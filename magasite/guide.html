@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capify Wallet</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f0f1a;font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;color:#e2e2f0;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:24px 12px}
+:root{
+--accent:#6c63ff;--accent2:#4f46e5;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;
+--card:#181828;--card2:#1e1e32;--border:#2a2a45;--muted:#8888aa;
+}
+.app{width:100%;max-width:420px}
+.screen{display:none}
+.screen.active{display:block}
+.logo-row{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.logo-dot{width:32px;height:32px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.logo-text{font-size:16px;font-weight:600;color:#fff}
+.logo-sub{font-size:12px;color:var(--muted);margin-left:2px}
+.balance-card{background:linear-gradient(135deg,#6c63ff22,#4f46e511);border:1px solid var(--accent);border-radius:20px;padding:24px;margin-bottom:20px;position:relative;overflow:hidden}
+.balance-label{font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px}
+.balance-amount{font-size:42px;font-weight:600;color:#fff;line-height:1}
+.balance-amount span{font-size:22px;color:var(--muted);margin-right:2px}
+.balance-status{display:flex;align-items:center;gap:6px;margin-top:10px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.status-text{font-size:12px;color:var(--muted)}
+.sec-label{font-size:11px;color:var(--muted);margin-bottom:10px;letter-spacing:1px}
+.items-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.item-btn{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.15s;width:100%;color:#e2e2f0;text-align:left}
+.item-btn:hover:not(:disabled){border-color:var(--accent);background:var(--card2)}
+.item-btn:disabled{opacity:0.38;cursor:not-allowed}
+.item-left{display:flex;align-items:center;gap:12px}
+.item-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.item-name{font-size:14px;font-weight:500}
+.item-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.item-cost{font-size:14px;font-weight:600;color:var(--accent)}
+.primary-btn{width:100%;background:var(--accent);border:none;border-radius:14px;padding:16px;font-size:14px;font-weight:600;color:white;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px}
+.primary-btn:hover:not(:disabled){background:var(--accent2)}
+.primary-btn:disabled{opacity:0.5;cursor:not-allowed}
+.ghost-btn{width:100%;background:transparent;border:1px solid var(--border);border-radius:14px;padding:14px;font-size:13px;color:var(--muted);cursor:pointer;transition:all 0.15s}
+.ghost-btn:hover{border-color:var(--accent);color:#e2e2f0}
+.amounts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.amt-chip{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 8px;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.15s;color:#e2e2f0;text-align:center}
+.amt-chip:hover,.amt-chip.sel{border-color:var(--accent);background:var(--accent);color:white}
+.amt-chip.zero{color:var(--muted);font-size:12px}
+.mock-card{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px}
+.mock-label{font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:10px}
+.mock-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.mock-num{font-size:14px;color:var(--muted);flex:1;font-family:monospace;letter-spacing:2px}
+.mock-exp{font-size:12px;color:var(--muted)}
+.mock-note{font-size:10px;color:var(--muted)}
+.otc-box{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px;text-align:center}
+.otc-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.otc-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+.code-display{font-family:monospace;font-size:28px;font-weight:700;color:var(--accent);letter-spacing:8px;background:var(--card);border:1px solid var(--accent);border-radius:10px;padding:14px;margin-bottom:12px}
+.otc-input-row{display:flex;gap:8px;margin-bottom:6px}
+.otc-inp{flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:18px;font-family:monospace;letter-spacing:5px;color:#e2e2f0;text-align:center;font-weight:600}
+.otc-inp:focus{outline:none;border-color:var(--accent)}
+.verify-btn{background:var(--accent);border:none;border-radius:10px;padding:12px 18px;font-size:13px;font-weight:600;color:white;cursor:pointer}
+.verify-btn:hover{background:var(--accent2)}
+.err{font-size:11px;color:var(--red);margin-top:4px;min-height:18px}
+.txn-list{margin-bottom:16px}
+.txn-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.txn-row:last-child{border-bottom:none}
+.txn-name{font-size:13px}
+.txn-time{font-size:10px;color:var(--muted);margin-top:2px}
+.txn-amt{font-size:13px;font-weight:600}
+.credit{color:var(--green)}
+.debit{color:var(--red)}
+.back-btn{background:transparent;border:none;color:var(--muted);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px;padding:0;margin-bottom:18px}
+.back-btn:hover{color:#e2e2f0}
+.scr-title{font-size:18px;font-weight:600;margin-bottom:4px}
+.scr-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+.insufficient{background:#ef444410;border:1px solid var(--red);border-radius:14px;padding:16px;margin-bottom:14px;text-align:center}
+.insuf-title{font-size:14px;font-weight:600;color:#fca5a5;margin-bottom:4px}
+.insuf-sub{font-size:12px;color:var(--muted)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e1e32;border:1px solid var(--border);border-radius:12px;padding:12px 20px;font-size:13px;display:none;align-items:center;gap:8px;z-index:999;white-space:nowrap;box-shadow:0 8px 32px #0009}
+.toast.show{display:flex}
+.toast.success{border-color:var(--green);color:var(--green)}
+.toast.error{border-color:var(--red);color:var(--red)}
+.toast.warn{border-color:var(--amber);color:var(--amber)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div id="s-home" class="screen active">
+  <div class="logo-row">
+    <div class="logo-dot"><i class="ti ti-bolt" style="color:white;font-size:16px"></i></div>
+    <div><span class="logo-text">Capify</span><span class="logo-sub">Wallet</span></div>
+    <div style="margin-left:auto;cursor:pointer" onclick="go('s-history')"><i class="ti ti-history" style="color:var(--muted);font-size:20px"></i></div>
+  </div>
+  <div class="balance-card" id="bal-card">
+    <div class="balance-label">AVAILABLE BALANCE</div>
+    <div class="balance-amount"><span>$</span><span id="bal-num">0.00</span></div>
+    <div class="balance-status" id="bal-status">
+      <div class="status-dot" id="bal-dot"></div>
+      <span class="status-text" id="bal-txt">Ready to use</span>
+    </div>
+  </div>
+  <div class="sec-label">AVAILABLE ACTIONS</div>
+  <div class="items-grid" id="items-grid"></div>
+  <button class="primary-btn" onclick="go('s-topup')"><i class="ti ti-plus"></i> Add credits</button>
+  <button class="ghost-btn" onclick="go('s-otc')"><i class="ti ti-key" style="margin-right:4px"></i> Enter one-time code</button>
+</div>
+
+<div id="s-topup" class="screen">
+  <button class="back-btn" onclick="go('s-home')"><i class="ti ti-arrow-left"></i> Back</button>
+  <div class="scr-title">Add credits</div>
+  <div class="scr-sub">Choose amount — demo mode, no real charge</div>
+  <div class="amounts-grid" id="amt-grid"></div>
+  <div class="mock-card">
+    <div class="mock-label">PAYMENT DETAILS (DEMO)</div>
+    <div class="mock-row">
+      <i class="ti ti-credit-card" style="color:var(--muted);font-size:18px"></i>
+      <span class="mock-num">•••• •••• •••• 4242</span>
+      <span class="mock-exp">12/26</span>
+    </div>
+    <div class="mock-note">Demo only — tap Pay to simulate Stripe checkout</div>
+  </div>
+  <div id="sel-amt-txt" style="font-size:13px;color:var(--muted);margin-bottom:14px;text-align:center"></div>
+  <button class="primary-btn" id="pay-btn" onclick="mockPay()" disabled>
+    <i class="ti ti-lock"></i> Pay & get code
+  </button>
+</div>
+
+<div id="s-otc" class="screen">
+  <button class="back-btn" onclick="go('s-home')"><i class="ti ti-arrow-left"></i> Back</button>
+  <div class="scr-title">One-time code</div>
+  <div class="scr-sub">Enter your code to add credits to wallet</div>
+  <div class="otc-input-row">
+    <input class="otc-inp" id="otc-in" type="text" maxlength="8" placeholder="XXXXXXXX" oninput="clrErr()">
+    <button class="verify-btn" onclick="verifyOTC()">Verify</button>
+  </div>
+  <div class="err" id="otc-err"></div>
+</div>
+
+<div id="s-code" class="screen">
+  <button class="back-btn" onclick="go('s-home')"><i class="ti ti-arrow-left"></i> Back to wallet</button>
+  <div class="scr-title">Your one-time code</div>
+  <div class="scr-sub">Top up of <span id="code-amt" style="color:var(--accent);font-weight:600"></span> confirmed</div>
+  <div class="otc-box">
+    <div class="otc-title">Payment successful</div>
+    <div class="otc-sub">Copy this code — single use only</div>
+    <div class="code-display" id="gen-code">————————</div>
+    <button class="ghost-btn" onclick="copyCode()" style="font-size:12px;padding:10px">
+      <i class="ti ti-copy" style="margin-right:4px"></i> Copy code
+    </button>
+  </div>
+  <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px">Code is stored in this session — apply now or enter it later</div>
+  <button class="primary-btn" onclick="applyCode()"><i class="ti ti-wallet"></i> Apply to wallet now</button>
+</div>
+
+<div id="s-history" class="screen">
+  <button class="back-btn" onclick="go('s-home')"><i class="ti ti-arrow-left"></i> Back</button>
+  <div class="scr-title">Transaction history</div>
+  <div class="scr-sub">Recent activity on this device</div>
+  <div class="txn-list" id="txn-list"></div>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var bal = parseFloat(localStorage.getItem('cpf_bal')||'0');
+var txns = JSON.parse(localStorage.getItem('cpf_txns')||'[]');
+var codes = JSON.parse(localStorage.getItem('cpf_codes')||'{}');
+var selAmt = 0;
+
+var ITEMS=[
+  {id:'ai-gen',name:'AI content',desc:'Generate text or image',cost:5,icon:'ti-wand',color:'#6c63ff'},
+  {id:'ai-sum',name:'Smart summary',desc:'Summarise documents',cost:10,icon:'ti-file-text',color:'#22c55e'},
+  {id:'ai-trn',name:'Translation',desc:'Multi-language support',cost:10,icon:'ti-language',color:'#f59e0b'},
+  {id:'ai-anl',name:'Deep analysis',desc:'Advanced insight',cost:20,icon:'ti-chart-dots',color:'#3b82f6'},
+  {id:'ai-cod',name:'Code assist',desc:'Write & review code',cost:15,icon:'ti-code',color:'#ec4899'},
+];
+var AMOUNTS=[0,10,30,50,100,200];
+
+function save(){
+  localStorage.setItem('cpf_bal',bal.toFixed(2));
+  localStorage.setItem('cpf_txns',JSON.stringify(txns));
+  localStorage.setItem('cpf_codes',JSON.stringify(codes));
+}
+
+function genCode(amt){
+  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var c='';
+  for(var i=0;i<8;i++) c+=chars[Math.floor(Math.random()*chars.length)];
+  codes[c]=amt; save(); return c;
+}
+
+function rBal(){
+  document.getElementById('bal-num').textContent=bal.toFixed(2);
+  var card=document.getElementById('bal-card');
+  var dot=document.getElementById('bal-dot');
+  var txt=document.getElementById('bal-txt');
+  if(bal<=0){
+    card.style.background='linear-gradient(135deg,#ef444422,#ef444411)';
+    card.style.borderColor='#ef4444';
+    dot.style.background='#ef4444';
+    dot.style.animation='blink 1s infinite';
+    txt.textContent='Top up to continue';
+    txt.style.color='#fca5a5';
+  } else if(bal<10){
+    card.style.background='linear-gradient(135deg,#f59e0b22,#f59e0b11)';
+    card.style.borderColor='#f59e0b';
+    dot.style.background='#f59e0b';
+    dot.style.animation='';
+    txt.textContent='Low balance — add more soon';
+    txt.style.color='#fcd34d';
+  } else {
+    card.style.background='linear-gradient(135deg,#6c63ff22,#4f46e511)';
+    card.style.borderColor='#6c63ff';
+    dot.style.background='#22c55e';
+    dot.style.animation='';
+    txt.textContent='Ready to use';
+    txt.style.color='';
+  }
+}
+
+function rItems(){
+  document.getElementById('items-grid').innerHTML=ITEMS.map(function(it){
+    var ok=bal>=it.cost;
+    return '<button class="item-btn"'+(ok?'':' disabled')+' onclick="useItem(\''+it.id+'\','+it.cost+',\''+it.name+'\')">'
+      +'<div class="item-left">'
+      +'<div class="item-icon" style="background:'+it.color+'22"><i class="ti '+it.icon+'" style="color:'+it.color+';font-size:16px"></i></div>'
+      +'<div><div class="item-name">'+it.name+'</div><div class="item-desc">'+it.desc+'</div></div>'
+      +'</div><div class="item-cost">-$'+it.cost+'</div></button>';
+  }).join('');
+}
+
+function rAmts(){
+  document.getElementById('amt-grid').innerHTML=AMOUNTS.map(function(a){
+    return '<button class="amt-chip'+(a===0?' zero':'')+'" onclick="selA('+a+',this)">'+(a===0?'Skip':'$'+a)+'</button>';
+  }).join('');
+}
+
+function rHistory(){
+  var list=document.getElementById('txn-list');
+  if(!txns.length){list.innerHTML='<div style="font-size:13px;color:var(--muted);text-align:center;padding:30px 0">No transactions yet</div>';return}
+  list.innerHTML=txns.slice().reverse().slice(0,30).map(function(t){
+    var pos=t.amt>0;
+    return '<div class="txn-row"><div><div class="txn-name">'+t.name+'</div><div class="txn-time">'+t.time+'</div></div>'
+      +'<div class="txn-amt '+(pos?'credit':'debit')+'">'+(pos?'+':'')+t.amt.toFixed(2)+'</div></div>';
+  }).join('');
+}
+
+function selA(amt,el){
+  selAmt=amt;
+  document.querySelectorAll('.amt-chip').forEach(function(c){c.classList.remove('sel')});
+  el.classList.add('sel');
+  var btn=document.getElementById('pay-btn');
+  var txt=document.getElementById('sel-amt-txt');
+  if(amt>0){
+    btn.disabled=false;
+    txt.textContent='Paying $'+amt+' → receive one-time code';
+    txt.style.color='var(--accent)';
+  } else {
+    btn.disabled=true;
+    txt.textContent='';
+  }
+}
+
+function mockPay(){
+  if(!selAmt) return;
+  var btn=document.getElementById('pay-btn');
+  btn.innerHTML='<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Processing...';
+  btn.disabled=true;
+  setTimeout(function(){
+    var c=genCode(selAmt);
+    document.getElementById('gen-code').textContent=c;
+    document.getElementById('code-amt').textContent='$'+selAmt;
+    go('s-code');
+    btn.innerHTML='<i class="ti ti-lock"></i> Pay & get code';
+  },1800);
+}
+
+function copyCode(){
+  var c=document.getElementById('gen-code').textContent;
+  if(navigator.clipboard) navigator.clipboard.writeText(c).then(function(){toast('Code copied!','success')}).catch(function(){toast('Select & copy the code manually','warn')});
+  else toast('Select the code above and copy it','warn');
+}
+
+function applyCode(){
+  var c=document.getElementById('gen-code').textContent;
+  if(codes[c]!==undefined){
+    var a=codes[c];
+    bal=Math.round((bal+a)*100)/100;
+    txns.push({name:'Top up ('+c+')',amt:a,time:new Date().toLocaleString()});
+    delete codes[c]; save(); rBal(); rItems(); go('s-home');
+    toast('$'+a+' added to wallet!','success');
+  }
+}
+
+function verifyOTC(){
+  var inp=document.getElementById('otc-in');
+  var c=inp.value.toUpperCase().trim();
+  var err=document.getElementById('otc-err');
+  if(!c||c.length<6){err.textContent='Enter a valid 8-character code';return}
+  if(codes[c]!==undefined){
+    var a=codes[c];
+    bal=Math.round((bal+a)*100)/100;
+    txns.push({name:'Credit via code',amt:a,time:new Date().toLocaleString()});
+    delete codes[c]; save(); inp.value=''; err.textContent='';
+    rBal(); rItems(); go('s-home');
+    toast('$'+a+' added!','success');
+  } else {
+    err.textContent='Invalid or already used code';
+    inp.style.borderColor='var(--red)';
+    setTimeout(function(){inp.style.borderColor=''},2000);
+  }
+}
+
+function clrErr(){
+  document.getElementById('otc-err').textContent='';
+  document.getElementById('otc-in').style.borderColor='';
+}
+
+function useItem(id,cost,name){
+  if(bal<cost){toast('唔夠錢！請先入錢','error');return}
+  bal=Math.round((bal-cost)*100)/100;
+  txns.push({name:name,amt:-cost,time:new Date().toLocaleString()});
+  save(); rBal(); rItems();
+  toast(name+' activated  (-$'+cost+')','success');
+  if(bal<10&&bal>0) setTimeout(function(){toast('餘額唔多 — 記得充值','warn')},1000);
+  if(bal<=0) setTimeout(function(){toast('錢用晒！請入返啲先','error')},800);
+}
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+  if(id==='s-history') rHistory();
+  if(id==='s-topup'){
+    selAmt=0;
+    var btn=document.getElementById('pay-btn');
+    btn.disabled=true;
+    btn.innerHTML='<i class="ti ti-lock"></i> Pay & get code';
+    document.getElementById('sel-amt-txt').textContent='';
+    rAmts();
+  }
+}
+
+var toastT;
+function toast(msg,type){
+  var el=document.getElementById('toast');
+  var icon=type==='success'?'ti-circle-check':type==='error'?'ti-alert-circle':'ti-alert-triangle';
+  el.innerHTML='<i class="ti '+icon+'"></i> '+msg;
+  el.className='toast show '+type;
+  clearTimeout(toastT);
+  toastT=setTimeout(function(){el.classList.remove('show')},2500);
+}
+
+rBal(); rItems();
+</script>
+</body>
+</html>
