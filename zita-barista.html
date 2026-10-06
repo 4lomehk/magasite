@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZITA BARISTA 靜音手作咖啡館 · 無障礙 IG / WhatsApp 極簡落單及 KDS 系統</title>
+  <meta name="description" content="香港廣東話版無障礙咖啡師 (HK DEAF Barista) 極簡落單與 KDS 系統：支援 IG Message 及 WhatsApp，手動 HKD 報價、轉數快 FPS、PayMe、八達通及信用卡 QR Code 即時生成。" />
+  <meta property="og:title" content="ZITA BARISTA 靜音手作咖啡館 · 無障礙落單及 KDS 系統" />
+  <meta property="og:description" content="客人 SOP 只需輸入、確認及付款；完整訂單對接無障礙工作環境。" />
+  <meta property="og:type" content="website" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans, Noto Sans TC, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            espresso: {
+              50: '#FAF7F5',
+              100: '#F3ECE7',
+              200: '#E5D5CA',
+              600: '#6F4233',
+              700: '#4E2E22',
+              800: '#351E15',
+              900: '#1E110B',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', '"Noto Sans TC"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #F6F2EC;
+      color: #1C1917;
+      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .tactile-card {
+      background: #FFFFFF;
+      border: 2px solid #1C1917;
+      box-shadow: 4px 4px 0px #1C1917;
+      border-radius: 1rem;
+    }
+    .tactile-btn {
+      border: 2px solid #1C1917;
+      box-shadow: 2.5px 2.5px 0px #1C1917;
+      transition: all 0.12s ease;
+    }
+    .tactile-btn:hover:not(:disabled) {
+      transform: translate(-1px, -1px);
+      box-shadow: 3.5px 3.5px 0px #1C1917;
+    }
+    .tactile-btn:active:not(:disabled) {
+      transform: translate(1.5px, 1.5px);
+      box-shadow: 1px 1px 0px #1C1917;
+    }
+    .tactile-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #FFFFFF; }
+      .tactile-card { box-shadow: none; border: 1px solid #000; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-amber-300 selection:text-stone-900">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-50 bg-[#1E110B] text-stone-100 border-b-2 border-stone-900 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-400 text-stone-950 border-2 border-white flex items-center justify-center font-black text-xl shrink-0">
+          ☕
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-black text-base sm:text-lg tracking-tight text-white">ZITA BARISTA · 靜音手作咖啡館</h1>
+            <span class="text-xs font-mono text-amber-300">HK DEAF BARISTA · 廣東話無障礙版</span>
+          </div>
+          <p class="text-xs text-stone-300">IG Message / WhatsApp 極簡 3 步落單 · 手動 HKD 報價核對系統</p>
+        </div>
+      </div>
+
+      <!-- Mode Switcher & Quick Links -->
+      <div class="flex items-center flex-wrap gap-2">
+        <div class="flex items-center bg-stone-800 p-1 rounded-xl border border-stone-700" role="tablist">
+          <button onclick="switchMainView('dual')" id="view-btn-dual" class="px-3 py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-stone-950">
+            ⚡ 雙向同步實戰台 (推薦)
+          </button>
+          <button onclick="switchMainView('customer')" id="view-btn-customer" class="px-3 py-1.5 rounded-lg text-xs font-bold transition text-stone-300 hover:text-white">
+            📱 客人落單介面
+          </button>
+          <button onclick="switchMainView('kds')" id="view-btn-kds" class="px-3 py-1.5 rounded-lg text-xs font-bold transition text-stone-300 hover:text-white">
+            🖥️ 咖啡師 KDS 看板 (<span id="kds-badge-count">3</span>)
+          </button>
+          <button onclick="switchMainView('analysis')" id="view-btn-analysis" class="px-3 py-1.5 rounded-lg text-xs font-bold transition text-stone-300 hover:text-white">
+            📋 連結分析與 SOP 手冊
+          </button>
+        </div>
+
+        <a href="/dailyflow.html" class="px-3 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-600 text-xs font-bold flex items-center gap-1 transition">
+          <span>📰 抗炎日報</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sub-header Operational Status Bar -->
+  <div class="bg-amber-50 border-b-2 border-stone-900 px-4 py-2.5 no-print">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+      <div class="flex items-center gap-2 font-bold text-stone-800">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" id="global-shop-dot"></span>
+        <span id="global-shop-status">無障礙零語音通道運行中：客人只需「1. 輸入 ➔ 2. 確認 ➔ 3. 付款截圖」，待咖啡師手動核對 HKD 銀碼後即開始沖煮。</span>
+      </div>
+      <div class="flex items-center gap-3 font-mono text-xs">
+        <span class="text-stone-600">支援貨幣：<strong>只限香港 HKD ($)</strong></span>
+        <span aria-hidden="true">·</span>
+        <span class="text-stone-600">收款：<strong>轉數快 FPS / PayMe / 八達通 / Visa</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="max-w-7xl mx-auto w-full flex-1 p-4 sm:p-6 space-y-8">
+
+    <!-- =================================================================== -->
+    <!-- SECTION 0: CONCISE LINK ANALYSIS BANNER (Collapsible / Toggleable) -->
+    <!-- =================================================================== -->
+    <section id="analysis-banner" class="tactile-card p-5 bg-[#FFFDF9]">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200 pb-3 mb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="microscope" class="w-5 h-5 text-amber-700"></i>
+          <h2 class="font-black text-base sm:text-lg text-stone-900">
+            🔍 原連結 (magamap/zita-barista) 結構分析與新流程改造重點
+          </h2>
+        </div>
+        <button onclick="toggleAnalysisCollapse()" id="toggle-analysis-btn" class="text-xs font-bold text-stone-600 hover:text-stone-900 underline cursor-pointer">
+          收起分析摘要 ▲
+        </button>
+      </div>
+
+      <div id="analysis-content" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed">
+        <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-200">
+          <div class="font-black text-stone-900 mb-1">1. 原版架構優點與痛點</div>
+          <p class="text-stone-600">
+            原版「今日飲咩 ZITA DBC」採用 <code class="font-mono font-bold text-stone-900">H01-H05 / 杯量 / 奶類 / 數量</code> 極簡代碼，實現聽障/言語障礙咖啡師「零語音、不設拉花甜度」理念。但原版<strong>將價格寫死</strong>，未支援 <strong class="text-amber-800">Zita SOE 豆</strong> 標示及 WhatsApp 雙向傳送。
+          </p>
+        </div>
+        <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200">
+          <div class="font-black text-amber-950 mb-1">2. 手動輸入 HKD 銀碼與付款鎖定</div>
+          <p class="text-stone-700">
+            由於每次豆款或特調收費不同，新系統改為<strong>「咖啡師手動確認/修改收費銀碼 (HKD)」</strong>給客人。系統強制鎖定<strong>「等待客人付款成功並核對截圖後，才能解鎖進入下一步（製作中）」</strong>。
+          </p>
+        </div>
+        <div class="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200">
+          <div class="font-black text-emerald-950 mb-1">3. 香港 HKD 轉數快電話 + 3大 QR 範本</div>
+          <p class="text-stone-700">
+            全面整合香港本地收款：支援<strong>轉數快 FPS 電話號碼過數</strong>，以及自動將單號（如 <code class="font-mono font-bold">#104</code> / <code class="font-mono font-bold">#105</code>）與手動銀碼（如 <code class="font-mono font-bold">$43</code>）注入 <strong>1️⃣ PayMe、2️⃣ 八達通 Octopus、3️⃣ Visa / 信用卡</strong> 範本與動態 QR Code。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 1 & 2: INTERACTIVE DUAL-SCREEN / CUSTOMER SOP & BARISTA KDS    -->
+    <!-- =================================================================== -->
+    <div id="dual-workspace-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- LEFT COLUMN (6 cols): 客人極簡 3 步落單 SOP & DM 轉換模擬器 -->
+      <section id="customer-panel" class="lg:col-span-6 tactile-card p-5 sm:p-6 space-y-5">
+        <div class="flex items-center justify-between border-b-2 border-stone-900 pb-3">
+          <div>
+            <span class="text-xs font-mono font-bold text-amber-700">CUSTOMER SOP · 客人端</span>
+            <h2 class="text-xl font-black text-stone-900">📱 客人極簡 3 步落單 (IG / WhatsApp)</h2>
+          </div>
+          <div class="text-right font-mono text-xs text-stone-500">
+            <div>步驟：輸入 ➔ 確認 ➔ 付款</div>
+            <div class="font-bold text-stone-900">零語音 · 全文字完整訂單</div>
+          </div>
+        </div>
+
+        <!-- Step Indicator Bar -->
+        <div class="grid grid-cols-3 gap-2 text-center font-mono text-xs">
+          <div id="cust-step-ind-1" class="p-2 rounded-lg border-2 border-stone-900 bg-amber-300 font-black text-stone-950">
+            STEP 1 · 輸入/選單
+          </div>
+          <div id="cust-step-ind-2" class="p-2 rounded-lg border border-stone-300 bg-stone-100 font-bold text-stone-600">
+            STEP 2 · 確認訂單
+          </div>
+          <div id="cust-step-ind-3" class="p-2 rounded-lg border border-stone-300 bg-stone-100 font-bold text-stone-600">
+            STEP 3 · HKD 付款
+          </div>
+        </div>
+
+        <!-- STEP 1: 快速點選或輸入代碼 -->
+        <div class="space-y-4 bg-stone-50 p-4 rounded-xl border border-stone-200">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-black text-stone-900">
+              ① 點擊餐牌快速組合 或 直接輸入 DM 代碼：
+            </label>
+            <span class="text-[11px] font-mono text-stone-500">不設拉花、甜度或冰量調整</span>
+          </div>
+
+          <!-- Bean Selector (Zita SOE 豆) -->
+          <div>
+            <div class="text-xs font-bold text-stone-600 mb-1.5">選擇咖啡豆 (Coffee Bean)：</div>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="selectBean('Zita SOE 豆')" id="bean-btn-soe" class="py-2 px-3 rounded-lg text-xs font-black border-2 border-stone-900 bg-amber-300 text-stone-950 text-left flex items-center justify-between">
+                <span>✨ Zita SOE 豆 (單一產地)</span>
+                <span class="font-mono text-[11px]">預設推薦</span>
+              </button>
+              <button type="button" onclick="selectBean('')" id="bean-btn-none" class="py-2 px-3 rounded-lg text-xs font-bold border border-stone-300 bg-white text-stone-700 hover:bg-stone-100 text-left flex items-center justify-between">
+                <span>☕ 標準拼配豆 (不加豆名)</span>
+                <span class="font-mono text-[11px]">經典</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 5 Coffee Items Quick Buttons -->
+          <div>
+            <div class="text-xs font-bold text-stone-600 mb-1.5">選擇飲品 (H01 - H05)：</div>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+              <button type="button" onclick="quickSelectDrink('H01')" id="drink-btn-H01" class="p-2 rounded-lg border border-stone-300 bg-white hover:bg-amber-50 text-left transition">
+                <div class="font-mono font-black text-xs text-stone-900">H01</div>
+                <div class="text-xs font-bold text-stone-800 truncate">熱美式</div>
+                <div class="text-[10px] font-mono text-stone-500">$28-$36</div>
+              </button>
+              <button type="button" onclick="quickSelectDrink('H02')" id="drink-btn-H02" class="p-2 rounded-lg border-2 border-stone-900 bg-amber-100 text-left transition">
+                <div class="font-mono font-black text-xs text-stone-900">H02</div>
+                <div class="text-xs font-bold text-stone-900 truncate">熱 Latte</div>
+                <div class="text-[10px] font-mono text-stone-600">$35-$43</div>
+              </button>
+              <button type="button" onclick="quickSelectDrink('H03')" id="drink-btn-H03" class="p-2 rounded-lg border border-stone-300 bg-white hover:bg-amber-50 text-left transition">
+                <div class="font-mono font-black text-xs text-stone-900">H03</div>
+                <div class="text-xs font-bold text-stone-800 truncate">Cappuccino</div>
+                <div class="text-[10px] font-mono text-stone-500">$35-$43</div>
+              </button>
+              <button type="button" onclick="quickSelectDrink('H04')" id="drink-btn-H04" class="p-2 rounded-lg border border-stone-300 bg-white hover:bg-amber-50 text-left transition">
+                <div class="font-mono font-black text-xs text-stone-900">H04</div>
+                <div class="text-xs font-bold text-stone-800 truncate">熱 Mocha</div>
+                <div class="text-[10px] font-mono text-stone-500">$38-$46</div>
+              </button>
+              <button type="button" onclick="quickSelectDrink('H05')" id="drink-btn-H05" class="p-2 rounded-lg border border-stone-300 bg-white hover:bg-amber-50 text-left transition col-span-2 sm:col-span-1">
+                <div class="font-mono font-black text-xs text-stone-900">H05</div>
+                <div class="text-xs font-bold text-stone-800 truncate">Espresso</div>
+                <div class="text-[10px] font-mono text-stone-500">S$20 / D$25</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Size, Milk & Qty Row -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div>
+              <label class="block text-[11px] font-bold text-stone-600 mb-1">杯量 / 份量：</label>
+              <select id="quick-size" onchange="syncCodeFromSelectors()" class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-xs font-bold">
+                <option value="S">S - 細杯 / 單份</option>
+                <option value="M" selected>M - 中杯</option>
+                <option value="L">L - 大杯</option>
+                <option value="D">D - 雙份 (只限 H05)</option>
+              </select>
+            </div>
+            <div id="milk-selector-wrap">
+              <label class="block text-[11px] font-bold text-stone-600 mb-1">奶類選項：</label>
+              <select id="quick-milk" onchange="syncCodeFromSelectors()" class="w-full rounded-lg border border-stone-300 bg-white px-2.5 py-2 text-xs font-bold">
+                <option value="O" selected>O - 燕麥奶 (+$4)</option>
+                <option value="D">D - 正常全脂奶 (+$0)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-stone-600 mb-1">數量 (杯)：</label>
+              <div class="flex items-center">
+                <button type="button" onclick="adjustQty(-1)" class="px-2.5 py-1.5 bg-stone-200 hover:bg-stone-300 rounded-l-lg font-black text-xs border border-stone-300">-</button>
+                <input type="number" id="quick-qty" value="1" min="1" max="20" onchange="syncCodeFromSelectors()" class="w-full text-center border-y border-stone-300 py-1.5 text-xs font-mono font-bold bg-white" />
+                <button type="button" onclick="adjustQty(1)" class="px-2.5 py-1.5 bg-stone-200 hover:bg-stone-300 rounded-r-lg font-black text-xs border border-stone-300">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Raw DM Code Input + Manual Price Input -->
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-2 border-t border-stone-200">
+            <div class="sm:col-span-7">
+              <label for="sim-input" class="block text-xs font-black text-stone-800 mb-1">
+                客人輸入 DM 代碼（可手動輸入測試）：
+              </label>
+              <div class="flex gap-1.5">
+                <input
+                  type="text"
+                  id="sim-input"
+                  value="H02 / M / O / 1"
+                  oninput="runSimulation(true)"
+                  placeholder="例如: H02 / M / O / 1"
+                  class="w-full border-2 border-stone-900 rounded-lg px-3 py-2 text-sm font-mono font-bold bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
+                />
+                <button type="button" onclick="runSimulation(false)" class="tactile-btn bg-stone-900 text-white px-3 py-2 rounded-lg text-xs font-bold shrink-0">
+                  解析
+                </button>
+              </div>
+            </div>
+
+            <div class="sm:col-span-5">
+              <label for="manual-price-input" class="block text-xs font-black text-rose-800 mb-1">
+                💰 手動輸入收費銀碼 (HKD $)：
+              </label>
+              <div class="flex items-center">
+                <span class="px-2.5 py-2 bg-rose-100 border-2 border-r-0 border-stone-900 rounded-l-lg font-mono font-black text-sm text-rose-900">$</span>
+                <input
+                  type="number"
+                  id="manual-price-input"
+                  value="43"
+                  min="1"
+                  step="1"
+                  oninput="onManualPriceChange()"
+                  class="w-full border-2 border-stone-900 rounded-r-lg px-2.5 py-2 text-sm font-mono font-black bg-amber-50 text-stone-950 focus:outline-none focus:ring-2 focus:ring-rose-500 tabular-nums"
+                />
+              </div>
+              <p class="text-[10px] text-rose-700 font-bold mt-0.5">
+                *每次收費不同，可手動修改銀碼給客人
+              </p>
+            </div>
+          </div>
+
+          <!-- Error Alert if invalid code -->
+          <div id="sim-error" class="hidden p-3 rounded-lg bg-red-100 border-2 border-red-600 text-xs text-red-900 font-bold"></div>
+        </div>
+
+        <!-- DM 系統即時轉換輸出 (Exact Match to Prompt Specification) -->
+        <div class="bg-stone-950 text-stone-100 p-4 sm:p-5 rounded-xl border-2 border-stone-900 space-y-4 font-mono text-xs sm:text-sm">
+          <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+            <span class="text-stone-400 font-bold text-xs">⚡ DM 系統即時轉換輸出 (雙端同步)：</span>
+            <span class="text-[11px] text-amber-400 font-bold">當前單號：<span id="live-order-id">#105</span></span>
+          </div>
+
+          <!-- 【客人端顯示】 -->
+          <div class="bg-stone-900/90 p-3.5 rounded-lg border border-stone-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-400">【客人端顯示】</span>
+              <button type="button" onclick="copyTextById('sim-output-customer', '已複製【客人端顯示】訊息')" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-stone-200 text-[11px] font-bold flex items-center gap-1">
+                <i data-lucide="copy" class="w-3 h-3"></i> 複製給客人
+              </button>
+            </div>
+            <pre id="sim-output-customer" class="text-amber-200 whitespace-pre-wrap leading-relaxed font-mono text-xs sm:text-sm select-all"></pre>
+          </div>
+
+          <!-- 【咖啡師 KDS 顯示】 -->
+          <div class="bg-stone-900/90 p-3.5 rounded-lg border border-stone-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-400">【咖啡師 KDS 顯示】</span>
+              <button type="button" onclick="copyTextById('sim-output-barista', '已複製【咖啡師 KDS 顯示】訊息')" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-stone-200 text-[11px] font-bold flex items-center gap-1">
+                <i data-lucide="copy" class="w-3 h-3"></i> 複製 KDS 紀錄
+              </button>
+            </div>
+            <pre id="sim-output-barista" class="text-emerald-300 whitespace-pre-wrap leading-relaxed font-mono text-xs sm:text-sm select-all"></pre>
+          </div>
+        </div>
+
+        <!-- STEP 2: 客人一鍵回覆操作（確認 / 修改 / 取消）及 IG / WhatsApp 傳送 -->
+        <div class="space-y-3 pt-1">
+          <div class="text-xs font-black text-stone-800 flex items-center justify-between">
+            <span>② 客人回覆操作（點擊即模擬客人回覆及推進流程）：</span>
+            <span id="customer-reply-badge" class="font-mono text-xs text-amber-800 font-bold">等待客人回覆...</span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2.5">
+            <button type="button" onclick="handleCustomerAction('confirm')" class="tactile-btn bg-emerald-500 hover:bg-emerald-600 text-white font-black py-2.5 px-3 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-1.5">
+              <span>✅ 確認訂單</span>
+            </button>
+            <button type="button" onclick="handleCustomerAction('modify')" class="tactile-btn bg-amber-300 hover:bg-amber-400 text-stone-950 font-black py-2.5 px-3 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-1.5">
+              <span>✏️ 修改</span>
+            </button>
+            <button type="button" onclick="handleCustomerAction('cancel')" class="tactile-btn bg-rose-600 hover:bg-rose-700 text-white font-black py-2.5 px-3 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-1.5">
+              <span>❌ 取消</span>
+            </button>
+          </div>
+
+          <!-- Send via WhatsApp or IG DM Direct Action -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
+            <button type="button" onclick="sendOrderViaWhatsApp()" class="tactile-btn bg-[#25D366] hover:bg-[#20bd5a] text-stone-950 font-black py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2">
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+              <span>WhatsApp 傳送完整訂單</span>
+            </button>
+            <button type="button" onclick="copyOrderForIG()" class="tactile-btn bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 text-white font-black py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2">
+              <i data-lucide="instagram" class="w-4 h-4"></i>
+              <span>IG Message 複製並貼上落單</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN (6 cols): 新付款流程 (HKD 手動報價 + FPS 轉數快電話 + 3大 QR 範本 + 截圖核對鎖定) -->
+      <section id="payment-and-kds-panel" class="lg:col-span-6 space-y-6">
+
+        <!-- CARD A: 香港 HKD 手動銀碼與 4 大收款範本產生器 (FPS / PayMe / Octopus / Visa) -->
+        <div class="tactile-card p-5 sm:p-6 space-y-5 bg-white">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-stone-900 pb-3">
+            <div>
+              <span class="text-xs font-mono font-bold text-rose-700">HKD PAYMENT GATEWAY · 手動銀碼收款台</span>
+              <h2 class="text-xl font-black text-stone-900">💳 步驟 ③：香港 HKD 報價及付款範本輸出</h2>
+            </div>
+            <div class="text-right font-mono text-xs">
+              <span class="text-stone-500">付款綁定單號：</span>
+              <select id="payment-order-select" onchange="onSelectPaymentOrder()" class="border-2 border-stone-900 rounded px-2 py-1 font-black bg-amber-100 text-stone-900">
+                <option value="104" selected>#104 ($43)</option>
+                <option value="105">#105 ($43)</option>
+                <option value="103">#103 ($72)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Manual HKD Amount & FPS Phone Control Bar -->
+          <div class="p-4 rounded-xl bg-amber-50 border-2 border-stone-900 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="text-xs font-black text-stone-900 flex items-center gap-1.5">
+                <i data-lucide="Sliders" class="w-4 h-4 text-rose-700"></i>
+                <span>由於每次收費不同，請手動輸入收費銀碼給客人 (只限 HKD)：</span>
+              </div>
+              <span class="text-[11px] font-mono font-bold text-rose-800">⚠️ 等待客人付款成功才能進行下一步</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+              <div class="sm:col-span-4">
+                <label class="block text-[11px] font-bold text-stone-700 mb-1">訂單編號：</label>
+                <div class="flex items-center">
+                  <span class="px-2.5 py-2 bg-stone-200 border-2 border-r-0 border-stone-900 rounded-l-lg font-mono font-black text-xs">#</span>
+                  <input type="text" id="tpl-order-id" value="104" oninput="renderPaymentTemplates()" class="w-full border-2 border-stone-900 rounded-r-lg px-2.5 py-2 text-sm font-mono font-black bg-white tabular-nums" />
+                </div>
+              </div>
+
+              <div class="sm:col-span-4">
+                <label class="block text-[11px] font-bold text-rose-800 mb-1">應付總額 (HKD $)：</label>
+                <div class="flex items-center">
+                  <span class="px-2.5 py-2 bg-rose-600 text-white border-2 border-r-0 border-stone-900 rounded-l-lg font-mono font-black text-xs">HK$</span>
+                  <input type="number" id="tpl-order-amount" value="43" min="1" oninput="syncManualAmountFromGateway()" class="w-full border-2 border-stone-900 rounded-r-lg px-2.5 py-2 text-sm font-mono font-black bg-white text-rose-900 tabular-nums" />
+                </div>
+              </div>
+
+              <div class="sm:col-span-4">
+                <label class="block text-[11px] font-bold text-stone-700 mb-1">香港轉數快 FPS 電話：</label>
+                <input type="text" id="fps-phone-input" value="9876 5432" oninput="renderPaymentTemplates()" placeholder="輸入 FPS 電話號碼" class="w-full border-2 border-stone-900 rounded-lg px-2.5 py-2 text-sm font-mono font-bold bg-white tabular-nums" />
+              </div>
+            </div>
+
+            <!-- Quick HKD Preset Chips -->
+            <div class="flex flex-wrap items-center gap-1.5 pt-1">
+              <span class="text-[11px] font-bold text-stone-600">快速銀碼：</span>
+              <button type="button" onclick="setQuickAmount(28)" class="px-2 py-0.5 rounded border border-stone-400 bg-white hover:bg-amber-200 font-mono text-xs font-bold">$28</button>
+              <button type="button" onclick="setQuickAmount(35)" class="px-2 py-0.5 rounded border border-stone-400 bg-white hover:bg-amber-200 font-mono text-xs font-bold">$35</button>
+              <button type="button" onclick="setQuickAmount(39)" class="px-2 py-0.5 rounded border border-stone-400 bg-white hover:bg-amber-200 font-mono text-xs font-bold">$39</button>
+              <button type="button" onclick="setQuickAmount(43)" class="px-2 py-0.5 rounded border-2 border-stone-900 bg-amber-300 font-mono text-xs font-black">$43 (預設範例)</button>
+              <button type="button" onclick="setQuickAmount(47)" class="px-2 py-0.5 rounded border border-stone-400 bg-white hover:bg-amber-200 font-mono text-xs font-bold">$47</button>
+              <button type="button" onclick="setQuickAmount(55)" class="px-2 py-0.5 rounded border border-stone-400 bg-white hover:bg-amber-200 font-mono text-xs font-bold">$55 (SOE手沖)</button>
+            </div>
+          </div>
+
+          <!-- Payment Method Selector Tabs (1️⃣ PayMe | 2️⃣ 八達通 | 3️⃣ Visa | 🇭🇰 轉數快 FPS) -->
+          <div>
+            <div class="text-xs font-black text-stone-800 mb-2">選擇發送給客人的香港 HKD 付款方式範本：</div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <button type="button" onclick="selectPaymentMethod('payme')" id="pm-tab-payme" class="p-2.5 rounded-xl border-2 border-stone-900 bg-rose-600 text-white font-black text-xs text-left transition">
+                <div>1️⃣ PayMe</div>
+                <div class="text-[10px] opacity-90 font-normal">長按儲存 QR</div>
+              </button>
+              <button type="button" onclick="selectPaymentMethod('octopus')" id="pm-tab-octopus" class="p-2.5 rounded-xl border border-stone-300 bg-stone-50 text-stone-800 hover:bg-amber-50 font-bold text-xs text-left transition">
+                <div>2️⃣ 八達通 Octopus</div>
+                <div class="text-[10px] text-stone-500 font-normal">App 掃瞄 QR</div>
+              </button>
+              <button type="button" onclick="selectPaymentMethod('visa')" id="pm-tab-visa" class="p-2.5 rounded-xl border border-stone-300 bg-stone-50 text-stone-800 hover:bg-amber-50 font-bold text-xs text-left transition">
+                <div>3️⃣ Visa / 信用卡</div>
+                <div class="text-[10px] text-stone-500 font-normal">安全支付頁面</div>
+              </button>
+              <button type="button" onclick="selectPaymentMethod('fps')" id="pm-tab-fps" class="p-2.5 rounded-xl border border-stone-300 bg-stone-50 text-stone-800 hover:bg-amber-50 font-bold text-xs text-left transition">
+                <div>🇭🇰 轉數快 FPS</div>
+                <div class="text-[10px] text-stone-500 font-normal">電話號碼 / QR</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Active QR Code Card + Copyable Template Output -->
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center bg-stone-50 p-4 rounded-xl border-2 border-stone-900">
+            <!-- Dynamic QR Code Visual Box -->
+            <div class="sm:col-span-5 flex flex-col items-center justify-center bg-white p-3.5 rounded-xl border-2 border-stone-900 text-center">
+              <div id="qr-badge-header" class="text-xs font-black text-rose-700 mb-1">1️⃣ PayMe 收款碼 (HKD)</div>
+              <div class="relative w-36 h-36 flex items-center justify-center bg-white p-1 border border-stone-200 rounded-lg">
+                <canvas id="dynamic-qr-canvas" width="136" height="136" class="w-full h-full"></canvas>
+                <img id="custom-qr-img" class="hidden w-full h-full object-contain rounded" alt="自訂收款 QR Code" />
+              </div>
+              <div class="mt-2 font-mono text-xs font-black text-stone-900">
+                單號 #<span id="qr-label-id">104</span> · HK$<span id="qr-label-amt">43</span>
+              </div>
+              <label class="mt-1.5 text-[10px] font-bold text-stone-500 hover:text-stone-900 underline cursor-pointer">
+                <span>上傳真實收款 QR 圖</span>
+                <input type="file" accept="image/*" onchange="uploadCustomQrImage(event)" class="hidden" />
+              </label>
+            </div>
+
+            <!-- Selected Payment Template Box & Action Buttons -->
+            <div class="sm:col-span-7 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-black text-stone-900" id="active-tpl-title">1️⃣ PayMe 付款範本</span>
+                <span class="text-[11px] font-mono text-stone-500">香港 HKD 專用</span>
+              </div>
+              <pre id="active-payment-template" class="p-3 rounded-lg bg-stone-900 text-amber-200 font-mono text-xs whitespace-pre-wrap leading-relaxed border border-stone-800 select-all"></pre>
+
+              <div class="flex flex-wrap gap-2">
+                <button type="button" onclick="copyTextById('active-payment-template', '已複製付款範本！可貼上至 IG / WhatsApp')" class="tactile-btn flex-1 bg-amber-300 hover:bg-amber-400 text-stone-950 font-black py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-1.5">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                  <span>複製此付款範本</span>
+                </button>
+                <button type="button" onclick="sendPaymentTemplateViaWhatsApp()" class="tactile-btn bg-[#25D366] hover:bg-[#20bd5a] text-stone-950 font-black py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-1">
+                  <span>WhatsApp 發送</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- All 3 Standard Templates Side-by-Side Preview (As requested in prompt) -->
+          <div class="pt-2 border-t border-stone-200">
+            <div class="text-xs font-black text-stone-700 mb-2">📋 三大標準付款範本實時預覽（隨上方單號與銀碼自動更新）：</div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-[11px] font-mono">
+              <div class="p-2.5 rounded-lg bg-rose-50/70 border border-rose-200 flex flex-col justify-between">
+                <div>
+                  <div class="font-black text-rose-900 mb-1">1️⃣ PayMe 付款範本</div>
+                  <pre id="preview-tpl-payme" class="whitespace-pre-wrap text-stone-700 leading-snug"></pre>
+                </div>
+                <button type="button" onclick="copyTextById('preview-tpl-payme', '已複製 1️⃣ PayMe 付款範本')" class="mt-2 w-full py-1 rounded bg-white hover:bg-rose-100 border border-rose-300 text-rose-900 font-bold text-[10px]">一鍵複製 PayMe 範本</button>
+              </div>
+
+              <div class="p-2.5 rounded-lg bg-amber-50/70 border border-amber-200 flex flex-col justify-between">
+                <div>
+                  <div class="font-black text-amber-900 mb-1">2️⃣ 八達通 Octopus 範本</div>
+                  <pre id="preview-tpl-octopus" class="whitespace-pre-wrap text-stone-700 leading-snug"></pre>
+                </div>
+                <button type="button" onclick="copyTextById('preview-tpl-octopus', '已複製 2️⃣ 八達通 Octopus 範本')" class="mt-2 w-full py-1 rounded bg-white hover:bg-amber-100 border border-amber-300 text-amber-900 font-bold text-[10px]">一鍵複製八達通範本</button>
+              </div>
+
+              <div class="p-2.5 rounded-lg bg-indigo-50/70 border border-indigo-200 flex flex-col justify-between">
+                <div>
+                  <div class="font-black text-indigo-900 mb-1">3️⃣ Visa / 信用卡範本</div>
+                  <pre id="preview-tpl-visa" class="whitespace-pre-wrap text-stone-700 leading-snug"></pre>
+                </div>
+                <button type="button" onclick="copyTextById('preview-tpl-visa', '已複製 3️⃣ Visa / 信用卡範本')" class="mt-2 w-full py-1 rounded bg-white hover:bg-indigo-100 border border-indigo-300 text-indigo-900 font-bold text-[10px]">一鍵複製信用卡範本</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Screenshot Verification Gate (等待客人付款成功才能進行下一步) -->
+          <div class="p-4 rounded-xl bg-stone-900 text-white space-y-3 border-2 border-stone-900">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-purple-400 animate-ping"></span>
+                <span class="font-black text-xs sm:text-sm text-amber-300">🔒 付款核對閘門（核對成功才解鎖下一步製作）</span>
+              </div>
+              <span id="gate-status-label" class="font-mono text-xs text-purple-300 font-bold">狀態：🟣 待核對付款</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+              <label class="flex items-center gap-2 p-2 rounded bg-stone-800 border border-stone-700 cursor-pointer select-none">
+                <input type="checkbox" id="verify-chk-amount" onchange="checkVerificationGate()" class="w-4 h-4 accent-emerald-500" />
+                <span>1. 截圖金額 = <strong>HK$<span id="verify-amt-span">43</span></strong></span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded bg-stone-800 border border-stone-700 cursor-pointer select-none">
+                <input type="checkbox" id="verify-chk-time" onchange="checkVerificationGate()" class="w-4 h-4 accent-emerald-500" />
+                <span>2. 交易時間在 5 分鐘內</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded bg-stone-800 border border-stone-700 cursor-pointer select-none">
+                <input type="checkbox" id="verify-chk-status" onchange="checkVerificationGate()" class="w-4 h-4 accent-emerald-500" />
+                <span>3. 顯示「付款成功/完成」</span>
+              </label>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+              <button type="button" onclick="simulateCustomerScreenshot()" class="px-3 py-2 rounded-lg bg-stone-800 hover:bg-stone-700 border border-stone-600 text-xs font-bold text-amber-300 flex items-center gap-1.5 cursor-pointer">
+                <i data-lucide="image-plus" class="w-4 h-4"></i>
+                <span>模擬客人傳來付款成功截圖 (自動勾選三點)</span>
+              </button>
+
+              <button
+                type="button"
+                id="unlock-next-step-btn"
+                onclick="confirmPaymentAndStartMaking()"
+                disabled
+                class="tactile-btn bg-emerald-500 hover:bg-emerald-600 text-stone-950 font-black py-2 px-4 rounded-lg text-xs flex items-center gap-1.5"
+              >
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                <span>✅ 核對無誤 · 解鎖下一步 (開始製作)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- BARISTA KDS LIVE BOARD (無障礙咖啡師工作台看板)                      -->
+    <!-- =================================================================== -->
+    <section id="kds-board-section" class="tactile-card p-5 sm:p-6 bg-white space-y-5">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b-2 border-stone-900 pb-4">
+        <div>
+          <span class="text-xs font-mono font-bold text-amber-700">ACCESSIBLE BARISTA KDS · 無障礙視覺化工作台</span>
+          <h2 class="text-xl sm:text-2xl font-black text-stone-900">🖥️ 咖啡師實時訂單看板 (KDS)</h2>
+          <p class="text-xs text-stone-600 mt-0.5">每張訂單均可獨立手動修改 HKD 銀碼、一鍵複製專屬 QR 付款範本、核對付款後才解鎖製作。</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <button id="toggle-shop-btn" onclick="toggleShopStatus()" class="tactile-btn px-3.5 py-2 rounded-xl text-xs font-black bg-emerald-600 text-white flex items-center gap-2">
+            <span id="shop-status-indicator" class="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></span>
+            <span id="shop-status-text">營業中 (接受 IG / WhatsApp 訂單)</span>
+          </button>
+          <button onclick="addSimulatedOrderToKDS()" class="tactile-btn bg-amber-300 hover:bg-amber-400 text-stone-950 px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>將左方模擬器訂單加入 KDS</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- KDS Cards Container -->
+      <div id="kds-orders-container" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- Injected by JS -->
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- COMPLETE MENU, CODE TABLE & EXCEPTION AUTO-REPLIES REFERENCE        -->
+    <!-- =================================================================== -->
+    <section id="reference-manual-section" class="space-y-6">
+      <!-- 5 Hot Coffees Menu & Code Reference -->
+      <div class="tactile-card p-5 sm:p-6 bg-white">
+        <h2 class="text-lg sm:text-xl font-black text-stone-900 border-b-2 border-stone-900 pb-3 mb-4">
+          ☕ 5 款熱咖啡基礎餐牌及簡短代碼表（可由咖啡師按豆款手動調整最終 HKD 收費）
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 text-xs">
+          <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-300 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="font-mono font-black text-sm text-stone-900">H01</span>
+                <span class="text-[11px] text-stone-500">純黑咖啡 · 免選奶</span>
+              </div>
+              <h3 class="font-black text-sm text-stone-900">熱美式 Americano</h3>
+              <p class="text-stone-600 mt-1">濃縮咖啡注入熱水，展現 Zita SOE 豆純粹果香或堅果調。</p>
+            </div>
+            <div class="mt-3 pt-2 border-t border-stone-200 font-mono space-y-0.5 text-stone-800">
+              <div>S (細杯): $28</div>
+              <div>M (中杯): $32</div>
+              <div>L (大杯): $36</div>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-amber-50/60 border-2 border-stone-900 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="font-mono font-black text-sm text-stone-900">H02</span>
+                <span class="text-[11px] font-bold text-amber-800">D=正常奶 / O=燕麥奶+$4</span>
+              </div>
+              <h3 class="font-black text-sm text-stone-900">熱 Latte</h3>
+              <p class="text-stone-600 mt-1">經典鮮奶或燕麥奶咖啡，奶泡綿滑平衡。</p>
+            </div>
+            <div class="mt-3 pt-2 border-t border-amber-200 font-mono space-y-0.5 text-stone-900 font-bold">
+              <div>S (細杯): $35 (燕麥奶 $39)</div>
+              <div>M (中杯): $39 (燕麥奶 $43)</div>
+              <div>L (大杯): $43 (燕麥奶 $47)</div>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-300 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="font-mono font-black text-sm text-stone-900">H03</span>
+                <span class="text-[11px] font-bold text-amber-800">D=正常奶 / O=燕麥奶+$4</span>
+              </div>
+              <h3 class="font-black text-sm text-stone-900">熱 Cappuccino</h3>
+              <p class="text-stone-600 mt-1">豐厚綿密奶泡，咖啡醇厚度更突出。</p>
+            </div>
+            <div class="mt-3 pt-2 border-t border-stone-200 font-mono space-y-0.5 text-stone-800">
+              <div>S (細杯): $35 (燕麥奶 $39)</div>
+              <div>M (中杯): $39 (燕麥奶 $43)</div>
+              <div>L (大杯): $43 (燕麥奶 $47)</div>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-300 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="font-mono font-black text-sm text-stone-900">H04</span>
+                <span class="text-[11px] font-bold text-amber-800">D=正常奶 / O=燕麥奶+$4</span>
+              </div>
+              <h3 class="font-black text-sm text-stone-900">熱 Mocha</h3>
+              <p class="text-stone-600 mt-1">濃郁可可朱古力融合濃縮咖啡與熱奶。</p>
+            </div>
+            <div class="mt-3 pt-2 border-t border-stone-200 font-mono space-y-0.5 text-stone-800">
+              <div>S (細杯): $38 (燕麥奶 $42)</div>
+              <div>M (中杯): $42 (燕麥奶 $46)</div>
+              <div>L (大杯): $46 (燕麥奶 $50)</div>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-300 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="font-mono font-black text-sm text-stone-900">H05</span>
+                <span class="text-[11px] font-bold text-sky-800">S=單份 / D=雙份</span>
+              </div>
+              <h3 class="font-black text-sm text-stone-900">Espresso</h3>
+              <p class="text-stone-600 mt-1">純粹義式濃縮咖啡精華。</p>
+            </div>
+            <div class="mt-3 pt-2 border-t border-stone-200 font-mono space-y-0.5 text-stone-800">
+              <div>S (單份 Single): $20</div>
+              <div>D (雙份 Double): $25</div>
+              <div class="text-stone-400">不設大杯或奶類選項</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exception Handling Auto-Response Library -->
+      <div class="tactile-card p-5 sm:p-6 bg-white">
+        <h2 class="text-lg font-black text-stone-900 border-b-2 border-stone-900 pb-3 mb-4">
+          💬 無障礙異常情況一鍵回覆庫（點擊即可複製貼上至 IG DM / WhatsApp）
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-mono">
+          <button type="button" onclick="copyDirectText('⚠️ 請補充選擇杯量 (S=細杯 / M=中杯 / L=大杯)，例如回覆：M')" class="p-3 rounded-xl border border-stone-300 hover:border-stone-900 bg-stone-50 text-left transition">
+            <div class="font-black text-rose-700 mb-1">漏填杯量 ⎘</div>
+            <p class="text-stone-600">⚠️ 請補充選擇杯量 (S=細杯 / M=中杯 / L=大杯)，例如回覆：M</p>
+          </button>
+          <button type="button" onclick="copyDirectText('ℹ️ 未收到奶類選擇，系統已自動預設為「正常奶」。如需轉燕麥奶(+$4)請回覆：O')" class="p-3 rounded-xl border border-stone-300 hover:border-stone-900 bg-stone-50 text-left transition">
+            <div class="font-black text-amber-800 mb-1">漏填奶類 ⎘</div>
+            <p class="text-stone-600">ℹ️ 未收到奶類選擇，系統已自動預設為「正常奶」。如需轉燕麥奶(+$4)請回覆：O</p>
+          </button>
+          <button type="button" onclick="copyDirectText('⚠️ 抱歉，付款截圖未能辨識或金額不符。請重新上傳清晰顯示「成功付款金額及時間」之截圖。')" class="p-3 rounded-xl border border-stone-300 hover:border-stone-900 bg-stone-50 text-left transition">
+            <div class="font-black text-rose-700 mb-1">截圖金額不符 ⎘</div>
+            <p class="text-stone-600">⚠️ 抱歉，付款截圖未能辨識或金額不符。請重新上傳清晰顯示「成功付款金額及時間」之截圖。</p>
+          </button>
+          <button type="button" onclick="copyDirectText('🟢 你的咖啡已經沖製完成！請到櫃檯出示訂單編號取餐，多謝支持無障礙手作咖啡 ☕')" class="p-3 rounded-xl border border-stone-300 hover:border-stone-900 bg-stone-50 text-left transition">
+            <div class="font-black text-emerald-700 mb-1">通知櫃檯取餐 ⎘</div>
+            <p class="text-stone-600">🟢 你的咖啡已經沖製完成！請到櫃檯出示訂單編號取餐，多謝支持無障礙手作咖啡 ☕</p>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast-box" class="fixed bottom-5 right-5 z-50 hidden bg-stone-900 text-amber-300 border-2 border-amber-400 px-4 py-3 rounded-xl shadow-xl font-mono text-xs font-bold flex items-center gap-2">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toast-text">已複製到剪貼簿</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-stone-900 text-stone-400 border-t-2 border-stone-950 py-5 px-4 text-center text-xs font-mono no-print mt-8">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>ZITA BARISTA · 靜音手作咖啡館 無障礙 DM & WhatsApp 訂單系統 (HKD 專版)</div>
+      <div class="flex items-center gap-4">
+        <a href="https://sites.google.com/view/magamap/zita-barista" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:underline">Google Sites 原頁 ↗</a>
+        <a href="/dailyflow.html" class="text-stone-300 hover:underline">抗炎日報 Daily Flow</a>
+        <a href="/" class="text-stone-300 hover:underline">MAGASite 主頁</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript Engine -->
+  <script>
+    // 1. Master Menu & Pricing Reference
+    const MENU = {
+      'H01': { name: '熱美式', fullName: '熱美式 Americano', type: 'black', prices: { S: 28, M: 32, L: 36 } },
+      'H02': { name: '熱 Latte', fullName: '熱 Latte', type: 'milk', prices: { S: 35, M: 39, L: 43 } },
+      'H03': { name: '熱 Cappuccino', fullName: '熱 Cappuccino', type: 'milk', prices: { S: 35, M: 39, L: 43 } },
+      'H04': { name: '熱 Mocha', fullName: '熱 Mocha', type: 'milk', prices: { S: 38, M: 42, L: 46 } },
+      'H05': { name: 'Espresso', fullName: 'Espresso', type: 'espresso', prices: { S: 20, D: 25 } }
+    };
+
+    const SIZE_MAP = { S: '細杯', M: '中杯', L: '大杯', D: '雙份' };
+    const MILK_MAP = { D: '正常奶', O: '燕麥奶' };
+
+    // State
+    let selectedBean = 'Zita SOE 豆';
+    let selectedDrinkCode = 'H02';
+    let currentSimOrderId = 105;
+    let isManualPriceOverride = false;
+    let selectedPaymentMethod = 'payme';
+    let customQrDataUrl = localStorage.getItem('zita_custom_qr') || null;
+    let isShopOpen = true;
+
+    // Active KDS Orders (Initial realistic state matching #104 and #105)
+    let activeOrders = [
+      {
+        id: 105,
+        bean: 'Zita SOE 豆',
+        raw: 'H02 / M / O / 1',
+        customerDesc: 'Zita SOE 豆/ 中杯熱 Latte／燕麥奶／1 杯',
+        kdsDesc: '中杯熱 Latte／燕麥奶／1 杯',
+        amount: 43,
+        paymentVerified: false,
+        status: '待核對付款',
+        channel: 'IG DM',
+        time: '14:35'
+      },
+      {
+        id: 104,
+        bean: 'Zita SOE 豆',
+        raw: 'H02 / M / O / 1',
+        customerDesc: 'Zita SOE 豆/ 中杯熱 Latte／燕麥奶／1 杯',
+        kdsDesc: '中杯熱 Latte／燕麥奶／1 杯',
+        amount: 43,
+        paymentVerified: false,
+        status: '待核對付款',
+        channel: 'WhatsApp',
+        time: '14:32'
+      },
+      {
+        id: 103,
+        bean: 'Zita SOE 豆',
+        raw: 'H01 / L / 2',
+        customerDesc: 'Zita SOE 豆/ 大杯熱美式／2 杯',
+        kdsDesc: '大杯熱美式／2 杯',
+        amount: 72,
+        paymentVerified: true,
+        status: '🟠 製作中',
+        channel: 'IG DM',
+        time: '14:28'
+      }
+    ];
+
+    // Show Toast Helper
+    function showToast(msg) {
+      const box = document.getElementById('toast-box');
+      const text = document.getElementById('toast-text');
+      text.innerText = msg;
+      box.classList.remove('hidden');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        box.classList.add('hidden');
+      }, 2600);
+    }
+
+    function copyTextById(elId, toastMsg) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      navigator.clipboard.writeText(el.innerText.trim()).then(() => {
+        showToast(toastMsg || '已複製到剪貼簿');
+      });
+    }
+
+    function copyDirectText(str) {
+      navigator.clipboard.writeText(str).then(() => {
+        showToast('已複製回覆範本：' + str.slice(0, 18) + '...');
+      });
+    }
+
+    // Toggle Analysis Summary
+    function toggleAnalysisCollapse() {
+      const content = document.getElementById('analysis-content');
+      const btn = document.getElementById('toggle-analysis-btn');
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        btn.innerText = '收起分析摘要 ▲';
+      } else {
+        content.classList.add('hidden');
+        btn.innerText = '展開分析摘要 ▼';
+      }
+    }
+
+    // Switch Top-Level Views
+    function switchMainView(view) {
+      const dualGrid = document.getElementById('dual-workspace-grid');
+      const custPanel = document.getElementById('customer-panel');
+      const payPanel = document.getElementById('payment-and-kds-panel');
+      const kdsSection = document.getElementById('kds-board-section');
+      const refSection = document.getElementById('reference-manual-section');
+      const analysisBanner = document.getElementById('analysis-banner');
+
+      ['dual', 'customer', 'kds', 'analysis'].forEach(v => {
+        const b = document.getElementById('view-btn-' + v);
+        if (b) {
+          b.className = (v === view)
+            ? 'px-3 py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-stone-950'
+            : 'px-3 py-1.5 rounded-lg text-xs font-bold transition text-stone-300 hover:text-white';
+        }
+      });
+
+      if (view === 'dual') {
+        dualGrid.classList.remove('hidden');
+        custPanel.classList.remove('hidden', 'lg:col-span-12');
+        custPanel.classList.add('lg:col-span-6');
+        payPanel.classList.remove('hidden', 'lg:col-span-12');
+        payPanel.classList.add('lg:col-span-6');
+        kdsSection.classList.remove('hidden');
+        refSection.classList.remove('hidden');
+        analysisBanner.classList.remove('hidden');
+      } else if (view === 'customer') {
+        dualGrid.classList.remove('hidden');
+        custPanel.classList.remove('hidden', 'lg:col-span-6');
+        custPanel.classList.add('lg:col-span-12');
+        payPanel.classList.remove('hidden', 'lg:col-span-6');
+        payPanel.classList.add('lg:col-span-12');
+        kdsSection.classList.add('hidden');
+        refSection.classList.add('hidden');
+      } else if (view === 'kds') {
+        dualGrid.classList.add('hidden');
+        kdsSection.classList.remove('hidden');
+        refSection.classList.add('hidden');
+      } else if (view === 'analysis') {
+        dualGrid.classList.add('hidden');
+        kdsSection.classList.add('hidden');
+        refSection.classList.remove('hidden');
+        analysisBanner.classList.remove('hidden');
+        document.getElementById('analysis-content').classList.remove('hidden');
+      }
+    }
+
+    // Bean selection
+    function selectBean(beanName) {
+      selectedBean = beanName;
+      const btnSoe = document.getElementById('bean-btn-soe');
+      const btnNone = document.getElementById('bean-btn-none');
+      if (beanName === 'Zita SOE 豆') {
+        btnSoe.className = 'py-2 px-3 rounded-lg text-xs font-black border-2 border-stone-900 bg-amber-300 text-stone-950 text-left flex items-center justify-between';
+        btnNone.className = 'py-2 px-3 rounded-lg text-xs font-bold border border-stone-300 bg-white text-stone-700 hover:bg-stone-100 text-left flex items-center justify-between';
+      } else {
+        btnNone.className = 'py-2 px-3 rounded-lg text-xs font-black border-2 border-stone-900 bg-amber-300 text-stone-950 text-left flex items-center justify-between';
+        btnSoe.className = 'py-2 px-3 rounded-lg text-xs font-bold border border-stone-300 bg-white text-stone-700 hover:bg-stone-100 text-left flex items-center justify-between';
+      }
+      runSimulation(false);
+    }
+
+    // Quick drink button click
+    function quickSelectDrink(code) {
+      selectedDrinkCode = code;
+      ['H01', 'H02', 'H03', 'H04', 'H05'].forEach(c => {
+        const btn = document.getElementById('drink-btn-' + c);
+        if (!btn) return;
+        if (c === code) {
+          btn.className = 'p-2 rounded-lg border-2 border-stone-900 bg-amber-100 text-left transition';
+        } else {
+          btn.className = 'p-2 rounded-lg border border-stone-300 bg-white hover:bg-amber-50 text-left transition';
+        }
+      });
+
+      const sizeSel = document.getElementById('quick-size');
+      const milkWrap = document.getElementById('milk-selector-wrap');
+
+      if (code === 'H05') {
+        sizeSel.value = 'D';
+        milkWrap.classList.add('opacity-40', 'pointer-events-none');
+      } else if (code === 'H01') {
+        if (sizeSel.value === 'D') sizeSel.value = 'M';
+        milkWrap.classList.add('opacity-40', 'pointer-events-none');
+      } else {
+        if (sizeSel.value === 'D') sizeSel.value = 'M';
+        milkWrap.classList.remove('opacity-40', 'pointer-events-none');
+      }
+
+      isManualPriceOverride = false;
+      syncCodeFromSelectors();
+    }
+
+    function adjustQty(delta) {
+      const qtyInput = document.getElementById('quick-qty');
+      let v = parseInt(qtyInput.value || '1', 10) + delta;
+      if (v < 1) v = 1;
+      if (v > 20) v = 20;
+      qtyInput.value = v;
+      isManualPriceOverride = false;
+      syncCodeFromSelectors();
+    }
+
+    function syncCodeFromSelectors() {
+      const size = document.getElementById('quick-size').value;
+      const milk = document.getElementById('quick-milk').value;
+      const qty = parseInt(document.getElementById('quick-qty').value || '1', 10);
+
+      let codeStr = '';
+      if (selectedDrinkCode === 'H01' || selectedDrinkCode === 'H05') {
+        const validSize = (selectedDrinkCode === 'H05' && !['S', 'D'].includes(size)) ? 'S' : size;
+        codeStr = `${selectedDrinkCode} / ${validSize} / ${qty}`;
+      } else {
+        const validSize = (size === 'D') ? 'M' : size;
+        codeStr = `${selectedDrinkCode} / ${validSize} / ${milk} / ${qty}`;
+      }
+
+      document.getElementById('sim-input').value = codeStr;
+      isManualPriceOverride = false;
+      runSimulation(false);
+    }
+
+    // Parse DM Order Code
+    function parseOrderCode(inputStr) {
+      if (!inputStr || !inputStr.trim()) return { error: '請輸入訂單代碼（例如：H02 / M / O / 1）' };
+      const parts = inputStr.split('/').map(p => p.trim().toUpperCase()).filter(Boolean);
+      const itemCode = parts[0];
+
+      if (!MENU[itemCode]) {
+        return { error: '飲品編號不存在。請使用 H01 至 H05（例如：H02 / M / O / 1）。' };
+      }
+
+      const item = MENU[itemCode];
+
+      // Case 1: H05 Espresso
+      if (itemCode === 'H05') {
+        const shot = parts[1] || 'S';
+        const qty = Math.max(1, parseInt(parts[2] || '1', 10) || 1);
+        if (shot !== 'S' && shot !== 'D') {
+          return { error: 'Espresso (H05) 份量只設 S (單份) 或 D (雙份)，例如：H05 / D / 1' };
+        }
+        const priceEach = item.prices[shot];
+        const calcTotal = priceEach * qty;
+        const shotName = shot === 'S' ? '單份' : '雙份';
+        const kdsDesc = `${shotName} Espresso／${qty} 杯`;
+        const customerDesc = selectedBean ? `${selectedBean}/ ${kdsDesc}` : kdsDesc;
+        return { itemCode, kdsDesc, customerDesc, calcTotal, qty };
+      }
+
+      // Case 2: H01 Hot Americano
+      if (itemCode === 'H01') {
+        const size = parts[1] || 'M';
+        const qty = Math.max(1, parseInt(parts[2] || '1', 10) || 1);
+        if (!['S', 'M', 'L'].includes(size)) {
+          return { error: '熱美式 (H01) 杯量請選擇 S、M 或 L，例如：H01 / M / 1' };
+        }
+        const priceEach = item.prices[size];
+        const calcTotal = priceEach * qty;
+        const kdsDesc = `${SIZE_MAP[size]}${item.name}／${qty} 杯`;
+        const customerDesc = selectedBean ? `${selectedBean}/ ${kdsDesc}` : kdsDesc;
+        return { itemCode, kdsDesc, customerDesc, calcTotal, qty };
+      }
+
+      // Case 3: H02, H03, H04 Milk Coffees
+      const size = parts[1] || 'M';
+      let milk = parts[2] || 'D';
+      let qty = Math.max(1, parseInt(parts[3] || '1', 10) || 1);
+
+      if (!isNaN(parseInt(milk, 10)) && parts[2]) {
+        qty = Math.max(1, parseInt(milk, 10));
+        milk = 'D';
+      }
+
+      if (!['S', 'M', 'L'].includes(size)) {
+        return { error: '杯量請選擇 S (細杯)、M (中杯) 或 L (大杯)。' };
+      }
+      if (!['D', 'O'].includes(milk)) {
+        milk = 'D';
+      }
+
+      let priceEach = item.prices[size];
+      if (milk === 'O') priceEach += 4;
+      const calcTotal = priceEach * qty;
+
+      const kdsDesc = `${SIZE_MAP[size]}${item.name}／${MILK_MAP[milk]}／${qty} 杯`;
+      const customerDesc = selectedBean ? `${selectedBean}/ ${kdsDesc}` : kdsDesc;
+      return { itemCode, kdsDesc, customerDesc, calcTotal, qty };
+    }
+
+    function onManualPriceChange() {
+      isManualPriceOverride = true;
+      const manualVal = parseInt(document.getElementById('manual-price-input').value || '0', 10);
+      if (manualVal > 0) {
+        document.getElementById('tpl-order-amount').value = manualVal;
+      }
+      runSimulation(true);
+      renderPaymentTemplates();
+    }
+
+    function syncManualAmountFromGateway() {
+      const gatewayVal = parseInt(document.getElementById('tpl-order-amount').value || '0', 10);
+      if (gatewayVal > 0) {
+        isManualPriceOverride = true;
+        document.getElementById('manual-price-input').value = gatewayVal;
+        runSimulation(true);
+        renderPaymentTemplates();
+      }
+    }
+
+    function setQuickAmount(amt) {
+      isManualPriceOverride = true;
+      document.getElementById('manual-price-input').value = amt;
+      document.getElementById('tpl-order-amount').value = amt;
+      runSimulation(true);
+      renderPaymentTemplates();
+    }
+
+    // Run DM Conversion Output
+    function runSimulation(preserveManualPrice) {
+      const input = document.getElementById('sim-input').value;
+      const errorDiv = document.getElementById('sim-error');
+      const custDiv = document.getElementById('sim-output-customer');
+      const barDiv = document.getElementById('sim-output-barista');
+      const manualInput = document.getElementById('manual-price-input');
+
+      errorDiv.classList.add('hidden');
+
+      const res = parseOrderCode(input);
+      if (res.error) {
+        errorDiv.innerText = res.error;
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+
+      if (!preserveManualPrice && !isManualPriceOverride) {
+        manualInput.value = res.calcTotal;
+      }
+
+      const finalAmount = parseInt(manualInput.value || res.calcTotal, 10) || res.calcTotal;
+
+      // Exact required format for Customer & Barista KDS
+      custDiv.innerText =
+`🧾 你的訂單：
+${res.customerDesc}
+金額：$${finalAmount}
+
+請回覆：
+✅ 確認
+✏️ 修改
+❌ 取消`;
+
+      barDiv.innerText =
+`🧾 新訂單 #${currentSimOrderId}
+${res.kdsDesc}
+金額：$${finalAmount}
+
+付款狀態：待核對付款`;
+    }
+
+    // Handle Customer Reply Action (Confirm / Modify / Cancel)
+    function handleCustomerAction(action) {
+      const badge = document.getElementById('customer-reply-badge');
+      const step1 = document.getElementById('cust-step-ind-1');
+      const step2 = document.getElementById('cust-step-ind-2');
+      const step3 = document.getElementById('cust-step-ind-3');
+
+      if (action === 'confirm') {
+        badge.innerText = '✅ 客人已確認！請發送右方 HKD 付款範本給客人';
+        badge.className = 'font-mono text-xs text-emerald-700 font-black';
+        step1.className = 'p-2 rounded-lg border border-stone-300 bg-emerald-50 font-bold text-emerald-800';
+        step2.className = 'p-2 rounded-lg border border-stone-300 bg-emerald-50 font-bold text-emerald-800';
+        step3.className = 'p-2 rounded-lg border-2 border-stone-900 bg-amber-300 font-black text-stone-950';
+
+        // Sync current simulation amount into Payment Gateway
+        const finalAmt = parseInt(document.getElementById('manual-price-input').value || '43', 10);
+        document.getElementById('tpl-order-amount').value = finalAmt;
+        renderPaymentTemplates();
+        showToast('客人已回覆「✅ 確認」！右方付款範本已同步更新為 HK$' + finalAmt);
+      } else if (action === 'modify') {
+        badge.innerText = '✏️ 客人要求修改訂單，請重新選擇或輸入代碼';
+        badge.className = 'font-mono text-xs text-amber-800 font-bold';
+        document.getElementById('sim-input').focus();
+        showToast('請修改上方飲品選項或代碼');
+      } else if (action === 'cancel') {
+        badge.innerText = '❌ 訂單已取消';
+        badge.className = 'font-mono text-xs text-rose-700 font-bold';
+        showToast('已模擬回覆客人：❌ 訂單已為你取消');
+      }
+    }
+
+    // Send via WhatsApp / IG
+    function sendOrderViaWhatsApp() {
+      const text = document.getElementById('sim-output-customer').innerText;
+      const url = 'https://wa.me/?text=' + encodeURIComponent(text);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    function copyOrderForIG() {
+      copyTextById('sim-output-customer', '已複製訂單訊息！請直接貼上至 Instagram DM 發送');
+    }
+
+    function sendPaymentTemplateViaWhatsApp() {
+      const text = document.getElementById('active-payment-template').innerText;
+      const url = 'https://wa.me/?text=' + encodeURIComponent(text);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    // Payment Gateway Templates & Dynamic QR Code
+    function onSelectPaymentOrder() {
+      const ordId = parseInt(document.getElementById('payment-order-select').value, 10);
+      const found = activeOrders.find(o => o.id === ordId);
+      document.getElementById('tpl-order-id').value = ordId;
+      if (found) {
+        document.getElementById('tpl-order-amount').value = found.amount;
+        document.getElementById('manual-price-input').value = found.amount;
+      }
+      renderPaymentTemplates();
+    }
+
+    function selectPaymentMethod(method) {
+      selectedPaymentMethod = method;
+      const tabs = {
+        payme: { label: '1️⃣ PayMe', sub: '長按儲存 QR', activeBg: 'bg-rose-600 text-white' },
+        octopus: { label: '2️⃣ 八達通 Octopus', sub: 'App 掃瞄 QR', activeBg: 'bg-amber-500 text-stone-950' },
+        visa: { label: '3️⃣ Visa / 信用卡', sub: '安全支付頁面', activeBg: 'bg-indigo-600 text-white' },
+        fps: { label: '🇭🇰 轉數快 FPS', sub: '電話號碼 / QR', activeBg: 'bg-emerald-600 text-white' }
+      };
+
+      Object.keys(tabs).forEach(k => {
+        const btn = document.getElementById('pm-tab-' + k);
+        if (!btn) return;
+        if (k === method) {
+          btn.className = `p-2.5 rounded-xl border-2 border-stone-900 ${tabs[k].activeBg} font-black text-xs text-left transition`;
+        } else {
+          btn.className = 'p-2.5 rounded-xl border border-stone-300 bg-stone-50 text-stone-800 hover:bg-amber-50 font-bold text-xs text-left transition';
+        }
+      });
+
+      renderPaymentTemplates();
+    }
+
+    function renderPaymentTemplates() {
+      const ordId = document.getElementById('tpl-order-id').value.trim() || '104';
+      const amt = document.getElementById('tpl-order-amount').value.trim() || '43';
+      const fpsPhone = document.getElementById('fps-phone-input').value.trim() || '9876 5432';
+
+      // Exact 3 Templates requested by user
+      const paymeTpl =
+`請長按以下 QR Code 儲存並開啟 PayMe App 完成付款。
+訂單編號：#${ordId}
+應付總額：$${amt}
+付款後請即時發送付款截圖以作核對。`;
+
+      const octopusTpl =
+`請使用八達通 App 掃瞄以下 QR Code 完成付款。
+訂單編號：#${ordId}
+應付總額：$${amt}
+付款後請即時發送交易紀錄截圖。`;
+
+      const visaTpl =
+`請掃瞄 QR Code 進入安全支付頁面完成信用卡付款。
+訂單編號：#${ordId}
+應付總額：$${amt}
+付款完成後請傳送成功付款畫面截圖。`;
+
+      const fpsTpl =
+`請使用香港轉數快 (FPS) 輸入電話號碼或掃瞄 QR Code 完成 HKD 過數。
+轉數快電話：${fpsPhone}
+訂單編號：#${ordId}
+應付總額：$${amt} (HKD)
+付款後請即時發送成功過數截圖以作核對。`;
+
+      // Update 3 preview boxes
+      document.getElementById('preview-tpl-payme').innerText = paymeTpl;
+      document.getElementById('preview-tpl-octopus').innerText = octopusTpl;
+      document.getElementById('preview-tpl-visa').innerText = visaTpl;
+
+      // Update active box
+      const activeTitleEl = document.getElementById('active-tpl-title');
+      const activeTplEl = document.getElementById('active-payment-template');
+      const qrBadgeEl = document.getElementById('qr-badge-header');
+
+      if (selectedPaymentMethod === 'payme') {
+        activeTitleEl.innerText = '1️⃣ PayMe 付款範本';
+        activeTplEl.innerText = paymeTpl;
+        qrBadgeEl.innerText = '1️⃣ PayMe 收款碼 (HKD)';
+        qrBadgeEl.className = 'text-xs font-black text-rose-700 mb-1';
+      } else if (selectedPaymentMethod === 'octopus') {
+        activeTitleEl.innerText = '2️⃣ 八達通 Octopus 範本';
+        activeTplEl.innerText = octopusTpl;
+        qrBadgeEl.innerText = '2️⃣ 八達通 Octopus 收款碼';
+        qrBadgeEl.className = 'text-xs font-black text-amber-700 mb-1';
+      } else if (selectedPaymentMethod === 'visa') {
+        activeTitleEl.innerText = '3️⃣ Visa / 信用卡範本';
+        activeTplEl.innerText = visaTpl;
+        qrBadgeEl.innerText = '3️⃣ Visa / 信用卡安全支付碼';
+        qrBadgeEl.className = 'text-xs font-black text-indigo-700 mb-1';
+      } else {
+        activeTitleEl.innerText = '🇭🇰 香港轉數快 FPS 電話過數範本';
+        activeTplEl.innerText = fpsTpl;
+        qrBadgeEl.innerText = `🇭🇰 FPS 轉數快 (${fpsPhone})`;
+        qrBadgeEl.className = 'text-xs font-black text-emerald-700 mb-1';
+      }
+
+      document.getElementById('qr-label-id').innerText = ordId;
+      document.getElementById('qr-label-amt').innerText = amt;
+      document.getElementById('verify-amt-span').innerText = amt;
+
+      drawStylizedQrCode(selectedPaymentMethod, ordId, amt, fpsPhone);
+    }
+
+    // Draw deterministic, high-contrast QR code matrix on Canvas
+    function drawStylizedQrCode(method, ordId, amt, fpsPhone) {
+      const canvas = document.getElementById('dynamic-qr-canvas');
+      const customImg = document.getElementById('custom-qr-img');
+      if (customQrDataUrl) {
+        canvas.classList.add('hidden');
+        customImg.src = customQrDataUrl;
+        customImg.classList.remove('hidden');
+        return;
+      }
+      canvas.classList.remove('hidden');
+      customImg.classList.add('hidden');
+
+      const ctx = canvas.getContext('2d');
+      const size = 21;
+      const cell = Math.floor(canvas.width / size);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const colors = {
+        payme: '#BE123C',
+        octopus: '#B45309',
+        visa: '#3730A3',
+        fps: '#047857'
+      };
+      ctx.fillStyle = colors[method] || '#1C1917';
+
+      const seedStr = `${method}-${ordId}-${amt}-${fpsPhone}`;
+      let hash = 2166136261;
+      for (let i = 0; i < seedStr.length; i++) {
+        hash ^= seedStr.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+
+      function drawFinder(r0, c0) {
+        for (let r = 0; r < 7; r++) {
+          for (let c = 0; c < 7; c++) {
+            const isBorder = (r === 0 || r === 6 || c === 0 || c === 6);
+            const isInner = (r >= 2 && r <= 4 && c >= 2 && c <= 4);
+            if (isBorder || isInner) {
+              ctx.fillRect((c0 + c) * cell, (r0 + r) * cell, cell, cell);
+            }
+          }
+        }
+      }
+
+      drawFinder(0, 0);
+      drawFinder(0, size - 7);
+      drawFinder(size - 7, 0);
+
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          const inTL = (r < 8 && c < 8);
+          const inTR = (r < 8 && c >= size - 8);
+          const inBL = (r >= size - 8 && c < 8);
+          const inCenter = (r >= 8 && r <= 12 && c >= 8 && c <= 12);
+          if (inTL || inTR || inBL || inCenter) continue;
+
+          const bit = ((hash >>> ((r * size + c) % 24)) ^ (r * 13 + c * 7)) & 1;
+          if (bit) {
+            ctx.fillRect(c * cell, r * cell, cell - 0.5, cell - 0.5);
+          }
+        }
+      }
+
+      // Center Currency Badge
+      ctx.fillStyle = '#1C1917';
+      ctx.fillRect(8 * cell, 8 * cell, 5 * cell, 5 * cell);
+      ctx.fillStyle = '#FACC15';
+      ctx.font = 'bold 10px JetBrains Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('$' + amt, 10.5 * cell, 10.5 * cell);
+    }
+
+    function uploadCustomQrImage(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        customQrDataUrl = e.target.result;
+        try { localStorage.setItem('zita_custom_qr', customQrDataUrl); } catch (err) {}
+        renderPaymentTemplates();
+        showToast('已更新並儲存自訂收款 QR Code！');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // 3-Point Verification Gate Logic
+    function checkVerificationGate() {
+      const c1 = document.getElementById('verify-chk-amount').checked;
+      const c2 = document.getElementById('verify-chk-time').checked;
+      const c3 = document.getElementById('verify-chk-status').checked;
+      const btn = document.getElementById('unlock-next-step-btn');
+      const label = document.getElementById('gate-status-label');
+
+      if (c1 && c2 && c3) {
+        btn.disabled = false;
+        label.innerText = '狀態：🟢 三點核對通過 (可進入下一步)';
+        label.className = 'font-mono text-xs text-emerald-400 font-black';
+      } else {
+        btn.disabled = true;
+        label.innerText = '狀態：🟣 待核對付款 (請完成三點核對)';
+        label.className = 'font-mono text-xs text-purple-300 font-bold';
+      }
+    }
+
+    function simulateCustomerScreenshot() {
+      document.getElementById('verify-chk-amount').checked = true;
+      document.getElementById('verify-chk-time').checked = true;
+      document.getElementById('verify-chk-status').checked = true;
+      checkVerificationGate();
+      showToast('📸 已收到客人 HK$' + document.getElementById('tpl-order-amount').value + ' 付款成功截圖！三點核對已通過');
+    }
+
+    function confirmPaymentAndStartMaking() {
+      const ordId = parseInt(document.getElementById('tpl-order-id').value, 10);
+      const amt = parseInt(document.getElementById('tpl-order-amount').value || '43', 10);
+      const ord = activeOrders.find(o => o.id === ordId);
+
+      if (ord) {
+        ord.amount = amt;
+        ord.paymentVerified = true;
+        ord.status = '🟠 製作中';
+      } else {
+        // Add to KDS as in-progress
+        const res = parseOrderCode(document.getElementById('sim-input').value);
+        const now = new Date();
+        const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        activeOrders.unshift({
+          id: ordId,
+          bean: selectedBean,
+          raw: document.getElementById('sim-input').value,
+          customerDesc: res.customerDesc || 'Zita SOE 豆/ 中杯熱 Latte／燕麥奶／1 杯',
+          kdsDesc: res.kdsDesc || '中杯熱 Latte／燕麥奶／1 杯',
+          amount: amt,
+          paymentVerified: true,
+          status: '🟠 製作中',
+          channel: 'IG DM',
+          time: timeStr
+        });
+      }
+
+      renderKDS();
+      // Reset checkboxes for next verification
+      document.getElementById('verify-chk-amount').checked = false;
+      document.getElementById('verify-chk-time').checked = false;
+      document.getElementById('verify-chk-status').checked = false;
+      checkVerificationGate();
+
+      showToast(`✅ 單號 #${ordId} (HK$${amt}) 已確認付款，正式進入【🟠 製作中】！`);
+    }
+
+    // Add current simulator order to KDS
+    function addSimulatedOrderToKDS() {
+      if (!isShopOpen) {
+        showToast('⚠️ 目前已暫停接單，請先開啟營業狀態');
+        return;
+      }
+      const input = document.getElementById('sim-input').value;
+      const res = parseOrderCode(input);
+      if (res.error) {
+        showToast(res.error);
+        return;
+      }
+      const amt = parseInt(document.getElementById('manual-price-input').value || res.calcTotal, 10);
+      const nextId = activeOrders.length > 0 ? Math.max(...activeOrders.map(o => o.id)) + 1 : 105;
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      activeOrders.unshift({
+        id: nextId,
+        bean: selectedBean,
+        raw: input,
+        customerDesc: res.customerDesc,
+        kdsDesc: res.kdsDesc,
+        amount: amt,
+        paymentVerified: false,
+        status: '待核對付款',
+        channel: 'IG DM / WhatsApp',
+        time: timeStr
+      });
+
+      currentSimOrderId = nextId + 1;
+      document.getElementById('live-order-id').innerText = '#' + currentSimOrderId;
+      document.getElementById('tpl-order-id').value = nextId;
+      document.getElementById('tpl-order-amount').value = amt;
+
+      updatePaymentOrderDropdown();
+      renderPaymentTemplates();
+      renderKDS();
+      showToast(`🧾 新訂單 #${nextId} (HK$${amt}) 已加入 KDS 待核對付款！`);
+    }
+
+    function updatePaymentOrderDropdown() {
+      const sel = document.getElementById('payment-order-select');
+      if (!sel) return;
+      sel.innerHTML = activeOrders.map(o => `<option value="${o.id}">#${o.id} ($${o.amount} · ${o.status})</option>`).join('');
+    }
+
+    // Update price directly from a KDS card
+    function updateKdsOrderPrice(id, newPriceVal) {
+      const ord = activeOrders.find(o => o.id === id);
+      const parsed = parseInt(newPriceVal, 10);
+      if (ord && parsed > 0) {
+        ord.amount = parsed;
+        document.getElementById('tpl-order-id').value = ord.id;
+        document.getElementById('tpl-order-amount').value = parsed;
+        renderPaymentTemplates();
+        renderKDS();
+        showToast(`💰 單號 #${id} 收費銀碼已更新為 HK$${parsed}`);
+      }
+    }
+
+    // Load order into payment gateway from KDS card
+    function loadOrderToPaymentGateway(id, method) {
+      const ord = activeOrders.find(o => o.id === id);
+      if (!ord) return;
+      document.getElementById('tpl-order-id').value = ord.id;
+      document.getElementById('tpl-order-amount').value = ord.amount;
+      if (method) selectPaymentMethod(method);
+      renderPaymentTemplates();
+      copyTextById('active-payment-template', `已複製單號 #${ord.id} (HK$${ord.amount}) 付款範本！`);
+    }
+
+    // Render Barista KDS Cards
+    function renderKDS() {
+      const container = document.getElementById('kds-orders-container');
+      const countEl = document.getElementById('kds-badge-count');
+      if (countEl) countEl.innerText = activeOrders.length;
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      if (activeOrders.length === 0) {
+        container.innerHTML = `<div class="col-span-3 text-center py-12 text-stone-400 font-bold">目前沒有待處理訂單</div>`;
+        return;
+      }
+
+      activeOrders.forEach(ord => {
+        const isPendingPay = ord.status.includes('待核對');
+        let statusTone = 'text-purple-800 bg-purple-100 border-purple-300';
+        if (ord.status.includes('製作中')) statusTone = 'text-amber-900 bg-amber-200 border-amber-400';
+        if (ord.status.includes('可以取餐')) statusTone = 'text-emerald-900 bg-emerald-200 border-emerald-400';
+        if (ord.status.includes('已完成')) statusTone = 'text-stone-600 bg-stone-200 border-stone-300';
+        if (ord.status.includes('需要處理')) statusTone = 'text-rose-900 bg-rose-200 border-rose-400';
+
+        const card = document.createElement('div');
+        card.className = 'rounded-xl border-2 border-stone-900 bg-stone-50 p-4 flex flex-col justify-between space-y-4 shadow-[3px_3px_0px_#1C1917]';
+        card.innerHTML = `
+          <div class="space-y-3">
+            <div class="flex items-center justify-between border-b border-stone-200 pb-2">
+              <div>
+                <span class="font-mono font-black text-base text-stone-900">🧾 新訂單 #${ord.id}</span>
+                <span class="text-[11px] font-mono text-stone-500 ml-1.5">${ord.time} · ${ord.channel}</span>
+              </div>
+              <span class="text-xs font-bold px-2 py-0.5 rounded border ${statusTone}">${ord.status}</span>
+            </div>
+
+            <!-- KDS Standardized Output Block -->
+            <div class="bg-white p-3 rounded-lg border border-stone-300 font-mono text-xs space-y-1">
+              ${ord.bean ? `<div class="text-[11px] font-bold text-amber-800">豆款：${ord.bean}</div>` : ''}
+              <div class="font-black text-sm text-stone-900">${ord.kdsDesc}</div>
+              <div class="flex items-center justify-between pt-1">
+                <span class="text-stone-600 font-bold">手動收費銀碼 (HKD)：</span>
+                <div class="flex items-center">
+                  <span class="text-xs font-black text-rose-800 mr-1">$</span>
+                  <input
+                    type="number"
+                    value="${ord.amount}"
+                    onchange="updateKdsOrderPrice(${ord.id}, this.value)"
+                    class="w-20 border-2 border-stone-900 rounded px-1.5 py-0.5 text-xs font-mono font-black bg-amber-50 text-stone-900 tabular-nums"
+                  />
+                </div>
+              </div>
+              <div class="text-[11px] text-stone-500">付款狀態：<strong class="${ord.paymentVerified ? 'text-emerald-700' : 'text-purple-700'}">${ord.status}</strong></div>
+            </div>
+
+            <!-- Quick Copy Payment Templates for this Order -->
+            <div class="space-y-1">
+              <div class="text-[11px] font-bold text-stone-600">一鍵複製 #${ord.id} ($${ord.amount}) 付款範本給客人：</div>
+              <div class="grid grid-cols-4 gap-1 text-[10px] font-mono">
+                <button onclick="loadOrderToPaymentGateway(${ord.id}, 'payme')" class="py-1 px-1.5 rounded bg-rose-100 hover:bg-rose-200 text-rose-900 font-bold border border-rose-300">1️⃣PayMe</button>
+                <button onclick="loadOrderToPaymentGateway(${ord.id}, 'octopus')" class="py-1 px-1.5 rounded bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold border border-amber-300">2️⃣八達通</button>
+                <button onclick="loadOrderToPaymentGateway(${ord.id}, 'visa')" class="py-1 px-1.5 rounded bg-indigo-100 hover:bg-indigo-200 text-indigo-900 font-bold border border-indigo-300">3️⃣Visa</button>
+                <button onclick="loadOrderToPaymentGateway(${ord.id}, 'fps')" class="py-1 px-1.5 rounded bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold border border-emerald-300">🇭🇰轉數快</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-2 pt-2 border-t border-stone-200">
+            <div class="grid grid-cols-2 gap-1.5 text-xs">
+              <button onclick="verifyAndMakeFromKDS(${ord.id})" class="bg-amber-400 hover:bg-amber-500 text-stone-950 border border-stone-900 font-black py-1.5 px-2 rounded-lg transition">
+                ✅ 核對付款 (開始製作)
+              </button>
+              <button onclick="updateOrderStatus(${ord.id}, '🟢 可以取餐')" ${!ord.paymentVerified && isPendingPay ? 'disabled title="請先核對客人付款才能進行下一步"' : ''} class="${!ord.paymentVerified && isPendingPay ? 'opacity-40 cursor-not-allowed bg-stone-300 text-stone-600' : 'bg-emerald-600 hover:bg-emerald-700 text-white'} font-black py-1.5 px-2 rounded-lg transition">
+                🟢 通知取餐
+              </button>
+              <button onclick="updateOrderStatus(${ord.id}, '⚫ 已完成')" class="bg-stone-800 hover:bg-stone-950 text-white font-bold py-1.5 px-2 rounded-lg transition">
+                ⚫ 完成訂單
+              </button>
+              <button onclick="updateOrderStatus(${ord.id}, '🔴 需要處理 (截圖不符)')" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-1.5 px-2 rounded-lg transition">
+                🔴 截圖有不符
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function verifyAndMakeFromKDS(id) {
+      const ord = activeOrders.find(o => o.id === id);
+      if (!ord) return;
+      ord.paymentVerified = true;
+      ord.status = '🟠 製作中';
+      renderKDS();
+      copyDirectText(`✅ 已核對收到你的 HK$${ord.amount} 付款！訂單 #${ord.id} (${ord.customerDesc}) 現正為你新鮮沖製中 ☕`);
+    }
+
+    function updateOrderStatus(id, newStatus) {
+      const ord = activeOrders.find(o => o.id === id);
+      if (!ord) return;
+      if (newStatus.includes('可以取餐') && !ord.paymentVerified) {
+        showToast('⚠️ 必須等待客人付款成功並核對後，才能進行下一步！');
+        return;
+      }
+      ord.status = newStatus;
+      renderKDS();
+
+      if (newStatus.includes('可以取餐')) {
+        copyDirectText(`🟢 訂單 #${ord.id} (${ord.customerDesc}) 已經沖製完成！請到櫃檯出示單號 #${ord.id} 取餐 ☕`);
+      } else if (newStatus.includes('需要處理')) {
+        copyDirectText(`⚠️ 抱歉，訂單 #${ord.id} 付款截圖未能辨識或金額不符 (應付 HK$${ord.amount})。請重新上傳清晰顯示成功付款金額及時間之截圖。`);
+      }
+    }
+
+    function toggleShopStatus() {
+      isShopOpen = !isShopOpen;
+      const btn = document.getElementById('toggle-shop-btn');
+      const text = document.getElementById('shop-status-text');
+      const indicator = document.getElementById('shop-status-indicator');
+      const globalDot = document.getElementById('global-shop-dot');
+      const globalStatus = document.getElementById('global-shop-status');
+
+      if (isShopOpen) {
+        btn.className = 'tactile-btn px-3.5 py-2 rounded-xl text-xs font-black bg-emerald-600 text-white flex items-center gap-2';
+        text.innerText = '營業中 (接受 IG / WhatsApp 訂單)';
+        indicator.className = 'w-2.5 h-2.5 rounded-full bg-white animate-pulse';
+        globalDot.className = 'inline-block w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse';
+        globalStatus.innerText = '無障礙零語音通道運行中：客人只需「1. 輸入 ➔ 2. 確認 ➔ 3. 付款截圖」，待咖啡師手動核對 HKD 銀碼後即開始沖煮。';
+      } else {
+        btn.className = 'tactile-btn px-3.5 py-2 rounded-xl text-xs font-black bg-rose-600 text-white flex items-center gap-2';
+        text.innerText = '已暫停接單';
+        indicator.className = 'w-2.5 h-2.5 rounded-full bg-white';
+        globalDot.className = 'inline-block w-2.5 h-2.5 rounded-full bg-rose-600';
+        globalStatus.innerText = '☕ 暫停接單中：現時咖啡師正專注沖煮或休息中，暫停接收新 DM 訂單。';
+      }
+    }
+
+    // Initialize on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      runSimulation(true);
+      renderPaymentTemplates();
+      renderKDS();
+    });
+  </script>
+</body>
+</html>
