@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MagaBrew · 無障礙手沖落單及沖啡系統</title>
-  <meta name="description" content="MagaBrew 香港地道廣東話無障礙落單系統：客人 order 與 咖啡師 Brewer 雙向同步、轉數快 FPS 置頂過數、電郵登記及 4 位密碼保護、即時取消張單。" />
+  <title>For Brew</title>
+  <meta name="description" content="Brew 香港地道廣東話落單系統：客人 order 與 咖啡師 Brewer 雙向同步、轉數快 FPS 置頂過數、電郵登記及 4 位密碼保護、即時取消張單。" />
   <meta property="og:title" content="MagaBrew · 無障礙手沖落單及沖啡系統" />
   <meta property="og:description" content="客人 order · 咖啡師 Brewer 即時同步 · 轉數快 FPS 置頂過數" />
   <meta property="og:type" content="website" />
@@ -1625,7 +1625,7 @@
       } catch (e) {}
 
       if (changedOrder) {
-        fetch('/api/magabrew/orders', {
+        fetch('/api/brew/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(changedOrder)
@@ -1672,14 +1672,14 @@
 
     // 12. Utility Actions (Copy / WhatsApp / Shop Mode / MCP)
     function copyText(type) {
-      const text = `🧾 MagaBrew 落單：\n${currentParsedOrder.customerDesc}\n聯絡：${currentParsedOrder.customerName} (${currentParsedOrder.whatsapp})\n應付港紙：$${currentParsedOrder.totalPrice}`;
+      const text = `🧾 Brew 落單：\n${currentParsedOrder.customerDesc}\n聯絡：${currentParsedOrder.customerName} (${currentParsedOrder.whatsapp})\n應付港紙：$${currentParsedOrder.totalPrice}`;
       navigator.clipboard.writeText(text).then(() => {
         showToast('📋 已複製落單字句');
       });
     }
 
     function openWhatsAppOrder() {
-      const text = `🧾 MagaBrew 落單：\n${currentParsedOrder.customerDesc}\n稱呼：${currentParsedOrder.customerName}\n金額：$${currentParsedOrder.totalPrice}\n✅ 確認落單，轉數快過數後傳截圖`;
+      const text = `🧾 Brew 落單：\n${currentParsedOrder.customerDesc}\n稱呼：${currentParsedOrder.customerName}\n金額：$${currentParsedOrder.totalPrice}\n✅ 確認落單，轉數快過數後傳截圖`;
       const link = document.createElement('a');
       link.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
       link.target = '_blank';
