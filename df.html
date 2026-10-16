@@ -9,7 +9,7 @@
     <meta property="og:description" content="破除建制毒素與商業包裝偽術，重塑個人生物主權。" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-
+ 
     <!-- Safe WebSocket & HMR Sandbox Guard -->
     <script>
       (function () {
@@ -20,7 +20,7 @@
               (typeof protocols === 'string' && protocols.indexOf('vite-hmr') !== -1) ||
               (Array.isArray(protocols) && protocols.indexOf('vite-hmr') !== -1) ||
               (typeof url === 'string' && (url.indexOf('vite-hmr') !== -1 || url.indexOf(':3000') !== -1));
-
+ 
             if (isViteHmr) {
               var listeners = {};
               var mockSocket = {
@@ -55,19 +55,19 @@
                 onerror: null,
                 onmessage: null
               };
-
+ 
               setTimeout(function () {
                 if (typeof mockSocket.onopen === 'function') {
                   try { mockSocket.onopen({ type: 'open', target: mockSocket }); } catch (e) {}
                 }
               }, 0);
-
+ 
               return mockSocket;
             }
-
+ 
             return new OriginalWebSocket(url, protocols);
           }
-
+ 
           SafeWebSocket.prototype = OriginalWebSocket.prototype;
           SafeWebSocket.CONNECTING = 0;
           SafeWebSocket.OPEN = 1;
@@ -75,7 +75,7 @@
           SafeWebSocket.CLOSED = 3;
           window.WebSocket = SafeWebSocket;
         }
-
+ 
         window.addEventListener('unhandledrejection', function (event) {
           if (!event) return;
           var reason = event.reason;
@@ -95,7 +95,7 @@
             event.stopImmediatePropagation();
           }
         }, true);
-
+ 
         window.addEventListener('error', function (event) {
           if (!event) return;
           var msg = (event.message || '') + ' ' + (event.error ? (event.error.message || '') : '');
@@ -248,7 +248,7 @@
             text-decoration-thickness: 3px;    
             text-underline-offset: 5px;    
         }
-
+ 
         /* AI Text & Background Effects for Remotion / GSAP */
         @keyframes aiPulsateBg {
             0%, 100% { background-position: 0% 50%; }
@@ -398,7 +398,7 @@
                     <strong>一人 6 年抗癌 2 次血淚告白：</strong>日日驚驗血有事、驚 60 歲前癌症纏身？平時居然仲一直倒呢 6 種毒素落肚！咪再當被商業 Marketing 同大藥廠圈養洗腦嘅病態 NPC，等病到開刀化療先識驚！真正自癒黑客係要 <strong>Control the controllables</strong>，24 小時內即刻切斷呢 6 大毒素入口，奪回主導權！
                 </p>    
             </div>    
-
+ 
             <!-- 6 大化學毒素 清單 (01 - 06) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 font-sans text-xs mb-3">
                 <!-- 01 -->
@@ -417,7 +417,7 @@
                         </span>
                     </div>
                 </div>
-
+ 
                 <!-- 02 -->
                 <div class="p-3 bg-amber-50/80 border border-amber-300 rounded flex flex-col justify-between">
                     <div>
@@ -434,7 +434,7 @@
                         </span>
                     </div>
                 </div>
-
+ 
                 <!-- 03 -->
                 <div class="p-3 bg-emerald-50/80 border border-emerald-300 rounded flex flex-col justify-between">
                     <div>
@@ -451,7 +451,7 @@
                         </span>
                     </div>
                 </div>
-
+ 
                 <!-- 04 -->
                 <div class="p-3 bg-rose-50/80 border-2 border-rose-400 rounded flex flex-col justify-between shadow-2xs">
                     <div>
@@ -468,7 +468,7 @@
                         </span>
                     </div>
                 </div>
-
+ 
                 <!-- 05 -->
                 <div class="p-3 bg-purple-50/80 border border-purple-300 rounded flex flex-col justify-between">
                     <div>
@@ -485,7 +485,7 @@
                         </span>
                     </div>
                 </div>
-
+ 
                 <!-- 06 -->
                 <div class="p-3 bg-cyan-50/80 border border-cyan-300 rounded flex flex-col justify-between">
                     <div>
@@ -503,7 +503,7 @@
                     </div>
                 </div>
             </div>
-
+ 
             <!-- 自癒執行三部曲 (STEP 1, STEP 2, STEP 3) -->
             <div class="border-2 border-slate-900 bg-[#FFFDF8] p-3.5 sm:p-4 mb-3">
                 <div class="flex items-center gap-2 mb-2 pb-1.5 border-b border-slate-300 font-mono text-xs font-black text-slate-900">
@@ -522,7 +522,7 @@
                     </div>
                 </div>
             </div>
-
+ 
             <!-- 24HR 行動條 (超精簡一體化) -->
             <div class="p-2.5 bg-[#FFFDF8] border border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
                 <div class="font-mono text-slate-800">
@@ -624,7 +624,7 @@
                         <p class="text-base font-serif italic border-l-4 border-news-red pl-3 py-1 text-news-subtle mb-4 font-bold">    
                             每日輪換執行，徹底阻斷細胞「漏電」，重塑個人生物主權。    
                         </p>    
-
+ 
                         <!-- 最新排序 1 ➔ 7 實彈總覽列表 -->
                         <ul class="space-y-2.5 mb-5 font-serif">
                             <!-- B1 新增項目：更新 EVOO ericwongkhk -->
@@ -643,7 +643,7 @@
                                     <a href="/evoo-guide.html" target="_blank" class="text-news-winered font-black underline ml-1">閱讀《EVOO 1-7 款品油指南全文》↗</a>
                                 </p>
                             </li>
-
+ 
                             <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(7);" class="p-3.5 bg-cyan-50/70 border-2 border-cyan-800 rounded-sm cursor-pointer hover:bg-cyan-100/80 transition shadow-xs">
                                 <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
                                     <span class="font-mono text-xs font-black bg-cyan-900 text-white px-2 py-0.5 rounded">【#7 最新移動一點】</span>
@@ -652,7 +652,7 @@
                                 <h3 class="text-base sm:text-lg font-black text-news-ink">Kefir 克菲爾 意識60秒 腸道大清淤 ‧ 破除乳糖不耐症迷思</h3>
                                 <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>一飲奶就肚脹痛到 SLDPK？咪再被商業益生菌當 NPC 圈養！60 秒快閃意識，每日 1/4 杯天然 Kefir 加料活性短鏈脂肪酸 (SCFA)，2-4 週腸道微生態大進化，徹底排走脹氣！</p>
                             </li>
-
+ 
                             <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(6);" class="p-3 bg-white border border-slate-300 hover:border-news-ink rounded-sm cursor-pointer transition">
                                 <div class="flex items-center gap-2 mb-0.5">
                                     <span class="font-mono text-xs font-black bg-slate-800 text-white px-2 py-0.5 rounded">【#6】</span>
@@ -660,7 +660,7 @@
                                 </div>
                                 <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>一人 6 年抗癌 2 次血淚告白！咪再做被塑膠水喉同化學濾水器圈養嘅水豬！自家過濾水＋純紅銅杯，極速切斷微塑膠與水毒，微充電帶電活水瞬時自癒！</p>
                             </li>
-
+ 
                             <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(5);" class="p-3 bg-white border border-slate-300 hover:border-news-ink rounded-sm cursor-pointer transition">
                                 <div class="flex items-center gap-2 mb-0.5">
                                     <span class="font-mono text-xs font-black bg-sky-800 text-white px-2 py-0.5 rounded">【#5】</span>
@@ -668,7 +668,7 @@
                                 </div>
                                 <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>全生活 Swap 實戰！剔除無核青檸、養殖大型魚、不黏塗層鑊，替換成有核 Key Limes、野生小沙甸魚、不鏽鋼/鑄鐵鑊及天然酸種麵包，24 小時內從根源切斷微塑膠與基因改造毒素入口。</p>
                             </li>
-
+ 
                             <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(4);" class="p-3 bg-white border border-slate-300 hover:border-news-ink rounded-sm cursor-pointer transition">
                                 <div class="flex items-center gap-2 mb-0.5">
                                     <span class="font-mono text-xs font-black bg-rose-800 text-white px-2 py-0.5 rounded">【#4】</span>
@@ -676,7 +676,7 @@
                                 </div>
                                 <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>踢爆市售燕麥奶菜籽油 (Canola Oil) 與結冷膠陷阱！拒絕常溫 UHT 焦化奶與脫脂奶，鎖定 100% 草飼全脂鮮奶、有機超濾鮮奶或純淨「堅果＋水＋海鹽」植物奶，掌控腸道屏障主導權。</p>
                             </li>
-
+ 
                             <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(3);" class="p-3 bg-white border border-slate-300 hover:border-news-ink rounded-sm cursor-pointer transition">
                                 <div class="flex items-center gap-2 mb-0.5">
                                     <span class="font-mono text-xs font-black bg-orange-700 text-white px-2 py-0.5 rounded">【#3】</span>
@@ -684,7 +684,7 @@
                                 </div>
                                 <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>咖啡根本製造唔到真能量，只係阻斷腺苷 (Adenosine) 並暴增皮質醇透支體力 (PMID: 16631247)！透過草飼牛高脂早餐、晨光曬太陽、力量訓練與深層睡眠重構真實細胞能量。</p>
                             </li>
-
+ 
                             <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(2);" class="p-3 bg-white border border-slate-300 hover:border-news-ink rounded-sm cursor-pointer transition">
                                 <div class="flex items-center gap-2 mb-0.5">
                                     <span class="font-mono text-xs font-black bg-emerald-700 text-white px-2 py-0.5 rounded">【#2】</span>
@@ -692,7 +692,7 @@
                                 </div>
                                 <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>食物係每日直接傳送到 DNA 嘅 Biological Information！鎖定葉酸、槲皮素、甜菜紅素、β-胡蘿蔔素、D-檸檬烯與芹菜素 6 大分子，支援 DNA 甲基化修復與肝臟解毒途徑。</p>
                             </li>
-
+ 
                             <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(1);" class="p-3 bg-white border border-slate-300 hover:border-news-ink rounded-sm cursor-pointer transition">
                                 <div class="flex items-center gap-2 mb-0.5">
                                     <span class="font-mono text-xs font-black bg-amber-700 text-white px-2 py-0.5 rounded">【#1】</span>
@@ -701,7 +701,7 @@
                                 <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>發酵係人類最古老嘅生物科技！透過發酵泡菜 (Sauerkraut) 與發酵乳酪補充天然活性乳酸菌與短鏈脂肪酸，修補腸道 Tight Junctions、壓制 LPS 內毒素，將簡單食材轉化成強效抗炎武器。</p>
                             </li>
                         </ul>
-
+ 
                         <!-- GSAP 物理動效即時 HUD (附件圖 1：渲染時間線與代謝比率) -->
                         <div id="gsapHudContainer" class="mb-5 bg-[#070B14] text-white border-2 border-[#1E293B] rounded-xl p-4 sm:p-5 shadow-xl font-mono relative overflow-hidden select-none cursor-pointer group" onclick="triggerGsapHudBounce()" title="點擊觸發 GSAP 物理彈跳動效">
                             <div class="flex items-center justify-between text-xs sm:text-sm border-b border-slate-800 pb-2 mb-3">
@@ -741,7 +741,7 @@
                                 </div>
                             </div>
                         </div>
-
+ 
                         <!-- B1 Switcher Tabs (不同深淺色區分) -->
                         <div class="flex flex-wrap gap-2 mb-4 no-print border-b border-slate-300 pb-2.5 font-mono text-xs sm:text-sm">
                             <button onclick="showB1FeatureCard(1)" id="btn-b1-deck-1" class="px-3.5 py-1.5 rounded font-bold border transition bg-[#8B0000] text-white border-[#8B0000] shadow-sm flex items-center gap-1.5">
@@ -752,7 +752,7 @@
     
                         <!-- B1 CARDS DECK CONTAINER -->
                         <div class="space-y-4">
-
+ 
                             <!-- B1 TAB 1: 12大抗炎戰術輪播 (保留戰術 01) (Default Visible) -->
                             <div id="b1-feature-card-1" class="space-y-4">
                                 <!-- CAROUSEL BOX -->    
@@ -769,7 +769,7 @@
                                                 <span>⭐ 鎖定檢視：戰術 06 舊傷瘢痕</span>
                                             </button>
                                         </div>
-
+ 
                                         <button onclick="nextSlide()" class="bg-news-ink hover:bg-news-red text-white px-3 py-1 rounded text-xs sm:text-sm font-mono font-bold flex items-center gap-1 transition">    
                                             下一項 <i data-lucide="chevron-right" class="w-4 h-4"></i>    
                                         </button>    
@@ -786,7 +786,7 @@
                                     </div>    
                                 </div>    
                             </div>
-
+ 
                             <!-- B1 TAB 2: 舊 A1 專題大調查 (最新排序 1 ➔ 7) -->
                             <div id="b1-feature-card-2" class="border-2 border-[#121212] p-5 sm:p-6 bg-white shadow-sm hidden">
                                 <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
@@ -796,7 +796,7 @@
                                     </div>
                                     <span class="text-xs font-mono font-bold text-emerald-700 hidden sm:inline">實彈檔案存檔</span>
                                 </div>
-
+ 
                                 <!-- Sub-tabs for the 7 sub topics (最新排序 7 ➔ 1) -->
                                 <div class="flex flex-wrap gap-1.5 mb-4 font-mono text-xs">
                                     <button onclick="switchOldA1SubTopic(7)" id="sub-a1-btn-7" class="px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400">7. Kefir 克菲爾 60秒大清淤 (最新)</button>
@@ -807,7 +807,7 @@
                                     <button onclick="switchOldA1SubTopic(2)" id="sub-a1-btn-2" class="px-2.5 py-1 font-bold rounded bg-emerald-50 text-emerald-950 border border-emerald-300 hover:bg-emerald-100 transition">2. 6大抗炎生物數據</button>
                                     <button onclick="switchOldA1SubTopic(1)" id="sub-a1-btn-1" class="px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition">1. 古法發酵轉化</button>
                                 </div>
-
+ 
                                 <!-- Sub 7: Kefir 克菲爾 60秒 腸道大清淤 (最新移動一點) -->
                                 <div id="sub-a1-topic-7" class="space-y-3">
                                     <div class="flex items-center gap-2 flex-wrap">
@@ -825,7 +825,7 @@
                                         <div>🥥 <strong>純素/戒奶替換：</strong>選用椰子水 Kefir (Coconut Water Kefir)，零乳糖零酪蛋白，活菌效益一剔爆標！</div>
                                     </div>
                                 </div>
-
+ 
                                 <!-- Sub 6: 水毒破局？自家過濾＋紅銅黑客 Hack -->
                                 <div id="sub-a1-topic-6" class="space-y-3 hidden">
                                     <div class="flex items-center gap-2 flex-wrap">
@@ -842,7 +842,7 @@
                                         📋 <strong>24HR 必備清單：</strong>純紅銅杯（無內漆）＋ 自家物理微孔濾水 ＋ 純紅銅餐具 ＋ 全玻璃/316鋼熱水壺。
                                     </div>
                                 </div>
-
+ 
                                 <!-- Sub 1: 古法發酵 -->
                                 <div id="sub-a1-topic-1" class="space-y-3 hidden">
                                     <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">
@@ -856,7 +856,7 @@
                                         <span class="text-[#4B5563]">發酵食物（如發酵泡菜 Sauerkraut、發酵乳酪 Kombucha）唔單止好食，更係修補腸道 Tight Junctions、壓制 LPS 內毒素嘅核心武器！直接填補「副偈」腸道漏電漏洞！</span>
                                     </div>
                                 </div>
-
+ 
                                 <!-- Sub 2: 6大抗癌解毒分子 -->
                                 <div id="sub-a1-topic-2" class="space-y-3 hidden">
                                     <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">
@@ -892,7 +892,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+ 
                                 <!-- Sub 3: 踢爆咖啡假能量 -->
                                 <div id="sub-a1-topic-3" class="space-y-3 hidden">
                                     <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">
@@ -916,7 +916,7 @@
                                         </ol>
                                     </div>
                                 </div>
-
+ 
                                 <!-- Sub 4: 揭開我腫瘤唔飲奶真相 · 別再當燕麥奶 NPC -->
                                 <div id="sub-a1-topic-4" class="space-y-4 hidden">
                                     <!-- 實彈 Header Banner -->
@@ -941,7 +941,7 @@
                                             商業行銷洗腦大拆解 · 種子油與化學膠類破壞腸道屏障 · 超市採購 List
                                         </p>
                                     </div>
-
+ 
                                     <!-- Main 2-Columns Grid -->
                                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
                                         <!-- Left Column (7 cols) -->
@@ -971,7 +971,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+ 
                                             <!-- Box 2: 正確 SWAP 替換 -->
                                             <div class="border-2 border-emerald-700 p-4 bg-white shadow-xs">
                                                 <div class="flex items-center justify-between border-b border-emerald-200 pb-2 mb-2.5 flex-wrap gap-1">
@@ -990,7 +990,7 @@
                                                 </p>
                                             </div>
                                         </div>
-
+ 
                                         <!-- Right Column (5 cols): 超市鮮奶 / 植物奶 Check-list -->
                                         <div class="lg:col-span-5 border-2 border-slate-900 p-4 bg-[#FFFDF8] flex flex-col justify-between shadow-xs">
                                             <div>
@@ -1030,7 +1030,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+ 
                                             <div class="mt-4 pt-3 border-t border-slate-300 text-center font-mono">
                                                 <div class="text-xs font-black text-red-800 tracking-wider uppercase mb-0.5">
                                                     CONTROL THE CONTROLLABLES
@@ -1041,7 +1041,7 @@
                                             </div>
                                         </div>
                                     </div>
-
+ 
                                     <!-- PREM 20 Dedicated Callout & Hyperlink Bar (INSIDE Subtopic 4) -->
                                     <div class="mt-4 p-3.5 bg-red-900 text-white flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm font-mono rounded">
                                         <div>
@@ -1058,7 +1058,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+ 
                                 <!-- Sub 5: 切斷基因改造與微塑膠毒素 (附件圖 1 全生活 Swap 自癒實戰大綱) -->
                                 <div id="sub-a1-topic-5" class="space-y-4 hidden font-serif">
                                     <div class="border-b-2 border-news-ink pb-3 mb-2">
@@ -1073,7 +1073,7 @@
                                             一人 6 年抗癌 2 次生存者血淚告白：重建細胞活力唔係靠食藥，而係要喺日常生活中毫不留情噉切斷所有人工雜交種、荷爾蒙干擾物同微塑膠！
                                         </p>
                                     </div>
-
+ 
                                     <!-- 3 大核心戰術卡 (Compact Grid) -->
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-3">
                                         <!-- Tactic 1 -->
@@ -1093,7 +1093,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-
+ 
                                         <!-- Tactic 2 -->
                                         <div class="border-2 border-slate-900 p-3 bg-white flex flex-col justify-between shadow-xs">
                                             <div>
@@ -1108,7 +1108,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-
+ 
                                         <!-- Tactic 3 -->
                                         <div class="border-2 border-slate-900 p-3 bg-white flex flex-col justify-between shadow-xs">
                                             <div>
@@ -1127,7 +1127,7 @@
                                             </div>
                                         </div>
                                     </div>
-
+ 
                                     <!-- 4 大核心日常 Swap 網格 -->
                                     <div class="border-2 border-slate-900 p-3.5 bg-[#FFFDF8] font-mono text-xs">
                                         <div class="flex items-center justify-between border-b border-slate-300 pb-1.5 mb-2.5">
@@ -1153,7 +1153,7 @@
                                             </div>
                                         </div>
                                     </div>
-
+ 
                                     <!-- 終極自癒黑客：24HR 行動大綱 -->
                                     <div class="p-3.5 bg-emerald-50 border-2 border-emerald-700 text-xs sm:text-sm font-serif text-emerald-950 flex flex-col sm:flex-row items-center justify-between gap-3">
                                         <div>
@@ -1166,9 +1166,9 @@
                                     </div>
                                 </div>
                             </div> <!-- Closing b1-feature-card-2 -->
-
+ 
                         </div> <!-- Closing B1 CARDS DECK CONTAINER -->
-
+ 
                         <!-- Core Formula Highlight Banner -->    
                         <div class="my-6 p-4 bg-amber-50 border-2 border-news-ink rounded-none">    
                             <div class="font-mono text-xs sm:text-sm font-black uppercase tracking-widest text-news-red mb-1">MAGA 生物戰術核心公式</div>    
@@ -1308,13 +1308,13 @@
     
         <!-- ══ 幫助下一位計劃 v2 — Buy 1 Give 1 ══ -->
         <div class="my-8 overflow-hidden border-2 border-[#121212]" id="help-next-box">
-
+ 
           <!-- Eyebrow -->
           <div class="bg-[#121212] text-white px-4 py-2 flex items-center justify-between gap-2 flex-wrap">
             <span class="font-lemon text-[10px] tracking-[.18em] uppercase text-white/60">幫助下一位計劃 · HELP THE NEXT ONE</span>
             <span class="font-mono text-[10px] bg-[#8B0000] text-white px-2 py-0.5 tracking-wider uppercase">抗炎之路，每日都做</span>
           </div>
-
+ 
           <!-- Headline -->
           <div class="bg-[#FAF8F5] px-5 pt-4 pb-3 border-b-2 border-[#121212] text-center">
             <h2 class="font-lemon font-black text-[#8B0000] uppercase tracking-wider text-base sm:text-lg md:text-xl leading-tight mb-1">
@@ -1324,10 +1324,10 @@
               「抗炎日報」，幫多個想抗炎嘅人圓夢 ‧ 抗炎之路，每日都做
             </p>
           </div>
-
+ 
           <!-- Buy 1 Give 1 三格視覺 -->
           <div class="grid grid-cols-[1fr_auto_1fr] bg-[#FAF8F5]">
-
+ 
             <!-- 左：你 -->
             <div class="bg-[#121212] text-white p-4 sm:p-5 flex flex-col items-center justify-center text-center gap-2">
               <div class="font-lemon font-black text-3xl sm:text-4xl text-white leading-none">你</div>
@@ -1338,13 +1338,13 @@
                 <span class="text-white/50 text-[10px]">一次付費，終身使用</span>
               </div>
             </div>
-
+ 
             <!-- 中：箭頭 -->
             <div class="bg-[#FAF8F5] flex flex-col items-center justify-center px-2 sm:px-3 border-l-2 border-r-2 border-[#121212]">
               <div class="font-lemon font-black text-[#8B0000] text-xl sm:text-2xl leading-none">→</div>
               <div class="font-mono text-[9px] text-slate-400 tracking-wider mt-1 rotate-0 hidden sm:block">GIVE</div>
             </div>
-
+ 
             <!-- 右：下一位 -->
             <div class="bg-[#8B0000] text-white p-4 sm:p-5 flex flex-col items-center justify-center text-center gap-2">
               <div class="font-lemon font-black text-3xl sm:text-4xl text-white leading-none">下一位</div>
@@ -1355,9 +1355,9 @@
                 <span class="text-white/50 text-[10px]">唔使額外收費</span>
               </div>
             </div>
-
+ 
           </div><!-- /grid -->
-
+ 
           <!-- Bottom CTA -->
           <div class="bg-[#FAF8F5] border-t-2 border-[#121212] px-5 py-4 text-center">
             <a href="https://buy.stripe.com/dRm9ATdlf4VGf9T61t9fW02?client_reference_id=Less20"
@@ -1369,7 +1369,7 @@
               買一個，我就送多一個 · 真正減低門檻 · 沒需收取任何額外費用
             </p>
           </div>
-
+ 
         </div><!-- /help-next-box -->    
     
         <!-- SECTION C1: 戰術資源庫 (高斯模糊 + 🚧) -->    
@@ -1382,7 +1382,7 @@
                     </h3>      
                 </div>
             </div>    
-
+ 
             <!-- Featured PREM_20 Spotlight Banner -->
             <div class="mb-3 p-3 bg-amber-50 border-2 border-amber-600 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                 <div>
@@ -1646,7 +1646,7 @@
             }
         }
         window.showB1FeatureCard = showB1FeatureCard;
-
+ 
         // Sub topic switcher for Card 02 (舊 A1 7➔1 專題) - 獨立深淺色彩系統
         const subTopicStyles = {
             1: { active: "px-2.5 py-1 font-bold rounded bg-amber-700 text-white border border-amber-800 shadow-sm ring-2 ring-amber-400", inactive: "px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition" },
@@ -1657,7 +1657,7 @@
             6: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" },
             7: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-cyan-50 text-cyan-950 border border-cyan-300 hover:bg-cyan-100 transition" }
         };
-
+ 
         function switchOldA1SubTopic(topicNum) {
             for (let i = 1; i <= 7; i++) {
                 const topic = document.getElementById(`sub-a1-topic-${i}`);
@@ -1679,7 +1679,7 @@
             }
         }
         window.switchOldA1SubTopic = switchOldA1SubTopic;
-
+ 
         // GSAP Physical Animation for HUD (附件圖 1: 渲染時間線與代謝進度條)
         function initGsapHud() {
             const hasGsap = typeof gsap !== 'undefined';
@@ -1728,7 +1728,7 @@
                 if (crp) crp.style.width = '25%';
             }
         }
-
+ 
         // Interactive GSAP Bounce for HUD
         function triggerGsapHudBounce() {
             if (typeof gsap !== 'undefined') {
@@ -1739,7 +1739,7 @@
             }
         }
         window.triggerGsapHudBounce = triggerGsapHudBounce;
-
+ 
         // HUD Timeline Clock running smoothly
         let hudSeconds = 252; // 00:04:12
         setInterval(() => {
@@ -1751,7 +1751,7 @@
                 timerEl.textContent = `00:${m}:${s} / 60 FPS`;
             }
         }, 1000);
-
+ 
         // Clipboard Copy Helper
         function copyToClipboard(elementId, toastId) {
             const el = document.getElementById(elementId);
@@ -1770,7 +1770,7 @@
             });
         }
         window.copyToClipboard = copyToClipboard;
-
+ 
         // B2 Food Pyramid Update (Layer 02 Focus - 腸道黏膜屏障修復)
         function initB2DailyUpdate() {    
             const titleEl = document.getElementById('b2DailyTitle');    
