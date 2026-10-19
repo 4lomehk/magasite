@@ -4,11 +4,17 @@
     <meta charset="UTF-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <title>DAILY FLOW - Make Anti-inflammatory Great Again</title>    
-    <meta name="description" content="MAGA DAILY FLOW: Slaying establishment toxin deception, rebuilding personal biological sovereignty." />
-    <meta property="og:title" content="DAILY FLOW - Make Anti-inflammatory Great Again" />
-    <meta property="og:description" content="MAGA DAILY FLOW: Slaying establishment toxin deception, rebuilding personal biological sovereignty." />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="description" content="DAILY FLOW: Daily Anti-Inflammatory Lifestyle Guide." />
+    <meta property="og:title" content="DAILY FLOW - Make Anti-inflammatory Great Again">
+    <meta property="og:description" content="DAILY FLOW: Daily Anti-Inflammatory Lifestyle Guide.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://magasite.pages.dev/df">
+    <meta property="og:image" content="https://magasite.pages.dev/images/df.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DAILY FLOW Cover Image">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://magasite.pages.dev/images/df.jpg">
 
     <!-- Safe WebSocket & HMR Sandbox Guard -->
     <script>
@@ -269,6 +275,13 @@
             <button onclick="triggerPrintWithNotice()" class="bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded font-bold flex items-center gap-1 transition">    
                 <i data-lucide="printer" class="w-4 h-4"></i> Print / PDF    
             </button>    
+            <!-- Direct links to Day 10 editions -->
+            <a href="day-10.html" class="bg-red-700 hover:bg-red-600 text-white font-black px-3 py-1.5 rounded flex items-center gap-1.5 transition" title="Day 10 Chinese Edition">    
+                <i data-lucide="file-text" class="w-4 h-4"></i> Day 10 (day-10.html)    
+            </a>    
+            <a href="day-10-en.html" class="bg-rose-700 hover:bg-rose-600 text-white font-black px-3 py-1.5 rounded flex items-center gap-1.5 transition" title="Day 10 English Edition">    
+                <i data-lucide="languages" class="w-4 h-4"></i> Day 10 EN (day-10-en.html)    
+            </a>    
             <!-- Language Switcher to Traditional Chinese -->
             <a href="dailyflow.html" class="bg-news-winered hover:bg-black text-white font-black px-3 py-1.5 rounded flex items-center gap-1.5 transition">    
                 <i data-lucide="languages" class="w-4 h-4"></i> 中文廣東話 (HK)    
@@ -288,7 +301,7 @@
             <div class="flex flex-wrap justify-between items-center text-xs sm:text-sm font-mono border-b border-news-ink pb-1 mb-2 tracking-tight text-news-subtle">    
                 <div class="flex items-center gap-3">    
                     <span class="font-bold text-news-ink">YEAR 2026</span>    
-                    <span class="font-bold text-news-winered bg-red-50 border border-red-200 px-1.5 py-0.5 rounded">DAY 08</span>    
+                    <span class="font-bold text-news-winered bg-red-50 border border-red-200 px-1.5 py-0.5 rounded">DAY 10</span>    
                     <span class="hidden sm:inline">WEATHER: EXTREME METABOLIC HEAT / GUT DETOX ALERT</span>    
                 </div>    
                 <div class="font-bold text-news-winered flex items-center gap-1">    
@@ -335,168 +348,271 @@
 
             <!-- Date & Issue Meta Strip -->    
             <div class="double-line-top double-line-bottom py-1.5 flex flex-wrap justify-between items-center font-mono text-xs sm:text-sm font-bold text-news-ink mt-2">    
-                <div id="displayDateStrip">【TODAY'S HEADLINE】 October 9, 2026 (Day 9) ‧ 6 Chemical Toxins Cut-off Alert ‧ Control The Controllables</div>    
+                <div id="displayDateStrip">【TODAY'S HEADLINE】 October 10, 2026 (Day 10) ‧ 10 Multi-System Symptoms Pathology &amp; Clinical Evidence</div>    
                 <div class="hidden md:block">PRICE: OPEN SOURCE</div>    
-                <div>SECTIONS: A1 Cut Off 6 Toxic Wastes / Tongue Diagnosis / B1 Old A1 Dossier (1-7) / B2 Inverted Pyramid / C1 Vault</div>    
+                <div>SECTIONS: A1 10 Multi-System Pathology &amp; Microbiome / Tongue Diagnosis / B1 Old A1 Dossier (1-8) / B2 Inverted Pyramid / C1 Vault</div>    
             </div>    
         </header>    
     
         <!-- NEWSPAPER SECTION TABS / NAVIGATION -->    
         <nav class="no-print my-4 border-b border-news-ink pb-2">    
-            <div class="flex flex-wrap gap-2 font-mono text-xs sm:text-sm font-bold">    
-                <button onclick="scrollToSection('sec-a1')" class="bg-news-winered text-white px-3 py-1.5 hover:bg-black transition">A1: 24HR Cut Off 6 Chemical Toxins</button>    
+            <div class="flex flex-wrap items-center gap-2 font-mono text-xs sm:text-sm font-bold">    
+                <button onclick="scrollToSection('sec-a1')" class="bg-news-winered text-white px-3 py-1.5 hover:bg-black transition">A1: 10 Multi-System Symptoms Radar</button>    
                 <button onclick="scrollToSection('sec-tongue-game')" class="bg-[#9A3412] text-white px-3 py-1.5 hover:bg-amber-900 transition">👅 Tongue Leakage Meter (2 Checks)</button>    
-                <button onclick="scrollToSection('sec-b1')" class="bg-black text-white px-3 py-1.5 hover:bg-news-red transition">B1: Old A1 Dossier (1-7) & 12 Protocols</button>    
+                <button onclick="scrollToSection('sec-b1')" class="bg-black text-white px-3 py-1.5 hover:bg-news-red transition">B1: Old A1 Dossier (1-8) &amp; 12 Protocols</button>    
                 <button onclick="scrollToSection('sec-b2')" class="bg-black text-white px-3 py-1.5 hover:bg-news-red transition">B2: Inverted Food Pyramid (Layer 02)</button>    
                 <button onclick="scrollToSection('sec-c1')" class="bg-slate-600 text-white px-3 py-1.5 hover:bg-slate-700 transition">C1: Resource Vault (🚧 MAGASite Home)</button>    
+                <span class="text-slate-400 hidden sm:inline">|</span>
+                <a href="day-10.html" class="bg-red-800 hover:bg-black text-white px-3 py-1.5 rounded-sm flex items-center gap-1 transition" title="Day 10 Chinese Edition">
+                    <i data-lucide="file-text" class="w-3.5 h-3.5"></i> 📄 Day 10 (day-10.html)
+                </a>
+                <a href="day-10-en.html" class="bg-rose-800 hover:bg-black text-white px-3 py-1.5 rounded-sm flex items-center gap-1 transition" title="Day 10 English Edition">
+                    <i data-lucide="globe" class="w-3.5 h-3.5"></i> 🌐 Day 10 EN (day-10-en.html)
+                </a>
             </div>    
         </nav>    
     
-        <!-- SECTION A1: 【DAY 9 A1 ACTION】 Cut Off 6 Toxic Chemical Waste Traps ‧ Reclaim Biological Sovereignty (Control The Controllables) -->    
+        <!-- SECTION A1: 【DAY 10 A1 ACTION】 10 Multi-System Symptoms Pathology & Clinical Evidence Comparison Table -->    
         <section id="sec-a1" class="my-6 border-2 border-news-ink p-4 sm:p-5 bg-white shadow-sm font-serif">    
             <!-- A1 Header / Headline -->
             <div class="border-b-2 border-news-ink pb-2.5 mb-3">    
+                <!-- Quick Issue Links Strip -->
+                <div class="flex items-center gap-2 flex-wrap mb-2 pb-2 border-b border-slate-200">
+                    <span class="text-xs font-mono font-bold text-slate-600">Quick Issue Access:</span>
+                    <a href="day-10.html" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-red-100 border border-red-300 text-red-950 font-mono text-xs font-bold hover:bg-red-200 transition">
+                        <i data-lucide="file-text" class="w-3.5 h-3.5"></i> 📄 Day 10 Chinese Archive (day-10.html) ↗
+                    </a>
+                    <a href="day-10-en.html" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-blue-100 border border-blue-300 text-blue-950 font-mono text-xs font-bold hover:bg-blue-200 transition">
+                        <i data-lucide="globe" class="w-3.5 h-3.5"></i> 🌐 Day 10 English Edition (day-10-en.html) ↗
+                    </a>
+                </div>
                 <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
                     <div class="flex items-center gap-2">
-                        <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">A1 HEADLINE · 24HR Cut Off 6 Chemical Toxins</span>    
+                        <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">A1 HEADLINE · Day 10 Multi-System Microbiome Radar</span>    
                         <span class="bg-amber-300 text-slate-950 font-mono text-xs font-black px-2 py-0.5 rounded border border-slate-900">LATEST A1</span>
                     </div>
-                    <span class="text-xs font-mono font-bold text-slate-500">October 9, 2026 (Day 9) ‧ Control The Controllables</span>
+                    <span class="text-xs font-mono font-bold text-slate-500">October 10, 2026 (Day 10) ‧ Multi-System Pathology &amp; Microbiome Radar</span>
                 </div>
                 <h2 class="text-xl sm:text-2xl md:text-3xl font-black font-lemon text-[#1F2937] leading-tight winered-underline mt-1">    
-                    A1: Cut Off 6 Toxic Chemical Waste Traps ‧ Reclaim Biological Sovereignty
+                    A1: 10 Multi-System Symptoms Pathology &amp; Clinical Evidence Table
                 </h2>    
                 <p class="text-xs sm:text-sm text-[#1F2937] mt-1.5 leading-relaxed">    
-                    <strong>6-Year, 2-Time Cancer Survivor Blood & Tears:</strong> Terrified of abnormal blood panels or getting cancer before 60? Yet you keep pouring these 6 toxic garbage wastes straight into your gut daily! Stop being a sick, brainwashed NPC farmed by commercial marketing and Big Pharma, waiting until surgery or chemo to wake up! True self-healing hackers <strong>Control the controllables</strong>—cut off these 6 toxic gateways within 24 hours and seize your health sovereignty back!
+                    <strong>6-Year, 2-Time Cancer Survivor Blood &amp; Tears:</strong> Still thinking rashes, mouth ulcers, or greasy acne are just "heatiness"? Stop being a brainwashed NPC relying on topical steroids! These are sirens of <strong>gut &amp; mucosal microbiome collapse, short-chain fatty acid (SCFA) starvation, and lipopolysaccharide (LPS) leakage</strong> into systemic circulation! Below is the clinical evidence matrix detailing root mechanisms and randomized controlled trial data to halt systemic cytokine cascades.
                 </p>    
             </div>    
 
-            <!-- 6 Chemical Toxins (01 - 06) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 font-sans text-xs mb-3">
-                <!-- 01 -->
-                <div class="p-3 bg-red-50/80 border border-red-300 rounded flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between font-mono font-black text-red-900 mb-1.5">
-                            <span class="text-xs font-bold">🍿 【01 · Forever Chemicals】Microwaved Popcorn</span>
-                        </div>
-                        <p class="text-slate-700 text-[11.5px] leading-relaxed">
-                            Bag linings are drenched with <strong>PFAS</strong> "Forever Chemicals". Artificial chemical butter (diacetyl) inside is clinically proven to cause severe irreversible lung damage!
-                        </p>
+            <!-- 10 Multi-System Symptoms Table (Desktop View) -->
+            <div class="hidden md:block overflow-x-auto mb-4 border-2 border-slate-900 shadow-xs">
+                <table class="w-full text-left border-collapse text-xs font-sans">
+                    <thead>
+                        <tr class="bg-slate-900 text-white font-mono font-bold border-b border-slate-900">
+                            <th class="p-3 w-[18%] border-r border-slate-700">Symptom / Category</th>
+                            <th class="p-3 w-[22%] border-r border-slate-700">Clinical Manifestations</th>
+                            <th class="p-3 w-[30%] border-r border-slate-700">Core Pathology &amp; Microbiome Dysbiosis</th>
+                            <th class="p-3 w-[30%]">Clinical Evidence &amp; Literature Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-300 bg-white leading-relaxed">
+                        <!-- 01 Eczema -->
+                        <tr class="hover:bg-red-50/50 transition">
+                            <td class="p-3 font-bold border-r border-slate-200 bg-red-50/70 align-top">
+                                <span class="font-mono text-red-900 block text-[11px]">【01 · Skin Barrier】</span>
+                                <strong class="text-sm text-red-950 font-black">Eczema<br>(Atopic Dermatitis)</strong>
+                            </td>
+                            <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
+                                Erythema, intense pruritus, weeping exudate, lichenification.
+                            </td>
+                            <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
+                                Loss of gut butyrate-producing bacteria; 60–100% skin S. aureus colonization; Th2 immune polarization.
+                            </td>
+                            <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
+                                <span class="bg-emerald-100 text-emerald-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-emerald-300 font-bold inline-block mb-1">RCT Proven</span><br>
+                                Heat-killed Lactobacillus significantly lowers SCORAD severity scores in infants (4–30 mo); SCFAs restore Filaggrin barrier.
+                            </td>
+                        </tr>
+
+                        <!-- 02 Urticaria -->
+                        <tr class="hover:bg-amber-50/50 transition">
+                            <td class="p-3 font-bold border-r border-slate-200 bg-amber-50/70 align-top">
+                                <span class="font-mono text-amber-900 block text-[11px]">【02 · Mast Cells】</span>
+                                <strong class="text-sm text-amber-950 font-black">Acute Hives<br>(Urticaria)</strong>
+                            </td>
+                            <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
+                                Wheals, urticarial erythema, angioedema, episodic paroxysmal itching.
+                            </td>
+                            <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
+                                Decreased gut α-diversity; Prevotella depletion; gut leak allows LPS entry into blood, triggering mast cell degranulation.
+                            </td>
+                            <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
+                                <span class="bg-cyan-100 text-cyan-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-cyan-300 font-bold inline-block mb-1">Double-Blind RCT</span><br>
+                                RCT shows L. rhamnosus + FOS reduces UAS7 scores by 60%, boosts IL-10 by 45%; heat-killed strains reduce wheals by 40%.
+                            </td>
+                        </tr>
+
+                        <!-- 03 Aphthous Ulcers -->
+                        <tr class="hover:bg-rose-50/50 transition">
+                            <td class="p-3 font-bold border-r border-slate-200 bg-rose-50/70 align-top">
+                                <span class="font-mono text-rose-900 block text-[11px]">【03 · Oral Mucosa】</span>
+                                <strong class="text-sm text-rose-950 font-black">Canker Sores<br>(Aphthous Stomatitis)</strong>
+                            </td>
+                            <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
+                                Depressed mucosal ulcers, yellow-white pseudomembrane, erythematous halo, sharp pain.
+                            </td>
+                            <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
+                                Oral/gut microbiome dysbiosis; localized T-cell cytotoxicity &amp; high TNF-α expression; mucosal barrier disruption.
+                            </td>
+                            <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
+                                <span class="bg-purple-100 text-purple-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-purple-300 font-bold inline-block mb-1">Postbiotic Nano-Tech</span><br>
+                                L. reuteri postbiotic nano-formulation for 7 days significantly cuts ulcer area &amp; pain vs analgesic rinse.
+                            </td>
+                        </tr>
+
+                        <!-- 04 Seborrhea & Acne -->
+                        <tr class="hover:bg-blue-50/50 transition">
+                            <td class="p-3 font-bold border-r border-slate-200 bg-blue-50/70 align-top">
+                                <span class="font-mono text-blue-900 block text-[11px]">【04 · Sebaceous Axis】</span>
+                                <strong class="text-sm text-blue-950 font-black">Greasy Scalp &amp; Acne<br>(Seborrheic Derm / Acne)</strong>
+                            </td>
+                            <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
+                                Greasy scalp flakes, follicular inflammatory papules, pustules, seborrhea.
+                            </td>
+                            <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
+                                IGF-1/mTORC1 hyperactivation driving excess sebum; C. acnes bloom; low-grade systemic inflammation.
+                            </td>
+                            <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
+                                <span class="bg-blue-100 text-blue-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-blue-300 font-bold inline-block mb-1">Meta-Analysis</span><br>
+                                Meta-analysis confirms probiotics/postbiotics + antibiotics significantly decrease acne lesions and alleviate antibiotic side effects.
+                            </td>
+                        </tr>
+
+                        <!-- 05 Cheilitis -->
+                        <tr class="hover:bg-emerald-50/50 transition">
+                            <td class="p-3 font-bold border-r border-slate-200 bg-emerald-50/70 align-top">
+                                <span class="font-mono text-emerald-900 block text-[11px]">【05 · Epithelial Hydration】</span>
+                                <strong class="text-sm text-emerald-950 font-black">Chapped Lips<br>(Angular Cheilitis)</strong>
+                            </td>
+                            <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
+                                Vermilion border desquamation, fissures, angular erosion, bleeding.
+                            </td>
+                            <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
+                                Local microbial dysbiosis; vitamin B / iron deficit; mucosal epithelial barrier decline.
+                            </td>
+                            <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
+                                <span class="bg-emerald-100 text-emerald-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-emerald-300 font-bold inline-block mb-1">Bioactive Restoration</span><br>
+                                Fermented bioactive peptides &amp; organic acids inhibit fungal/bacterial colonization, accelerating epithelial regeneration and barrier hydration.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile Cards View -->
+            <div class="block md:hidden space-y-3 font-sans text-xs mb-3">
+                <!-- 01 Eczema -->
+                <div class="p-3.5 bg-red-50/80 border-2 border-red-300 rounded shadow-2xs">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="font-mono text-xs font-black bg-red-900 text-white px-2 py-0.5 rounded">01 · Skin Barrier</span>
+                        <strong class="text-sm font-black text-red-950">Eczema (Atopic Dermatitis)</strong>
                     </div>
-                    <div class="mt-2 pt-1.5 border-t border-red-200">
-                        <span class="inline-flex items-center gap-1 font-mono font-bold text-red-800 text-[11px] bg-red-100 px-2 py-0.5 rounded border border-red-300">
-                            🚨 Reject Toxic Popcorn
-                        </span>
+                    <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-red-200">
+                        <div><strong class="text-red-900 font-bold">Clinical Signs:</strong> Erythema, intense itching, weeping exudate, lichenification.</div>
+                        <div><strong class="text-red-900 font-bold">Microbiome Mechanism:</strong> Gut butyrate-producing bacteria depletion; 60–100% S. aureus colonization; Th2 skewing.</div>
+                        <div class="p-2 bg-white rounded border border-red-200 text-slate-900">
+                            <strong class="text-emerald-800 font-mono font-bold">📊 Clinical Evidence:</strong> Heat-killed Lactobacillus lowers infant SCORAD score; SCFAs restore Filaggrin.
+                        </div>
                     </div>
                 </div>
 
-                <!-- 02 -->
-                <div class="p-3 bg-amber-50/80 border border-amber-300 rounded flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between font-mono font-black text-amber-900 mb-1.5">
-                            <span class="text-xs font-bold">🍝 【02 · Digestive Disaster】Fast Dried Pasta</span>
-                        </div>
-                        <p class="text-slate-700 text-[11.5px] leading-relaxed">
-                            Factory pasta flash-dried at high temperatures severely alters starch, destroying gut digestion and spiking glucose! That's why North American pasta causes excruciating cramps (SLDPK), while Italian slow-dried pasta causes zero distress!
-                        </p>
+                <!-- 02 Urticaria -->
+                <div class="p-3.5 bg-amber-50/80 border-2 border-amber-300 rounded shadow-2xs">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="font-mono text-xs font-black bg-amber-900 text-white px-2 py-0.5 rounded">02 · Mast Cells</span>
+                        <strong class="text-sm font-black text-amber-950">Acute Hives (Urticaria)</strong>
                     </div>
-                    <div class="mt-2 pt-1.5 border-t border-amber-200">
-                        <span class="inline-flex items-center gap-1 font-mono font-bold text-amber-800 text-[11px] bg-amber-100 px-2 py-0.5 rounded border border-amber-300">
-                            🚨 Choose Low-Temp Slow Dried
-                        </span>
+                    <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-amber-200">
+                        <div><strong class="text-amber-900 font-bold">Clinical Signs:</strong> Wheals, urticarial erythema, angioedema, episodic itching.</div>
+                        <div><strong class="text-amber-900 font-bold">Microbiome Mechanism:</strong> Decreased α-diversity; Prevotella depletion; gut leak translocates LPS triggering mast cell degranulation.</div>
+                        <div class="p-2 bg-white rounded border border-amber-200 text-slate-900">
+                            <strong class="text-cyan-800 font-mono font-bold">📊 Clinical Evidence:</strong> L. rhamnosus + FOS reduces UAS7 by 60%, boosts IL-10 by 45%.
+                        </div>
                     </div>
                 </div>
 
-                <!-- 03 -->
-                <div class="p-3 bg-emerald-50/80 border border-emerald-300 rounded flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between font-mono font-black text-emerald-900 mb-1.5">
-                            <span class="text-xs font-bold">🍞 【03 · Chemical Preservatives】Storebought Breads</span>
-                        </div>
-                        <p class="text-slate-700 text-[11.5px] leading-relaxed">
-                            Packed with industrial preservatives and synthetic conditioners. Real bread should strictly have only <strong>4 ingredients</strong> (flour, water, yeast/sourdough, salt). If it has more than 4, it's chemical trash!
-                        </p>
+                <!-- 03 Canker Sores -->
+                <div class="p-3.5 bg-rose-50/80 border-2 border-rose-300 rounded shadow-2xs">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="font-mono text-xs font-black bg-rose-900 text-white px-2 py-0.5 rounded">03 · Oral Mucosa</span>
+                        <strong class="text-sm font-black text-rose-950">Canker Sores (Aphthous Stomatitis)</strong>
                     </div>
-                    <div class="mt-2 pt-1.5 border-t border-emerald-200">
-                        <span class="inline-flex items-center gap-1 font-mono font-bold text-emerald-800 text-[11px] bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
-                            🚨 >4 Ingredients = Trash
-                        </span>
+                    <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-rose-200">
+                        <div><strong class="text-rose-900 font-bold">Clinical Signs:</strong> Depressed ulcers, yellow-white pseudomembrane, sharp pain.</div>
+                        <div><strong class="text-rose-900 font-bold">Microbiome Mechanism:</strong> Oral/gut dysbiosis; localized T-cell toxicity &amp; high TNF-α; mucosal breach.</div>
+                        <div class="p-2 bg-white rounded border border-rose-200 text-slate-900">
+                            <strong class="text-purple-800 font-mono font-bold">📊 Clinical Evidence:</strong> L. reuteri postbiotic nano-gel significantly cuts ulcer area &amp; pain vs analgesic rinse.
+                        </div>
                     </div>
                 </div>
 
-                <!-- 04 -->
-                <div class="p-3 bg-rose-50/80 border-2 border-rose-400 rounded flex flex-col justify-between shadow-2xs">
-                    <div>
-                        <div class="flex items-center justify-between font-mono font-black text-rose-900 mb-1.5">
-                            <span class="text-xs font-bold">🥓 【04 · Group 1 Carcinogen】Deli Meats / Cold Cuts</span>
-                        </div>
-                        <p class="text-slate-700 text-[11.5px] leading-relaxed">
-                            Filled with <strong>Nitrates</strong>, categorized as a confirmed <strong>Group 1 Carcinogen</strong> by WHO! Eating processed deli slices is biochemically equivalent to swallowing cigarettes!
-                        </p>
+                <!-- 04 Acne -->
+                <div class="p-3.5 bg-blue-50/80 border-2 border-blue-300 rounded shadow-2xs">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="font-mono text-xs font-black bg-blue-900 text-white px-2 py-0.5 rounded">04 · Sebaceous Axis</span>
+                        <strong class="text-sm font-black text-blue-950">Greasy Scalp &amp; Acne</strong>
                     </div>
-                    <div class="mt-2 pt-1.5 border-t border-rose-200">
-                        <span class="inline-flex items-center gap-1 font-mono font-bold text-rose-800 text-[11px] bg-rose-100 px-2 py-0.5 rounded border border-rose-300">
-                            🚨 Purge Processed Deli Meats
-                        </span>
+                    <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-blue-200">
+                        <div><strong class="text-blue-900 font-bold">Clinical Signs:</strong> Greasy flakes, papules, pustules, seborrhea.</div>
+                        <div><strong class="text-blue-900 font-bold">Microbiome Mechanism:</strong> IGF-1/mTORC1 hyperdrive; C. acnes blooms; systemic low-grade inflammation.</div>
+                        <div class="p-2 bg-white rounded border border-blue-200 text-slate-900">
+                            <strong class="text-blue-800 font-mono font-bold">📊 Clinical Evidence:</strong> Meta-analysis proves probiotics/postbiotics + antibiotics cut lesions &amp; side effects.
+                        </div>
                     </div>
                 </div>
 
-                <!-- 05 -->
-                <div class="p-3 bg-purple-50/80 border border-purple-300 rounded flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between font-mono font-black text-purple-900 mb-1.5">
-                            <span class="text-xs font-bold">🥔 【05 · Neurotoxin Waste】Bagged Chips</span>
+                <!-- 05 Cheilitis -->
+                <div class="p-3.5 bg-emerald-50/80 border-2 border-emerald-300 rounded shadow-2xs">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="font-mono text-xs font-black bg-emerald-900 text-white px-2 py-0.5 rounded">05 · Epithelial Hydration</span>
+                        <strong class="text-sm font-black text-emerald-950">Chapped Lips (Angular Cheilitis)</strong>
+                    </div>
+                    <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-emerald-200">
+                        <div><strong class="text-emerald-900 font-bold">Clinical Signs:</strong> Vermilion border peeling, fissures, angular erosion, bleeding.</div>
+                        <div><strong class="text-emerald-900 font-bold">Microbiome Mechanism:</strong> Local dysbiosis; vitamin B / iron deficit; epithelial breakdown.</div>
+                        <div class="p-2 bg-white rounded border border-emerald-200 text-slate-900">
+                            <strong class="text-emerald-800 font-mono font-bold">📊 Clinical Evidence:</strong> Fermented peptides &amp; organic acids inhibit pathogens, boosting epithelial repair.
                         </div>
-                        <p class="text-slate-700 text-[11.5px] leading-relaxed">
-                            Ultra-processed waste deep-fried in inflammatory seed oils, forming <strong>Acrylamide</strong>—a known neurotoxin. Oxidized rancid oils destroy mitochondrial membranes!
-                        </p>
-                    </div>
-                    <div class="mt-2 pt-1.5 border-t border-purple-200">
-                        <span class="inline-flex items-center gap-1 font-mono font-bold text-purple-800 text-[11px] bg-purple-100 px-2 py-0.5 rounded border border-purple-300">
-                            🚨 Cut Rancid Fried Waste
-                        </span>
-                    </div>
-                </div>
-
-                <!-- 06 -->
-                <div class="p-3 bg-cyan-50/80 border border-cyan-300 rounded flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between font-mono font-black text-cyan-900 mb-1.5">
-                            <span class="text-xs font-bold">🍰 【06 · Inflammatory Triad】Packaged Desserts</span>
-                        </div>
-                        <p class="text-slate-700 text-[11.5px] leading-relaxed">
-                            Cookies, packaged pastries, granola bars! Loaded with the fatal triad: <strong>refined sugars, seed oils, and bleached flour</strong>, triggering chronic full-body inflammation and fatty liver!
-                        </p>
-                    </div>
-                    <div class="mt-2 pt-1.5 border-t border-cyan-200">
-                        <span class="inline-flex items-center gap-1 font-mono font-bold text-cyan-800 text-[11px] bg-cyan-100 px-2 py-0.5 rounded border border-cyan-300">
-                            🚨 Cut Refined Sugars & Oils
-                        </span>
                     </div>
                 </div>
             </div>
 
-            <!-- Self-Healing 3-Step Action (STEP 1, STEP 2, STEP 3) -->
+            <!-- Microbiome Rebuild Strategy -->
             <div class="border-2 border-slate-900 bg-[#FFFDF8] p-3.5 sm:p-4 mb-3">
                 <div class="flex items-center gap-2 mb-2 pb-1.5 border-b border-slate-300 font-mono text-xs font-black text-slate-900">
-                    <span class="bg-slate-900 text-white px-2 py-0.5">24HR ACTION PLAN</span>
-                    <span>3 Execution Steps · Control the Controllables</span>
+                    <span class="bg-slate-900 text-white px-2 py-0.5">ACTION PROTOCOL</span>
+                    <span>3 Execution Steps · Gut-Skin-Mucosa Axis</span>
                 </div>
                 <div class="space-y-2.5 font-sans text-xs leading-relaxed text-slate-800">
-                    <div class="p-2.5 bg-red-50 border-l-4 border-red-700">
-                        <strong class="font-mono text-red-900">STEP 1 (即刻清櫃 Immediate Pantry Purge)：</strong>打開雪櫃同零食櫃，將含有 PFAS、硝酸鹽、精製種子油、化學防腐劑、超4種成分 嘅包裝食品一次過清空！
+                    <div class="p-2.5 bg-emerald-50 border-l-4 border-emerald-700">
+                        <strong class="font-mono text-emerald-900">STEP 1 (Restore Butyrate &amp; SCFAs)：</strong>Consume fermented fibers, resistant starches, and raw kraut to replenish butyrate producers and rebuild the Filaggrin skin barrier!
                     </div>
                     <div class="p-2.5 bg-amber-50 border-l-4 border-amber-600">
-                        <strong class="font-mono text-amber-900">STEP 2 (源頭切斷 Source Interception)：</strong>超市買嘢嚴守「4 種天然成分法則」！成分表有你讀唔出嘅化學字、乳化劑或防腐劑，一律唔好俾錢買！
+                        <strong class="font-mono text-amber-900">STEP 2 (Seal Gut Tight Junctions &amp; Cut LPS)：</strong>Completely eliminate industrial seed oils and synthetic emulsifiers, preventing endotoxin translocation from triggering mast cell degranulation and chronic hives!
                     </div>
-                    <div class="p-2.5 bg-emerald-50 border-l-4 border-emerald-700">
-                        <strong class="font-mono text-emerald-900">STEP 3 (真食物替換 Real Food Swap)：</strong>將熱量來源全面換成 100% 原型食物（Real foods）、冷壓 EVOO、草飼肉類、發酵食物與有機生果，副偈自然啟動強效自癒！
+                    <div class="p-2.5 bg-cyan-50 border-l-4 border-cyan-700">
+                        <strong class="font-mono text-cyan-900">STEP 3 (Deploy Targeted Postbiotics &amp; Bioactive Peptides)：</strong>Incorporate active fermented Lactobacilli, postbiotics, and natural polyphenols to inhibit S. aureus and C. acnes, speeding mucosal ulcer healing!
                     </div>
                 </div>
             </div>
 
-            <!-- 24HR Action Strip (Ultra-compact) -->
+            <!-- 24HR Action Strip -->
             <div class="p-2.5 bg-[#FFFDF8] border border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+                <div class="font-mono text-slate-800">
+                    <strong class="text-red-900">⚡ 24HR Action:</strong> Match your symptoms against the microbiome dysbiosis radar; rebuild mucosal barriers with active prebiotics, postbiotics, and whole foods immediately!
+                </div>
+                <a href="https://lihi.vip/soHJv" target="_blank" class="shrink-0 bg-red-700 hover:bg-black text-white font-mono font-bold px-3 py-1 rounded transition text-[11px]">
+                    IG Channel ↗
+                </a>
+            </div>
+        </section>
                 <div class="font-mono text-slate-800">
                     <strong class="text-red-900">⚡ 24HR Hacker Action:</strong> Immediately purge these 6 chemical toxin entryways today! Reclaim your biological sovereignty! <strong>Control the controllables!</strong>
                 </div>
@@ -1352,8 +1468,14 @@
                     DAILY FLOW: YOUR DAILY STEP ON THE ANTI-INFLAMMATORY JOURNEY.    
                 </h1>    
             </div>    
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-2 mb-2 font-bold">    
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-2 mb-2 font-bold flex-wrap">    
                 <div>《DAILY FLOW BULLETIN》 All Rights Reserved ‧ 2026</div>    
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span>Issue Archive:</span>
+                    <a href="day-10.html" class="underline text-news-ink hover:text-news-winered font-bold">Day 10 (day-10.html)</a>
+                    <span>·</span>
+                    <a href="day-10-en.html" class="underline text-news-ink hover:text-news-winered font-bold">Day 10 EN (day-10-en.html)</a>
+                </div>
                 <div>MAGASite Home: <a href="https://sites.google.com/view/magamap/magasite" target="_blank" class="underline text-news-ink font-bold">magasite home</a></div>    
                 <div><a href="https://buy.stripe.com/dRm9ATdlf4VGf9T61t9fW02?client_reference_id=Less20" target="_blank" class="underline text-news-winered font-bold">Help The Next One</a></div>    
             </div>    
