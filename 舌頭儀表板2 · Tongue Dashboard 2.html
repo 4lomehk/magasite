@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>舌頭儀表板2 · Tongue Dashboard 2</title>
+<style>
+  :root {
+    --bg:        #f3f5f9;
+    --surface:   #ffffff;
+    --ink:       #171a21;
+    --sub:       #6b7280;
+    --line:      #e8ebf0;
+    --teal:      #0d9488;
+    --teal-lt:   #ccfbf1;
+    --coral:     #f43f5e;
+    --coral-lt:  #ffe4e8;
+    --violet:    #8b5cf6;
+    --violet-lt: #ede9fe;
+    --amber:     #f59e0b;
+    --amber-lt:  #fef3c7;
+    --blue:      #3b82f6;
+    --blue-lt:   #dbeafe;
+    --green:     #22c55e;
+    --green-lt:  #dcfce7;
+    --shadow:    0 2px 8px rgba(23,26,33,.06), 0 8px 24px rgba(23,26,33,.04);
+    --shadow-lg: 0 8px 24px rgba(23,26,33,.1), 0 24px 48px rgba(23,26,33,.08);
+    color-scheme: light;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  * { box-sizing: inherit; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg); }
+  body {
+    color: var(--ink);
+    font-family: 'Noto Sans TC', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== TOP BAR ===== */
+  .topbar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(12px);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-icon {
+    width: 36px; height: 36px; border-radius: 11px;
+    background: linear-gradient(135deg, var(--teal), var(--blue));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+  }
+  .brand-text { font-weight: 800; font-size: 16px; letter-spacing: -0.01em; }
+  .brand-text small { display:block; font-size:10px; font-weight:500; color:var(--sub); margin-top:1px; }
+  .theme-toggle {
+    width: 36px; height: 36px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 15px; color: var(--ink);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    margin: 16px 16px 0;
+    border-radius: 24px;
+    padding: 28px 24px 26px;
+    background: linear-gradient(135deg, #0d9488 0%, #3b82f6 55%, #8b5cf6 100%);
+    position: relative; overflow: hidden;
+    color: #fff;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; width: 220px; height: 220px; border-radius: 50%;
+    background: rgba(255,255,255,.12);
+    right: -60px; top: -80px;
+  }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: .12em;
+    opacity: .85; text-transform: uppercase; margin-bottom: 8px;
+    position: relative;
+  }
+  .hero h1 {
+    font-size: clamp(20px, 5vw, 27px);
+    font-weight: 800; line-height: 1.3; margin-bottom: 10px;
+    position: relative;
+  }
+  .hero p {
+    font-size: 13px; line-height: 1.7; opacity: .92;
+    max-width: 480px; position: relative;
+  }
+  .hero-stats {
+    display: flex; gap: 10px; margin-top: 18px; position: relative; flex-wrap: wrap;
+  }
+  .hero-stat {
+    background: rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 14px;
+    padding: 8px 14px;
+    font-size: 12px; font-weight: 600;
+  }
+  .hero-stat b { font-size: 15px; display:block; }
+
+  /* ===== HOW-TO STRIP ===== */
+  .steps-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 18px 16px 0;
+  }
+  .step-chip {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 14px 10px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .step-chip .num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--teal-lt); color: var(--teal);
+    font-size: 12px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 8px;
+  }
+  .step-chip p { font-size: 10.5px; color: var(--sub); line-height: 1.4; }
+  @media (max-width: 480px) {
+    .steps-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ===== ORGAN MAP ===== */
+  .section {
+    margin: 26px 16px 0;
+  }
+  .section-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .section-head h2 {
+    font-size: 16px; font-weight: 800; letter-spacing: -0.01em;
+  }
+  .section-head .count-badge {
+    background: var(--teal-lt); color: var(--teal);
+    font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 10px;
+  }
+
+  .map-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    display: flex; gap: 20px; align-items: center;
+    flex-wrap: wrap;
+  }
+  .map-svg-wrap { flex-shrink: 0; width: 140px; }
+  .map-legend-list { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 8px; }
+  .map-legend-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12.5px; color: var(--sub);
+  }
+  .map-legend-chip {
+    width: 28px; height: 20px; border-radius: 6px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: #fff;
+  }
+
+  /* ===== FILTER PILLS ===== */
+  .filter-scroll {
+    display: flex; gap: 8px; overflow-x: auto;
+    padding: 2px 2px 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .filter-scroll::-webkit-scrollbar { display: none; }
+  .pill {
+    flex-shrink: 0;
+    border: 1.5px solid var(--line);
+    background: var(--surface);
+    color: var(--sub);
+    font-size: 12.5px; font-weight: 600;
+    padding: 8px 16px; border-radius: 20px;
+    cursor: pointer; white-space: nowrap;
+    transition: all .15s;
+  }
+  .pill.active {
+    background: var(--ink); border-color: var(--ink); color: var(--bg);
+  }
+
+  /* ===== CARD GRID ===== */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform .15s, box-shadow .15s;
+    display: flex; flex-direction: column;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .card:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+  .card-top {
+    padding: 16px 16px 0;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .card-viz {
+    width: 52px; height: 64px; border-radius: 40% 40% 50% 50% / 45% 45% 55% 55%;
+    flex-shrink: 0; overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
+  }
+  .card-head-text { flex: 1; min-width: 0; }
+  .card-name { font-size: 16.5px; font-weight: 800; line-height: 1.25; }
+  .card-eng { font-size: 10.5px; color: var(--sub); margin-top: 2px; }
+  .sev-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+
+  .card-mid { padding: 10px 16px 0; }
+  .card-quick {
+    font-size: 12px; color: var(--sub); line-height: 1.55;
+  }
+
+  .card-bottom {
+    padding: 12px 16px 16px;
+    margin-top: auto;
+    display: flex; gap: 5px; flex-wrap: wrap;
+  }
+  .chip {
+    font-size: 10px; font-weight: 700;
+    padding: 3px 9px; border-radius: 8px;
+    letter-spacing: 0.02em;
+  }
+  .chip-tcm   { background: var(--green-lt); color: var(--green); }
+  .chip-ayur  { background: var(--violet-lt); color: var(--violet); }
+  .chip-food  { background: var(--amber-lt); color: var(--amber); }
+  .chip-warn  { background: var(--coral-lt); color: var(--coral); }
+
+  /* ===== MODAL (bottom sheet) ===== */
+  .sheet-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(10,12,16,.55);
+    backdrop-filter: blur(2px);
+  }
+  .sheet-overlay.open { display: block; }
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: var(--surface);
+    border-radius: 28px 28px 0 0;
+    max-height: 90vh;
+    display: flex; flex-direction: column;
+    box-shadow: var(--shadow-lg);
+    animation: sheetUp .25s cubic-bezier(.2,.9,.3,1);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @keyframes sheetUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+  .sheet-handle {
+    width: 36px; height: 4px; border-radius: 2px;
+    background: var(--line); margin: 10px auto 4px;
+  }
+  .sheet-head {
+    padding: 10px 20px 14px;
+    display: flex; align-items: flex-start; gap: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .sheet-viz {
+    width: 62px; height: 78px; border-radius: 40% 40% 50% 50% / 45% 45% 55% 55%;
+    flex-shrink: 0; overflow: hidden;
+  }
+  .sheet-title { font-size: 21px; font-weight: 800; }
+  .sheet-eng { font-size: 11.5px; color: var(--sub); margin-top: 2px; }
+  .sheet-chips { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+  .sheet-close {
+    background: var(--bg); border: 1px solid var(--line);
+    width: 32px; height: 32px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--sub); font-size: 16px; flex-shrink: 0;
+  }
+
+  .seg-tabs {
+    display: flex; gap: 6px; padding: 12px 20px;
+    overflow-x: auto; scrollbar-width: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .seg-tabs::-webkit-scrollbar { display: none; }
+  .seg-tab {
+    flex-shrink: 0;
+    background: var(--bg); border: 1px solid var(--line);
+    color: var(--sub); font-size: 12px; font-weight: 600;
+    padding: 7px 14px; border-radius: 12px;
+    cursor: pointer; white-space: nowrap;
+  }
+  .seg-tab.active {
+    background: var(--teal); border-color: var(--teal); color: #fff;
+  }
+
+  .sheet-body {
+    padding: 18px 20px 28px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* content blocks reused */
+  .stat-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin-bottom: 16px;
+  }
+  .stat-box {
+    background: var(--bg); border: 1px solid var(--line);
+    border-radius: 14px; padding: 11px 13px;
+  }
+  .stat-box .label { font-size: 10.5px; color: var(--sub); margin-bottom: 3px; }
+  .stat-box .val { font-size: 13.5px; font-weight: 700; }
+
+  .sev-meter { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .sev-meter .lab { font-size: 11.5px; color: var(--sub); width: 48px; flex-shrink:0; }
+  .sev-track { flex: 1; height: 7px; background: var(--line); border-radius: 4px; overflow: hidden; }
+  .sev-fill { height: 100%; border-radius: 4px; }
+
+  .block { margin-bottom: 18px; }
+  .block-title {
+    font-size: 13.5px; font-weight: 800; margin-bottom: 9px;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .block-title .ico {
+    width: 22px; height: 22px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0;
+  }
+  .ico-tcm  { background: var(--green-lt); color: var(--green); }
+  .ico-ayur { background: var(--violet-lt); color: var(--violet); }
+  .ico-food { background: var(--amber-lt); color: var(--amber); }
+  .ico-warn { background: var(--coral-lt); color: var(--coral); }
+  .ico-info { background: var(--blue-lt); color: var(--blue); }
+
+  .ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .ul li {
+    font-size: 13px; line-height: 1.6; color: var(--ink);
+    padding-left: 15px; position: relative;
+  }
+  .ul li::before {
+    content: ''; position: absolute; left: 0; top: 7px;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--teal);
+  }
+
+  .dual-box {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;
+  }
+  @media (max-width: 480px) { .dual-box { grid-template-columns: 1fr; } }
+  .dual-box .box {
+    border-radius: 14px; padding: 13px 14px; font-size: 12.5px; line-height: 1.6;
+  }
+  .box.tcm  { background: var(--green-lt); color: #0a3321; }
+  .box.ayur { background: var(--violet-lt); color: #3a1f66; }
+  .box-title { font-size: 10.5px; font-weight: 800; margin-bottom: 6px; letter-spacing: .03em; text-transform: uppercase; }
+  .box.tcm .box-title { color: var(--green); }
+  .box.ayur .box-title { color: var(--violet); }
+
+  .food-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px,1fr)); gap: 8px; }
+  .food-chip {
+    background: var(--amber-lt); border-radius: 12px; padding: 9px 6px;
+    text-align: center; font-size: 11.5px; color: #7c4a06; line-height: 1.4;
+  }
+  .food-chip .e { font-size: 18px; display: block; margin-bottom: 3px; }
+  .avoid-chip {
+    background: var(--coral-lt); border-radius: 12px; padding: 9px 6px;
+    text-align: center; font-size: 11.5px; color: #8a1327; line-height: 1.4;
+  }
+
+  .warn-card {
+    background: var(--coral-lt); border-radius: 14px; padding: 14px 16px;
+    font-size: 12.5px; color: #7a0f23; line-height: 1.7;
+  }
+  .warn-card strong { display: block; font-size: 13px; margin-bottom: 5px; }
+
+  /* ===== FOOTER ===== */
+  .footer-note {
+    max-width: 700px; margin: 28px auto 0; padding: 18px 20px 40px;
+    text-align: center; font-size: 11px; color: var(--sub); line-height: 1.8;
+  }
+
+  body { max-width: 900px; margin: 0 auto; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">👅</div>
+    <div class="brand-text">舌頭儀表板2<small>身體儀表板 · 中醫 × 阿育吠陀</small></div>
+  </div>
+  <div style="display:flex;gap:8px"><button class="theme-toggle" onclick="toggleLang()" id="langBtn" style="width:auto;padding:0 12px;font-weight:700;font-size:12px">ENG</button></div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">每日一照 · 自我健康雷達</div>
+  <h1>舌頭係你身體嘅即時儀表板</h1>
+  <p>中醫望診 + 印度阿育吠陀對照，幫你搞清楚身體而家播緊咩狀態，仲有對應食療建議，唔使次次都周街問 Google。</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><b>14</b>舌象收錄</div>
+    <div class="hero-stat"><b>2</b>醫學體系對照</div>
+    <div class="hero-stat"><b>70+</b>食材建議</div>
+  </div>
+</div>
+
+<div class="steps-row">
+  <div class="step-chip"><div class="num">1</div><p>早起未刷牙前照鏡</p></div>
+  <div class="step-chip"><div class="num">2</div><p>自然光下觀察最準</p></div>
+  <div class="step-chip"><div class="num">3</div><p>放鬆伸出，10秒內睇完</p></div>
+  <div class="step-chip"><div class="num">4</div><p>深色食物後要扣返分</p></div>
+</div>
+
+<div class="section">
+  <div class="section-head"><h2>舌頭器官對應圖</h2></div>
+  <div class="map-card">
+    <div class="map-svg-wrap">
+      <svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="80" cy="95" rx="58" ry="80" fill="#e8b4a4" stroke="#cf8f7c" stroke-width="2"/>
+        <ellipse cx="80" cy="165" rx="40" ry="25" fill="#ebbcac"/>
+        <ellipse cx="80" cy="150" rx="30" ry="20" fill="rgba(244,63,94,.22)"/>
+        <ellipse cx="80" cy="112" rx="40" ry="20" fill="rgba(59,130,246,.18)"/>
+        <ellipse cx="80" cy="85" rx="36" ry="17" fill="rgba(245,158,11,.22)"/>
+        <ellipse cx="44" cy="85" rx="16" ry="28" fill="rgba(34,197,94,.22)"/>
+        <ellipse cx="116" cy="85" rx="16" ry="28" fill="rgba(34,197,94,.22)"/>
+        <ellipse cx="80" cy="45" rx="38" ry="20" fill="rgba(139,92,246,.2)"/>
+      </svg>
+    </div>
+    <div class="map-legend-list">
+      <div class="map-legend-row"><div class="map-legend-chip" style="background:var(--coral)">尖</div>心 · 心神狀態</div>
+      <div class="map-legend-row"><div class="map-legend-chip" style="background:var(--blue)">前</div>肺 · 呼吸系統</div>
+      <div class="map-legend-row"><div class="map-legend-chip" style="background:var(--amber)">中</div>脾胃 · 消化核心</div>
+      <div class="map-legend-row"><div class="map-legend-chip" style="background:var(--green)">側</div>肝膽 · 情緒代謝</div>
+      <div class="map-legend-row"><div class="map-legend-chip" style="background:var(--violet)">根</div>腎 · 根本元氣</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head">
+    <h2>14 種舌象全收錄</h2>
+    <span class="count-badge" id="countBadge">14 款</span>
+  </div>
+  <div class="filter-scroll">
+    <button class="pill active" onclick="filterCards('all',this)">全部</button>
+    <button class="pill" onclick="filterCards('coat',this)">舌苔問題</button>
+    <button class="pill" onclick="filterCards('colour',this)">顏色異常</button>
+    <button class="pill" onclick="filterCards('shape',this)">形態問題</button>
+    <button class="pill" onclick="filterCards('urgent',this)">需要注意</button>
+  </div>
+  <div style="height:14px"></div>
+  <div class="grid" id="cardsGrid"></div>
+</div>
+
+<div class="footer-note">
+  ⚠️ 本資料僅供參考，幫助了解基本身體訊號及食療調理方向，並非醫療診斷。<br>
+  如症狀持續或嚴重，請立即尋求專業醫護人員協助。<br>
+  食療原則：唔用奶類、米飯、麵粉同穀物；奶改用「水＋鹽＋植物」三成份植物奶或椰子乳酪。<br>中醫 · 阿育吠陀 · 現代醫學資料整合製作
+</div>
+
+<!-- SHEET MODAL -->
+<div class="sheet-overlay" id="overlay" onclick="closeSheetBg(event)">
+  <div class="sheet" id="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-viz" id="sheetViz"></div>
+      <div style="flex:1;min-width:0">
+        <div class="sheet-title" id="sheetTitle"></div>
+        <div class="sheet-eng" id="sheetEng"></div>
+        <div class="sheet-chips" id="sheetChips"></div>
+      </div>
+      <button class="sheet-close" onclick="closeSheet()">✕</button>
+    </div>
+    <div class="seg-tabs" id="segTabs"></div>
+    <div class="sheet-body" id="sheetBody"></div>
+  </div>
+</div>
+
+<script>
+const DATA = [
+  // ===== ORIGINAL 9 =====
+  {
+    id:'cracked', name:'舌頭爆裂', eng:'Fissured Tongue', category:['coat','shape'], severity:2,
+    quick:'B 族維他命唔夠、黏膜發炎，身體話你缺嘢食',
+    tags:['tcm','ayur','food'], tongue:{base:'#d48a7a', tip:'#c87068', feature:'cracked'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid">
+          <div class="stat-box"><div class="label">主要問題</div><div class="val">B族維他命缺乏</div></div>
+          <div class="stat-box"><div class="label">影響器官</div><div class="val">消化 / 黏膜</div></div>
+        </div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:50%;background:var(--amber)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌面出現深淺唔一嘅裂紋，好似乾旱大地</li><li>可能伴隨口乾、舌頭有灼熱感</li><li>嚴重時裂縫會積聚食物殘渣</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>陰虛內熱，津液無法滋養舌面，多見腎陰虛、胃陰虛。舌中裂＝胃陰虛；舌根裂＝腎陰虛。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>Vata（風能）失衡，身體乾燥、神經緊張。同時 Agni 過旺消耗體液，令舌面乾裂。</div>
+        </div>
+        <div class="block"><div class="block-title"><div class="ico ico-tcm">中</div>調理方向</div>
+        <ul class="ul"><li>滋陰補腎：生地黃、麥冬、石斛</li><li>每日 Oil Pulling 用芝麻油淨化口腔</li><li>避免辛辣燥熱食物</li></ul></div>`,
+      食療:`
+        <div class="block-title"><div class="ico ico-food">食</div>建議食材</div>
+        <div class="food-row">
+          <div class="food-chip"><span class="e">🥚</span>雞蛋</div><div class="food-chip"><span class="e">🐟</span>沙甸魚</div>
+          <div class="food-chip"><span class="e">🌿</span>菠菜</div><div class="food-chip"><span class="e">🥑</span>牛油果</div>
+          <div class="food-chip"><span class="e">🫘</span>豆類</div><div class="food-chip"><span class="e">🫐</span>藍莓</div>
+        </div>
+        <div style="height:14px"></div>
+        <div class="block-title"><div class="ico ico-warn">避</div>要避免</div>
+        <div class="food-row"><div class="avoid-chip">酒精</div><div class="avoid-chip">過量咖啡</div><div class="avoid-chip">辛辣</div></div>`,
+      注意事項:`
+        <div class="warn-card"><strong>需要睇醫生嘅情況</strong>裂紋深且痛楚出血 → 睇牙醫或中醫<br>吞咽困難、聲音沙啞 → 立即就醫<br>補充維他命 4 週後無改善 → 查血驗營養</div>`
+    }
+  },
+  {
+    id:'smooth_red', name:'滑舌赤舌', eng:'Beefy Red Tongue', category:['colour','coat'], severity:3,
+    quick:'胃酸少、葉酸 B12 唔夠，舌乳頭萎縮，消化弱',
+    tags:['tcm','ayur','food','warn'], tongue:{base:'#c8504a', tip:'#d86060', feature:'smooth'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid">
+          <div class="stat-box"><div class="label">主要問題</div><div class="val">B12 / 葉酸缺乏</div></div>
+          <div class="stat-box"><div class="label">緊急程度</div><div class="val">需要關注</div></div>
+        </div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:70%;background:var(--coral)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌面光滑如鏡，無正常舌苔同舌乳頭</li><li>顏色鮮紅甚至灼熱疼痛</li><li>可能伴隨消化不良、容易疲倦</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>胃陰虛火旺，無苔係胃陰極度虧損，正常薄白苔係胃氣充足嘅指標。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>Pitta 極度失衡消耗體液，光滑無苔係 Ama 積聚後組織被消耗嘅訊號。</div>
+        </div>`,
+      食療:`
+        <div class="food-row">
+          <div class="food-chip"><span class="e">🥩</span>紅肉</div><div class="food-chip"><span class="e">🐚</span>蜆貝</div>
+          <div class="food-chip"><span class="e">🥚</span>雞蛋</div><div class="food-chip"><span class="e">🐟</span>沙甸魚</div>
+          <div class="food-chip"><span class="e">🌿</span>菠菜</div><div class="food-chip"><span class="e">🥦</span>西蘭花</div>
+        </div>
+        <div class="warn-card" style="margin-top:14px"><strong>素食者注意</strong>B12 幾乎只存在動物性食品，建議定期驗血同補充劑。</div>`,
+      注意事項:`
+        <div class="warn-card"><strong>以下情況要即刻睇醫生</strong>長期光滑舌 + 疲倦頭暈 → 可能惡性貧血<br>舌頭腫痛 + 發燒 → 感染可能<br>配合手腳麻痺 → B12 神經損傷</div>`
+    }
+  },
+  {
+    id:'root_coat', name:'舌根有苔', eng:'Thick Root Coating', category:['coat'], severity:2,
+    quick:'腸胃蠕動慢、SIBO，消化系統提示你注意',
+    tags:['tcm','ayur','food'], tongue:{base:'#d49080', tip:'#c87868', feature:'rootcoat'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid"><div class="stat-box"><div class="label">主要問題</div><div class="val">腸道蠕動失調</div></div><div class="stat-box"><div class="label">關鍵詞</div><div class="val">SIBO / 積滯</div></div></div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:45%;background:var(--amber)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌根（最後面）有厚厚白苔或黃苔</li><li>舌尖仍然正常粉紅</li><li>可能有口臭、腹脹、排便不規律</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>舌根對應腎、膀胱同下焦，厚苔表示下焦濕熱積滯或脾胃運化失調。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>Ama 積聚喺大腸嘅訊號，Agni 減弱，食物無法完全消化。</div>
+        </div>`,
+      食療:`
+        <div class="food-row">
+          <div class="food-chip"><span class="e">🫚</span>薑</div><div class="food-chip"><span class="e">🥒</span>冬瓜</div>
+          <div class="food-chip"><span class="e">🍵</span>普洱茶</div><div class="food-chip"><span class="e">🦠</span>益生菌</div>
+        </div>`,
+      注意事項:`<div class="warn-card"><strong>需要就醫情況</strong>持續腹脹 + 放屁多 → 考慮 SIBO 測試<br>黃厚苔 + 發燒 → 可能腸道感染</div>`
+    }
+  },
+  {
+    id:'side_yellow', name:'側紅邊黃苔', eng:'Red Sides, Yellow Coat', category:['colour','coat'], severity:3,
+    quick:'肝臟負擔過重、膽汁不暢，係肝膽雙重警報',
+    tags:['tcm','ayur','food','warn'], tongue:{base:'#c87868', tip:'#d48070', feature:'sideyellow'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid"><div class="stat-box"><div class="label">主要問題</div><div class="val">肝膽負荷過重</div></div><div class="stat-box"><div class="label">常見原因</div><div class="val">飲酒 / 油膩 / 壓力</div></div></div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:68%;background:var(--coral)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌頭兩側明顯偏紅（肝膽對應位置）</li><li>中間或後半部有黃色厚苔</li><li>可能伴隨右脅不適、口苦、眼黃</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>舌邊屬肝膽，兩側紅代表肝火旺；黃苔代表濕熱，合稱「肝膽濕熱」。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>Pitta 失衡影響 Ranjaka Pitta（肝膽相關火能），黃苔代表 Ama 積聚。</div>
+        </div>`,
+      食療:`
+        <div class="food-row">
+          <div class="food-chip"><span class="e">🥬</span>深綠蔬菜</div><div class="food-chip"><span class="e">🌼</span>菊花茶</div>
+          <div class="food-chip"><span class="e">🟡</span>薑黃</div><div class="food-chip"><span class="e">🍋</span>檸檬</div>
+        </div>`,
+      注意事項:`<div class="warn-card"><strong>以下情況需即刻就醫</strong>眼白或皮膚變黃（黃疸）→ 立即急診<br>右上腹持續疼痛 → 膽石或肝炎可能</div>`
+    }
+  },
+  {
+    id:'tip_red', name:'舌尖通紅', eng:'Red Tongue Tip', category:['colour'], severity:2,
+    quick:'壓力爆燈、心火上升，身體話你夠喇 rest下啦',
+    tags:['tcm','ayur','food'], tongue:{base:'#d49080', tip:'#c83a35', feature:'tipred'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid"><div class="stat-box"><div class="label">主要問題</div><div class="val">心火亢盛 / 高壓</div></div><div class="stat-box"><div class="label">現代對應</div><div class="val">皮質醇過高</div></div></div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:50%;background:var(--amber)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>只有舌尖部分明顯偏紅</li><li>可能伴隨失眠、心跳加速、煩躁</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>舌尖對應心，紅係「心火上炎」，心神不安、失眠多夢皆因此。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>Sadhaka Pitta 失衡，同時 Prana Vata 紊亂，導致焦慮失眠。</div>
+        </div>`,
+      食療:`
+        <div class="food-row">
+          <div class="food-chip"><span class="e">🍵</span>蓮子心茶</div><div class="food-chip"><span class="e">🌹</span>玫瑰花茶</div>
+          <div class="food-chip"><span class="e">🍒</span>車厘子</div><div class="food-chip"><span class="e">🥥</span>椰子水</div>
+        </div>`,
+      注意事項:`<div class="warn-card"><strong>需要就醫情況</strong>舌尖紅 + 心悸胸痛 → 立即睇心臟科<br>失眠超過 3 個月 → 考慮精神科</div>`
+    }
+  },
+  {
+    id:'geographic', name:'地圖舌', eng:'Geographic Tongue', category:['shape','coat'], severity:2,
+    quick:'腸道菌群失衡、鋅唔夠，免疫系統波動中',
+    tags:['tcm','ayur','food'], tongue:{base:'#d49080', tip:'#c87868', feature:'geographic'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid"><div class="stat-box"><div class="label">主要問題</div><div class="val">腸道菌群 / 鋅缺乏</div></div><div class="stat-box"><div class="label">特點</div><div class="val">斑塊游走變化</div></div></div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:40%;background:var(--amber)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌面不規則光滑紅色斑塊，邊緣有白框</li><li>圖案每日改變，好似地圖</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>脾胃虛弱同氣血不足，過度思慮係常見誘因。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>三種 Dosha 同時失衡，反映身體正喺適應轉變狀態。</div>
+        </div>`,
+      食療:`
+        <div class="food-row">
+          <div class="food-chip"><span class="e">🦪</span>蠔</div><div class="food-chip"><span class="e">🎃</span>南瓜籽</div>
+          <div class="food-chip"><span class="e">🦠</span>益生菌</div><div class="food-chip"><span class="e">🥥</span>椰子乳酪</div>
+        </div>`,
+      注意事項:`<div class="warn-card"><strong>需要就醫排除</strong>地圖舌 + 皮膚出疹 → 乾癬可能<br>地圖舌 + 關節痛 → 自身免疫問題</div>`
+    }
+  },
+  {
+    id:'black_coat', name:'黑苔', eng:'Black Hairy Tongue', category:['coat'], severity:3,
+    quick:'真菌細菌失衡，可能係抗生素副作用',
+    tags:['tcm','ayur','food','warn'], tongue:{base:'#c08070', tip:'#b07060', feature:'blackcoat'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid"><div class="stat-box"><div class="label">主要問題</div><div class="val">菌群嚴重失衡</div></div><div class="stat-box"><div class="label">緊急程度</div><div class="val">需立即關注</div></div></div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:80%;background:var(--coral)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌面黑色、棕黑色或深色毛狀苔</li><li>可能有金屬味、口臭</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>最嚴重嘅苔色，代表寒極化熱、腎陽虛極，建議盡快面診。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>嚴重 Ama 積聚，Agni 幾近熄滅，需要深層淨化療法。</div>
+        </div>`,
+      食療:`<div class="food-row"><div class="food-chip"><span class="e">🥥</span>無糖椰子乳酪</div><div class="food-chip"><span class="e">🍵</span>薑茶</div><div class="food-chip"><span class="e">🫙</span>泡菜</div></div>`,
+      注意事項:`<div class="warn-card"><strong>黑苔係認真嘢</strong>持續 48 小時以上 → 立即睇醫生<br>服用抗生素後出現 → 告知醫生調整用藥</div>`
+    }
+  },
+  {
+    id:'centre_coat', name:'中央有苔', eng:'Central Coating', category:['coat'], severity:2,
+    quick:'脾胃發炎，消化系統有 red flag',
+    tags:['tcm','ayur','food'], tongue:{base:'#d49080', tip:'#c87868', feature:'centrecoat'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid"><div class="stat-box"><div class="label">主要問題</div><div class="val">脾胃炎症</div></div><div class="stat-box"><div class="label">常見人群</div><div class="val">飲食不規律者</div></div></div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:50%;background:var(--amber)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌頭正中間有一塊明顯白苔或黃苔</li><li>可能有胃脹、消化慢</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>舌中對應脾胃，白厚苔＝寒濕；黃厚苔＝胃熱。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>Sama Agni，Ama 積聚喺主消化管道。</div>
+        </div>`,
+      食療:`<div class="food-row"><div class="food-chip"><span class="e">🫚</span>薑</div><div class="food-chip"><span class="e">🍵</span>陳皮茶</div><div class="food-chip"><span class="e">🥕</span>紅蘿蔔</div></div>`,
+      注意事項:`<div class="warn-card"><strong>需要就醫情況</strong>胃痛 + 黑便 → 急診<br>苔厚 + 體重減輕 → 胃鏡檢查</div>`
+    }
+  },
+  {
+    id:'teeth_marks', name:'齒痕舌', eng:'Scalloped Tongue', category:['shape'], severity:2,
+    quick:'脾氣虛、水腫，腸道話你係時候照顧佢',
+    tags:['tcm','ayur','food'], tongue:{base:'#dca898', tip:'#d09888', feature:'teethmarks'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid"><div class="stat-box"><div class="label">主要問題</div><div class="val">脾氣虛弱</div></div><div class="stat-box"><div class="label">常見人群</div><div class="val">都市人、久坐族</div></div></div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:35%;background:var(--green)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌頭兩側有牙齒壓印</li><li>可能面部或手腳浮腫</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>脾氣虛、痰濕內盛，脾主運化水濕，久坐冷飲人士常見。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>Kapha 嚴重失衡，身體沉重遲緩，Apana Vata 受阻。</div>
+        </div>`,
+      食療:`<div class="food-row"><div class="food-chip"><span class="e">🥒</span>冬瓜</div><div class="food-chip"><span class="e">🫘</span>紅豆</div><div class="food-chip"><span class="e">🫚</span>薑</div></div>`,
+      注意事項:`<div class="warn-card"><strong>需要就醫排除</strong>齒痕 + 嚴重水腫 → 腎功能檢查<br>齒痕 + 甲狀腺腫大 → 甲狀腺檢查</div>`
+    }
+  },
+  // ===== NEW 5 =====
+  {
+    id:'pale', name:'淡白舌', eng:'Pale Tongue', category:['colour'], severity:2,
+    quick:'氣血唔夠、貧血警號，成個人都冇晒氣咁',
+    tags:['tcm','ayur','food'], tongue:{base:'#e3b8ac', tip:'#dcaea0', feature:'pale'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid">
+          <div class="stat-box"><div class="label">主要問題</div><div class="val">氣血 / 陽虛</div></div>
+          <div class="stat-box"><div class="label">現代對應</div><div class="val">缺鐵性貧血</div></div>
+        </div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:45%;background:var(--amber)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌色明顯偏淡，缺少正常粉紅色澤</li><li>可能伴隨面色蒼白、手腳冰冷</li><li>容易頭暈、氣喘、乏力</li><li>女性經期後特別明顯</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>氣血兩虛或陽氣不足，血不能充盈舌體則色淡。久病、長期捱夜、經血過多都係成因。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>Vata 過盛、Agni 虛弱，身體缺乏 Ojas（生命能量精華），造血功能低下。</div>
+        </div>
+        <div class="block" style="margin-top:14px"><div class="block-title"><div class="ico ico-tcm">中</div>調理方向</div>
+        <ul class="ul"><li>補氣養血：黨參、黃芪、當歸燉湯</li><li>紅棗桂圓茶日常飲用</li><li>規律作息，避免過度勞累</li></ul></div>`,
+      食療:`
+        <div class="block-title"><div class="ico ico-food">食</div>補血食材</div>
+        <div class="food-row">
+          <div class="food-chip"><span class="e">🥩</span>紅肉</div><div class="food-chip"><span class="e">🍇</span>紅棗</div>
+          <div class="food-chip"><span class="e">🐓</span>烏雞</div><div class="food-chip"><span class="e">🥬</span>菠菜</div>
+          <div class="food-chip"><span class="e">🫘</span>黑豆</div><div class="food-chip"><span class="e">🍯</span>蜂蜜</div>
+        </div>
+        <div style="height:14px"></div>
+        <div class="warn-card"><strong>鐵質吸收小貼士</strong>配合維他命C（橙、奇異果）一齊食，鐵質吸收率大增；茶同咖啡會阻礙鐵質吸收，食飯時間唔好飲。</div>`,
+      注意事項:`
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>自我調理</div>
+        <ul class="ul"><li>每日保持充足睡眠 7-8 小時</li><li>避免劇烈運動後立即進食生冷</li><li>定期檢查血色素水平</li></ul></div>
+        <div class="warn-card"><strong>需要就醫情況</strong>持續頭暈 + 心悸 → 查血色素同鐵質儲備<br>月經量異常多 → 婦科檢查排除病因<br>長期疲倦無改善 → 查甲狀腺功能</div>`
+    }
+  },
+  {
+    id:'purple', name:'紫暗舌', eng:'Purple / Dusky Tongue', category:['colour'], severity:3,
+    quick:'血瘀、循環差，久坐一族要郁多啲',
+    tags:['tcm','ayur','food','warn'], tongue:{base:'#8a5560', tip:'#7a4a55', feature:'purple'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid">
+          <div class="stat-box"><div class="label">主要問題</div><div class="val">血瘀 / 循環差</div></div>
+          <div class="stat-box"><div class="label">現代對應</div><div class="val">缺氧 / 血液循環不良</div></div>
+        </div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:65%;background:var(--coral)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌色偏暗紫或帶青，失去正常紅潤</li><li>可能見舌下靜脈明顯曲張</li><li>手腳冰冷、容易瘀傷</li><li>女性常見經痛、經血有血塊</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>血瘀之象，氣滯血瘀則舌色紫暗。久坐少動、情緒壓抑、寒凝都會導致氣血運行不暢。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>Vata-Pitta 失衡阻塞 Srotas（身體通道），血液循環（Rakta Dhatu）運行受阻。</div>
+        </div>
+        <div class="block" style="margin-top:14px"><div class="block-title"><div class="ico ico-tcm">中</div>調理方向</div>
+        <ul class="ul"><li>活血化瘀：丹參、三七、紅花（需醫師指導）</li><li>玫瑰花、山楂泡茶，日常疏肝活血</li><li>多做輕度帶氧運動促進循環</li></ul></div>`,
+      食療:`
+        <div class="block-title"><div class="ico ico-food">食</div>活血食材</div>
+        <div class="food-row">
+          <div class="food-chip"><span class="e">🌹</span>玫瑰花茶</div><div class="food-chip"><span class="e">🍎</span>山楂</div>
+          <div class="food-chip"><span class="e">🫐</span>黑木耳</div><div class="food-chip"><span class="e">🧄</span>蒜頭</div>
+          <div class="food-chip"><span class="e">🐟</span>深海魚</div><div class="food-chip"><span class="e">🫚</span>薑</div>
+        </div>`,
+      注意事項:`
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>生活調整</div>
+        <ul class="ul"><li>每小時起身郁動，避免長時間久坐</li><li>保暖手腳，避免受寒</li><li>管理情緒，減少長期壓抑</li></ul></div>
+        <div class="warn-card"><strong>需要即刻就醫嘅情況</strong>舌色突然發紫 + 嘴唇發青 → 可能缺氧，急診<br>胸痛 + 呼吸困難 + 紫舌 → 立即call救護車<br>長期紫暗 + 經痛劇烈 → 婦科詳細檢查</div>`
+    }
+  },
+  {
+    id:'greasy_white', name:'油膩白苔', eng:'Greasy White Coat', category:['coat'], severity:2,
+    quick:'痰濕體質，身體好似濕咗水咁重',
+    tags:['tcm','ayur','food'], tongue:{base:'#d49888', tip:'#c88878', feature:'greasywhite'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid">
+          <div class="stat-box"><div class="label">主要問題</div><div class="val">痰濕內盛</div></div>
+          <div class="stat-box"><div class="label">常見人群</div><div class="val">香港飲食型態高發</div></div>
+        </div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:48%;background:var(--amber)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌苔厚膩，好似糊咗一層厚漿咁黏喺舌面</li><li>刮極都唔乾淨嘅感覺</li><li>常伴隨身體沉重、頭重、精神唔振</li><li>大便黏膩難沖</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>痰濕內盛，脾失健運，水濕停聚化痰。長期飲食油膩、嗜食生冷、少運動係主因。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>Kapha 過盛同 Ama 積聚，消化系統負擔過重，形成黏液性毒素堆積。</div>
+        </div>
+        <div class="block" style="margin-top:14px"><div class="block-title"><div class="ico ico-tcm">中</div>調理方向</div>
+        <ul class="ul"><li>化痰祛濕：陳皮、茯苓、法半夏（需指導）</li><li>減少飲食油膩、甜食、牛奶同動物乳製品（想飲奶就轉自製植物奶）</li><li>適量運動排汗，幫助化濕</li></ul></div>`,
+      食療:`
+        <div class="food-row">
+          <div class="food-chip"><span class="e">🍊</span>陳皮</div><div class="food-chip"><span class="e">🍵</span>荷葉茶</div>
+          <div class="food-chip"><span class="e">🫚</span>薑</div><div class="food-chip"><span class="e">🥒</span>冬瓜</div>
+          <div class="food-chip"><span class="e">🌿</span>赤小豆</div><div class="food-chip"><span class="e">🍋</span>檸檬水</div>
+        </div>
+        <div style="height:14px"></div>
+        <div class="block-title"><div class="ico ico-warn">避</div>痰濕體質要戒</div>
+        <div class="food-row"><div class="avoid-chip">手搖甜飲</div><div class="avoid-chip">炸物</div><div class="avoid-chip">甜品</div><div class="avoid-chip">凍飲</div></div>`,
+      注意事項:`
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>生活改善</div>
+        <ul class="ul"><li>每週至少 3 次帶氧運動，排汗去濕</li><li>飯後唔好即刻瞓，幫助脾胃運化</li><li>減少夜宵同宵夜習慣</li></ul></div>
+        <div class="warn-card"><strong>需要留意嘅情況</strong>白厚苔 + 發燒 → 可能感冒初起，中醫寒濕論治<br>長期厚膩不退 + 體重持續上升 → 檢查代謝指標</div>`
+    }
+  },
+  {
+    id:'mirror', name:'無苔鏡面舌', eng:'Mirror / Bald Tongue', category:['coat'], severity:3,
+    quick:'胃陰極虛，壓力耗盡身體儲備嘅警號',
+    tags:['tcm','ayur','food','warn'], tongue:{base:'#d8766a', tip:'#c86a5c', feature:'mirror'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid">
+          <div class="stat-box"><div class="label">主要問題</div><div class="val">胃陰極虛</div></div>
+          <div class="stat-box"><div class="label">緊急程度</div><div class="val">需要認真對待</div></div>
+        </div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:72%;background:var(--coral)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌面光滑發亮，完全冇舌苔，好似鏡面</li><li>舌色偏紅或偏暗，質地乾燥</li><li>常伴口乾、胃口差、消化弱</li><li>慢性病患者、長期捱夜人士常見</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>胃陰嚴重虧損，正氣大傷。中醫視完全無苔為「光剝苔」，係久病耗損或嚴重熱病後嘅表現，需要認真調理。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>Agni 極度衰弱，身體組織（Dhatu）被過度消耗，Ojas（生命精華）嚴重不足。</div>
+        </div>
+        <div class="block" style="margin-top:14px"><div class="block-title"><div class="ico ico-tcm">中</div>調理方向</div>
+        <ul class="ul"><li>滋養胃陰：石斛、麥冬、沙參煲湯</li><li>忌辛辣燥熱，飲食宜清淡滋潤</li><li>充足休息，減少熬夜耗損</li></ul></div>`,
+      食療:`
+        <div class="food-row">
+          <div class="food-chip"><span class="e">🍐</span>雪梨</div><div class="food-chip"><span class="e">🥥</span>椰子水</div>
+          <div class="food-chip"><span class="e">🍯</span>蜂蜜</div><div class="food-chip"><span class="e">🥛</span>自製植物奶</div>
+          <div class="food-chip"><span class="e">🍄</span>銀耳</div><div class="food-chip"><span class="e">🥔</span>山藥</div>
+        </div>
+        <div class="warn-card" style="margin-top:14px;background:var(--green-lt);color:#0a3321"><strong>植物奶 / 植物乳酪嘅原則</strong>只用 3 種原材料：水、鹽、植物（大豆 / 杏仁 / 椰子擇一），自己打、自己濾。唔加糖、唔加增稠劑、唔加香料。<br>乳酪就揀椰子乳酪（coconut yogurt）。</div>`,
+      注意事項:`
+        <div class="warn-card"><strong>需要就醫嘅情況</strong>完全無苔持續 2 週以上 → 建議睇中醫全面調理<br>伴隨體重急降 + 吞咽困難 → 必須就醫排查<br>長期病患者出現此舌象 → 告知主診醫生跟進<br>兒童出現無苔舌 → 可能與鋅缺乏或營養不良有關，建議兒科評估</div>`
+    }
+  },
+  {
+    id:'dry', name:'乾燥舌', eng:'Dry Tongue', category:['coat','colour'], severity:2,
+    quick:'脫水或陰虛，飲水不夠真係唔係借口',
+    tags:['tcm','ayur','food'], tongue:{base:'#d49888', tip:'#c88878', feature:'dry'},
+    tabs:['概覽','中西對照','食療','注意事項'],
+    content:{
+      概覽:`
+        <div class="stat-grid">
+          <div class="stat-box"><div class="label">主要問題</div><div class="val">陰虛 / 脫水</div></div>
+          <div class="stat-box"><div class="label">常見原因</div><div class="val">飲水不足 / 口呼吸</div></div>
+        </div>
+        <div class="sev-meter"><div class="lab">嚴重度</div><div class="sev-track"><div class="sev-fill" style="width:38%;background:var(--amber)"></div></div></div>
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>症狀表現</div>
+        <ul class="ul"><li>舌面缺乏正常濕潤光澤，摸落粗糙</li><li>可能伴隨嘴唇乾裂、喉嚨乾癢</li><li>晨起口乾特別明顯</li><li>長期捱夜、吹冷氣人士高發</li></ul></div>`,
+      中西對照:`
+        <div class="dual-box">
+          <div class="box tcm"><div class="box-title">中醫</div>陰虛津液不足，或熱邪傷津，身體缺乏滋潤物質，舌面因而乾燥少津。</div>
+          <div class="box ayur"><div class="box-title">Ayurveda</div>Vata 過盛令身體組織失去水分同潤滑，Pitta 過旺則加速體液蒸發。</div>
+        </div>
+        <div class="block" style="margin-top:14px"><div class="block-title"><div class="ico ico-tcm">中</div>調理方向</div>
+        <ul class="ul"><li>滋陰生津：麥冬、玉竹、沙參泡水</li><li>避免長期吹冷氣直吹口鼻</li><li>檢查睡眠時有否張口呼吸</li></ul></div>`,
+      食療:`
+        <div class="food-row">
+          <div class="food-chip"><span class="e">🍐</span>雪梨</div><div class="food-chip"><span class="e">🥒</span>青瓜</div>
+          <div class="food-chip"><span class="e">🍅</span>番茄</div><div class="food-chip"><span class="e">🥥</span>椰子水</div>
+          <div class="food-chip"><span class="e">🍯</span>蜂蜜水</div><div class="food-chip"><span class="e">🥛</span>自製杏仁奶</div>
+        </div>
+        <div style="height:14px"></div>
+        <div class="warn-card"><strong>飲水小貼士</strong>目標每日 1.5-2 公升水，分次小口飲，唔好一次過牛飲；起身第一件事飲一杯溫水。</div>`,
+      注意事項:`
+        <div class="block"><div class="block-title"><div class="ico ico-info">i</div>自我調理</div>
+        <ul class="ul"><li>房間放加濕機，尤其開冷氣/暖氣時</li><li>減少含咖啡因飲品（利尿加劇脫水）</li><li>用生理鹽水噴霧滋潤口腔</li></ul></div>
+        <div class="warn-card"><strong>需要就醫情況</strong>持續口乾 + 眼乾 → 排查修格蘭氏症候群<br>伴隨多尿、體重下降 → 查血糖排除糖尿病<br>服藥期間出現 → 查詢是否藥物副作用</div>`
+    }
+  }
+];
+
+function getTongueSVG(t, w, h) {
+  const {base, tip, feature} = t;
+  let coatLayer = '', featureLayer = '';
+
+  if (feature === 'rootcoat') coatLayer = `<ellipse cx="${w*.5}" cy="${h*.2}" rx="${w*.35}" ry="${h*.18}" fill="rgba(240,235,215,.8)"/>`;
+  if (feature === 'sideyellow') featureLayer += `<ellipse cx="${w*.15}" cy="${h*.5}" rx="${w*.14}" ry="${h*.35}" fill="rgba(190,60,50,.4)"/><ellipse cx="${w*.85}" cy="${h*.5}" rx="${w*.14}" ry="${h*.35}" fill="rgba(190,60,50,.4)"/><ellipse cx="${w*.5}" cy="${h*.5}" rx="${w*.22}" ry="${h*.2}" fill="rgba(210,180,60,.6)"/>`;
+  if (feature === 'blackcoat') coatLayer = `<ellipse cx="${w*.5}" cy="${h*.4}" rx="${w*.3}" ry="${h*.3}" fill="rgba(25,18,14,.65)"/>`;
+  if (feature === 'centrecoat') coatLayer = `<ellipse cx="${w*.5}" cy="${h*.45}" rx="${w*.2}" ry="${h*.18}" fill="rgba(230,225,205,.85)"/>`;
+  if (feature === 'geographic') coatLayer = `<ellipse cx="${w*.35}" cy="${h*.45}" rx="${w*.12}" ry="${h*.12}" fill="rgba(220,210,200,.85)"/><ellipse cx="${w*.62}" cy="${h*.38}" rx="${w*.1}" ry="${h*.1}" fill="rgba(220,210,200,.85)"/>`;
+  if (feature === 'cracked') featureLayer = `<line x1="${w*.5}" y1="${h*.25}" x2="${w*.52}" y2="${h*.75}" stroke="#a06050" stroke-width="1.3" opacity=".7"/><line x1="${w*.35}" y1="${h*.4}" x2="${w*.22}" y2="${h*.55}" stroke="#a06050" stroke-width="1" opacity=".6"/>`;
+  if (feature === 'teethmarks') { for (let i=0;i<5;i++){ const y=h*(.3+i*.09); featureLayer += `<ellipse cx="${w*.08}" cy="${y}" rx="${w*.06}" ry="${h*.035}" fill="rgba(180,140,120,.55)"/><ellipse cx="${w*.92}" cy="${y}" rx="${w*.06}" ry="${h*.035}" fill="rgba(180,140,120,.55)"/>`; } }
+  if (feature === 'greasywhite') coatLayer = `<ellipse cx="${w*.5}" cy="${h*.42}" rx="${w*.36}" ry="${h*.32}" fill="rgba(238,228,210,.7)"/>`;
+  if (feature === 'mirror') featureLayer = `<ellipse cx="${w*.5}" cy="${h*.4}" rx="${w*.3}" ry="${h*.3}" fill="rgba(255,255,255,.25)"/>`;
+  if (feature === 'purple') coatLayer = '';
+  if (feature === 'dry') featureLayer = `<ellipse cx="${w*.5}" cy="${h*.42}" rx="${w*.34}" ry="${h*.3}" fill="rgba(180,140,120,.2)"/>`;
+
+  const tipColor = feature === 'tipred' ? '#c83530' : tip;
+  const tipGrad = feature === 'tipred' ? `<defs><radialGradient id="tg${Math.random().toString(36).slice(2)}" cx="50%" cy="80%" r="40%"><stop offset="0%" stop-color="#d83530"/><stop offset="100%" stop-color="${base}"/></radialGradient></defs>` : '';
+
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="${w*.5}" cy="${h*.45}" rx="${w*.42}" ry="${h*.47}" fill="${base}"/>
+    <ellipse cx="${w*.5}" cy="${h*.78}" rx="${w*.3}" ry="${h*.22}" fill="${tipColor}"/>
+    <ellipse cx="${w*.5}" cy="${h*.08}" rx="${w*.25}" ry="${h*.12}" fill="rgba(243,245,249,.5)"/>
+    ${coatLayer}
+    ${featureLayer}
+    <ellipse cx="${w*.5}" cy="${h*.45}" rx="${w*.42}" ry="${h*.47}" fill="none" stroke="${base}" stroke-width="1" opacity=".4"/>
+  </svg>`;
+}
+
+function renderCards(filter='all') {
+  const grid = document.getElementById('cardsGrid');
+  grid.innerHTML = '';
+  let count = 0;
+  DATA.forEach(d => {
+    if (filter !== 'all') {
+      if (filter === 'urgent' && !d.tags.includes('warn')) return;
+      if (filter !== 'urgent' && !d.category.includes(filter)) return;
+    }
+    count++;
+    const sevColor = d.severity >= 3 ? 'var(--coral)' : d.severity === 2 ? 'var(--amber)' : 'var(--green)';
+    const labels = {tcm:'中醫',ayur:'阿育吠陀',food:'食療',warn:'需注意'};
+    const chipsHtml = d.tags.map(t => `<span class="chip chip-${t}">${labels[t]}</span>`).join('');
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.tabIndex = 0;
+    card.setAttribute('role','button');
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-viz">${getTongueSVG(d.tongue, 52, 64)}</div>
+        <div class="card-head-text">
+          <div class="card-name">${d.name}</div>
+          <div class="card-eng">${d.eng}</div>
+        </div>
+        <div class="sev-dot" style="background:${sevColor}"></div>
+      </div>
+      <div class="card-mid"><div class="card-quick">${d.quick}</div></div>
+      <div class="card-bottom">${chipsHtml}</div>`;
+    card.addEventListener('click', () => openSheet(d));
+    card.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') openSheet(d); });
+    grid.appendChild(card);
+  });
+  document.getElementById('countBadge').textContent = count + ' 款';
+}
+
+function filterCards(type, btn) {
+  document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards(type);
+}
+
+function openSheet(d) {
+  document.getElementById('sheetTitle').textContent = d.name;
+  document.getElementById('sheetEng').textContent = d.eng;
+  document.getElementById('sheetViz').innerHTML = getTongueSVG(d.tongue, 62, 78);
+  const labels = {tcm:'中醫',ayur:'阿育吠陀',food:'食療',warn:'需注意'};
+  document.getElementById('sheetChips').innerHTML = d.tags.map(t => `<span class="chip chip-${t}">${labels[t]}</span>`).join('');
+
+  const tabsEl = document.getElementById('segTabs');
+  tabsEl.innerHTML = '';
+  d.tabs.forEach((tab,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'seg-tab' + (i===0?' active':'');
+    btn.textContent = tab;
+    btn.onclick = () => {
+      document.querySelectorAll('.seg-tab').forEach((b,j)=>b.classList.toggle('active', j===i));
+      document.getElementById('sheetBody').innerHTML = d.content[tab] || '';
+    };
+    tabsEl.appendChild(btn);
+  });
+  document.getElementById('sheetBody').innerHTML = d.content[d.tabs[0]];
+
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSheet() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeSheetBg(e) { if (e.target.id === 'overlay') closeSheet(); }
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeSheet(); });
+
+
+// ===== ENG / 廣 =====
+let lang='zh', curFilter='all';
+const UI_EN={
+ brand:'Tongue Dashboard 2<small>Body dashboard · TCM × Ayurveda</small>',
+ eyebrow:'DAILY CHECK · SELF-HEALTH RADAR',
+ h1:'Your tongue is a live dashboard of your body',
+ p:'Traditional Chinese Medicine and Indian Ayurveda side by side, to help you read what your body is signalling, with food suggestions you can act on.',
+ stats:'<div class="hero-stat"><b>14</b>Tongue types</div><div class="hero-stat"><b>2</b>Medical systems</div><div class="hero-stat"><b>70+</b>Food ideas</div>',
+ steps:['Look first thing, before brushing','Natural daylight is most accurate','Relax, stick it out, check within 10 seconds','Dark foods can stain, so factor that in'],
+ titles:['Tongue-to-organ map','14 tongue types'],
+ legend:['Heart · mind','Lung · breathing','Spleen-stomach · digestion','Liver-gallbladder · mood & metabolism','Kidney · core vitality'],
+ pills:['All','Coating','Colour','Shape','Needs attention'],
+ tags:{tcm:'TCM',ayur:'Ayurveda',food:'Food',warn:'Caution'},
+ tabs:['Overview','TCM vs Ayurveda','Food','See a doctor'],
+ lab:{sev:'Severity',sym:'What you may notice',tcm:'TCM',ayu:'Ayurveda',eat:'Good to eat',avoid:'Go easy on',unit:' types'},
+ foot:'⚠️ For reference only, not a medical diagnosis. If symptoms persist or are severe, seek professional care immediately.<br>Food principle: no dairy, rice, flour or grains. For milk use homemade 3-ingredient plant milk (water + salt + one plant) or coconut yogurt.<br>TCM · Ayurveda · modern medicine, combined.'
+};
+const UI_ZH={tags:{tcm:'中醫',ayur:'阿育吠陀',food:'食療',warn:'需注意'},unit:' 款'};
+const EN={
+cracked:{n:'Cracked Tongue',e:'Fissured tongue',q:'Low B vitamins and irritated mucosa. Your body is asking for better food.',
+ sym:['Fissures across the surface, like dry earth','Dry mouth or a burning feeling','Food debris can collect in deep cracks'],
+ tcm:'Yin deficiency with internal heat: not enough fluid to moisten the tongue (kidney or stomach yin).',
+ ayu:'Vata imbalance brings dryness and nervous tension; excess Agni burns up body fluids.',
+ f:'🥚 Eggs|🐟 Sardines|🌿 Spinach|🥑 Avocado|🫘 Beans|🫐 Blueberries',a:'Alcohol|Too much coffee|Spicy food',
+ w:'Deep, painful or bleeding cracks: see a dentist or TCM doctor.<br>Trouble swallowing or hoarse voice: seek care now.<br>No change after 4 weeks of better nutrition: ask for a blood test.'},
+smooth_red:{n:'Smooth Red Tongue',e:'Beefy red tongue',q:'Low stomach acid, folate or B12. Papillae thinning, weak digestion.',
+ sym:['Glossy surface with no coating or papillae','Bright red, may feel sore or burning','Tiredness and poor digestion'],
+ tcm:'Stomach yin deficiency with heat. A bare tongue means stomach yin is badly depleted.',
+ ayu:'Severe Pitta excess drying the tissues; a smooth surface signals Ama and depleted tissue.',
+ f:'🥩 Red meat|🐚 Clams|🥚 Eggs|🐟 Sardines|🌿 Spinach|🥦 Broccoli',a:'Alcohol|Spicy food',
+ note:'Vegans: B12 only comes from animal foods or supplements. Get your levels tested.',
+ w:'Smooth tongue + fatigue or dizziness: possible pernicious anaemia.<br>Swollen, painful tongue + fever: possible infection.<br>Numb hands or feet: B12 nerve damage, do not wait.'},
+root_coat:{n:'Thick Coating at the Back',e:'Root coating',q:'Sluggish gut, possible SIBO. Your digestion wants attention.',
+ sym:['Thick white or yellow coat at the very back','Tip stays normal pink','Bad breath, bloating, irregular stools'],
+ tcm:'The back maps to kidney and lower burner. A thick coat means damp-heat stagnation or a weak spleen-stomach.',
+ ayu:'Ama builds up in the colon; weak Agni leaves food half-digested.',
+ f:'🫚 Ginger|🥒 Winter melon|🍵 Pu-erh tea|🦠 Probiotics',a:'Sweets|Late-night snacks|Too much red meat',
+ w:'Persistent bloating and gas: ask about a SIBO test.<br>Alternating loose and hard stools: possible IBS.<br>Thick yellow coat + fever: possible infection, see a doctor.'},
+side_yellow:{n:'Red Sides + Yellow Coat',e:'Liver-gallbladder pattern',q:'Overloaded liver and sluggish bile. A double liver-gallbladder alarm.',
+ sym:['Both edges clearly red','Thick yellow coat in the middle or back','Bitter taste, right-side discomfort, irritability'],
+ tcm:'Tongue sides map to liver-gallbladder. Red sides = liver fire, yellow coat = damp-heat.',
+ ayu:'Pitta imbalance in Ranjaka Pitta (liver and bile); yellow coat reflects Ama and heat.',
+ f:'🥬 Dark leafy greens|🌼 Chrysanthemum tea|🟡 Turmeric|🍋 Lemon',a:'Alcohol|Fried food|Added sugar',
+ w:'Yellow eyes or skin: emergency.<br>Ongoing upper-right abdominal pain: gallstones or hepatitis possible.<br>Dark urine: liver check.<br>Yellow coat that will not clear: liver function test (ALT, AST, GGT).'},
+tip_red:{n:'Red Tongue Tip',e:'Heart fire pattern',q:'Stress overload and "heart fire". Your body says take a break.',
+ sym:['Only the tip is red','Poor sleep','Racing heart, restlessness'],
+ tcm:'The tip maps to the heart. A red tip means heart fire flaring up, causing insomnia and mouth sores.',
+ ayu:'Sadhaka Pitta and Prana Vata are disturbed, giving anxiety and light sleep.',
+ f:'🍵 Lotus plumule tea|🌹 Rose tea|🍒 Cherries|🥥 Coconut water',a:'Late-night caffeine|Spicy food',
+ w:'Red tip + palpitations or chest pain: see a cardiologist.<br>Insomnia for over 3 months: consider mental-health support.'},
+geographic:{n:'Geographic Tongue',e:'Mapped tongue',q:'Gut flora out of balance, low zinc. The immune system is fluctuating.',
+ sym:['Smooth red patches with pale borders','Pattern changes day to day','Usually painless but sensitive to spicy food'],
+ tcm:'Weak spleen-stomach and thin qi-blood; overthinking is a common trigger.',
+ ayu:'All three doshas shifting. The body is adapting.',
+ f:'🦪 Oysters|🎃 Pumpkin seeds|🦠 Probiotics|🥥 Coconut yogurt',a:'Spicy food|Very hot food|Acidic food',
+ w:'With skin rash: check for psoriasis.<br>With joint pain: autoimmune check.<br>With diarrhoea or abdominal pain: gut inflammation work-up.'},
+black_coat:{n:'Black Hairy Tongue',e:'Dark hairy coating',q:'Bacteria and fungus out of balance, often an antibiotic side effect.',
+ sym:['Black or brown hairy coating','Metallic taste','Bad breath'],
+ tcm:'The most serious coat colour: extreme cold turning to heat, or depleted kidney yang. See a TCM practitioner soon.',
+ ayu:'Heavy Ama in the tissues with Agni nearly out; needs deep cleansing guidance.',
+ f:'🥥 Unsweetened coconut yogurt|🍵 Ginger tea|🫙 Kimchi or sauerkraut',a:'Coffee|Tea|Alcohol|Smoking',
+ note:'Dark foods can stain the tongue for a while. Rule that out first.',
+ w:'Lasting over 48 hours: see a doctor.<br>After antibiotics: tell your doctor.<br>Weak immunity + black coat: urgent.<br>Trouble swallowing or fever: emergency.'},
+centre_coat:{n:'Central Coating',e:'Centre coat',q:'Irritated spleen-stomach. A digestive red flag.',
+ sym:['Visible white or yellow patch in the centre','Clean edges','Bloating, slow digestion'],
+ tcm:'The centre maps to spleen-stomach. Thick white = cold-damp; thick yellow = stomach heat.',
+ ayu:'Uneven Agni; Ama gathers in the main digestive tract.',
+ f:'🫚 Ginger|🍵 Tangerine-peel tea|🥕 Carrot',a:'Skipping meals|Greasy food',
+ w:'Stomach pain + black stools: emergency (possible bleeding).<br>Yellow coat + weight loss: endoscopy.<br>Thick coat + total loss of appetite: full check-up.'},
+teeth_marks:{n:'Scalloped Tongue',e:'Tooth-marked tongue',q:'Weak spleen qi and water retention. Time to look after your gut.',
+ sym:['Tooth imprints along both edges','Swollen tongue','Puffy face or limbs, tiredness, soft sticky stools'],
+ tcm:'Spleen qi deficiency with damp-phlegm; common in desk workers and iced-drink fans.',
+ ayu:'Heavy Kapha imbalance with blocked Apana Vata.',
+ f:'🥒 Winter melon|🫘 Red beans|🫚 Ginger|🟡 Turmeric',a:'Iced drinks|Ice cream|Lots of raw salad',
+ w:'With heavy swelling: kidney check.<br>With thyroid swelling: thyroid test.<br>With extreme fatigue: check for anaemia or low thyroid.'},
+pale:{n:'Pale Tongue',e:'Low qi and blood',q:'Low qi and blood, an anaemia warning. You feel drained.',
+ sym:['Noticeably pale tongue','Pale face, cold hands and feet','Dizziness, breathlessness'],
+ tcm:'Qi-blood or yang deficiency: blood does not fill the tongue. Overwork, late nights, heavy periods.',
+ ayu:'Excess Vata, weak Agni and low Ojas (vital essence).',
+ f:'🥩 Red meat|🍇 Red dates|🐓 Black chicken|🥬 Spinach|🫘 Black beans|🍯 Honey',a:'Tea or coffee with meals',
+ note:'Pair iron-rich foods with vitamin C (orange, kiwi) to absorb more.',
+ w:'Persistent dizziness + palpitations: check haemoglobin and ferritin.<br>Very heavy periods: gynae check.<br>Long-lasting fatigue: thyroid check.'},
+purple:{n:'Purple Tongue',e:'Dusky tongue',q:'Blood stasis and poor circulation. Time to move more.',
+ sym:['Dusky purple or bluish colour','Prominent veins under the tongue','Cold hands, easy bruising, painful periods with clots'],
+ tcm:'Qi stagnation leading to blood stasis, from sitting, stress and cold.',
+ ayu:'Vata-Pitta blocking the srotas (channels), slowing Rakta dhatu.',
+ f:'🌹 Rose tea|🍎 Hawthorn|🍄 Black fungus|🧄 Garlic|🐟 Sardines|🫚 Ginger',a:'Sitting for hours|Cold drinks',
+ w:'Sudden purple tongue + blue lips: emergency (low oxygen).<br>Chest pain + breathlessness: call an ambulance.<br>Severe period pain: gynae check.'},
+greasy_white:{n:'Greasy White Coat',e:'Phlegm-damp pattern',q:'Phlegm-damp constitution. Your body feels waterlogged.',
+ sym:['Thick sticky coat that is hard to scrape','Heavy body and head, sluggish','Sticky stools'],
+ tcm:'The spleen cannot transform fluids, so damp turns to phlegm. Greasy food, cold drinks and little exercise.',
+ ayu:'Kapha excess with Ama, a sticky build-up of toxins.',
+ f:'🍵 Lotus leaf tea|🍊 Tangerine peel|🫚 Ginger|🥒 Winter melon|🌿 Adzuki beans|🍋 Lemon water',a:'Sugary drinks|Fried food|Desserts|Iced drinks',
+ w:'Thick white coat + fever: possible early cold.<br>Greasy coat that never clears + steady weight gain: check metabolic markers.'},
+mirror:{n:'Mirror Tongue',e:'Bald, glossy tongue',q:'Severely low stomach yin. Stress has drained your reserves.',
+ sym:['Shiny, smooth and coat-free, red or dusky and dry','Dry mouth, poor appetite','Common with chronic illness or long late nights'],
+ tcm:'Severe stomach-yin loss (stripped coat) means vital qi is damaged; needs careful care.',
+ ayu:'Agni extremely weak, tissues over-consumed, Ojas depleted.',
+ f:'🍐 Pear|🥥 Coconut water|🍯 Honey|🥛 Homemade plant milk|🍄 White fungus|🥔 Chinese yam',a:'Spicy food|Late nights',
+ note:'Plant milk rule: only 3 ingredients, water, salt and one plant (soy, almond or coconut). No sugar, thickeners or flavouring. For yogurt, choose coconut yogurt.',
+ w:'No coating for 2+ weeks: see a TCM practitioner.<br>With sudden weight loss or swallowing trouble: medical work-up.<br>Child with a mirror tongue: paediatric check (zinc, nutrition).'},
+dry:{n:'Dry Tongue',e:'Dehydration or yin deficiency',q:'Dehydration or yin deficiency. Not drinking enough water is no excuse.',
+ sym:['Lacks moisture, feels rough','Cracked lips, dry throat','Worse in the morning'],
+ tcm:'Yin deficiency or heat injuring fluids, so the tongue lacks moisture.',
+ ayu:'Vata dries the tissues; excess Pitta evaporates fluids faster.',
+ f:'🍐 Pear|🥒 Cucumber|🍅 Tomato|🥥 Coconut water|🍯 Honey water|🥛 Homemade almond milk',a:'Too much caffeine|Air-con blowing on your face',
+ note:'Aim for 1.5 to 2 litres of water a day in small sips. Start the day with a glass of warm water.',
+ w:'Dry mouth + dry eyes: check for Sjögren\'s.<br>With frequent urination or weight loss: check blood sugar.<br>Started after new medication: ask about side effects.'}
+};
+function T(){return lang==='en'?UI_EN.tags:UI_ZH.tags}
+function enTab(d,i){
+ const x=EN[d.id], L=UI_EN.lab;
+ if(i===0){const w=d.severity>=3?70:d.severity===2?48:35, c=d.severity>=3?'var(--coral)':d.severity===2?'var(--amber)':'var(--green)';
+  return `<div class="sev-meter"><div class="lab" style="width:64px">${L.sev}</div><div class="sev-track"><div class="sev-fill" style="width:${w}%;background:${c}"></div></div></div><div class="block"><div class="block-title"><div class="ico ico-info">i</div>${L.sym}</div><ul class="ul">${x.sym.map(t=>'<li>'+t+'</li>').join('')}</ul></div>`;}
+ if(i===1) return `<div class="dual-box"><div class="box tcm"><div class="box-title">${L.tcm}</div>${x.tcm}</div><div class="box ayur"><div class="box-title">${L.ayu}</div>${x.ayu}</div></div>`;
+ if(i===2){const fc=x.f.split('|').map(s=>{const k=s.indexOf(' ');return `<div class="food-chip"><span class="e">${s.slice(0,k)}</span>${s.slice(k+1)}</div>`}).join('');
+  return `<div class="block-title"><div class="ico ico-food">+</div>${L.eat}</div><div class="food-row">${fc}</div><div style="height:14px"></div><div class="block-title"><div class="ico ico-warn">-</div>${L.avoid}</div><div class="food-row">${x.a.split('|').map(s=>'<div class="avoid-chip">'+s+'</div>').join('')}</div>${x.note?'<div class="warn-card" style="margin-top:14px;background:var(--green-lt);color:#0a3321">'+x.note+'</div>':''}`;}
+ return `<div class="warn-card"><strong>${UI_EN.tabs[3]}</strong>${x.w}</div>`;
+}
+function renderCards(filter){
+ curFilter=filter||curFilter;
+ const grid=document.getElementById('cardsGrid'); grid.innerHTML=''; let count=0;
+ DATA.forEach(d=>{
+  if(curFilter!=='all'){ if(curFilter==='urgent'&&!d.tags.includes('warn'))return; if(curFilter!=='urgent'&&!d.category.includes(curFilter))return; }
+  count++;
+  const x=lang==='en'?EN[d.id]:null, nm=x?x.n:d.name, eg=x?x.e:d.eng, qk=x?x.q:d.quick;
+  const sc=d.severity>=3?'var(--coral)':d.severity===2?'var(--amber)':'var(--green)';
+  const card=document.createElement('div'); card.className='card'; card.tabIndex=0; card.setAttribute('role','button');
+  card.innerHTML=`<div class="card-top"><div class="card-viz">${getTongueSVG(d.tongue,52,64)}</div><div class="card-head-text"><div class="card-name">${nm}</div><div class="card-eng">${eg}</div></div><div class="sev-dot" style="background:${sc}"></div></div><div class="card-mid"><div class="card-quick">${qk}</div></div><div class="card-bottom">${d.tags.map(t=>`<span class="chip chip-${t}">${T()[t]}</span>`).join('')}</div>`;
+  card.addEventListener('click',()=>openSheet(d)); card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openSheet(d)});
+  grid.appendChild(card);
+ });
+ document.getElementById('countBadge').textContent=count+(lang==='en'?UI_EN.lab.unit:UI_ZH.unit);
+}
+function openSheet(d){
+ const en=lang==='en', x=en?EN[d.id]:null, tabs=en?UI_EN.tabs:d.tabs;
+ document.getElementById('sheetTitle').textContent=en?x.n:d.name;
+ document.getElementById('sheetEng').textContent=en?x.e:d.eng;
+ document.getElementById('sheetViz').innerHTML=getTongueSVG(d.tongue,62,78);
+ document.getElementById('sheetChips').innerHTML=d.tags.map(t=>`<span class="chip chip-${t}">${T()[t]}</span>`).join('');
+ const show=i=>{document.querySelectorAll('.seg-tab').forEach((b,j)=>b.classList.toggle('active',j===i)); document.getElementById('sheetBody').innerHTML=en?enTab(d,i):(d.content[d.tabs[i]]||'');};
+ const te=document.getElementById('segTabs'); te.innerHTML='';
+ tabs.forEach((t,i)=>{const b=document.createElement('button'); b.className='seg-tab'+(i===0?' active':''); b.textContent=t; b.onclick=()=>show(i); te.appendChild(b);});
+ show(0);
+ document.getElementById('overlay').classList.add('open'); document.body.style.overflow='hidden';
+}
+const ZH_CACHE={};
+function setHTML(key,el,en,on){ if(!el)return; if(!(key in ZH_CACHE))ZH_CACHE[key]=el.innerHTML; el.innerHTML=on?en:ZH_CACHE[key]; }
+function applyLang(){
+ const on=lang==='en', q=s=>document.querySelector(s), qa=s=>document.querySelectorAll(s);
+ document.documentElement.lang=on?'en':'zh-HK';
+ document.getElementById('langBtn').textContent=on?'廣':'ENG';
+ setHTML('brand',q('.brand-text'),UI_EN.brand,on);
+ setHTML('eyebrow',q('.hero-eyebrow'),UI_EN.eyebrow,on);
+ setHTML('h1',q('.hero h1'),UI_EN.h1,on);
+ setHTML('p',q('.hero p'),UI_EN.p,on);
+ setHTML('stats',q('.hero-stats'),UI_EN.stats,on);
+ qa('.step-chip p').forEach((el,i)=>setHTML('st'+i,el,UI_EN.steps[i],on));
+ qa('.section-head h2').forEach((el,i)=>setHTML('ti'+i,el,UI_EN.titles[i],on));
+ qa('.map-legend-row').forEach((el,i)=>{ if(!(('lg'+i) in ZH_CACHE))ZH_CACHE['lg'+i]=el.lastChild.textContent; el.lastChild.textContent=on?UI_EN.legend[i]:ZH_CACHE['lg'+i]; });
+ qa('.pill').forEach((el,i)=>setHTML('pi'+i,el,UI_EN.pills[i],on));
+ setHTML('foot',q('.footer-note'),UI_EN.foot,on);
+ closeSheet(); renderCards();
+}
+function toggleLang(){ lang=lang==='zh'?'en':'zh'; applyLang(); }
+
+renderCards('all');
+</script>
+</body>
+</html>
