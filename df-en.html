@@ -1237,10 +1237,33 @@
 
     </div> <!-- END NEWSPAPER CONTAINER -->
 
-    <!-- JAVASCRIPT LOGIC & CAROUSEL SCRIPT -->
-    <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
+<!-- JavaScript Interactions -->    
+    <script>    
+        // Initialize Lucide icons    
+        if (window.lucide) {    
+            lucide.createIcons();    
+        }    
+    
+        // Date Display    
+        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };    
+        const now = new Date();    
+        const displayDateStrip = document.getElementById('displayDateStrip');    
+        if (displayDateStrip) {    
+            displayDateStrip.textContent = `3-8 大多系統病徵病理學與臨床實證對照表`;    
+        }    
+    
+        // Scroll to section    
+        function scrollToSection(id) {    
+            const el = document.getElementById(id);    
+            if (el) {    
+                el.scrollIntoView({ behavior: 'smooth' });    
+            }    
+        }    
+    
+        // Print function with reminder notice    
+        function triggerPrintWithNotice() {    
+            window.print();    
+        } 
 
 // 12 Infinite Endurance Protocols Data
 const infiniteEnduranceProtocols = [    
@@ -1329,8 +1352,8 @@ const infiniteEnduranceProtocols = [
         source: "Direct sunlight, healthy animal/fruit fats, structured fasting"    
     }    
 ];
-
-        let currentSlide = 0;
+// Carousel state: default to today's index    
+        let currentSlideIndex = (now.getDate() - 1) % infiniteEnduranceProtocols.length;  
 
         function renderCarousel() {
             const slideContainer = document.getElementById('carouselSlideContent');
