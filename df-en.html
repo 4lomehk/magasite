@@ -4,11 +4,11 @@
     <meta charset="UTF-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <title>DAILY FLOW - Make Anti-inflammatory Great Again</title>    
-    <meta name="description" content="DAILY FLOW: Your daily step-by-step anti-inflammatory lifestyle guide." />
+    <meta name="description" content="DAILY FLOW: Your Daily Step on the Anti-inflammatory Journey." />
     <meta property="og:title" content="DAILY FLOW - Make Anti-inflammatory Great Again">
-    <meta property="og:description" content="DAILY FLOW: Your daily step-by-step anti-inflammatory lifestyle guide.">
+    <meta property="og:description" content="DAILY FLOW: Your Daily Step on the Anti-inflammatory Journey.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://magasite.pages.dev/df-en">
+    <meta property="og:url" content="https://magasite.pages.dev/df">
     <meta property="og:image" content="https://magasite.pages.dev/images/df.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -150,7 +150,7 @@
     <link href="https://fonts.cdnfonts.com/css/lemon-milk" rel="stylesheet">    
     <link rel="preconnect" href="https://fonts.googleapis.com">    
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>    
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">    
     
     <!-- Lucide Icons -->    
     <script src="https://unpkg.com/lucide@latest"></script>    
@@ -159,7 +159,7 @@
     
     <!-- Custom Authentic Newspaper Styles -->    
     <style>    
-        /* Lemon Milk Font for Headings */    
+        /* Lemon Milk Font for all H2 and Headings */    
         h2, .font-lemon {    
             font-family: 'LEMON MILK', 'Lemon Milk', 'Montserrat', sans-serif !important;    
             letter-spacing: 0.04em;    
@@ -168,10 +168,10 @@
         body {    
             background-color: #EFECE6;    
             color: #121212;    
-            font-family: 'Georgia', 'Times New Roman', serif;    
+            font-family: 'Times New Roman', serif;    
             background-image: radial-gradient(#d5d0c7 1px, transparent 0);    
             background-size: 24px 24px;    
-            font-size: 16px; 
+            font-size: 17px;
             line-height: 1.6;
         }    
     
@@ -255,7 +255,7 @@
             text-underline-offset: 5px;    
         }
 
-        /* AI Text & Background Effects */
+        /* AI Text & Background Effects for Remotion / GSAP */
         @keyframes aiPulsateBg {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -271,6 +271,12 @@
                 linear-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
             background-size: 20px 20px;
+        }
+        .ai-glow-text {
+            background: linear-gradient(90deg, #38BDF8 0%, #818CF8 35%, #C084FC 70%, #F472B6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(129, 140, 248, 0.4);
         }
         .gsap-spring-bounce {
             transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -293,14 +299,14 @@
     <div class="no-print max-w-6xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-3 bg-news-ink text-white p-3 rounded-lg shadow-md font-sans text-xs sm:text-sm">    
         <div class="flex items-center gap-2">    
             <span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span>    
-            <span class="font-black uppercase tracking-wider">DAILY FLOW · ANTI-INFLAMMATORY JOURNAL</span>    
+            <span class="font-black uppercase tracking-wider">DAILY FLOW</span>    
         </div>    
         <div class="flex items-center flex-wrap gap-2">    
             <button onclick="triggerPrintWithNotice()" class="bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded font-bold flex items-center gap-1 transition">    
-                <i data-lucide="printer" class="w-4 h-4"></i> Save / Print
+                <i data-lucide="printer" class="w-4 h-4"></i>Archive
             </button> 
-            <a href="https://magasite.pages.dev/df" target="_blank" class="bg-amber-600 hover:bg-amber-500 text-black font-black px-3 py-1.5 rounded flex items-center gap-1 transition">    
-                <i data-lucide="globe" class="w-4 h-4"></i> MAGAsite HK (ZH)    
+            <a href="https://magasite.pages.dev/df-en" target="_blank" class="bg-amber-600 hover:bg-amber-500 text-black font-black px-3 py-1.5 rounded flex items-center gap-1 transition">    
+                <i data-lucide="home" class="w-4 h-4"></i> MAGAsite ENG    
             </a>    
         </div>    
     </div>    
@@ -319,7 +325,7 @@
                 </div>    
                 <div class="font-bold text-news-winered flex items-center gap-1">    
                     <i data-lucide="flame" class="w-3.5 h-3.5"></i>    
-                    <span>Cellular Energy Formula = (1st Grass-Finished > 2nd 100% Grass-Fed Beef Fuel × Mitochondria) - Seed Oil Toxicity</span>    
+                    <span>CELLULAR ENERGY FORMULA: Cellular Energy = (1st Grass-Finished > 2nd 100% Grass-Fed Beef Fuel × Mitochondria) - Seed Oil Toxicity</span>    
                 </div>    
             </div>    
     
@@ -327,11 +333,11 @@
             <div class="text-center py-4 my-1">    
                 <div class="flex items-center justify-between gap-2 border-y-2 border-news-ink py-1.5 mb-3">    
                     <span class="hidden md:inline font-mono text-xs sm:text-sm uppercase font-extrabold tracking-widest text-news-winered border border-news-winered px-2 py-0.5">BIOLOGICAL</span>    
-                    <span class="font-bold text-xs sm:text-sm uppercase tracking-widest text-center w-full md:w-auto">DISMANTLE TOXIC ILLUSIONS ‧ RECLAIM BIOLOGICAL SOVEREIGNTY</span>    
+                    <span class="font-bold text-xs sm:text-sm uppercase tracking-widest text-center w-full md:w-auto">DISMANTLE TOXIC DECEPTIONS ‧ RECLAIM BIOLOGICAL SOVEREIGNTY</span>    
                     <span class="hidden md:inline font-mono text-xs sm:text-sm uppercase font-extrabold tracking-widest bg-news-winered text-white px-2 py-0.5">MAGA</span>    
                 </div>    
                 
-                <!-- Main Header Title -->
+                <!-- H1 Bold Main Title -->
                 <h1 class="newspaper-title text-6xl sm:text-8xl md:text-9xl font-black text-news-ink uppercase leading-none my-3 tracking-tight">    
                     DAILY FLOW    
                 </h1>     
@@ -339,55 +345,57 @@
                     DAILY FLOW: YOUR DAILY STEP ON THE ANTI-INFLAMMATORY JOURNEY    
                 </div>       
     
-            <!-- TOP SLOGANS STRIP + Disclaimer -->    
+            <!-- TOP SLOGANS STRIP + Medical Disclaimer Strip -->    
             <div class="border-y-2 border-news-ink bg-[#FFFDF8] py-2.5 px-2 my-1 text-center">    
-                <div class="font-serif text-xs sm:text-sm font-black text-news-winered mb-1">    
-                    "DAILY FLOW" shares insights from a 2-Time Cancer Survivor, helping individuals eliminate inflammation maps and reclaim health ⚠️ Personal reference only. Please consult a qualified functional or medical doctor. Reject institutional exploitation.
+                <div class="font-serif text-base sm:text-sm font-black text-news-winered mb-1">    
+                    "DAILY FLOW" FROM A 2-TIME CANCER SURVIVOR'S PERSPECTIVE: REMINDING ANTI-INFLAMMATORY PURSUERS HOW TO FULFILL DREAMS · THOROUGHLY SLAYING THE INFLAMMATION MAP ⚠️ FOR PERSONAL REFERENCE ONLY, PLEASE CONSULT A HUMAN-SPEAKING DOCTOR OR TRADITIONAL CHINESE MEDICINE PRACTITIONER ↗ REJECT ESTABLISHMENT RIP-OFFS
                 </div>    
             </div>      
     
         <!-- NEWSPAPER SECTION TABS / NAVIGATION -->    
         <nav class="no-print my-4 border-b border-news-ink pb-2">    
             <div class="flex flex-wrap items-center gap-2 font-mono text-xs sm:text-sm font-bold">    
-                <button onclick="scrollToSection('sec-a1')" class="bg-news-winered text-white px-3 py-1.5 hover:bg-black transition">A1: 8 Multi-System Symptoms & Microbiome Radar</button>    
-                <button onclick="scrollToSection('sec-tongue-game')" class="bg-[#9A3412] text-white px-3 py-1.5 hover:bg-amber-900 transition">👅 Tongue Leakage Diagnostic Dashboard</button>    
-                <button onclick="scrollToSection('sec-b1')" class="bg-black text-white px-3 py-1.5 hover:bg-news-red transition">B1: Tactical Archives (1-8) & 12 Tactics</button>    
+                <button onclick="scrollToSection('sec-a1')" class="bg-news-winered text-white px-3 py-1.5 hover:bg-black transition">A1: 3-8 Multi-System Symptoms Microbiome Mapping</button>    
+                <button onclick="scrollToSection('sec-tongue-game')" class="bg-[#9A3412] text-white px-3 py-1.5 hover:bg-amber-900 transition">👅 Tongue Diagnosis "Leakage" Monitor (2 Tests)</button>    
+                <button onclick="scrollToSection('sec-b1')" class="bg-black text-white px-3 py-1.5 hover:bg-news-red transition">B1: Legacy A1 Live Files (1-8) & 12 Tactics</button>    
                 <button onclick="scrollToSection('sec-b2')" class="bg-black text-white px-3 py-1.5 hover:bg-news-red transition">B2: Inverted Food Pyramid</button>    
-                <button onclick="scrollToSection('sec-c1')" class="bg-slate-600 text-white px-3 py-1.5 hover:bg-slate-700 transition">C1: Sourcing Map & Tactical Vault</button>    
+                <button onclick="scrollToSection('sec-c1')" class="bg-slate-600 text-white px-3 py-1.5 hover:bg-slate-700 transition">C1: Tactical Resource Hub (🚧 MAGASite Home)</button>    
+                <span class="text-slate-400 hidden sm:inline">|</span>
             </div>    
         </nav>    
     
-        <!-- SECTION A1: Multi-System Symptoms Pathology & Clinical Correlation Table -->    
+        <!-- SECTION A1 -->    
         <section id="sec-a1" class="my-6 border-2 border-news-ink p-4 sm:p-5 bg-white shadow-sm font-serif">    
-            <!-- A1 Header -->
+            <!-- A1 Header / Headline -->
             <div class="border-b-2 border-news-ink pb-2.5 mb-3">    
+                <!-- Quick Issue Links Strip -->
                 <div class="flex items-center gap-2 flex-wrap mb-2 pb-2 border-b border-slate-200">
-                    <span class="text-xs font-mono font-bold text-slate-600">Issue Shortcut</span>
+                    <span class="text-xs font-mono font-bold text-slate-600">Quick Access This Issue</span>
                 </div>
                 <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
                     <div class="flex items-center gap-2">
-                        <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">A1 HEADLINE · Day 10 Multi-System Microbiome Pathology</span>    
+                        <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">A1 Today's Headline · Day 10 Multi-System Microbiome & Clinical Evidence</span>    
                         <span class="bg-amber-300 text-slate-950 font-mono text-xs font-black px-2 py-0.5 rounded border border-slate-900">Latest A1</span>
                     </div>
                     <span class="text-xs font-mono font-bold text-slate-500">Multi-System Pathology &amp; Microbiome Radar</span>
                 </div>
                 <h2 class="text-xl sm:text-2xl md:text-3xl font-black font-lemon text-[#1F2937] leading-tight winered-underline mt-1">    
-                    A1: Multi-System Symptoms Pathology &amp; Microbiome Clinical Correlation Chart
+                    A1: 3-8 Multi-System Symptoms Pathology vs Clinical Evidence Comparison Table
                 </h2>    
                 <p class="text-xs sm:text-sm text-[#1F2937] mt-1.5 leading-relaxed">    
-                    <strong>2-Time Cancer Survivor Confession:</strong> Do you think skin rashes, mouth ulcers, or greasy breakouts are just "heatiness"? Stop behaving like a brainwashed NPC dependent on synthetic topical creams! These are systemic inflammatory alarms triggered by <strong>gut and mucosal dysbiosis, Short-Chain Fatty Acid (SCFA) depletion, and Lipopolysaccharide (LPS) endotoxin leakage into the bloodstream</strong>. The clinical correlation chart below breaks down root pathology and literature evidence to sever inflammatory cascades at the source!
+                    <strong>Blood and Tears Confession of a 2-Time Cancer Survivor:</strong> You think skin rashes, mouth ulcers, and oily acne are just "internal heat"? Stop being a sick NPC brainwashed by commercial ointments! These are all <strong>systemic inflammation alarms triggered by the collapse of gut and mucosal microbiota, deficiency of short-chain fatty acids (SCFAs), and endotoxin (LPS) leaking into the bloodstream</strong>! The following clinical comparison table dissects core pathological mechanisms and the latest literature data to cut off the inflammatory chain reaction at the root and reclaim your biological sovereignty!
                 </p>    
             </div>    
 
-            <!-- Multi-System Pathology Desktop Table View -->
+            <!-- Desktop Table View -->
             <div class="hidden md:block overflow-x-auto mb-4 border-2 border-slate-900 shadow-xs">
                 <table class="w-full text-left border-collapse text-xs font-sans">
                     <thead>
                         <tr class="bg-slate-900 text-white font-mono font-bold border-b border-slate-900">
-                            <th class="p-3 w-[18%] border-r border-slate-700">Symptom / Category</th>
-                            <th class="p-3 w-[22%] border-r border-slate-700">Clinical Manifestations</th>
+                            <th class="p-3 w-[18%] border-r border-slate-700">Symptom / Disease Category</th>
+                            <th class="p-3 w-[22%] border-r border-slate-700">Primary Clinical Manifestations</th>
                             <th class="p-3 w-[30%] border-r border-slate-700">Core Pathology & Dysbiosis Mechanism</th>
-                            <th class="p-3 w-[30%]">Clinical Evidence & Research Highlights</th>
+                            <th class="p-3 w-[30%]">Clinical Evidence & Literature Summary</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-300 bg-white leading-relaxed">
@@ -398,57 +406,57 @@
                                 <strong class="text-sm text-red-950 font-black">Eczema<br>(Atopic Dermatitis)</strong>
                             </td>
                             <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
-                                Erythema, intense pruritus, exudation, and lichenification.
+                                Erythema, intense itching, exudation, lichenification.
                             </td>
                             <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
-                                Depletion of gut butyrate-producing bacteria; S. aureus skin colonization rate 60–100%; Th2 immune polarization.
+                                Depletion of gut butyrate-producing bacteria; 60–100% Staphylococcus aureus skin colonization; Th2 immune bias.
                             </td>
                             <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
-                                <span class="bg-emerald-100 text-emerald-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-emerald-300 font-bold inline-block mb-1">RCT Validated</span><br>
-                                Heat-killed Lactobacilli significantly reduced SCORAD severity scores in infants (4–30 months); SCFAs repair Filaggrin barrier integrity.
+                                <span class="bg-emerald-100 text-emerald-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-emerald-300 font-bold inline-block mb-1">RCT Clinical Validation</span><br>
+                                Heat-killed Lactobacillus reduced SCORAD severity scores in infants aged 4–30 months; SCFAs repair Filaggrin barrier.
                             </td>
                         </tr>
 
-                        <!-- 02 Urticaria -->
+                        <!-- 02 Measles & Acute Hives -->
                         <tr class="hover:bg-amber-50/50 transition">
                             <td class="p-3 font-bold border-r border-slate-200 bg-amber-50/70 align-top">
                                 <span class="font-mono text-amber-900 block text-[11px]">【02 · Mast Cells】</span>
-                                <strong class="text-sm text-amber-950 font-black">Acute Hives<br>(Urticaria)</strong>
+                                <strong class="text-sm text-amber-950 font-black">Measles & Acute Hives<br>(Urticaria)</strong>
                             </td>
                             <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
-                                Wheals, urticarial erythema, localized edema, paroxysmal itching.
+                                Wheals, urticarial erythema, edema, paroxysmal severe itching.
                             </td>
                             <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
-                                Decreased intestinal α-diversity; reduction in Prevotella; gut leakiness allows LPS translocation to trigger mast cell degranulation.
+                                Reduced gut α-diversity; decreased Prevotella; leaky gut causing LPS entry into blood triggering mast cell degranulation.
                             </td>
                             <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
-                                <span class="bg-cyan-100 text-cyan-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-cyan-300 font-bold inline-block mb-1">Double-Blind RCT</span><br>
-                                L. rhamnosus + FOS reduced UAS7 scores by 60% and raised IL-10 by 45%; heat-inactivated strains decreased wheal occurrence by 40%.
+                                <span class="bg-cyan-100 text-cyan-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-cyan-300 font-bold inline-block mb-1">Double-Blind RCT Data</span><br>
+                                RCT showed L. rhamnosus + FOS reduced UAS7 score by 60%, increased IL-10 by 45%; heat-killed bacteria reduced wheals by 40%.
                             </td>
                         </tr>
 
-                        <!-- 03 Aphthous Ulcers -->
+                        <!-- 03 Canker Sores -->
                         <tr class="hover:bg-rose-50/50 transition">
                             <td class="p-3 font-bold border-r border-slate-200 bg-rose-50/70 align-top">
                                 <span class="font-mono text-rose-900 block text-[11px]">【03 · Oral Mucosa】</span>
-                                <strong class="text-sm text-rose-950 font-black">Mouth Ulcers<br>(Recurrent Aphthous Stomatitis)</strong>
+                                <strong class="text-sm text-rose-950 font-black">Canker Sores<br>(Recurrent Aphthous Stomatitis)</strong>
                             </td>
                             <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
-                                Sunken mucosal ulcerations, yellow-white pseudomembrane, erythematous halo, sharp burning pain.
+                                Depressed oral mucosal ulcers, yellow-white pseudomembrane, erythematous halo, sharp pain.
                             </td>
                             <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
-                                Oral/gut dysbiosis; elevated local T-cell cytotoxicity and TNF-α expression; breakdown of epithelial mucosal barrier.
+                                Oral/gut microbiota dysbiosis; localized T-cell cytotoxicity & high TNF-α expression; mucosal barrier disruption.
                             </td>
                             <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
                                 <span class="bg-purple-100 text-purple-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-purple-300 font-bold inline-block mb-1">Postbiotic Breakthrough</span><br>
-                                L. reuteri postbiotic nano-formulation used for 7 consecutive days produced ulcer size and pain reduction significantly superior to analgesic mouthwash.
+                                L. reuteri postbiotic nano-formulation used for 7 consecutive days showed significantly smaller ulcer area and pain index than analgesic mouthwashes.
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <!-- Mobile Responsive Card View -->
+            <!-- Mobile Responsive Cards -->
             <div class="block md:hidden space-y-3 font-sans text-xs mb-3">
                 <!-- 01 Eczema -->
                 <div class="p-3.5 bg-red-50/80 border-2 border-red-300 rounded shadow-2xs">
@@ -457,40 +465,40 @@
                         <strong class="text-sm font-black text-red-950">Eczema (Atopic Dermatitis)</strong>
                     </div>
                     <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-red-200">
-                        <div><strong class="text-red-900 font-bold">Manifestations:</strong> Erythema, intense pruritus, exudation, lichenification.</div>
-                        <div><strong class="text-red-900 font-bold">Pathology:</strong> Depletion of gut butyrate producers; high S. aureus skin colonization; Th2 imbalance.</div>
+                        <div><strong class="text-red-900 font-bold">Primary Manifestations:</strong> Erythema, intense itching, exudation, lichenification.</div>
+                        <div><strong class="text-red-900 font-bold">Dysbiosis Mechanism:</strong> Depletion of gut butyrate-producing bacteria; 60–100% Staphylococcus aureus skin colonization; Th2 immune bias.</div>
                         <div class="p-2 bg-white rounded border border-red-200 text-slate-900">
-                            <strong class="text-emerald-800 font-mono font-bold">📊 Clinical Data:</strong> Heat-killed Lactobacilli lowered infant SCORAD scores; SCFAs rebuild Filaggrin barrier.
+                            <strong class="text-emerald-800 font-mono font-bold">📊 Clinical Evidence:</strong> Heat-killed Lactobacillus reduced SCORAD severity scores in infants aged 4–30 months; SCFAs repair Filaggrin barrier.
                         </div>
                     </div>
                 </div>
 
-                <!-- 02 Urticaria -->
+                <!-- 02 Measles & Acute Hives -->
                 <div class="p-3.5 bg-amber-50/80 border-2 border-amber-300 rounded shadow-2xs">
                     <div class="flex items-center justify-between mb-1.5">
                         <span class="font-mono text-xs font-black bg-amber-900 text-white px-2 py-0.5 rounded">02 · Mast Cells</span>
-                        <strong class="text-sm font-black text-amber-950">Acute Hives (Urticaria)</strong>
+                        <strong class="text-sm font-black text-amber-950">Measles & Acute Hives (Urticaria)</strong>
                     </div>
                     <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-amber-200">
-                        <div><strong class="text-amber-900 font-bold">Manifestations:</strong> Wheals, swollen red patches, sudden severe itching.</div>
-                        <div><strong class="text-amber-900 font-bold">Pathology:</strong> Reduced α-diversity; LPS translocation triggers mast cell degranulation.</div>
+                        <div><strong class="text-amber-900 font-bold">Primary Manifestations:</strong> Wheals, urticarial erythema, edema, paroxysmal severe itching.</div>
+                        <div><strong class="text-amber-900 font-bold">Dysbiosis Mechanism:</strong> Reduced gut α-diversity; decreased Prevotella; leaky gut causing LPS entry into blood triggering mast cell degranulation.</div>
                         <div class="p-2 bg-white rounded border border-amber-200 text-slate-900">
-                            <strong class="text-cyan-800 font-mono font-bold">📊 Clinical Data:</strong> L. rhamnosus + FOS cut UAS7 score by 60%, raised IL-10 by 45%.
+                            <strong class="text-cyan-800 font-mono font-bold">📊 Clinical Evidence:</strong> RCT showed L. rhamnosus + FOS reduced UAS7 score by 60%, increased IL-10 by 45%; heat-killed bacteria reduced wheals by 40%.
                         </div>
                     </div>
                 </div>
 
-                <!-- 03 Mouth Ulcers -->
+                <!-- 03 Canker Sores -->
                 <div class="p-3.5 bg-rose-50/80 border-2 border-rose-300 rounded shadow-2xs">
                     <div class="flex items-center justify-between mb-1.5">
                         <span class="font-mono text-xs font-black bg-rose-900 text-white px-2 py-0.5 rounded">03 · Oral Mucosa</span>
-                        <strong class="text-sm font-black text-rose-950">Mouth Ulcers (Aphthous)</strong>
+                        <strong class="text-sm font-black text-rose-950">Canker Sores (Recurrent Aphthous Stomatitis)</strong>
                     </div>
                     <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-rose-200">
-                        <div><strong class="text-rose-900 font-bold">Manifestations:</strong> Painful ulcers, yellow-white pseudomembrane, inflammation halo.</div>
-                        <div><strong class="text-rose-900 font-bold">Pathology:</strong> Oral/gut dysbiosis; localized T-cell cytotoxicity &amp; high TNF-α.</div>
+                        <div><strong class="text-rose-900 font-bold">Primary Manifestations:</strong> Depressed oral mucosal ulcers, yellow-white pseudomembrane, erythematous halo, sharp pain.</div>
+                        <div><strong class="text-rose-900 font-bold">Dysbiosis Mechanism:</strong> Oral/gut microbiota dysbiosis; localized T-cell cytotoxicity & high TNF-α expression; mucosal barrier disruption.</div>
                         <div class="p-2 bg-white rounded border border-rose-200 text-slate-900">
-                            <strong class="text-purple-800 font-mono font-bold">📊 Clinical Data:</strong> L. reuteri postbiotics outperformed analgesic mouthwash over 7 days.
+                            <strong class="text-purple-800 font-mono font-bold">📊 Clinical Evidence:</strong> L. reuteri postbiotic nano-formulation used for 7 consecutive days showed significantly smaller ulcer area and pain index than analgesic mouthwashes.
                         </div>
                     </div>
                 </div>
@@ -499,26 +507,26 @@
             <!-- Microbiome Self-Healing 3-Step Ladder -->
             <div class="border-2 border-slate-900 bg-[#FFFDF8] p-3.5 sm:p-4 mb-3">
                 <div class="flex items-center gap-2 mb-2 pb-1.5 border-b border-slate-300 font-mono text-xs font-black text-slate-900">
-                    <span class="bg-slate-900 text-white px-2 py-0.5">MICROBIOME RECOVERY STEPS</span>
-                    <span>3 Tactical Pillars · Gut-Skin-Mucosa Axis</span>
+                    <span class="bg-slate-900 text-white px-2 py-0.5">Microbiome Reshaping Execution</span>
+                    <span>3 Key Anti-Inflammatory Steps · Gut-Skin-Mucosa Axis</span>
                 </div>
                 <div class="space-y-2.5 font-sans text-xs leading-relaxed text-slate-800">
                     <div class="p-2.5 bg-emerald-50 border-l-4 border-emerald-700">
-                        <strong class="font-mono text-emerald-900">STEP 1 (Butyrate &amp; SCFA Replenishment):</strong> Increase fermentable fibers, resistant starches, and raw fermented foods to rebuild butyrate producers and restore the Filaggrin barrier!
+                        <strong class="font-mono text-emerald-900">STEP 1 (Butyrate Bacteria & SCFA Supplementation):</strong> Consume more fermentable fiber, resistant starch, and naturally fermented vegetables to rebuild gut butyrate-producing microbiome and repair the skin keratin Filaggrin barrier!
                     </div>
                     <div class="p-2.5 bg-amber-50 border-l-4 border-amber-600">
-                        <strong class="font-mono text-amber-900">STEP 2 (Block LPS Endotoxin Translocation):</strong> Eliminate refined seed oils and chemical emulsifiers to seal gut Tight Junctions and prevent systemic mast cell degranulation!
+                        <strong class="font-mono text-amber-900">STEP 2 (Cut Off LPS Leakage at the Source):</strong> Completely eliminate refined seed oils and chemical emulsifiers, seal gut Tight Junctions, and block endotoxins from entering the bloodstream to trigger mast cell degranulation and hives!
                     </div>
                     <div class="p-2.5 bg-cyan-50 border-l-4 border-cyan-700">
-                        <strong class="font-mono text-cyan-900">STEP 3 (Targeted Postbiotics &amp; Bioactive Peptides):</strong> Deploy active fermenting Lactobacilli, postbiotics, and natural polyphenols to suppress pathogenic overgrowth and accelerate mucosal healing!
+                        <strong class="font-mono text-cyan-900">STEP 3 (Targeted Postbiotics & Bioactive Peptides):</strong> Utilize active fermented Lactobacillus, postbiotics, and natural polyphenols to inhibit Staphylococcus aureus and C. acnes, accelerating the hydration and healing of mucosal ulcers and vermilion border!
                     </div>
                 </div>
             </div>
 
-            <!-- 24HR Action Bar -->
+            <!-- 24HR Action Strip -->
             <div class="p-2.5 bg-[#FFFDF8] border border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
                 <div class="font-mono text-slate-800">
-                    <strong class="text-red-900">⚡ 24HR ACTION:</strong> Cross-reference your symptoms with the microbiome mechanisms above, then immediately utilize active prebiotics, postbiotics, and whole nutrient dense foods to reclaim your biological sovereignty!
+                    <strong class="text-red-900">⚡ 24HR Self-Healing Action:</strong> Cross-reference the 10 multi-system symptom microbiome mechanisms and immediately repair mucosal barriers using active prebiotics, postbiotics, and whole foods to reclaim your body's biological sovereignty!
                 </div>
                 <a href="https://lihi.vip/soHJv" target="_blank" class="shrink-0 bg-red-700 hover:bg-black text-white font-mono font-bold px-3 py-1 rounded transition text-[11px]">
                     IG Channel ↗
@@ -526,76 +534,78 @@
             </div>
         </section>    
     
-        <!-- MERGED SECTION: Tongue Diagnosis Dashboard -->    
+        <!-- MERGED SECTION: Tongue Diagnosis "Leakage" Self-Test Monitor -->    
         <section id="sec-tongue-game" class="my-8 border-2 border-amber-800 p-6 bg-[#FFFDF8] shadow-sm">    
             <div class="border-b-2 border-amber-800 pb-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">    
                 <div class="flex items-center gap-2 flex-wrap">    
-                    <span class="bg-amber-800 text-white font-mono text-xs sm:text-sm font-black px-2 py-0.5">Free Resource · Interactive Diagnostic Tool</span>    
+                    <span class="bg-amber-800 text-white font-mono text-xs sm:text-sm font-black px-2 py-0.5">Free Resource 5 · Interactive Mini-Game</span>    
                     <h2 class="text-2xl sm:text-3xl font-black font-lemon text-news-ink inline-block">    
-                        👅 Tongue Leakage Diagnostic Dashboard
+                        👅 Tongue Diagnosis "Leakage" Self-Test Monitor (Tongue Dashboard + Tongue 2 in Prem 21)    
                     </h2>    
-                    <span class="bg-amber-200 text-amber-900 font-mono text-xs sm:text-sm font-bold px-2 py-0.5 rounded">Your Body Doesn't Lie</span>    
+                    <span class="bg-amber-200 text-amber-900 font-mono text-xs sm:text-sm font-bold px-2 py-0.5 rounded">Your Body Never Lies</span>    
+                </div>    
+                <div class="flex items-center gap-2">                      
                 </div>    
             </div>    
     
             <!-- Intro -->    
             <div class="bg-amber-50 border border-amber-300 p-4 mb-5 rounded flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">    
                 <div class="text-sm sm:text-base font-serif text-news-ink leading-relaxed">    
-                    <strong class="text-news-winered font-black">Check your tongue coating in the mirror every morning!</strong>    
-                    Visit the MAGASite Self-Check Guide to identify 9 common tongue coating patterns and assess your systemic metabolic state.
+                    <strong class="text-news-winered font-black">Look in the mirror this morning and check your tongue coating!</strong>    
+                    Then go to MAGASite's "Your Body Never Lies" self-check link in the MENU to find out your overall physical condition across 9 common tongue coating patterns.    
                 </div>    
                 <a href="https://sites.google.com/view/magamap/%E8%BA%AB%E9%AB%94%E5%BE%88%E8%AA%A0%E5%AF%A6%E6%AA%A2%E6%9F%A5" target="_blank" class="shrink-0 font-mono text-xs sm:text-sm font-bold text-news-red hover:underline border border-news-red bg-white px-3 py-1 rounded">    
-                    Tongue Coating Guide ↗    
+                    Go to Tongue Coating Guide ↗    
                 </a>    
             </div>    
     
-            <!-- Interactive Diagnostic Instructions -->    
+            <!-- Interactive Game Instruction -->    
             <p class="text-sm font-serif text-news-subtle mb-4 font-bold">    
-                【Interactive Diagnostic】 Check any signs that match your current morning state to calculate your "Systemic Leakage Score" and reveal your anti-inflammatory protocol:
+                【Mini-Game Rules】 Check the items that match your condition this morning to instantly calculate your "Engine Leakage Index" and unlock your exclusive anti-inflammatory protection tier:    
             </p>    
     
-            <!-- Checkboxes -->    
+            <!-- 2 Checkboxes -->    
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto font-serif mb-6">    
                 <label class="bg-white p-4 border-2 border-news-ink flex items-start gap-3 cursor-pointer hover:bg-amber-50 transition shadow-sm select-none">    
                     <input type="checkbox" id="chk-1" onchange="calculateLeakScore()" class="mt-1 w-5 h-5 accent-red-700">    
                     <div class="text-sm sm:text-base">    
-                        <span class="font-bold block text-news-ink text-lg">① Scalloped Tongue / Teeth Marks</span>    
-                        <span class="text-news-subtle text-xs sm:text-sm block mt-1 leading-relaxed">Teeth Marks: Spleen dampness, compromised cell membrane fluidity, severely impaired cellular metabolism.</span>    
+                        <span class="font-bold block text-news-ink text-lg">① Distinct Tooth Marks on Tongue Edges</span>    
+                        <span class="text-news-subtle text-xs sm:text-sm block mt-1 leading-relaxed">Teeth Marks: Dampness in Spleen and Stomach, impaired cell membrane fluidity, extremely low metabolic efficiency.</span>    
                     </div>    
                 </label>    
     
                 <label class="bg-white p-4 border-2 border-news-ink flex items-start gap-3 cursor-pointer hover:bg-amber-50 transition shadow-sm select-none">    
                     <input type="checkbox" id="chk-2" onchange="calculateLeakScore()" class="mt-1 w-5 h-5 accent-red-700">    
                     <div class="text-sm sm:text-base">    
-                        <span class="font-bold block text-news-ink text-lg">② Thick Coating at Tongue Base</span>    
-                        <span class="text-news-subtle text-xs sm:text-sm block mt-1 leading-relaxed">Thick Coating: Intestinal stagnation and SIBO / microbial overgrowth.</span>    
+                        <span class="font-bold block text-news-ink text-lg">② Thick Coating at the Tongue Base</span>    
+                        <span class="text-news-subtle text-xs sm:text-sm block mt-1 leading-relaxed">Thick Coating: Intestinal stagnation · Poor small intestinal bacterial balance.</span>    
                     </div>    
                 </label>    
             </div>    
     
-            <!-- Diagnosis Result Box -->    
+            <!-- Diagnosis Result Display Box -->    
             <div id="diagnosticResult" class="bg-white p-5 border-2 border-news-ink text-center">    
-                <div class="font-mono text-xs sm:text-sm font-bold text-news-subtle uppercase tracking-wider">YOUR SYSTEM STATUS</div>    
+                <div class="font-mono text-xs sm:text-sm font-bold text-news-subtle uppercase tracking-wider">YOUR STATUS</div>    
                 <div id="diagStatus" class="font-serif font-black text-2xl sm:text-3xl text-news-ink my-2">    
-                    Select symptoms above to begin assessment
+                    Please check the features above to start diagnosis    
                 </div>    
                 <p id="diagDesc" class="text-sm sm:text-base font-serif text-news-subtle max-w-xl mx-auto leading-relaxed">    
-                    Unlock tailored anti-inflammatory tactics and detailed analysis.
+                    Exclusive anti-inflammatory tactical details across 9 conditions via link.    
                 </p>    
                     
-                <!-- Print Button -->    
+                <!-- Print Reminder -->    
                 <div class="mt-4 pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm">    
                     <span class="text-amber-800 font-bold font-serif flex items-center gap-1">    
-                        ⚠️ Reminder: Personal educational tool.    
+                        ⚠️ Reminder: Personal note!    
                     </span>    
                     <button onclick="triggerPrintWithNotice()" class="bg-news-ink hover:bg-news-winered text-white font-mono font-bold px-4 py-1.5 rounded transition flex items-center gap-1.5 shadow">    
-                        <i data-lucide="printer" class="w-4 h-4"></i> Save / Print    
+                        <i data-lucide="printer" class="w-4 h-4"></i>Archive    
                     </button>    
                 </div>    
             </div>    
         </section>    
     
-        <!-- SECTION B1: Tactical Archives & 12 Anti-Inflammatory Tactics Carousel -->    
+        <!-- SECTION B1 -->    
         <section id="sec-b1" class="my-6 border-b-2 border-news-ink pb-8 font-serif">    
             <div class="flex flex-col lg:flex-row gap-6">    
                     
@@ -603,38 +613,38 @@
                 <div class="lg:w-2/3 flex flex-col justify-between">    
                     <div>    
                         <div class="flex items-center gap-2 mb-2">    
-                            <span class="bg-news-red text-white text-xs sm:text-sm font-black font-mono px-2 py-0.5 uppercase">B1 FOCUS</span>    
-                            <span class="text-xs sm:text-sm font-mono font-bold text-news-winered">Tactical Archives (1 ➔ 8) ‧ 12 Anti-Inflammatory Tactics Carousel</span>    
+                            <span class="bg-news-red text-white text-xs sm:text-sm font-black font-mono px-2 py-0.5 uppercase">B1 Today's Focus</span>    
+                            <span class="text-xs sm:text-sm font-mono font-bold text-news-winered">Legacy A1 Live Files (Latest Order 1 ➔ 8) ‧ 12 Tactical Protocols Carousel</span>    
                         </div>    
                             
                         <h2 class="text-2xl sm:text-4xl font-black text-news-ink font-lemon leading-tight mb-2">    
-                            B1: Tactical Archives (Ranked 1 ➔ 8)    
+                            B1: Legacy A1 Live Files (Latest Order 1 ➔ 8)    
                         </h2>    
                             
                         <p class="text-base font-serif italic border-l-4 border-news-red pl-3 py-1 text-news-subtle mb-4 font-bold">    
-                            Execute daily rotations to halt cellular energy leakage and rebuild biological sovereignty.
+                            Rotated daily to completely block cellular "energy leakage" and reshape personal biological sovereignty.    
                         </p>    
 
-                        <!-- Ranked Archives List -->
+                        <!-- Latest Order 1 ➔ 8 Live Overview List -->
                         <ul class="space-y-2.5 mb-5 font-serif">
                             <li class="p-3.5 bg-amber-50/80 border-2 border-amber-800 rounded-sm shadow-xs transition hover:bg-amber-100/90">
                                 <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
                                     <div class="flex items-center gap-2">
-                                        <span class="font-mono text-xs font-black bg-amber-800 text-white px-2 py-0.5 rounded">【B1 SPOTLIGHT】</span>
-                                        <h3 class="text-base sm:text-lg font-black text-news-ink">EVOO Guide Updates (@ericwongkhk)</h3>
+                                        <span class="font-mono text-xs font-black bg-amber-800 text-white px-2 py-0.5 rounded">【B1 Special Focus】</span>
+                                        <h3 class="text-base sm:text-lg font-black text-news-ink">EVOO Updates by ericwongkhk</h3>
                                     </div>
                                     <a href="https://threads.com/ericwongkhk" target="_blank" class="font-mono text-xs font-black bg-news-winered hover:bg-black text-white px-2.5 py-1 rounded transition flex items-center gap-1">
                                         <span>@ericwongkhk ↗</span>
                                     </a>
                                 </div>
                                 <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed">
-                                    <strong>Tactical Content:</strong> Master Extra Virgin Olive Oil testing notes (Rankings 1 ➔ 7)! In-depth analysis of Italian Trento Casaliva (10-hour extraction miracle), Puglia PDO, Japan Shodoshima, and Argentina Mendoza Arauco rare varieties to obliterate your internal inflammation map!
-                                    <a href="/evoo-guide.html" target="_blank" class="text-news-winered font-black underline ml-1">Read Full EVOO Guide ↗</a>
+                                    <strong>Live Content:</strong> Extra Virgin Olive Oil King's latest practical oil tasting notes (Latest order 1 ➔ 7 archived)! In-depth analysis covering Italian Trento Casaliva (10-hour extraction miracle), Puglia PDO, Japan Shodoshima, and Argentina Mendoza Arauco rare varieties to eradicate the body's inflammation map!
+                                    <a href="/evoo-guide.html" target="_blank" class="text-news-winered font-black underline ml-1">Read Full 《EVOO 1-7 Tasting Guide》 ↗</a>
                                 </p>
                             </li>
                         </ul>
 
-                        <!-- GSAP HUD Realtime Renderer -->
+                        <!-- GSAP Physical Animation HUD -->
                         <div id="gsapHudContainer" class="mb-5 bg-[#070B14] text-white border-2 border-[#1E293B] rounded-xl p-4 sm:p-5 shadow-xl font-mono relative overflow-hidden select-none cursor-pointer group" onclick="triggerGsapHudBounce()" title="Click to trigger GSAP physical bounce animation">
                             <div class="flex items-center justify-between text-xs sm:text-sm border-b border-slate-800 pb-2 mb-3">
                                 <div class="flex items-center gap-2 text-slate-300">
@@ -651,7 +661,7 @@
                                 <div>
                                     <div class="flex justify-between text-xs sm:text-sm mb-1.5">
                                         <span class="text-emerald-400 font-bold flex items-center gap-1.5">
-                                            <span>⚡</span> Mitochondrial ATP Output Ratio
+                                            <span>⚡</span> Mitochondrial ATP Generation Ratio
                                         </span>
                                         <span id="atpValText" class="text-emerald-300 font-black text-sm tracking-wider">+185%</span>
                                     </div>
@@ -663,7 +673,7 @@
                                 <div>
                                     <div class="flex justify-between text-xs sm:text-sm mb-1.5">
                                         <span class="text-rose-400 font-bold flex items-center gap-1.5">
-                                            <span>🛡️</span> Chronic Systemic Inflammation Index (CRP / CEA Reduction)
+                                            <span>🛡️</span> Systemic Chronic Inflammation Index (CRP / CEA Reduction)
                                         </span>
                                         <span id="crpValText" class="text-rose-300 font-black text-sm tracking-wider">-78%</span>
                                     </div>
@@ -678,28 +688,31 @@
                         <div class="flex flex-wrap gap-2 mb-4 no-print border-b border-slate-300 pb-2.5 font-mono text-xs sm:text-sm">
                             <button onclick="showB1FeatureCard(1)" id="btn-b1-deck-1" class="px-3.5 py-1.5 rounded font-bold border transition bg-[#8B0000] text-white border-[#8B0000] shadow-sm flex items-center gap-1.5">
                                 <i data-lucide="shield-check" class="w-4 h-4"></i>
-                                <span>1. 12 Tactics Carousel (Preserve Tactic 01)</span>
+                                <span>1. 12 Tactics Carousel (Preserved Tactic 01)</span>
                             </button>
                             <button onclick="showB1FeatureCard(2)" id="btn-b1-deck-2" class="px-3.5 py-1.5 rounded font-bold border transition bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200 flex items-center gap-1.5">
                                 <i data-lucide="file-text" class="w-4 h-4"></i>
-                                <span>2. Complete Tactical Archives</span>
+                                <span>2. Earlier A1 Live Full Archive</span>
                             </button>
                         </div>
     
                         <!-- B1 CARDS DECK CONTAINER -->
                         <div class="space-y-4">
 
-                            <!-- B1 TAB 1: Carousel -->
+                            <!-- B1 TAB 1: 12 Tactics Carousel -->
                             <div id="b1-feature-card-1" class="space-y-4">
+                                <!-- CAROUSEL BOX -->    
                                 <div class="border-2 border-news-ink bg-white p-5 shadow-sm relative overflow-hidden">    
+                                    <!-- Prev / Next Controls -->    
                                     <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b border-news-ink pb-2">    
                                         <button onclick="prevSlide()" class="bg-news-ink hover:bg-news-red text-white px-3 py-1 rounded text-xs sm:text-sm font-mono font-bold flex items-center gap-1 transition">    
-                                            <i data-lucide="chevron-left" class="w-4 h-4"></i> Prev    
+                                            <i data-lucide="chevron-left" class="w-4 h-4"></i> Previous    
                                         </button>    
                                         
+                                        <!-- Special Preservation Badge for Tactic 06 -->
                                         <div class="flex items-center gap-2">
                                             <button onclick="goToSlide(5)" class="px-2.5 py-0.5 rounded bg-amber-100 hover:bg-amber-200 border border-amber-400 text-amber-900 font-mono text-xs font-black transition flex items-center gap-1">
-                                                <span>⭐ Inspect: Tactic 06 Scar Tissue</span>
+                                                <span>⭐ Lock View: Tactic 06 Old Injury Scarring</span>
                                             </button>
                                         </div>
 
@@ -720,102 +733,102 @@
                                 </div>    
                             </div>
 
-                            <!-- B1 TAB 2: Archived Sub-Topics -->
+                            <!-- B1 TAB 2: Legacy A1 Special Investigation (Latest Order 1 ➔ 8) -->
                             <div id="b1-feature-card-2" class="border-2 border-[#121212] p-5 sm:p-6 bg-white shadow-sm hidden">
                                 <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
                                     <div class="flex items-center gap-2">
-                                        <span class="font-mono text-xs sm:text-sm font-black bg-slate-900 text-white px-2 py-0.5 rounded">Tactical Archives</span>
-                                        <span class="font-mono text-xs font-bold text-news-winered">Ranked 1 ➔ 8</span>
+                                        <span class="font-mono text-xs sm:text-sm font-black bg-slate-900 text-white px-2 py-0.5 rounded">Legacy A1 Live</span>
+                                        <span class="font-mono text-xs font-bold text-news-winered">Latest Order 1 ➔ 8</span>
                                     </div>
-                                    <span class="text-xs font-mono font-bold text-emerald-700 hidden sm:inline">Verified Records</span>
+                                    <span class="text-xs font-mono font-bold text-emerald-700 hidden sm:inline">Live File Archive</span>
                                 </div>
 
-                                <!-- Sub-topic Buttons -->
+                                <!-- Sub-tabs for the 8 sub topics -->
                                 <div class="flex flex-wrap gap-1.5 mb-4 font-mono text-xs">
-                                    <button onclick="switchOldA1SubTopic(8)" id="sub-a1-btn-8" class="px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400">8. Cut 6 Chemical Toxins</button>
-                                    <button onclick="switchOldA1SubTopic(7)" id="sub-a1-btn-7" class="px-2.5 py-1 font-bold rounded bg-cyan-50 text-cyan-950 border border-cyan-300 hover:bg-cyan-100 transition">7. Kefir 60-Sec Gut Reset</button>
-                                    <button onclick="switchOldA1SubTopic(6)" id="sub-a1-btn-6" class="px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition">6. Water Toxins & Copper Hack</button>
-                                    <button onclick="switchOldA1SubTopic(5)" id="sub-a1-btn-5" class="px-2.5 py-1 font-bold rounded bg-sky-50 text-sky-950 border border-sky-300 hover:bg-sky-100 transition">5. Eliminate GMO & Microplastics</button>
-                                    <button onclick="switchOldA1SubTopic(4)" id="sub-a1-btn-4" class="px-2.5 py-1 font-bold rounded bg-rose-50 text-rose-950 border border-rose-300 hover:bg-rose-100 transition">4. PREM 20 Milk Truth</button>
-                                    <button onclick="switchOldA1SubTopic(3)" id="sub-a1-btn-3" class="px-2.5 py-1 font-bold rounded bg-orange-50 text-orange-950 border border-orange-300 hover:bg-orange-100 transition">3. Expose Fake Caffeine Energy</button>
+                                    <button onclick="switchOldA1SubTopic(8)" id="sub-a1-btn-8" class="px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400">8. Cut Off 6 Chemical Toxins (Latest)</button>
+                                    <button onclick="switchOldA1SubTopic(7)" id="sub-a1-btn-7" class="px-2.5 py-1 font-bold rounded bg-cyan-50 text-cyan-950 border border-cyan-300 hover:bg-cyan-100 transition">7. Kefir 60s Gut Clearance</button>
+                                    <button onclick="switchOldA1SubTopic(6)" id="sub-a1-btn-6" class="px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition">6. Water Toxicity Hack + Copper</button>
+                                    <button onclick="switchOldA1SubTopic(5)" id="sub-a1-btn-5" class="px-2.5 py-1 font-bold rounded bg-sky-50 text-sky-950 border border-sky-300 hover:bg-sky-100 transition">5. Cut GMOs & Microplastics</button>
+                                    <button onclick="switchOldA1SubTopic(4)" id="sub-a1-btn-4" class="px-2.5 py-1 font-bold rounded bg-rose-50 text-rose-950 border border-rose-300 hover:bg-rose-100 transition">4. PREM 20 No Milk Truth</button>
+                                    <button onclick="switchOldA1SubTopic(3)" id="sub-a1-btn-3" class="px-2.5 py-1 font-bold rounded bg-orange-50 text-orange-950 border border-orange-300 hover:bg-orange-100 transition">3. Expose Fake Coffee Energy</button>
                                     <button onclick="switchOldA1SubTopic(2)" id="sub-a1-btn-2" class="px-2.5 py-1 font-bold rounded bg-emerald-50 text-emerald-950 border border-emerald-300 hover:bg-emerald-100 transition">2. 6 Anti-Inflammatory Bio-Data</button>
-                                    <button onclick="switchOldA1SubTopic(1)" id="sub-a1-btn-1" class="px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition">1. Ancient Fermentation</button>
+                                    <button onclick="switchOldA1SubTopic(1)" id="sub-a1-btn-1" class="px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition">1. Ancient Fermentation Transformation</button>
                                 </div>
 
-                                <!-- Sub 8 -->
+                                <!-- Sub 8: Cut Off 6 Chemical Toxins -->
                                 <div id="sub-a1-topic-8" class="space-y-3">
                                     <div class="flex items-center gap-2 flex-wrap">
                                         <span class="bg-red-900 text-white font-mono text-xs font-black px-2 py-0.5 rounded">【#8 Latest】</span>
-                                        <span class="bg-amber-200 text-slate-900 font-mono text-xs font-bold px-2 py-0.5 rounded">Archive Record</span>
+                                        <span class="bg-amber-200 text-slate-900 font-mono text-xs font-bold px-2 py-0.5 rounded">Legacy A1 New Archive</span>
                                     </div>
                                     <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">
-                                        Eliminate 6 Major Chemical Toxins at the Entrance ‧ Reclaim Biological Sovereignty
+                                        Cut Off 6 Chemical Toxin Entrances ‧ Reclaim Health Biological Sovereignty (Control The Controllables)
                                     </h3>
                                     <p class="text-sm sm:text-base leading-relaxed text-[#374151]">
-                                        <strong>Tactical Summary:</strong> A 2-time cancer survivor's raw confession! Eliminate these 6 chemical vectors within 24 hours: microwave popcorn (PFAS permanent chemicals), ultra-processed dried pasta, chemically preserved bread (>4 ingredients = ultra-processed trash), processed deli meats (Group 1 carcinogen nitrates), commercial potato chips (acrylamide neurotoxin), and refined sweets. Transition energy sources to 100% whole real foods, cold-pressed EVOO, and grass-finished beef!
+                                        <strong>Live Content:</strong> Blood and tears confession of a 2-time cancer survivor over 6 years! Immediately cut off 6 chemical entrances within 24 hours: Microwave popcorn (PFAS forever chemicals), quick-dried pasta (SLDPK cramps & bloating), chemically preserved packaged bread (more than 4 ingredients is trash), processed cold cuts (Group 1 carcinogen nitrates), bagged potato chips (acrylamide neurotoxins), and refined desserts. Replace all calorie sources with 100% whole real food, cold-pressed EVOO, and grass-fed beef!
                                     </p>
                                     <div class="p-3 bg-[#FFFDF8] border border-red-300 text-xs sm:text-sm font-mono space-y-1">
-                                        <div>🍿 <strong>Cut Toxin Inputs:</strong> Enforce the "4 Natural Ingredients Rule" and purge chemical additives from pantry items.</div>
-                                        <div>🥩 <strong>Real Food Swaps:</strong> Cold-pressed extra virgin olive oil + 100% grass-finished beef + traditional fermentations.</div>
+                                        <div>🍿 <strong>Cut Off Toxin Sources:</strong> Strictly abide by the "4 Natural Ingredients Rule" and clear out all chemical additives in pantry snacks.</div>
+                                        <div>🥩 <strong>Real Food Replacement:</strong> Cold-pressed extra virgin olive oil + 100% grass-fed meat + ancient fermented foods.</div>
                                     </div>
                                 </div>
 
-                                <!-- Sub 7 -->
+                                <!-- Sub 7: Kefir 60s Gut Clearance -->
                                 <div id="sub-a1-topic-7" class="space-y-3 hidden">
                                     <div class="flex items-center gap-2 flex-wrap">
                                         <span class="bg-cyan-900 text-white font-mono text-xs font-black px-2 py-0.5 rounded">【#7 Latest】</span>
-                                        <span class="bg-amber-200 text-slate-900 font-mono text-xs font-bold px-2 py-0.5 rounded">Archive Record</span>
+                                        <span class="bg-amber-200 text-slate-900 font-mono text-xs font-bold px-2 py-0.5 rounded">Legacy A1 New Archive</span>
                                     </div>
                                     <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">
-                                        Kefir 60-Second Mucosal Reset ‧ Demolish Lactose Intolerance Myths
+                                        Kefir Conscious 60-Second Gut Clearance ‧ Debunking the Lactose Intolerance Myth
                                     </h3>
                                     <p class="text-sm sm:text-base leading-relaxed text-[#374151]">
-                                        <strong>Tactical Summary:</strong> Experiencing bloating and pain after dairy? Adult lactase levels decline naturally, leaving undigested lactose to ferment in the colon and feed harmful microbes. Consuming active Kefir cultures (Thermophilic Streptococci &amp; Lactobacilli) generates Short-Chain Fatty Acids (SCFAs) that directly repair the gut mucosal barrier and seal Tight Junctions. A 2019 clinical trial demonstrated significant IBS and bloating reduction over 4 weeks!
+                                        <strong>Live Content:</strong> Get severe stomach cramps and bloating as soon as you drink milk? Stop being raised like an NPC by commercial probiotics! Adult lactase levels plunge, leaving lactose to pass directly into the large intestine where bad bacteria ferment it into massive gas. Pour in a natural active Kefir beneficial ecosystem daily (Streptococcus thermophilus and Lactobacillus); these beneficial microbes produce short-chain fatty acids (SCFAs), directly repairing the gut barrier, sealing tight junctions, and defeating leaky gut! 2019 clinical studies proved significant improvements in IBS and bloating within 4 weeks!
                                     </p>
                                     <div class="p-3 bg-[#FFFDF8] border border-cyan-300 text-xs sm:text-sm font-mono space-y-1">
-                                        <div>🥛 <strong>Gradual Protocol:</strong> Start in Week 1 with 1/4 cup (60ml) unsweetened plain Kefir, increasing to 1 full cup over Weeks 2–4.</div>
-                                        <div>🥥 <strong>Vegan / Non-Dairy Alternative:</strong> Opt for Coconut Water Kefir—zero lactose, zero casein, with maximum live probiotic impact!</div>
+                                        <div>🥛 <strong>Progressive Clearance SOP:</strong> Start with 1/4 cup (60ml) natural unsweetened Kefir in Week 1, and gradually increase to 1 cup during Weeks 2-4.</div>
+                                        <div>🥥 <strong>Vegan / Dairy-Free Alternative:</strong> Choose Coconut Water Kefir; zero lactose, zero casein, with probiotic benefits maxed out!</div>
                                     </div>
                                 </div>
 
-                                <!-- Sub 6 -->
+                                <!-- Sub 6: Water Toxicity Hack + Copper -->
                                 <div id="sub-a1-topic-6" class="space-y-3 hidden">
                                     <div class="flex items-center gap-2 flex-wrap">
                                         <span class="bg-slate-800 text-white font-mono text-xs font-black px-2 py-0.5 rounded">【#6】</span>
-                                        <span class="bg-slate-200 text-slate-900 font-mono text-xs font-bold px-2 py-0.5 rounded">Archive Record</span>
+                                        <span class="bg-slate-200 text-slate-900 font-mono text-xs font-bold px-2 py-0.5 rounded">Legacy A1 Archive</span>
                                     </div>
                                     <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">
-                                        Water Toxicity Breakthrough ‧ Home Filtration &amp; Copper Vessel Hack
+                                        Water Toxicity Breakthrough? Home Filtration + Pure Copper Hack! Instantly Shatter Plastic Water Myths
                                     </h3>
                                     <p class="text-sm sm:text-base leading-relaxed text-[#374151]">
-                                        <strong>Tactical Summary:</strong> Stop consuming microplastic-laden bottled water or unfiltered tap water. Combining home micro-filtration with pure unlined copper drinking vessels neutralizes waterborne impurities and restores cellular hydration efficiency!
+                                        <strong>Live Content:</strong> Blood and tears confession of a 2-time cancer survivor over 6 years! Stop being raised on plastic pipes and chemical water filters! Home filtered water + pure copper cups rapidly cut off microplastics and water toxins, enabling micro-charged living water for instantaneous self-healing!
                                     </p>
                                     <div class="p-3 bg-[#FFFDF8] border border-slate-300 text-xs sm:text-sm font-mono">
-                                        📋 <strong>24HR Checklist:</strong> Pure unlined copper cup + physical micro-pore home filter + pure copper utensils + all-glass/316 stainless kettle.
+                                        📋 <strong>24HR Essential Checklist:</strong> Pure copper cup (unlined) + home physical microporous water filter + pure copper cutlery + full glass/316 stainless steel kettle.
                                     </div>
                                 </div>
 
-                                <!-- Sub 1 -->
+                                <!-- Sub 1: Ancient Fermentation -->
                                 <div id="sub-a1-topic-1" class="space-y-3 hidden">
                                     <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">
-                                        Ancient Fermentation ‧ Unlocking Peak Biological Value
+                                        Ancient Fermentation Transformation · Unlock Ultimate Biological Value of Ingredients
                                     </h3>
                                     <p class="text-sm sm:text-base leading-relaxed text-[#374151]">
-                                        Fermentation is humanity's oldest biological technology. Long before refrigeration, ancestral cultures harnessed fermentation to preserve food and unlock bioavailable nutrients. Given adequate time, micro-organisms produce organic acids, fine aromas, and complex bio-active compounds impossible to create through industrial processing!
+                                        "Fermentation" is the oldest biotechnology in human history! Long before refrigerators existed, ancestors knew how to preserve ingredients and unlock brand-new flavors using fermentation, transforming simple raw materials into entirely different, potent substances. Given enough time, ingredients brew bright acidity, delicate aromas, and rich layered flavors—biological essences that could never exist without fermentation!
                                     </p>
                                     <div class="p-3.5 bg-amber-50 border-l-4 border-amber-600 text-xs sm:text-sm">
-                                        <strong class="text-amber-950 block mb-0.5">🛡️ Gut Strategy Insight:</strong>
-                                        <span class="text-[#4B5563]">Fermented foods (e.g., traditional sauerkraut, kombucha, kefir) repair gut Tight Junctions and neutralize LPS endotoxins, directly sealing gut leakage points!</span>
+                                        <strong class="text-amber-950 block mb-0.5">🛡️ MAGA Gut Tactic Interpretation:</strong>
+                                        <span class="text-[#4B5563]">Fermented foods (such as Sauerkraut and Kombucha) are not only delicious, but also serve as core weapons to repair gut Tight Junctions and suppress LPS endotoxins! They directly plug leaks in your gut engine!</span>
                                     </div>
                                 </div>
 
-                                <!-- Sub 2 -->
+                                <!-- Sub 2: 6 Anti-Cancer Molecules -->
                                 <div id="sub-a1-topic-2" class="space-y-3 hidden">
                                     <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">
-                                        Food is Information ‧ Biological Data for Cellular Communication
+                                        Food Isn't Just Calories! It Is Biological Data Communicating with Your Cells
                                     </h3>
                                     <p class="text-sm sm:text-base leading-relaxed text-[#374151]">
-                                        Food is more than mere calories—it represents <strong class="text-news-winered">Biological Information</strong> delivered directly to your cells to regulate gene expression and immune pathways!
+                                        Chemotherapy and radiotherapy place immense stress on healthy cells; precision nutrition is crucial. Food is not merely calories; it is <strong class="text-news-winered">Biological Information</strong> delivered directly to your cells every day!
                                     </p>
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
                                         <div class="p-2.5 bg-slate-50 border border-slate-300">
@@ -824,72 +837,72 @@
                                         </div>
                                         <div class="p-2.5 bg-slate-50 border border-slate-300">
                                             <strong class="text-news-winered block">✨ Quercetin</strong>
-                                            <span class="text-slate-600">Activates the p53 tumor-suppressor pathway.</span>
+                                            <span class="text-slate-600">Activates the p53 tumor suppressor pathway, maintaining healthy anti-inflammatory balance.</span>
                                         </div>
                                         <div class="p-2.5 bg-slate-50 border border-slate-300">
                                             <strong class="text-news-winered block">✨ Betalains</strong>
-                                            <span class="text-slate-600">Potent free-radical scavengers combating oxidative stress.</span>
+                                            <span class="text-slate-600">Powerfully scavenges free radicals to combat cellular oxidative stress.</span>
                                         </div>
                                         <div class="p-2.5 bg-slate-50 border border-slate-300">
-                                            <strong class="text-news-winered block">✨ Beta-Carotene</strong>
-                                            <span class="text-slate-600">Fortifies mucosal defense barriers and cellular integrity.</span>
+                                            <strong class="text-news-winered block">✨ Beta-carotene</strong>
+                                            <span class="text-slate-600">Strengthens immune defenses and comprehensive cellular protection.</span>
                                         </div>
                                         <div class="p-2.5 bg-slate-50 border border-slate-300">
                                             <strong class="text-news-winered block">✨ D-Limonene</strong>
-                                            <span class="text-slate-600">Supports Phase II liver detoxification and physiological apoptosis.</span>
+                                            <span class="text-slate-600">Supports liver detoxification pathways and healthy apoptosis.</span>
                                         </div>
                                         <div class="p-2.5 bg-slate-50 border border-slate-300">
                                             <strong class="text-news-winered block">✨ Apigenin</strong>
-                                            <span class="text-slate-600">Maintains cellular signaling accuracy and suppresses aberrant proliferation.</span>
+                                            <span class="text-slate-600">Maintains precise cellular signaling and disrupts mutant signals.</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Sub 3 -->
+                                <!-- Sub 3: Expose Fake Coffee Energy -->
                                 <div id="sub-a1-topic-3" class="space-y-3 hidden">
                                     <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">
-                                        Exposing Fake Caffeine Energy ‧ Fix Your Cellular Fuel Source
+                                        Exposing Fake Caffeine Energy! You Aren't Lacking Energy, You're Running the Wrong Fuel!
                                     </h3>
                                     <p class="text-sm sm:text-base leading-relaxed text-[#374151]">
-                                        Brain fog and fatigue are rarely caused by a lack of energy—they stem from relying on toxic artificial stimulants!
+                                        Most people think their "engine" is out of power or suffering from brain fog, but they have it completely wrong! You are not lacking energy; you have been feeding your body toxic fake fuel!
                                     </p>
                                     <div class="p-3 bg-red-50 border-l-4 border-red-700 text-xs sm:text-sm">
-                                        <strong class="text-red-950 block text-sm">☕ Coffee Does Not Generate True Energy!</strong>
-                                        It merely blocks adenosine receptors (the brain's fatigue signal) while triggering cortisol spikes that drain adrenal reserves! <span class="font-mono text-xs text-red-800">(PMID: 16631247)</span>
+                                        <strong class="text-red-950 block text-sm">☕ Coffee Doesn't Create Energy at All!</strong>
+                                        It merely blocks adenosine—the signal that tells your brain "you are tired"—while surging cortisol to forcibly extract overdrafted energy! <span class="font-mono text-xs text-red-800">(PMID: 16631247)</span>
                                     </div>
                                     <div class="p-3 bg-emerald-50 border border-emerald-300 rounded text-xs sm:text-sm font-serif">
-                                        <strong class="text-emerald-950 font-bold block mb-1">⚡ True Cellular Energy Protocol:</strong>
+                                        <strong class="text-emerald-950 font-bold block mb-1">⚡ MAGA Real Energy Restructuring 5-Step Protocol:</strong>
                                         <ol class="list-decimal list-inside space-y-1 text-emerald-900 font-bold">
-                                            <li>High-protein/fat nutrient breakfast (Grass-Finished Beef / Tallow)</li>
-                                            <li>Early morning sunlight exposure + physical movement</li>
-                                            <li>Progressive resistance training</li>
-                                            <li>7-9 hours of restorative sleep</li>
-                                            <li>Active daily stress reduction</li>
+                                            <li>High-protein high-fat breakfast (Grass-Finished Beef / Tallow)</li>
+                                            <li>Morning sunlight + movement</li>
+                                            <li>Strength Training</li>
+                                            <li>7-9 hours of deep quality sleep</li>
+                                            <li>Daily thorough stress reduction habits</li>
                                         </ol>
                                     </div>
                                 </div>
 
-                                <!-- Sub 4 -->
+                                <!-- Sub 4: PREM 20 No Milk Truth -->
                                 <div id="sub-a1-topic-4" class="space-y-4 hidden">
                                     <div class="border-b-2 border-slate-900 pb-3">
                                         <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
                                             <div class="flex items-center gap-1.5 flex-wrap">
                                                 <span class="bg-[#8B0000] text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">
-                                                    TACTICAL FILE
+                                                    Unlock Exclusive ‧ Live File
                                                 </span>
                                                 <span class="border border-red-300 bg-red-50 text-red-700 font-mono text-xs font-bold px-2 py-0.5 rounded flex items-center gap-1">
-                                                    🔥 GUT MASTERY
+                                                    🔥 Master Gut Sovereignty
                                                 </span>
                                             </div>
                                             <a href="https://magasite.pages.dev/" target="_blank" class="bg-red-700 hover:bg-red-800 text-white font-mono text-xs font-black px-3 py-1 rounded border border-black flex items-center gap-1 shadow-xs transition">
-                                                <span>PREM 20 Project @ MAGASite ↗</span>
+                                                <span>MAGASite Home Bottom PREM 20 Project ↗</span>
                                             </a>
                                         </div>
                                         <h3 class="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 leading-tight">
-                                            The Dairy Truth ‧ Avoid the Oat Milk Marketing Trap
+                                            Unveiling Why I Quit Milk Due to Tumors · Stop Being an Oat Milk NPC
                                         </h3>
                                         <p class="text-xs sm:text-sm font-bold text-slate-600 mt-1">
-                                            Commercial Marketing Exposed · Seed Oils &amp; Gums Destroy Gut Barriers · Supermarket Buying List
+                                            Deconstructing Commercial Brainwashing · Seed Oils and Chemical Gums Destroying Gut Barriers · Supermarket Shopping List
                                         </p>
                                     </div>
 
@@ -898,24 +911,24 @@
                                             <div class="border-2 border-red-700 p-4 bg-white shadow-xs">
                                                 <div class="flex items-center justify-between border-b border-red-200 pb-2 mb-2.5 flex-wrap gap-1">
                                                     <span class="bg-[#8B0000] text-white font-mono text-xs font-black px-2 py-0.5 flex items-center gap-1">
-                                                        🚨 COMMERCIAL TRAP
+                                                        🚨 Commercial Traps Exposed
                                                     </span>
                                                     <span class="font-mono text-xs font-black text-red-700">
-                                                        ❌ Rapeseed / Canola Oil + Gellan Gum
+                                                        ❌ Rapeseed/Canola Oil + Gellan Gum
                                                     </span>
                                                 </div>
                                                 <h4 class="font-black text-base sm:text-lg text-red-950 mb-2 leading-snug">
-                                                    Commercial Oat Milk: Inflammatory Seed Oils Sold as Health Food
+                                                    Commercial Oat Milk Trap: You Think It's Healthy, But You're Pouring Industrial Oil Into Your Gut!
                                                 </h4>
                                                 <p class="text-xs sm:text-sm text-slate-700 leading-relaxed font-serif mb-3">
-                                                    Most commercial oat milk brands contain added rapeseed/canola oil as emulsifiers, alongside gellan gum and artificial flavorings that disrupt the intestinal lining and induce chronic inflammation!
+                                                    Vast majority of oat milks on the market add canola/rapeseed oil as an emulsifier along with gellan gum and synthetic flavorings. Once inside, these seed oils and thickeners trigger chronic systemic inflammation!
                                                 </p>
                                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                                                     <div class="border border-red-200 bg-red-50/70 p-2.5 text-red-900 font-bold leading-relaxed">
-                                                        ❌ Skim/Low-Fat Milk: Devoid of anti-inflammatory fats (Omega-3, CLA)
+                                                        ❌ Skim/Low-Fat Milk: Stripped of essential anti-inflammatory fats (Omega-3, CLA)
                                                     </div>
                                                     <div class="border border-red-200 bg-red-50/70 p-2.5 text-red-900 font-bold leading-relaxed">
-                                                        ❌ Ultra-Pasteurized (UHT): High-heat caramelization damages milk proteins
+                                                        ❌ UHT Milk: Ultra-high heat caramelization scorches lactose making it extremely hard to digest
                                                     </div>
                                                 </div>
                                             </div>
@@ -923,17 +936,17 @@
                                             <div class="border-2 border-emerald-700 p-4 bg-white shadow-xs">
                                                 <div class="flex items-center justify-between border-b border-emerald-200 pb-2 mb-2.5 flex-wrap gap-1">
                                                     <span class="bg-emerald-800 text-white font-mono text-xs font-black px-2 py-0.5 flex items-center gap-1">
-                                                        🟢 CLEAN ALTERNATIVES
+                                                        🟢 Correct SWAP Replacement
                                                     </span>
                                                     <span class="font-mono text-xs font-bold text-emerald-800">
-                                                        PURE PLANT MILKS OR 100% GRASS-FED WHOLE MILK
+                                                        Clean Plant Milk OR 100% Grass-Fed Fresh Milk
                                                     </span>
                                                 </div>
                                                 <h4 class="font-black text-base sm:text-lg text-emerald-950 mb-2 leading-snug">
-                                                    Verify Clean Ingredients
+                                                    Look for Clean Ingredients: Master High-Quality Cellular Fuel
                                                 </h4>
                                                 <p class="text-xs sm:text-sm text-slate-700 leading-relaxed font-serif">
-                                                    When selecting plant milks, ensure the ingredient list contains only <strong>"Nuts + Water + Sea Salt"</strong>! Alternatively, choose <strong>100% Grass-Fed Whole Milk</strong> for natural Omega-3s and CLA, or raw unpasteurized dairy where accessible!
+                                                    When choosing plant milk, ingredient labels must only list "<strong>Nuts + Water + Sea Salt</strong>"! Otherwise, choose <strong>100% Grass-Finished/Fed Whole Milk</strong> to replenish premium Omega-3 and CLA, or select Raw Milk to preserve original active proteins and natural enzymes!
                                                 </p>
                                             </div>
                                         </div>
@@ -942,28 +955,28 @@
                                             <div>
                                                 <div class="mb-2">
                                                     <span class="bg-slate-900 text-white font-mono text-xs font-black px-2.5 py-0.5 inline-block mb-1.5">
-                                                        📋 Supermarket Milk Check-list
+                                                        📋 Supermarket Milk / Plant Milk Checklist
                                                     </span>
                                                     <h4 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-1.5">
                                                         <span class="w-3 h-3 rounded-full bg-emerald-600 inline-block shrink-0"></span>
-                                                        <span>Recommended Approved List</span>
+                                                        <span>Recommended Buy List</span>
                                                     </h4>
                                                 </div>
                                                 <div class="space-y-2.5 mt-3">
                                                     <div class="border border-slate-300 bg-white p-2.5 rounded-sm">
                                                         <strong class="text-xs sm:text-sm font-black text-red-900 block mb-0.5">
-                                                            1. 100% Grass-Fed / Grass-Finished Whole Milk
+                                                            1. RAW MILK 100% Grass-Fed Whole Milk
                                                         </strong>
                                                         <p class="text-xs text-slate-600 leading-normal">
-                                                            Low Omega-6 to Omega-3 ratio, dramatically reducing inflammatory cascades.
+                                                            Extremely low Omega-3/6 ratio, significantly reducing systemic chronic inflammation.
                                                         </p>
                                                     </div>
                                                     <div class="border border-slate-300 bg-white p-2.5 rounded-sm">
                                                         <strong class="text-xs sm:text-sm font-black text-red-900 block mb-0.5">
-                                                            2. Organic Ultra-Filtered Whole Milk
+                                                            2. Organic Ultra-Filtered Milk
                                                         </strong>
                                                         <p class="text-xs text-slate-600 leading-normal">
-                                                            Micro-filtered to yield 50% higher protein (13g) and 50% lower natural sugars (6g).
+                                                            Filtered through physical microfiltration; protein increases by 50% (13g), natural sugar reduced by 50% (6g).
                                                         </p>
                                                     </div>
                                                     <div class="border border-slate-300 bg-white p-2.5 rounded-sm">
@@ -971,7 +984,7 @@
                                                             3. Clean Plant Milks
                                                         </strong>
                                                         <p class="text-xs text-slate-600 leading-normal">
-                                                            Strictly 2–3 whole ingredients: Nuts + Water + Sea Salt. Zero seed oils or industrial gums.
+                                                            Strictly capped at 2-3 natural ingredients: Nuts + Water + Sea Salt; zero seed oils or chemical gums.
                                                         </p>
                                                     </div>
                                                 </div>
@@ -982,7 +995,7 @@
                                                     CONTROL THE CONTROLLABLES
                                                 </div>
                                                 <div class="text-[11px] sm:text-xs font-bold text-slate-700">
-                                                    Stop funding industrial chemical wastes! Take command of your gut health.
+                                                    Stop spending money on chemical waste! Actively master your gut health.
                                                 </div>
                                             </div>
                                         </div>
@@ -990,8 +1003,8 @@
 
                                     <div class="mt-4 p-3.5 bg-red-900 text-white flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm font-mono rounded">
                                         <div>
-                                            <strong class="text-amber-300 block text-sm font-black">🥛 MAGASite PREM 20 Project: Full Dairy &amp; Plant Milk Dossier</strong>
-                                            <span>Exposing thermal glycation damage, seed oil emulsifiers, raw dairy, and organic ultra-filtered procurement SOPs.</span>
+                                            <strong class="text-amber-300 block text-sm font-black">🥛 MAGASite Home Bottom PREM 20 Project: Full Truth File on Why I Stopped Drinking Milk</strong>
+                                            <span>Unlock full files on pasteurization glycation damage, plant milk canola oil & gellan gum traps, and grass-fed raw vs organic ultra-filtered milk procurement SOP.</span>
                                         </div>
                                         <div class="flex items-center gap-2">
                                             <a href="https://magasite.pages.dev/" target="_blank" class="shrink-0 bg-red-950 hover:bg-black text-white font-mono text-xs font-bold px-2.5 py-1.5 rounded border border-red-700 whitespace-nowrap transition">
@@ -1001,65 +1014,69 @@
                                     </div>
                                 </div>
 
-                                <!-- Sub 5 -->
+                                <!-- Sub 5: Cut GMOs & Microplastics -->
                                 <div id="sub-a1-topic-5" class="space-y-4 hidden font-serif">
                                     <div class="border-b-2 border-news-ink pb-3 mb-2">
                                         <div class="flex items-center gap-2 flex-wrap mb-1">
-                                            <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">A1 ARCHIVE FILE</span>
-                                            <span class="text-xs font-mono font-bold text-slate-500">Lifestyle Swap Master Blueprint ‧ Reclaim Biological Sovereignty</span>
+                                            <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">A1 Live File · Attached Fig 1</span>
+                                            <span class="text-xs font-mono font-bold text-slate-500">Full Life SWAP Practice Outline ‧ Reclaim Cellular Sovereignty</span>
                                         </div>
                                         <h3 class="text-xl sm:text-2xl font-black text-news-ink winered-underline leading-tight">
-                                            Eliminate GMO &amp; Microplastic Toxins ‧ Lifestyle Swap Master Blueprint
+                                            【Step-by-Step Breakdown】Cut Off GMOs & Microplastics · Full Life Swap Self-Healing Outline
                                         </h3>
                                         <p class="text-xs sm:text-sm text-[#4B5563] mt-1.5 font-bold leading-relaxed">
-                                            2-Time Cancer Survivor Confession: Rebuilding cellular vitality isn't about pharmaceutical reliance—it requires ruthlessly stripping hybrid commercial crops, endocrine disruptors, and microplastics from your daily life!
+                                            Blood and tears confession of a 2-time cancer survivor over 6 years: Rebuilding cellular vitality isn't about taking drugs; it's about relentlessly cutting off artificial hybrids, endocrine disruptors, and microplastics from daily life!
                                         </p>
                                     </div>
 
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-3">
+                                        <!-- Tactic 1 -->
                                         <div class="border-2 border-slate-900 p-3 bg-white flex flex-col justify-between shadow-xs">
                                             <div>
                                                 <div class="flex items-center justify-between border-b border-slate-200 pb-1 mb-1.5">
-                                                    <span class="font-mono text-xs font-black text-white bg-slate-900 px-1.5 py-0.5">TACTIC 1</span>
-                                                    <span class="text-xs font-bold text-red-700">🚫 Eliminate Hybrids</span>
+                                                    <span class="font-mono text-xs font-black text-white bg-slate-900 px-1.5 py-0.5">Tactic 1</span>
+                                                    <span class="text-xs font-bold text-red-700">🚫 Eliminate Artificial Hybrids</span>
                                                 </div>
-                                                <h4 class="font-black text-sm sm:text-base text-slate-900 mb-1.5">Sever GMO &amp; Pseudo-Health Traps</h4>
+                                                <h4 class="font-black text-sm sm:text-base text-slate-900 mb-1.5">Sever GMOs and Fake Health Traps</h4>
                                                 <ul class="text-xs text-slate-700 space-y-1.5 leading-relaxed font-medium">
-                                                    <li>• <strong>Limes / Lemons:</strong> ❌ Seedless Limes ➔ ✅ <strong>Seeded Key Limes</strong></li>
-                                                    <li>• <strong>Fish:</strong> ❌ Farmed Fish / Large Tuna ➔ ✅ <strong>Wild Small Sardines</strong></li>
-                                                    <li>• <strong>Bananas:</strong> ❌ Cavendish Hybrids ➔ ✅ <strong>Mini Bananas / Plantains</strong></li>
-                                                    <li>• <strong>Nuts:</strong> ❌ Roasted Flavored Nuts ➔ ✅ <strong>Raw Walnuts &amp; Brazil Nuts</strong></li>
-                                                    <li>• <strong>Greens:</strong> Standard Broccoli ➔ ✅ <strong>Organic Arugula / Rocket</strong></li>
+                                                    <li>• <strong>Limes/Lemons:</strong> ❌ Seedless Limes ➔ ✅ <strong>Seeded Heirloom Key Limes</strong> (Preserves native genetic vigor)</li>
+                                                    <li>• <strong>Fish:</strong> ❌ Farmed Fish / Large Tuna ➔ ✅ <strong>Wild Small Sardines</strong> (Avoids heavy metal mercury)</li>
+                                                    <li>• <strong>Bananas:</strong> ❌ Commercial Hybrid Cavendish ➔ ✅ <strong>Mini Bananas / Plantains</strong></li>
+                                                    <li>• <strong>Nuts:</strong> ❌ Generic Chemically Roasted Nuts ➔ ✅ <strong>Walnuts & Brazil Nuts</strong> (High selenium & antioxidants)</li>
+                                                    <li>• <strong>Vegetables:</strong> ✅ Broccoli ➔ ✅ <strong>Organic Arugula</strong></li>
                                                 </ul>
                                             </div>
                                         </div>
 
+                                        <!-- Tactic 2 -->
                                         <div class="border-2 border-slate-900 p-3 bg-white flex flex-col justify-between shadow-xs">
                                             <div>
                                                 <div class="flex items-center justify-between border-b border-slate-200 pb-1 mb-1.5">
-                                                    <span class="font-mono text-xs font-black text-white bg-slate-900 px-1.5 py-0.5">TACTIC 2</span>
-                                                    <span class="text-xs font-bold text-emerald-800">🛡️ Repair Mucosa</span>
+                                                    <span class="font-mono text-xs font-black text-white bg-slate-900 px-1.5 py-0.5">Tactic 2</span>
+                                                    <span class="text-xs font-bold text-emerald-800">🛡️ Repair Gut Mucosa</span>
                                                 </div>
-                                                <h4 class="font-black text-sm sm:text-base text-slate-900 mb-1.5">Staple Reorganization &amp; Mucosal Recovery</h4>
+                                                <h4 class="font-black text-sm sm:text-base text-slate-900 mb-1.5">Staple Restructuring & Deep Mucosal Rebuilding</h4>
                                                 <ul class="text-xs text-slate-700 space-y-1.5 leading-relaxed font-medium">
-                                                    <li>• <strong>Bread:</strong> ❌ Ultra-Processed Bread ➔ ✅ <strong>Traditional Long-Fermentation Sourdough</strong></li>
-                                                    <li>• <strong>Rice:</strong> ❌ Refined White Rice ➔ ✅ <strong>Wild / Heirloom Red &amp; Brown Rice</strong></li>
+                                                    <li>• <strong>Bread:</strong> ❌ Commercial Packaged Bread ➔ ✅ <strong>Traditional Long-Fermentation Sourdough or Seed Flour Bread</strong> (Lactic acid bacteria pre-digest gluten, sealing leaky gut)</li>
+                                                    <li>• <strong>Rice:</strong> ❌ Refined White Rice ➔ ✅ <strong>Brown & Red Ancient Native Rice</strong> (Stabilizes blood sugar curves)</li>
                                                 </ul>
                                             </div>
                                         </div>
 
+                                        <!-- Tactic 3 -->
                                         <div class="border-2 border-slate-900 p-3 bg-white flex flex-col justify-between shadow-xs">
                                             <div>
                                                 <div class="flex items-center justify-between border-b border-slate-200 pb-1 mb-1.5">
-                                                    <span class="font-mono text-xs font-black text-white bg-slate-900 px-1.5 py-0.5">TACTIC 3</span>
-                                                    <span class="text-xs font-bold text-amber-800">⚠️ Microplastics Barrier</span>
+                                                    <span class="font-mono text-xs font-black text-white bg-slate-900 px-1.5 py-0.5">Tactic 3</span>
+                                                    <span class="text-xs font-bold text-amber-800">⚠️ Block Microplastics</span>
                                                 </div>
-                                                <h4 class="font-black text-sm sm:text-base text-slate-900 mb-1.5">Erect Chemical Plastic Shields</h4>
+                                                <h4 class="font-black text-sm sm:text-base text-slate-900 mb-1.5">Build Full Chemical & Plastic Defense Shields</h4>
                                                 <ul class="text-xs text-slate-700 space-y-1.5 leading-relaxed font-medium">
-                                                    <li>• <strong>Cookware:</strong> ❌ Non-Stick Pans (PFAS) ➔ ✅ <strong>Stainless Steel or Cast Iron</strong></li>
-                                                    <li>• <strong>Salt:</strong> ❌ Industrial Processed Salt ➔ ✅ <strong>Pure Natural Sea Salt</strong></li>
-                                                    <li>• <strong>Utensils:</strong> ❌ Plastic Spatulas / Cutting Boards ➔ ✅ <strong>Bamboo Spatulas &amp; Solid Wood Boards</strong></li>
-                                                    <li>• <strong>Apparel:</strong> ❌ Synthetic Polyester ➔ ✅ <strong>100% Organic Cotton &amp; Linen</strong></li>
+                                                    <li>• <strong>Cookware:</strong> ❌ Non-Stick Pans (PFAS) ➔ ✅ <strong>Stainless Steel or Cast Iron Skillets</strong></li>
+                                                    <li>• <strong>Salt:</strong> ❌ Himalayan Pink Rock Salt ➔ ✅ <strong>Pure Natural Sea Salt</strong></li>
+                                                    <li>• <strong>Utensils:</strong> ❌ Plastic Spatulas / Cutting Boards ➔ ✅ <strong>Bamboo Spatulas & Solid Wood Boards</strong></li>
+                                                    <li>• <strong>Apparel:</strong> ❌ Polyester / Synthetic Clothes ➔ ✅ <strong>100% Pure Cotton & Linen</strong></li>
+                                                    <li>• <strong>Personal Hygiene:</strong> ❌ Synthetic Rayon Hygiene Products ➔ ✅ <strong>100% Organic Pure Cotton</strong></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -1067,33 +1084,33 @@
 
                                     <div class="border-2 border-slate-900 p-3.5 bg-[#FFFDF8] font-mono text-xs">
                                         <div class="flex items-center justify-between border-b border-slate-300 pb-1.5 mb-2.5">
-                                            <span class="font-black text-news-winered uppercase">📋 4 Key Swaps (Immediate Action)</span>
+                                            <span class="font-black text-news-winered uppercase">📋 4 Core Lifestyle Swaps (Instant Elimination ➔ Real Ecological Alternatives)</span>
                                             <span class="text-slate-500 font-bold">24HR ACTION</span>
                                         </div>
                                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                                             <div class="p-2.5 bg-white border border-slate-200 rounded">
-                                                <span class="text-red-700 font-bold block">1. Standard Broccoli</span>
-                                                <span class="text-emerald-800 font-black block mt-0.5">➔ ✅ Wild Arugula + Broccoli Sprouts</span>
+                                                <span class="text-red-700 font-bold block">1. ✅ Broccoli</span>
+                                                <span class="text-emerald-800 font-black block mt-0.5">➔ ✅ Arugula + Fresh Broccoli Sprouts</span>
                                             </div>
                                             <div class="p-2.5 bg-white border border-slate-200 rounded">
-                                                <span class="text-red-700 font-bold block">2. ❌ Seedless Citrus</span>
-                                                <span class="text-emerald-800 font-black block mt-0.5">➔ ✅ Seeded Key Limes + Whole Clove Infusion (&lt;32°C)</span>
+                                                <span class="text-red-700 font-bold block">2. ❌ Seedless Limes / Lemons</span>
+                                                <span class="text-emerald-800 font-black block mt-0.5">➔ ✅ Seeded Key Limes + Whole Cloves Infused in Warm Water (&lt;32°C)</span>
                                             </div>
                                             <div class="p-2.5 bg-white border border-slate-200 rounded">
                                                 <span class="text-red-700 font-bold block">3. ❌ Farmed Fish / Large Tuna</span>
-                                                <span class="text-emerald-800 font-black block mt-0.5">➔ ✅ Wild Small Sardines (High Omega-3, Low Mercury)</span>
+                                                <span class="text-emerald-800 font-black block mt-0.5">➔ ✅ Wild Small Sardines (Low trophic level, High Omega-3)</span>
                                             </div>
                                             <div class="p-2.5 bg-white border border-slate-200 rounded">
-                                                <span class="text-red-700 font-bold block">4. ❌ Hybrid Cavendish Bananas</span>
-                                                <span class="text-emerald-800 font-black block mt-0.5">➔ ✅ Mini Bananas / Plantains (Boiled 5-8 min, cooled)</span>
+                                                <span class="text-red-700 font-bold block">4. ❌ Commercial Hybrid Cavendish Bananas</span>
+                                                <span class="text-emerald-800 font-black block mt-0.5">➔ ✅ Mini Bananas / Plantains (Boil 5-8 mins, cool, and slice)</span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="p-3.5 bg-emerald-50 border-2 border-emerald-700 text-xs sm:text-sm font-serif text-emerald-950 flex flex-col sm:flex-row items-center justify-between gap-3">
                                         <div>
-                                            <strong class="font-mono text-xs sm:text-sm text-emerald-900 block mb-0.5">👊 Ultimate Protocol: 24HR Action Plan (Control The Controllables)</strong>
-                                            <span>2-Time Cancer Survivor: Zero chemotherapy, zero surgery, zero radiation! Reject decades of marketing illusions—execute full home swaps within 24 hours to halt toxic influx at the source! 🔥</span>
+                                            <strong class="font-mono text-xs sm:text-sm text-emerald-900 block mb-0.5">👊 Ultimate Self-Healing Hack: 24HR Action Plan (Control The Controllables)</strong>
+                                            <span>2-Time Cancer Survivor over 6 years: Zero chemo, zero surgery, zero radiation! Reject 40 years of commercial marketing brainwashing, complete your kitchen and lifestyle Swap within 24 hours, cut off toxin inputs at the source, and reclaim self-healing dominance! 🔥</span>
                                         </div>
                                         <a href="https://magasite.pages.dev/" target="_blank" class="shrink-0 bg-emerald-700 hover:bg-emerald-800 text-white font-mono font-bold px-3.5 py-1.5 rounded whitespace-nowrap text-xs">
                                             Join 21-Day Action ↗
@@ -1104,88 +1121,92 @@
 
                         </div>
 
-                        <!-- Core Formula Banner -->    
+                        <!-- Core Formula Highlight Banner -->    
                         <div class="my-6 p-4 bg-amber-50 border-2 border-news-ink rounded-none">    
-                            <div class="font-mono text-xs sm:text-sm font-black uppercase tracking-widest text-news-red mb-1">MAGA Biological Energy Formula</div>    
+                            <div class="font-mono text-xs sm:text-sm font-black uppercase tracking-widest text-news-red mb-1">MAGA Biological Tactical Core Formula</div>    
                             <div class="text-sm sm:text-base md:text-lg font-black font-mono text-news-ink text-center py-2 border-y border-news-ink">    
                                 Cellular Energy = (1st Grass-Finished > 2nd Grass-Fed Beef × Mitochondria) - Seed Oil Toxicity    
                             </div>    
                             <p class="text-xs sm:text-sm font-serif text-center text-news-subtle mt-2 font-bold">    
-                                Cellular Energy = (Grass-Finished Beef Fuel × Mitochondrial Output) - Seed Oil Toxicity
+                                Cellular Energy = (Grass-Finished Beef Premium Fuel × Mitochondrial Activity) - Industrial Seed Oil Toxicity    
                             </p>    
                         </div>    
                     </div>    
                 </div>    
     
-                <!-- Sidebar (Right 1/3) -->    
-                <div class="lg:w-1/3 border-t lg:border-t-0 lg:border-l border-news-ink pt-6 lg:pt-0 lg:pl-6 flex flex-col justify-between" id="sec-c1">    
+                <!-- Side Column / Sidebar (Right 1/3) -->    
+                <div class="lg:w-1/3 border-t lg:border-t-0 lg:border-l border-news-ink pt-6 lg:pt-0 lg:pl-6 flex flex-col justify-between">    
                     <div>    
+                        <!-- 🛒 Small Shop Anti-Inflammatory Procurement Map -->    
                         <div class="border-2 border-news-ink bg-white p-4 mb-4">    
                             <h4 class="font-serif font-black text-base sm:text-lg text-news-ink border-b-2 border-news-ink pb-2 mb-3">    
-                                🛒 Anti-Inflammatory Sourcing Map
+                                🛒 Small Shop Anti-Inflammatory Map (Non-Commercial / Direct Contact)    
                             </h4>    
                             <ul class="space-y-3 font-serif">    
                                 <li>    
-                                    <div class="shop-tag">📍 Fermentation Lab</div>    
-                                    <div class="shop-title"><a href="https://greenfermentationlab.com" target="_blank">Green Fermentation Lab ↗</a></div>    
-                                    <div class="shop-desc">Active fermented cultures for sourdough spreads, replenishing beneficial gut microbiota.</div>    
+                                    <div class="shop-tag">📍 Online</div>    
+                                    <div class="shop-title"><a href="https://greenfermentationlab.com" target="_blank">Green Fermentation Lab Fermented Yogurt ↗</a></div>    
+                                    <div class="shop-desc">2 tsp for sourdough spread to replenish active beneficial gut microbes.</div>    
                                 </li>    
                                 <li>    
-                                    <div class="shop-tag">📍 Natural Grocer</div>    
-                                    <div class="shop-title"><a href="https://white-choice.com" target="_blank">White Choice Natural Provisions ↗</a></div>    
-                                    <div class="shop-desc">Curated anti-inflammatory whole foods.<br>Extra Virgin Olive Oil / Cold-pressed Lard / Vitamin D3 / Zinc-Oyster Broth / High-Selenium Oolong Tea / Probiotic Whey</div>    
+                                    <div class="shop-tag">📍 White Choice · Kwun Tong</div>    
+                                    <div class="shop-title"><a href="https://white-choice.com" target="_blank">White Choice Natural Goods ↗</a></div>    
+                                    <div class="shop-desc">70% of products helped my tumor, reducing CEA by half in 150 days.<br>EVOO / Cold-Pressed Lard / Vitamin D Soup / Zinc-Oyster Soup / LGBT Honey / Alishan High-Selenium Oolong / Whey Protein Probiotics</div>    
                                 </li>    
                                 <li>    
-                                    <div class="shop-tag">📍 Quality Meat Supplier</div>    
-                                    <div class="shop-title"><a href="https://instagram.com/onestop_foodsupply" target="_blank">One Stop Food Supply ↗</a></div>    
-                                    <div class="shop-desc">Portuguese Frozen Sardines / EVOO Canned Sardines / Guanciale / 100% Grass-Finished Beef</div>    
+                                    <div class="shop-tag">📍 High Street One Stop Food Supply</div>    
+                                    <div class="shop-title"><a href="https://instagram.com/onestop_foodsupply" target="_blank">High Street Frozen Meat · One Stop ↗</a></div>    
+                                    <div class="shop-desc">Portuguese Frozen Sardines / Olive Oil Canned Sardines / Pork Cheek Guanciale / 100% Grass-Finished Beef (NOT just Grass-Fed)</div>    
                                 </li>    
                                 <li class="bg-amber-50/70 p-2.5 rounded border border-amber-300">    
                                     <div class="shop-tag flex items-center justify-between">
-                                        <span>📍 EVOO Master Notes (@ericwongkhk)</span>
-                                        <span class="font-mono text-[10px] bg-news-winered text-white px-1.5 py-0.2 rounded font-bold">1-7 Ranked</span>
+                                        <span>📍 EVOO Updates by ericwongkhk</span>
+                                        <span class="font-mono text-[10px] bg-news-winered text-white px-1.5 py-0.2 rounded font-bold">Notes 1-7</span>
                                     </div>    
                                     <div class="shop-title">
                                         <a href="https://threads.com/ericwongkhk" target="_blank" class="text-news-winered font-black hover:underline">@ericwongkhk ↗</a>
                                         <span class="text-xs text-slate-500 font-normal"> · </span>
                                         <a href="https://sites.google.com/view/magamap/realfoodmap/v2ericwong" target="_blank" class="text-xs text-blue-700 font-bold hover:underline">EVOO Tasting Guide ↗</a>
                                     </div>    
-                                    <div class="shop-desc">Extra Virgin Olive Oil Breakdown (Casaliva, Puglia PDO, Shodoshima tasting analysis)</div>    
+                                    <div class="shop-desc">Extra Virgin Olive Oil Breakdown (Updated Lake Garda Casaliva, Puglia PDO, etc.)</div>    
                                 </li>
                                 <li>    
-                                    <div class="shop-tag">📍 Community Focus</div>    
-                                    <div class="shop-title"><span class="text-slate-400 font-bold">DEAFBrew - Zita</span></div>
+                                    <div class="shop-tag">📍 RESPECT Spirit</div>    
+                                    <div class="shop-title"><span class="text-slate-400 font-bold">🚧 DEAFBrew - Zita</span></div>
                                     <a href="https://instagram.com/zita-barista" target="_blank" class="text-news-winered font-black hover:underline">@zite.barista ↗</a>
-                                    <div class="shop-desc">Artisanal Brewer &amp; Coffee Craftsmanship</div>
-                                    <a href="https://magasite.pages.dev/brew" target="_blank" class="text-xs text-blue-600 font-bold hover:underline">Brew Order Project ↗</a>
+                                        <span class="text-xs text-slate-400 font-normal"> · </span>
+                                    <div class="shop-desc">"Customer" & "Barista Brewer"</div>
+                                    <a href="https://magasite.pages.dev/brew" target="_blank" class="text-xs text-blue-600 font-bold hover:underline">Non-Real ORDER ↗</a>
                                 </li>
                                 <li>    
-                                    <div class="shop-tag">📍 Natural Farming</div>    
-                                    <div class="shop-title"><span class="text-slate-400 font-bold">Amla Fruit / Indian Gooseberry</span></div>
-                                    <a href="https://www.threads.com/@xushengfu" target="_blank" class="text-news-winered font-black hover:underline">Amla Journal ↗</a>
-                                    <div class="shop-desc">Natural farm-grown Amla and bioactive enzymes</div>
-                                    <a href="https://everydayamla.com.tw/page/blog" target="_blank" class="text-xs text-blue-600 font-bold hover:underline">Amla Selection Guide ↗</a>
+                                    <div class="shop-tag">📍 Taiwan Natural Farming</div>    
+                                    <div class="shop-title"><span class="text-slate-400 font-bold">Everyday Amla - Indian Gooseberry</span></div>
+                                    <a href="https://www.threads.com/@xushengfu" target="_blank" class="text-news-winered font-black hover:underline">Ah Fu's Amla Diary ↗</a>
+                                        <span class="text-xs text-slate-400 font-normal"> · </span>
+                                    <div class="shop-desc">Taiwan Natural Farming Amla Fruit & Amla Enzymes</div>
+                                    <a href="https://everydayamla.com.tw/page/blog" target="_blank" class="text-xs text-blue-600 font-bold hover:underline">4 Things to Check Before Buying Amla Powder ↗</a>
                                 </li>
                                 <li>    
-                                    <div class="shop-tag">📍 Local Fresh Produce</div>    
-                                    <div class="shop-title">Ginger / Old Ginger + Cilantro (with roots) + White Radish + Broccoli / Cauliflower / Celery + Blueberries / Pomegranate / Raw Pumpkin Seeds</div> 
-                                    <div class="shop-desc">Purchase fresh, certified organic whole ingredients.</div>    
+                                    <div class="shop-tag">📍 Local Wet Market</div>    
+                                    <div class="shop-title">Ginger/Old Ginger + Cilantro (with roots)/White Radish + Broccoli/Cauliflower/Celery + Blueberries / Pomegranate / Unsalted Pumpkin Seeds</div> 
+                                    <div class="shop-title"></div>    
+                                    <div class="shop-desc">Purchase raw ingredients, certified organic</div>    
                                 </li>         
                             </ul>    
                         </div>    
     
-                        <!-- 9-Minute Rule -->    
+                        <!-- Nine-Minute Rule -->    
                         <div class="bg-news-ink text-white p-4 font-serif text-xs sm:text-sm mb-4">    
-                            <h4 class="font-mono font-bold text-amber-400 text-sm sm:text-base border-b border-slate-700 pb-1 mb-2">The 9-Minute Rule</h4>    
-                            <p class="text-slate-300 mb-2">Dedicate 9 minutes every single day:</p>    
-                            <p class="mb-2"><strong>1. Audit</strong><br>Review what you consumed and chemical exposures incurred; instantly eliminate inflammatory noise.</p>    
-                            <p><strong>2. Focus</strong><br>Deep breathing + light mobility stretching to signal your immune system: "I am back in control."</p>    
+                            <h4 class="font-mono font-bold text-amber-400 text-sm sm:text-base border-b border-slate-700 pb-1 mb-2">The Nine-Minute Rule</h4>    
+                            <p class="text-slate-300 mb-2">Only 9 minutes needed daily:</p>    
+                            <p class="mb-2"><strong>1. Audit</strong><br>Check what you ate today and what chemicals you touched; immediately cut out inflammatory "social noise."</p>    
+                            <p><strong>2. Focus</strong><br>Deep breathing + light stretching to wake up your immune system: "Boss, I'm back."</p>    
                         </div>    
     
-                        <!-- Daily Reminder -->    
+                        <!-- Today's Reminder -->    
                         <div class="border border-news-ink bg-amber-50/70 p-3.5 text-xs sm:text-sm font-serif">    
-                            <div class="font-bold text-news-red mb-1 font-mono uppercase">Daily Mantra</div>    
-                            <p class="text-news-ink italic font-bold">Stop asking "What should I eat?" Instead, ask: "When I eat this, how will my cellular immune system respond?"</p>    
+                            <div class="font-bold text-news-red mb-1 font-mono uppercase">Today's Reminder</div>    
+                            <p class="text-news-ink italic font-bold">Stop asking others "what should I eat?" Ask yourself: "If I eat this, what will my immune system think?"</p>    
                         </div>    
                     </div>    
                 </div>    
@@ -1193,51 +1214,184 @@
             </div>    
         </section>    
     
-        <!-- SECTION B2: RFK JR. INVERTED FOOD PYRAMID -->    
+        <!-- SECTION B2: RFK JR. INVERTED FOOD PYRAMID (LAYER 02 CORE) -->    
         <section id="sec-b2" class="my-8 border-b-2 border-news-ink pb-8 bg-[#FAF8F5] p-5 sm:p-6 border-2 border-[#121212] font-serif">    
             <div class="border-b-2 border-news-ink pb-2 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">    
                 <div>    
-                    <span class="bg-news-ink text-white font-mono text-xs sm:text-sm font-black px-2 py-0.5">B2 STRATEGY GUIDE</span>    
+                    <span class="bg-news-ink text-white font-mono text-xs sm:text-sm font-black px-2 py-0.5">B2 Tactical Guide</span>    
                     <h2 class="text-2xl sm:text-3xl font-black font-lemon text-[#1F2937] inline-block ml-2">RFK Jr. Inverted Food Pyramid</h2>    
                 </div>    
-                <span class="font-mono text-xs sm:text-sm font-bold text-news-winered">LAYER 02 CLEARANCE ‧ MUCOSAL BARRIER CORNERSTONE</span>    
+                <span class="font-mono text-xs sm:text-sm font-bold text-news-winered">LAYER 02 Detox & Clearance ‧ Gut Mucosal Barrier Foundation</span>    
             </div>    
     
             <!-- Layer 02 Active Focus Banner -->    
             <div id="b2DailyBanner" class="p-4 bg-[#FFFBEB] border-2 border-news-ink mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 font-serif text-sm">    
                 <div class="flex items-center gap-2">    
-                    <span class="bg-news-winered text-white font-mono text-xs font-black px-2 py-0.5 uppercase rounded">★ TODAY'S FOCUS</span>    
-                    <span id="b2DailyTitle" class="font-bold text-[#1F2937] text-sm sm:text-base">LAYER 02 / BASE: Mucosal Clearance (Fermented Cabbage / Cauliflower Mash / Cooked Tomatoes / Alliums) ★</span>    
+                    <span class="bg-news-winered text-white font-mono text-xs font-black px-2 py-0.5 uppercase rounded">★ Today's Focus</span>    
+                    <span id="b2DailyTitle" class="font-bold text-[#1F2937] text-sm sm:text-base">LAYER 02 / BASE: Detox & Clearance (Gut Barrier - Fermented Raw Cabbage / Cauliflower Mash / Cooked Tomatoes / Scallions & Garlic) ★ Today's Focus</span>    
                 </div>    
                 <div id="b2DailySummary" class="text-[#4B5563]">    
-                    Today's Focus: Intestinal Mucosal Repair! Fermented cruciferous vegetables suppress LPS endotoxins, restore Tight Junction integrity, and extinguish systemic inflammation!
+                    Today's Focus: Gut mucosal repair! Fermented vegetables and cruciferous plants suppress LPS endotoxins, repair Tight Junctions, and block systemic chronic inflammation!    
                 </div>    
             </div>
     
-            <!-- Pyramid Tier 2 Card -->    
+            <!-- Pyramid Card: Layer 02 Only -->    
             <div class="max-w-3xl mx-auto">    
                 <div id="b2-tier-2-card" class="border-2 border-news-ink p-6 bg-white relative transition-all duration-300 ring-4 ring-[#8B0000] bg-amber-50/40">    
                     <div class="absolute -top-3 left-4 bg-news-ink text-white font-mono text-xs font-black px-2.5 py-0.5 flex items-center gap-1.5">    
-                        <span>LAYER 02 // MUCOSAL BARRIER REPAIR</span>    
-                        <span id="b2-badge-tier-2" class="text-amber-300 font-bold">★ CORE FOCUS</span>    
+                        <span>LAYER 02 // Gut Barrier Repair</span>    
+                        <span id="b2-badge-tier-2" class="text-amber-300 font-bold">★ Today's Focus Core</span>    
                     </div>    
-                    <h3 class="font-serif font-black text-2xl sm:text-3xl text-[#1F2937] mb-1.5 mt-2">Barrier Tier (Mucosal Clearance &amp; Barrier Squad)</h3>    
-                    <p class="text-sm sm:text-base font-mono font-bold text-news-winered mb-3">Core Gut Microbiome &amp; Tight Junction Repair · Block LPS Translocation</p>    
+                    <h3 class="font-serif font-black text-2xl sm:text-3xl text-[#1F2937] mb-1.5 mt-2">Barrier Tier (Detox & Clearance ‧ Gut Barrier Repair Team)</h3>    
+                    <p class="text-sm sm:text-base font-mono font-bold text-news-winered mb-3">Core for Gut Microbiome & Tight Junction Repair · Block LPS Endotoxins from Bloodstage Entry</p>    
                     <p class="text-base sm:text-lg font-serif text-[#374151] mb-4 leading-relaxed">    
-                        Focus on wild fermented sauerkraut, cauliflower mash, cooked lycopene-rich tomatoes, garlic, and scallions to strengthen gut barrier integrity and seal tight junctions against systemic endotoxin leakage.
-                    </p>
-                </div>
+                        Focuses on rebuilding the gut mucosal barrier. Utilizing organic naturally fermented sauerkraut, sulforaphane-rich cruciferous vegetables, and cooked tomato lycopene to fully seal inflammatory factors, repair cellular tight junctions, and sever the vicious cycle of pathological changes.
+                    </p>    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#F9FAFB] p-4 border border-slate-300 text-sm font-serif text-[#1F2937] rounded-sm">    
+                        <div>
+                            <strong class="text-emerald-900 block mb-0.5">🥬 Fermented Raw Cabbage (Sauerkraut):</strong>
+                            <span class="text-slate-600 text-xs sm:text-sm">Provides natural active lactic acid bacteria and acetic acid, powerfully repairing gut Tight Junctions and degrading LPS endotoxins.</span>
+                        </div>
+                        <div>
+                            <strong class="text-amber-900 block mb-0.5">🥦 Cauliflower Mash / Broccoli Sprouts:</strong>
+                            <span class="text-slate-600 text-xs sm:text-sm">High-concentration sulforaphane activates Nrf2 gene antioxidant pathways, blocking carcinogenic toxin absorption.</span>
+                        </div>
+                        <div>
+                            <strong class="text-red-900 block mb-0.5">🍅 Cooked Tomatoes (in EVOO):</strong>
+                            <span class="text-slate-600 text-xs sm:text-sm">Heating with extra virgin olive oil releases highly active fat-soluble lycopene, protecting cell membranes.</span>
+                        </div>
+                        <div>
+                            <strong class="text-indigo-900 block mb-0.5">🧄 Raw Garlic & Alliums (Raw Garlic & Onions):</strong>
+                            <span class="text-slate-600 text-xs sm:text-sm">Rich in allicin and prebiotic fructooligosaccharides, precisely suppressing harmful gut bacteria and solidifying immune frontlines.</span>
+                        </div>
+                    </div>    
+                </div>    
+            </div>     
+        </section>    
+    
+        <!-- SPECIAL LINK BOX: Help The Next One Project -->    
+        <div class="max-w-3xl mx-auto">
+        <div class="my-8 overflow-hidden border-2 border-[#121212]" id="help-next-box">
+ 
+          <!-- Eyebrow -->
+          <div class="bg-[#121212] text-white px-4 py-2 flex items-center justify-between gap-2 flex-wrap">
+            <span class="font-lemon text-[10px] tracking-[.18em] uppercase text-white/60">HELP THE NEXT ONE PROGRAM · BUY 1 GIVE 1</span>
+            <span class="font-mono text-[10px] bg-[#8B0000] text-white px-2 py-0.5 tracking-wider uppercase">Anti-Inflammatory Journey, Practiced Daily</span>
+          </div>
+ 
+          <!-- Headline -->
+          <div class="bg-[#FAF8F5] px-5 pt-4 pb-3 border-b-2 border-[#121212] text-center">
+            <h2 class="font-lemon font-black text-[#8B0000] uppercase tracking-wider text-base sm:text-lg md:text-xl leading-tight mb-1">
+              DAILY FLOW: A STEP TOWARDS WELLNESS,<br class="hidden sm:block"> A SPARK FOR SOMEONE'S DREAM.
+            </h2>
+            <p class="font-mono text-xs text-[#121212] tracking-widest font-bold">
+              "DAILY FLOW", Helping More People Fulfill Dreams of Anti-Inflammation ‧ Anti-Inflammatory Journey, Practiced Daily
+            </p>
+          </div>
+ 
+          <!-- Buy 1 Give 1 Grid -->
+          <div class="grid grid-cols-[1fr_auto_1fr] bg-[#FAF8F5]">
+ 
+            <!-- Left: YOU -->
+            <div class="bg-[#121212] text-white p-4 sm:p-5 flex flex-col items-center justify-center text-center gap-2">
+              <div class="font-lemon font-black text-3xl sm:text-4xl text-white leading-none">YOU</div>
+              <div class="font-mono text-[10px] tracking-[.14em] uppercase text-white/50">YOU BUY</div>
+              <div class="w-8 h-px bg-white/20"></div>
+              <div class="font-serif text-xs sm:text-sm text-white/80 leading-relaxed">
+                Buy a "DAILY FLOW" passkey<br>Unlock full 22 Premium resources<br>
+                <span class="text-white/50 text-[10px]">One-time payment, lifetime access</span>
+              </div>
             </div>
-        </section>
+ 
+            <!-- Middle: Arrow -->
+            <div class="bg-[#FAF8F5] flex flex-col items-center justify-center px-2 sm:px-3 border-l-2 border-r-2 border-[#121212]">
+              <div class="font-lemon font-black text-[#8B0000] text-xl sm:text-2xl leading-none">→</div>
+              <div class="font-mono text-[9px] text-slate-400 tracking-wider mt-1 rotate-0 hidden sm:block">GIVE</div>
+            </div>
+ 
+            <!-- Right: NEXT ONE -->
+            <div class="bg-[#8B0000] text-white p-4 sm:p-5 flex flex-col items-center justify-center text-center gap-2">
+              <div class="font-lemon font-black text-2xl sm:text-3xl text-white leading-none">NEXT ONE</div>
+              <div class="font-mono text-[10px] tracking-[.14em] uppercase text-white/50">NEXT ONE GETS</div>
+              <div class="w-8 h-px bg-white/20"></div>
+              <div class="font-serif text-xs sm:text-sm text-white/80 leading-relaxed">
+                I gift an additional passkey<br>Helping someone in need take the first step to recovery<br>
+                <span class="text-white/50 text-[10px]">No extra charge</span>
+              </div>
+            </div>
+ 
+          </div>
+ 
+          <!-- Bottom CTA -->
+          <div class="bg-[#FAF8F5] border-t-2 border-[#121212] px-5 py-4 text-center">
+            <a href="https://buy.stripe.com/dRm9ATdlf4VGf9T61t9fW02?client_reference_id=Less20"
+               target="_blank" rel="noopener noreferrer"
+               class="inline-block bg-[#8B0000] hover:bg-red-800 text-white font-lemon font-black text-sm sm:text-base uppercase tracking-wider px-6 py-3 border-2 border-[#121212] shadow-[4px_4px_0px_#121212] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all duration-150">
+              → Join Anti-Inflammation Daily ←
+            </a>
+            <p class="mt-2 font-mono text-[10px] text-slate-400 tracking-wider">
+              Buy one, I gift one · Truly lowering barriers · Absolutely no extra fee required
+            </p>
+          </div>
+ 
+        </div>
+</div>
 
-        <!-- FOOTER / COPYRIGHT -->
-        <footer class="mt-8 pt-4 border-t-2 border-news-ink text-center font-mono text-xs text-news-subtle">
-            <p>DAILY FLOW © 2026 MAGASite Project. All rights reserved. Made for biological sovereignty.</p>
-        </footer>
-
-    </div> <!-- END NEWSPAPER CONTAINER -->
-
-<!-- JavaScript Interactions -->    
+            <!-- Featured PREM_22 Spotlight Banner -->
+            <div class="mb-3 p-3 bg-amber-50 border-2 border-amber-600 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                <div>
+                    <span class="bg-[#8B0000] text-white font-mono font-black px-1.5 py-0.5 rounded text-[10px] mr-1.5">Home Free & Unlocked Zone</span>
+                    <strong class="text-slate-900 font-serif">Stop Assuming "Milk" is Safe Nutrition: Truth About Why I Quit Milk Due to Tumors & Safe Dairy/Plant Options on the Market.</strong>
+                    <span class="text-slate-600 hidden sm:inline"> (Exposing Canola Oil & Gellan Gum Gut Damage Traps, Locking in 100% Grass-Fed Whole Milk and Clean Plant Milk)</span>
+                </div>
+                <a href="https://magasite.pages.dev/" target="_blank" class="self-start sm:self-auto bg-[#8B0000] hover:bg-red-800 text-white font-mono font-black px-3 py-1 rounded border border-black whitespace-nowrap">
+                    Home Free & Unlocked Zone ↗
+                </a>
+            </div>
+    
+            <!-- Compact Blurred Mockup with Overlay -->    
+            <div class="relative overflow-hidden py-3">    
+                <div class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-stone-100/85 backdrop-blur-[3px] text-center p-3">    
+                    <div class="text-2xl mb-1">🚧</div>    
+                    <div class="font-mono text-sm sm:text-base font-black text-news-winered uppercase">    
+                        22 Advanced Tactical Protocols require Verified Passkey / Stripe Verification / Please Return to MAGASite to Unlock Materials    
+                    </div>       
+                </div>    
+                <div class="filter blur-[4px] opacity-40 pointer-events-none select-none grid grid-cols-3 sm:grid-cols-6 gap-2 text-xs font-mono">    
+                    <div class="p-1.5 bg-white border border-slate-300 text-center">FREE 01-06</div>    
+                    <div class="p-1.5 bg-white border border-slate-300 text-center">PREM 01-04</div>    
+                    <div class="p-1.5 bg-white border border-slate-300 text-center">PREM 05-08</div>    
+                    <div class="p-1.5 bg-white border border-slate-300 text-center">PREM 09-12</div>    
+                    <div class="p-1.5 bg-white border border-slate-300 text-center">PREM 13-16</div>    
+                    <div class="p-1.5 bg-white border border-slate-300 text-center">PREM 17-20</div>    
+                </div>    
+            </div>    
+        </section>    
+    
+        <!-- FOOTER & NEWSPAPER FOOTNOTE -->    
+        <footer class="double-line-top pt-4 mt-8 text-center font-mono text-xs sm:text-sm text-news-subtle">    
+            <!-- Slogans in Footer -->    
+            <div class="mb-4 py-3.5 px-3 bg-[#FAF8F5] border border-slate-300 rounded text-center">    
+                <div class="font-serif font-black text-base sm:text-xl text-news-ink mb-1.5">    
+                    Anti-Inflammatory Journey, Practiced Daily    
+                </div>    
+                <h1 class="text-xs sm:text-sm md:text-base font-lemon font-black text-[#1F2937] tracking-wider uppercase">    
+                    DAILY FLOW: YOUR DAILY STEP ON THE ANTI-INFLAMMATORY JOURNEY.    
+                </h1>    
+            </div>    
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-2 mb-2 font-bold">    
+                <div>《DAILY FLOW》 All Rights Reserved ‧ 2026 Magasite ENG</div>
+                <div>MAGASite Home: <a href="https://magasite.pages.dev/index-en" target="_blank" class="underline text-news-ink font-bold">MAGASite Home</a></div>    
+                <div><a href="https://buy.stripe.com/dRm9ATdlf4VGf9T61t9fW02?client_reference_id=Less20" target="_blank" class="underline text-news-winered font-bold">Help The Next One</a></div>    
+            </div>    
+            <p class="text-xs text-news-subtle mt-2">    
+                Disclaimer: The content of this publication aims to dismantle establishment toxins and commercial marketing deceptions to rebuild personal biological sovereignty. If experiencing severe cellular leakage, cease seed oil consumption immediately. ⚠️ Reminder: Individual diagnosis results will not be saved upon refreshing; please click print to archive in time! ⚠️ Content is for personal reference only, not medical diagnosis. Please consult a doctor or Traditional Chinese Medicine practitioner who speaks plain human language.    
+            </p>    
+        </footer>    
+    
+    </div>     
+    
+    <!-- JavaScript Interactions -->    
     <script>    
         // Initialize Lucide icons    
         if (window.lucide) {    
@@ -1249,7 +1403,7 @@
         const now = new Date();    
         const displayDateStrip = document.getElementById('displayDateStrip');    
         if (displayDateStrip) {    
-            displayDateStrip.textContent = `3-8 大多系統病徵病理學與臨床實證對照表`;    
+            displayDateStrip.textContent = `【TODAY'S HEADLINE】 October 10, 2026 (Day 10) ‧ 10 Multi-System Pathology & Clinical Evidence Comparison Table`;    
         }    
     
         // Scroll to section    
@@ -1263,240 +1417,342 @@
         // Print function with reminder notice    
         function triggerPrintWithNotice() {    
             window.print();    
-        } 
-
-// 12 Infinite Endurance Protocols Data
-const infiniteEnduranceProtocols = [    
-    {    
-        num: "01",    
-        title: "Cortisol & Vitamin D3+K2 Reconstruction",    
-        mechanism: "Use high-dose Vitamin D3 to replace synthetic corticosteroids for anti-inflammation, paired with K2 to prevent calcium deposition in arterial walls. Supplement daily.",    
-        action: "Daily D3 10,000–40,000 IU + K2 (100mcg K2 per 10,000 IU D3)",    
-        source: "Sunlight exposure, egg yolks, sardines, fermented foods"    
-    },    
-    {    
-        num: "02",    
-        title: "Complete Allergen Elimination + Extended Fasting",    
-        mechanism: "Gluten and casein act as primary systemic triggers for immune dysfunction. Extended fasting resets gut immune sensitivity.",    
-        action: "Strict elimination of refined flour and dairy products + regular prolonged fasting protocols",    
-        source: "Gluten-free grains, extra virgin coconut oil, avocados"    
-    },    
-    {    
-        num: "03",    
-        title: "Latent Viral Suppression Defense",    
-        mechanism: "Whole-food Vitamin C paired with natural botanical antimicrobials to suppress dormant viral reactivity.",    
-        action: "Whole-food Vitamin C + raw crushed garlic daily",    
-        source: "Kiwifruit, hot peppers, fresh raw garlic"    
-    },    
-    {    
-        num: "04",    
-        title: "Deep Gut Mucosal Barrier Repair",    
-        mechanism: "Zinc L-carnosine repairs mucosal ulcerations, while raw fermented vegetables restore beneficial probiotic strains and active chlorophyll.",    
-        action: "Daily unpasteurized sauerkraut/kimchi + Zinc L-carnosine + 100% elimination of seed oils",    
-        source: "Home-fermented sauerkraut, authentic bone broth, raw pumpkin seeds"    
-    },    
-    {    
-        num: "05",    
-        title: "Insulin Clearance + Intermittent Fasting",    
-        mechanism: "Frequent snacking drives chronic hyperinsulinemia and insulin resistance. Fasting activates endogenous antioxidant pathways.",    
-        action: "Implement 16/8 or 20/4 Time-Restricted Feeding (TRF) daily",    
-        source: "Healthy fats, leafy green vegetables, high-quality proteins"    
-    },    
-    {    
-        num: "06",    
-        title: "Scar Tissue & Chronic Inflammatory Invalidation",    
-        mechanism: "Bioavailable curcumin and stinging nettle root quell localized mechanical inflammation in old scar tissue.",    
-        action: "High-potency bioavailable curcumin extract + nettle root supplementation",    
-        source: "Fresh turmeric root, blanched young nettle leaves"    
-    },    
-    {    
-        num: "07",    
-        title: "Biliary Sludge Clearance · Dandelion Leaf",    
-        mechanism: "Dandelion leaf possesses traditional bitter and choleretic properties, stimulating bile flow to flush out sluggish biliary sludge.",    
-        action: "10g+ dried leaf decoction/tea daily or blanched fresh leaves in soups/salads",    
-        source: "Herbal apothecaries, organic markets, or fresh home-grown leaves"    
-    },    
-    {    
-        num: "08",    
-        title: "Vitamin D3 Recurrence Line of Defense",    
-        mechanism: "Maintain optimal serum 25(OH)D levels to dissolve systemic inflammatory terrain and hinder metastatic cellular signaling.",    
-        action: "Maintain elevated circulating serum Vitamin D3 levels consistently year-round",    
-        source: "Midday sun exposure, wild sardines, pasture-raised egg yolks, mushrooms"    
-    },    
-    {    
-        num: "09",    
-        title: "Omega-3/6 Ratio Optimization",    
-        mechanism: "Soybean and canola oils flood cells with pro-inflammatory Omega-6. High-dose EPA/DHA resolves inflammatory cascades.",    
-        action: "Concentrated deep-sea fish oil or whole wild sardines + Extra Virgin Olive Oil (EVOO)",    
-        source: "Wild fatty fish, sardines, chia seeds, walnuts, cold-pressed EVOO"    
-    },    
-    {    
-        num: "10",    
-        title: "Environmental Toxin Autophagy Flush",    
-        mechanism: "Plasticizers and synthetic chemicals accumulate as persistent toxins. Fasting triggers autophagic cellular cleanup.",    
-        action: "Adopt plastic-free living protocols + periodic extended fasting to initiate deep autophagy",    
-        source: "Whole unprocessed foods, glass or 316 stainless steel food containers"    
-    },    
-    {    
-        num: "11",    
-        title: "Iron Overload & Hepatic Fibrosis Shield",    
-        mechanism: "Excess free iron acts as a potent pro-oxidant catalyst for hepatic inflammation while fueling opportunistic pathogens.",    
-        action: "Strictly avoid non-stick/uncoated iron cookware and elemental iron supplements",    
-        source: "Non-reactive ceramic or 304/316 stainless steel cookware"    
-    },    
-    {    
-        num: "12",    
-        title: "Natural Anti-Inflammatory Triad vs Steroids",    
-        mechanism: "Deploy a synergistic natural protocol of D3+K2, low-carb nutrition, and fasting to replace synthetic corticosteroid dependence.",    
-        action: "Execute the natural anti-inflammatory triad protocol daily",    
-        source: "Direct sunlight, healthy animal/fruit fats, structured fasting"    
-    }    
-];
-// Carousel state: default to today's index    
-        let currentSlideIndex = (now.getDate() - 1) % infiniteEnduranceProtocols.length;  
-
-        function renderCarousel() {
-            const slideContainer = document.getElementById('carouselSlideContent');
-            const dotsContainer = document.getElementById('carouselDots');
-            const slide = tacticsData[currentSlide];
-
-            if (slideContainer) {
-                slideContainer.innerHTML = `
-                    <div class="animate-fadeIn">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="bg-[#8B0000] text-white font-mono text-xs font-black px-2 py-0.5 rounded">TACTIC ${slide.num}</span>
-                            <span class="font-mono text-xs text-slate-500 font-bold">${currentSlide + 1} / 12</span>
-                        </div>
-                        <h3 class="text-xl sm:text-2xl font-black text-news-ink mb-2">${slide.title}</h3>
-                        <p class="text-sm sm:text-base font-serif text-slate-700 leading-relaxed">${slide.desc}</p>
-                    </div>
-                `;
-            }
-
-            if (dotsContainer) {
-                dotsContainer.innerHTML = tacticsData.map((_, idx) => `
-                    <button onclick="goToSlide(${idx})" class="w-2.5 h-2.5 rounded-full transition ${idx === currentSlide ? 'bg-news-winered w-6' : 'bg-slate-300 hover:bg-slate-400'}"></button>
-                `).join('');
-            }
-        }
-
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % tacticsData.length;
-            renderCarousel();
-        }
-
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + tacticsData.length) % tacticsData.length;
-            renderCarousel();
-        }
-
-        function goToSlide(index) {
-            currentSlide = index;
-            renderCarousel();
-        }
-
-        // B1 Switcher
+        }    
+    
+        // 12 Infinite Endurance Protocols Data    
+        const infiniteEnduranceProtocols = [    
+            {    
+                num: "01",    
+                title: "Cortisol & Vitamin D3+K2 Restructuring",    
+                mechanism: "Use high-dose D3 to replace synthetic cortisol for anti-inflammation, supplemented with K2 to prevent calcium from misdepositing into blood vessels. Replenish daily.",    
+                action: "Daily D3 10,000-40,000 IU + K2 (100mcg K2 per 10k IU D3)",    
+                source: "Sunlight, Egg Yolks, Sardines, Fermented Foods"    
+            },    
+            {    
+                num: "02",    
+                title: "Allergen Clean Cut + Extended Fasting",    
+                mechanism: "Gluten and casein represent the biggest 'junk signals' for the immune system; extended fasting can reset it.",    
+                action: "Completely abstain from flour & dairy products + regular extended fasting",    
+                source: "Gluten-Free Grains, Coconut Oil, Avocados"    
+            },    
+            {    
+                num: "03",    
+                title: "Latent Virus Comprehensive Suppression",    
+                mechanism: "Whole-food Vitamin C + herbal antimicrobials keep latent viruses suppressed.",    
+                action: "Whole-Food Vitamin C + Raw Garlic",    
+                source: "Kiwifruit, Peppers, Garlic"    
+            },    
+            {    
+                num: "04",    
+                title: "Gut Mucosal Deep Maintenance",    
+                mechanism: "Zinc L-carnosine repairs ulcers, while fermented sauerkraut replenishes probiotics and chlorophyll.",    
+                action: "Daily Fermented Sauerkraut + Zinc L-carnosine + Absolutely ZERO seed oils",    
+                source: "Homemade Sauerkraut, Bone Broth, Pumpkin Seeds"    
+            },    
+            {    
+                num: "05",    
+                title: "Insulin Clearance + Intermittent Fasting",    
+                mechanism: "Constant snacking drives insulin resistance; fasting is required to activate antioxidant networks.",    
+                action: "Practice 16/8 or 20/4 Intermittent Fasting",    
+                source: "Healthy Fats, Leafy Greens, Quality Proteins"    
+            },    
+            {    
+                num: "06",    
+                title: "Old Injury Scar Inflammation Blockade",    
+                mechanism: "Curcumin and nettle root quell chronic mechanical inflammation caused by old injuries.",    
+                action: "High-Quality Curcumin + Nettle Root",    
+                source: "Fresh Turmeric, Tender Nettle Leaves (blanched)"    
+            },    
+            {    
+                num: "07",    
+                title: "Bile Duct Sludge Clearance · Dandelion Greens",    
+                mechanism: "Dandelion leaves facilitate bile flow and clear bile duct sludge.",    
+                action: "10g+ dried leaves brewed daily as tea / decoction; or blanched fresh leaves in soups.",    
+                source: "TCM Herbal Shops; fresh organic leaves in spring"    
+            },    
+            {    
+                num: "08",    
+                title: "Vitamin D3 Cancer Recurrence Defense Line",    
+                mechanism: "Maintain high serum D3 concentrations to erase internal inflammation maps and stop tumor metastasis targets.",    
+                action: "Maintain high serum D3 levels daily",    
+                source: "Sunlight, Sardines, Egg Yolks, Mushrooms"    
+            },    
+            {    
+                num: "09",    
+                title: "Omega-3/6 Ratio Reshaping",    
+                mechanism: "Soybean and canola oils are Omega-6 bombs; heavy EPA/DHA supplementation is required to quell inflammation.",    
+                action: "Deep-sea fish oil or direct consumption of sardines + Extra Virgin Olive Oil",    
+                source: "Deep-Sea Fish, Sardines, Chia Seeds, Walnuts, Olive Oil"    
+            },    
+            {    
+                num: "10",    
+                title: "Environmental Toxin Autophagy Clearance",    
+                mechanism: "Plastic chemicals act as chronic toxins; fasting triggers cellular autophagy to clear cellular trash.",    
+                action: "Minimize plastic contact + regular fasting to activate autophagy",    
+                source: "Whole Foods, Glass or Stainless Steel Containers"    
+            },    
+            {    
+                num: "11",    
+                title: "Iron Overload & Liver Fibrosis Shielding",    
+                mechanism: "Excess iron fuels liver inflammation while feeding pathogenic bacteria.",    
+                action: "Avoid iron cookware / Teflon pans and elemental iron supplements",    
+                source: "Switch to Ceramic or Stainless Steel Cookware"    
+            },    
+            {    
+                num: "12",    
+                title: "Natural Arsenal Replacing Steroids",    
+                mechanism: "Use D3 + K2 + Low-Carb + Fasting to replace synthetic steroids naturally.",    
+                action: "Execute natural anti-inflammatory triple protocol",    
+                source: "Sunlight, Healthy Fats, Fasting"    
+            }    
+        ];    
+    
+        let currentSlideIndex = (now.getDate() - 1) % infiniteEnduranceProtocols.length;    
+    
+        function renderCarousel() {    
+            const proto = infiniteEnduranceProtocols[currentSlideIndex];    
+            const contentEl = document.getElementById('carouselSlideContent');    
+            const counterEl = document.getElementById('carouselCounter');    
+                
+            if (counterEl) {    
+                counterEl.textContent = `${proto.num} / ${infiniteEnduranceProtocols.length}`;    
+            }    
+    
+            if (contentEl) {    
+                contentEl.innerHTML = `    
+                    <div class="space-y-3">    
+                        <div class="flex items-center gap-2">    
+                            <span class="bg-news-red text-white font-mono text-xs sm:text-sm font-black px-2 py-0.5 rounded">Tactic ${proto.num}</span>    
+                            <h3 class="font-serif font-black text-xl sm:text-2xl text-news-ink leading-snug">${proto.title}</h3>    
+                        </div>    
+                        <p class="font-serif text-base sm:text-lg text-news-subtle leading-relaxed border-l-2 border-slate-300 pl-3">    
+                            ${proto.mechanism}    
+                        </p>    
+                        <div class="bg-amber-50 border-l-4 border-news-winered p-3.5 my-2 text-sm sm:text-base font-serif">    
+                            <div class="font-mono font-bold text-news-winered uppercase mb-0.5">Daily Execution SOP:</div>    
+                            <div class="font-bold text-news-ink">${proto.action}</div>    
+                        </div>    
+                        <div class="text-xs sm:text-sm font-mono text-news-subtle">    
+                            <strong>Natural Supplement Sources:</strong> ${proto.source}    
+                        </div>    
+                    </div>    
+                `;    
+            }    
+    
+            const dotsEl = document.getElementById('carouselDots');    
+            if (dotsEl) {    
+                dotsEl.innerHTML = infiniteEnduranceProtocols.map((p, idx) => `    
+                    <button onclick="goToSlide(${idx})" class="w-6.5 h-6.5 rounded text-xs font-mono font-bold border transition ${    
+                        idx === currentSlideIndex     
+                            ? 'bg-news-winered text-white border-news-winered scale-110 shadow'     
+                            : 'bg-white text-news-ink border-news-ink hover:bg-slate-100'    
+                    }" title="${p.num}. ${p.title}">    
+                        ${p.num}    
+                    </button>    
+                `).join('');    
+            }    
+        }    
+    
+        function prevSlide() {    
+            currentSlideIndex = (currentSlideIndex - 1 + infiniteEnduranceProtocols.length) % infiniteEnduranceProtocols.length;    
+            renderCarousel();    
+        }    
+    
+        function nextSlide() {    
+            currentSlideIndex = (currentSlideIndex + 1) % infiniteEnduranceProtocols.length;    
+            renderCarousel();    
+        }    
+    
+        function goToSlide(idx) {    
+            currentSlideIndex = idx;    
+            renderCarousel();    
+        }    
+    
         function showB1FeatureCard(cardNum) {
-            const card1 = document.getElementById('b1-feature-card-1');
-            const card2 = document.getElementById('b1-feature-card-2');
-            const btn1 = document.getElementById('btn-b1-deck-1');
-            const btn2 = document.getElementById('btn-b1-deck-2');
-
-            if (cardNum === 1) {
-                card1.classList.remove('hidden');
-                card2.classList.add('hidden');
-                btn1.className = "px-3.5 py-1.5 rounded font-bold border transition bg-[#8B0000] text-white border-[#8B0000] shadow-sm flex items-center gap-1.5";
-                btn2.className = "px-3.5 py-1.5 rounded font-bold border transition bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200 flex items-center gap-1.5";
-            } else {
-                card1.classList.add('hidden');
-                card2.classList.remove('hidden');
-                btn2.className = "px-3.5 py-1.5 rounded font-bold border transition bg-[#8B0000] text-white border-[#8B0000] shadow-sm flex items-center gap-1.5";
-                btn1.className = "px-3.5 py-1.5 rounded font-bold border transition bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200 flex items-center gap-1.5";
+            for (let i = 1; i <= 2; i++) {
+                const card = document.getElementById(`b1-feature-card-${i}`);
+                const btn = document.getElementById(`btn-b1-deck-${i}`);
+                if (card) {
+                    if (i === cardNum) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                }
+                if (btn) {
+                    if (i === 1) {
+                        btn.className = (cardNum === 1)
+                            ? "px-3.5 py-1.5 rounded font-bold border transition bg-[#8B0000] text-white border-[#8B0000] shadow-sm flex items-center gap-1.5"
+                            : "px-3.5 py-1.5 rounded font-bold border transition bg-rose-50 text-rose-900 border-rose-300 hover:bg-rose-100 flex items-center gap-1.5";
+                    } else if (i === 2) {
+                        btn.className = (cardNum === 2)
+                            ? "px-3.5 py-1.5 rounded font-bold border transition bg-[#0F172A] text-white border-[#0F172A] shadow-sm flex items-center gap-1.5"
+                            : "px-3.5 py-1.5 rounded font-bold border transition bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200 flex items-center gap-1.5";
+                    }
+                }
             }
         }
+        window.showB1FeatureCard = showB1FeatureCard;
 
-        // Sub-topic Switcher
+        const subTopicStyles = {
+            1: { active: "px-2.5 py-1 font-bold rounded bg-amber-700 text-white border border-amber-800 shadow-sm ring-2 ring-amber-400", inactive: "px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition" },
+            2: { active: "px-2.5 py-1 font-bold rounded bg-emerald-700 text-white border border-emerald-800 shadow-sm ring-2 ring-emerald-400", inactive: "px-2.5 py-1 font-bold rounded bg-emerald-50 text-emerald-950 border border-emerald-300 hover:bg-emerald-100 transition" },
+            3: { active: "px-2.5 py-1 font-bold rounded bg-orange-700 text-white border border-orange-800 shadow-sm ring-2 ring-orange-400", inactive: "px-2.5 py-1 font-bold rounded bg-orange-50 text-orange-950 border border-orange-300 hover:bg-orange-100 transition" },
+            4: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-rose-400", inactive: "px-2.5 py-1 font-bold rounded bg-rose-50 text-rose-950 border border-rose-300 hover:bg-rose-100 transition" },
+            5: { active: "px-2.5 py-1 font-bold rounded bg-sky-800 text-white border border-sky-900 shadow-sm ring-2 ring-sky-400", inactive: "px-2.5 py-1 font-bold rounded bg-sky-50 text-sky-950 border border-sky-300 hover:bg-sky-100 transition" },
+            6: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" },
+            7: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-cyan-400", inactive: "px-2.5 py-1 font-bold rounded bg-cyan-50 text-cyan-950 border border-cyan-300 hover:bg-cyan-100 transition" },
+            8: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" }
+        };
+
         function switchOldA1SubTopic(topicNum) {
             for (let i = 1; i <= 8; i++) {
-                const topicEl = document.getElementById(`sub-a1-topic-${i}`);
-                const btnEl = document.getElementById(`sub-a1-btn-${i}`);
-                if (topicEl) {
+                const topic = document.getElementById(`sub-a1-topic-${i}`);
+                const btn = document.getElementById(`sub-a1-btn-${i}`);
+                if (topic) {
                     if (i === topicNum) {
-                        topicEl.classList.remove('hidden');
+                        topic.classList.remove('hidden');
                     } else {
-                        topicEl.classList.add('hidden');
+                        topic.classList.add('hidden');
                     }
                 }
-                if (btnEl) {
+                if (btn && subTopicStyles[i]) {
                     if (i === topicNum) {
-                        btnEl.className = "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400";
+                        btn.className = subTopicStyles[i].active;
                     } else {
-                        btnEl.className = "px-2.5 py-1 font-bold rounded bg-slate-100 text-slate-800 border border-slate-300 hover:bg-slate-200 transition";
+                        btn.className = subTopicStyles[i].inactive;
                     }
                 }
             }
         }
+        window.switchOldA1SubTopic = switchOldA1SubTopic;
 
-        // Interactive Tongue Diagnostic Score Calculation
-        function calculateLeakScore() {
-            const chk1 = document.getElementById('chk-1').checked;
-            const chk2 = document.getElementById('chk-2').checked;
-            const diagStatus = document.getElementById('diagStatus');
-            const diagDesc = document.getElementById('diagDesc');
-
-            if (!chk1 && !chk2) {
-                diagStatus.innerText = "Select symptoms above to begin assessment";
-                diagStatus.className = "font-serif font-black text-2xl sm:text-3xl text-news-ink my-2";
-                diagDesc.innerText = "Unlock tailored anti-inflammatory tactics and detailed analysis.";
-            } else if (chk1 && !chk2) {
-                diagStatus.innerText = "LEAKAGE INDEX: MODERATE (Scalloped Margin)";
-                diagStatus.className = "font-serif font-black text-2xl sm:text-3xl text-amber-700 my-2";
-                diagDesc.innerText = "Teeth marks indicate spleen dampness, cellular fluid retention, and reduced membrane integrity. Focus on gut tight junction repair and electrolyte balance!";
-            } else if (!chk1 && chk2) {
-                diagStatus.innerText = "LEAKAGE INDEX: MODERATE (Thick Tongue Base)";
-                diagStatus.className = "font-serif font-black text-2xl sm:text-3xl text-amber-700 my-2";
-                diagDesc.innerText = "Thick coating at the base points to gut stagnation and microbial imbalance. Immediately initiate the 60-second Kefir reset and fiber clearance!";
+        function initGsapHud() {
+            const hasGsap = typeof gsap !== 'undefined';
+            if (hasGsap) {
+                gsap.to('#atpProgressBar', {
+                    width: '85%',
+                    duration: 1.8,
+                    ease: 'elastic.out(1, 0.4)',
+                    delay: 0.3
+                });
+                gsap.to('#crpProgressBar', {
+                    width: '25%',
+                    duration: 1.5,
+                    ease: 'elastic.out(1, 0.4)',
+                    delay: 0.5
+                });
+                const atpObj = { val: 0 };
+                gsap.to(atpObj, {
+                    val: 185,
+                    duration: 1.6,
+                    ease: 'power2.out',
+                    onUpdate: function () {
+                        const el = document.getElementById('atpValText');
+                        if (el) el.textContent = `+${Math.round(atpObj.val)}%`;
+                    }
+                });
+                const crpObj = { val: 0 };
+                gsap.to(crpObj, {
+                    val: -78,
+                    duration: 1.4,
+                    ease: 'power2.out',
+                    onUpdate: function () {
+                        const el = document.getElementById('crpValText');
+                        if (el) el.textContent = `${Math.round(crpObj.val)}%`;
+                    }
+                });
             } else {
-                diagStatus.innerText = "LEAKAGE INDEX: HIGH (Systemic Micro-Leakage)";
-                diagStatus.className = "font-serif font-black text-2xl sm:text-3xl text-red-700 my-2";
-                diagDesc.innerText = "Dual indicators point to gut dysbiosis and mucosal barrier compromise. Immediately execute the 24-hour toxin purge and complete whole food swap!";
+                const atp = document.getElementById('atpProgressBar');
+                const crp = document.getElementById('crpProgressBar');
+                if (atp) atp.style.width = '85%';
+                if (crp) crp.style.width = '25%';
             }
         }
 
-        // Navigation Scroll Helper
-        function scrollToSection(id) {
-            const el = document.getElementById(id);
-            if (el) {
-                el.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // GSAP Hud Bounce & Progress Bar Animation
         function triggerGsapHudBounce() {
-            const container = document.getElementById('gsapHudContainer');
-            if (container) {
-                container.classList.add('bouncing');
-                setTimeout(() => container.classList.remove('bouncing'), 700);
+            if (typeof gsap !== 'undefined') {
+                gsap.timeline()
+                    .to('#gsapHudContainer', { scale: 0.96, duration: 0.1, ease: 'power1.in' })
+                    .to('#gsapHudContainer', { scale: 1.03, duration: 0.3, ease: 'elastic.out(1.2, 0.4)' })
+                    .to('#gsapHudContainer', { scale: 1, duration: 0.2, ease: 'power1.out' });
             }
         }
+        window.triggerGsapHudBounce = triggerGsapHudBounce;
 
-        function initGsapBars() {
-            const atpBar = document.getElementById('atpProgressBar');
-            const crpBar = document.getElementById('crpProgressBar');
-            if (atpBar) atpBar.style.width = '85%';
-            if (crpBar) crpBar.style.width = '78%';
+        let hudSeconds = 252;
+        setInterval(() => {
+            hudSeconds++;
+            const m = String(Math.floor(hudSeconds / 60)).padStart(2, '0');
+            const s = String(hudSeconds % 60).padStart(2, '0');
+            const timerEl = document.getElementById('gsapFpsTimer');
+            if (timerEl) {
+                timerEl.textContent = `00:${m}:${s} / 60 FPS`;
+            }
+        }, 1000);
+
+        function copyToClipboard(elementId, toastId) {
+            const el = document.getElementById(elementId);
+            const toast = document.getElementById(toastId);
+            if (!el) return;
+            const text = el.innerText || el.textContent;
+            navigator.clipboard.writeText(text.trim()).then(() => {
+                if (toast) {
+                    toast.classList.remove('hidden');
+                    setTimeout(() => {
+                        toast.classList.add('hidden');
+                    }, 2500);
+                }
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
         }
+        window.copyToClipboard = copyToClipboard;
 
-        // Print Helper
-        function triggerPrintWithNotice() {
-            window.print();
-        }
-
-        // Window Load Initialization
-        window.onload = function() {
-            renderCarousel();
-            initGsapBars();
-        };
-    </script>
+        function initB2DailyUpdate() {    
+            const titleEl = document.getElementById('b2DailyTitle');    
+            const summaryEl = document.getElementById('b2DailySummary');    
+                
+            if (titleEl) titleEl.textContent = "LAYER 02 / BASE: Detox & Clearance (Gut Barrier - Fermented Raw Cabbage / Cauliflower Mash / Cooked Tomatoes / Scallions & Garlic) ★ Today's Focus";    
+            if (summaryEl) summaryEl.textContent = "Today's Focus: Gut mucosal repair! Fermented vegetables and cruciferous plants suppress LPS endotoxins, repair Tight Junctions, and block systemic chronic inflammation!";    
+    
+            const card = document.getElementById('b2-tier-2-card');    
+            const badge = document.getElementById('b2-badge-tier-2');    
+            if (card && badge) {    
+                card.classList.add('ring-4', 'ring-[#8B0000]', 'bg-amber-50/50');    
+                badge.classList.remove('hidden');    
+            }    
+        }    
+    
+        function calculateLeakScore() {    
+            const c1 = document.getElementById('chk-1')?.checked;    
+            const c2 = document.getElementById('chk-2')?.checked;    
+    
+            const count = (c1 ? 1 : 0) + (c2 ? 1 : 0);    
+                
+            const statusEl = document.getElementById('diagStatus');    
+            const descEl = document.getElementById('diagDesc');    
+    
+            if (!statusEl || !descEl) return;    
+    
+            if (count === 0) {    
+                statusEl.textContent = "No Significant 'Leakage' Characteristics Found (48%)";    
+                statusEl.className = "font-serif font-black text-2xl sm:text-3xl text-emerald-700 my-2";    
+                descEl.textContent = "Excellent vitality! Maintain your current anti-inflammatory lifestyle and continue avoiding seed oils and processed toxins.";    
+            } else if (count === 1) {    
+                statusEl.textContent = "ALERT: Engine is Experiencing Mild-to-Moderate 'Leakage' (48%)";    
+                statusEl.className = "font-serif font-black text-2xl sm:text-3xl text-orange-700 my-2";    
+                descEl.textContent = "Mitochondrial membrane affected by seed oils or inflammatory toxins. Recommend stopping vegetable oils immediately and switching to grass-fed tallow and virgin olive oil.";    
+            } else {    
+                statusEl.textContent = "EXTREME RISK: Comprehensive Metabolic Alert (98%)";    
+                statusEl.className = "font-serif font-black text-2xl sm:text-3xl text-news-winered my-2 animate-pulse";    
+                descEl.textContent = "Systemic inflammation overload! Please proceed to 'Your Body Never Lies Check Page' to reference the 9 tongue coating patterns. ⚠️ Reminder: Personal diagnostic results will not be saved upon refreshing; please print to archive in time!";    
+            }    
+        }    
+    
+        renderCarousel();    
+        initB2DailyUpdate();    
+        initGsapHud();    
+    </script>    
 </body>    
 </html>
