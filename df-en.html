@@ -1242,69 +1242,93 @@
         // Initialize Lucide Icons
         lucide.createIcons();
 
-        // 12 Anti-Inflammatory Tactics Carousel Data
-        const tacticsData = [
-            {
-                num: "01",
-                title: "Seed Oil Purge & Pure Fats",
-                desc: "Eliminate industrial seed oils (canola, soybean, corn, sunflower). Replace immediately with Cold-Pressed Extra Virgin Olive Oil (EVOO), 100% Grass-Finished Beef Tallow, or Cold-Pressed Lard."
-            },
-            {
-                num: "02",
-                title: "100% Grass-Finished Beef & Organ Fuel",
-                desc: "Prioritize 100% grass-finished beef rich in Omega-3s, CLA, heme iron, and bioavailable zinc over grain-fed alternatives."
-            },
-            {
-                num: "03",
-                title: "Active Probiotic & Fermented Foods",
-                desc: "Incorporate unsweetened plain Kefir, raw sauerkraut, and wild fermented vegetables to rebuild gut microbial diversity and elevate SCFA production."
-            },
-            {
-                num: "04",
-                title: "Morning Solar & Circadian Alignment",
-                desc: "Expose your eyes and skin to early morning sunlight within 30 minutes of waking to anchor cortisol rhythms and optimize mitochondrial ATP output."
-            },
-            {
-                num: "05",
-                title: "Cold Copper Hydration & Micro-Filtration",
-                desc: "Filter tap water using micro-pore systems and drink from pure unlined copper vessels to eliminate microplastics and heavy metals."
-            },
-            {
-                num: "06",
-                title: "Scar Tissue & Fascia Remodeling",
-                desc: "Deploy targeted deep-tissue fascia work and proteolytic enzymes to soften keloid scar tissue, restore lymphatic flow, and enhance microcirculation."
-            },
-            {
-                num: "07",
-                title: "Eliminate GMO & Glyphosate Vectors",
-                desc: "Rigorously replace commercial GMO crops, seedless hybrids, and glyphosate-sprayed grains with organic heirloom varieties."
-            },
-            {
-                num: "08",
-                title: "Raw Whole Food Polyphenol Matrix",
-                desc: "Consume wild berries, dark pomegranates, arugula, and raw cacao rich in quercetin, apigenin, and resveratrol."
-            },
-            {
-                num: "09",
-                title: "PFAS Cookware & Plastic Eradication",
-                desc: "Purge Teflon/non-stick cookware and plastic storage containers. Switch completely to 316 stainless steel, cast iron, and glass."
-            },
-            {
-                num: "10",
-                title: "Restorative Sleep & Glymphatic Clearance",
-                desc: "Ensure 7–9 hours of dark, cool sleep to activate central nervous system glymphatic drainage and metabolic waste clearance."
-            },
-            {
-                num: "11",
-                title: "Progressive Resistance & Muscle Biomass",
-                desc: "Engage in compound resistance training 3–4 times weekly to enhance insulin sensitivity, myokine secretion, and glucose disposal."
-            },
-            {
-                num: "12",
-                title: "Targeted Stress & Vagus Nerve Activation",
-                desc: "Practice physiological sighing, cold exposure, and deep diaphragmatic breathing to stimulate vagal tone and downregulate NF-kB inflammatory pathways."
-            }
-        ];
+// 12 Infinite Endurance Protocols Data (100% English Version)
+const infiniteEnduranceProtocols = [    
+    {    
+        num: "01",    
+        title: "Cortisol & Vitamin D3+K2 Reconstruction",    
+        mechanism: "Use high-dose Vitamin D3 to replace synthetic corticosteroids for anti-inflammation, paired with K2 to prevent calcium deposition in arterial walls. Supplement daily.",    
+        action: "Daily D3 10,000–40,000 IU + K2 (100mcg K2 per 10,000 IU D3)",    
+        source: "Sunlight exposure, egg yolks, sardines, fermented foods"    
+    },    
+    {    
+        num: "02",    
+        title: "Complete Allergen Elimination + Extended Fasting",    
+        mechanism: "Gluten and casein act as primary systemic triggers for immune dysfunction. Extended fasting resets gut immune sensitivity.",    
+        action: "Strict elimination of refined flour and dairy products + regular prolonged fasting protocols",    
+        source: "Gluten-free grains, extra virgin coconut oil, avocados"    
+    },    
+    {    
+        num: "03",    
+        title: "Latent Viral Suppression Defense",    
+        mechanism: "Whole-food Vitamin C paired with natural botanical antimicrobials to suppress dormant viral reactivity.",    
+        action: "Whole-food Vitamin C + raw crushed garlic daily",    
+        source: "Kiwifruit, hot peppers, fresh raw garlic"    
+    },    
+    {    
+        num: "04",    
+        title: "Deep Gut Mucosal Barrier Repair",    
+        mechanism: "Zinc L-carnosine repairs mucosal ulcerations, while raw fermented vegetables restore beneficial probiotic strains and active chlorophyll.",    
+        action: "Daily unpasteurized sauerkraut/kimchi + Zinc L-carnosine + 100% elimination of seed oils",    
+        source: "Home-fermented sauerkraut, authentic bone broth, raw pumpkin seeds"    
+    },    
+    {    
+        num: "05",    
+        title: "Insulin Clearance + Intermittent Fasting",    
+        mechanism: "Frequent snacking drives chronic hyperinsulinemia and insulin resistance. Fasting activates endogenous antioxidant pathways.",    
+        action: "Implement 16/8 or 20/4 Time-Restricted Feeding (TRF) daily",    
+        source: "Healthy fats, leafy green vegetables, high-quality proteins"    
+    },    
+    {    
+        num: "06",    
+        title: "Scar Tissue & Chronic Inflammatory Invalidation",    
+        mechanism: "Bioavailable curcumin and stinging nettle root quell localized mechanical inflammation in old scar tissue.",    
+        action: "High-potency bioavailable curcumin extract + nettle root supplementation",    
+        source: "Fresh turmeric root, blanched young nettle leaves"    
+    },    
+    {    
+        num: "07",    
+        title: "Biliary Sludge Clearance · Dandelion Leaf",    
+        mechanism: "Dandelion leaf possesses traditional bitter and choleretic properties, stimulating bile flow to flush out sluggish biliary sludge.",    
+        action: "10g+ dried leaf decoction/tea daily or blanched fresh leaves in soups/salads",    
+        source: "Herbal apothecaries, organic markets, or fresh home-grown leaves"    
+    },    
+    {    
+        num: "08",    
+        title: "Vitamin D3 Recurrence Line of Defense",    
+        mechanism: "Maintain optimal serum 25(OH)D levels to dissolve systemic inflammatory terrain and hinder metastatic cellular signaling.",    
+        action: "Maintain elevated circulating serum Vitamin D3 levels consistently year-round",    
+        source: "Midday sun exposure, wild sardines, pasture-raised egg yolks, mushrooms"    
+    },    
+    {    
+        num: "09",    
+        title: "Omega-3/6 Ratio Optimization",    
+        mechanism: "Soybean and canola oils flood cells with pro-inflammatory Omega-6. High-dose EPA/DHA resolves inflammatory cascades.",    
+        action: "Concentrated deep-sea fish oil or whole wild sardines + Extra Virgin Olive Oil (EVOO)",    
+        source: "Wild fatty fish, sardines, chia seeds, walnuts, cold-pressed EVOO"    
+    },    
+    {    
+        num: "10",    
+        title: "Environmental Toxin Autophagy Flush",    
+        mechanism: "Plasticizers and synthetic chemicals accumulate as persistent toxins. Fasting triggers autophagic cellular cleanup.",    
+        action: "Adopt plastic-free living protocols + periodic extended fasting to initiate deep autophagy",    
+        source: "Whole unprocessed foods, glass or 316 stainless steel food containers"    
+    },    
+    {    
+        num: "11",    
+        title: "Iron Overload & Hepatic Fibrosis Shield",    
+        mechanism: "Excess free iron acts as a potent pro-oxidant catalyst for hepatic inflammation while fueling opportunistic pathogens.",    
+        action: "Strictly avoid non-stick/uncoated iron cookware and elemental iron supplements",    
+        source: "Non-reactive ceramic or 304/316 stainless steel cookware"    
+    },    
+    {    
+        num: "12",    
+        title: "Natural Anti-Inflammatory Triad vs Steroids",    
+        mechanism: "Deploy a synergistic natural protocol of D3+K2, low-carb nutrition, and fasting to replace synthetic corticosteroid dependence.",    
+        action: "Execute the natural anti-inflammatory triad protocol daily",    
+        source: "Direct sunlight, healthy animal/fruit fats, structured fasting"    
+    }    
+];
 
         let currentSlide = 0;
 
