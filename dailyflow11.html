@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抗炎日報 DAILY FLOW · 第11日特刊 - 咪撚再一粒過混吞！補劑 Timing 生物駭客市井踢爆</title>
+    <meta name="description" content="抗炎日報 DAILY FLOW 第11日：踢爆一粒過吞補劑智商稅！市井廣東話拆解脂溶性D3與魚油、鐵質咖啡因死敵互斥、鋅植酸阻斷及鎂分拆劑量四大命門。" />
+
+    <!-- OpenGraph Metadata -->
+    <meta property="og:title" content="抗炎日報 DAILY FLOW · 第11日特刊 - 咪撚再一粒過混吞！">
+    <meta property="og:description" content="抗炎日報 DAILY FLOW 第11日：市井廣東話踢爆一粒過混吞智商稅，奪回生物能量主權！">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://magasite.pages.dev/dailyflow11.html">
+    <meta property="og:image" content="https://magasite.pages.dev/images/df.jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="抗炎日報 DAILY FLOW 第11日封面">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://magasite.pages.dev/images/df.jpeg">
+
+    <!-- Safe WebSocket & HMR Sandbox Guard -->
+    <script>
+      (function () {
+        var OriginalWebSocket = window.WebSocket;
+        if (OriginalWebSocket) {
+          function SafeWebSocket(url, protocols) {
+            var isViteHmr =
+              (typeof protocols === 'string' && protocols.indexOf('vite-hmr') !== -1) ||
+              (Array.isArray(protocols) && protocols.indexOf('vite-hmr') !== -1) ||
+              (typeof url === 'string' && (url.indexOf('vite-hmr') !== -1 || url.indexOf(':3000') !== -1));
+            if (isViteHmr) {
+              var listeners = {};
+              var mockSocket = {
+                binaryType: 'blob',
+                bufferedAmount: 0,
+                extensions: '',
+                protocol: 'vite-hmr',
+                readyState: 1,
+                url: String(url),
+                CONNECTING: 0,
+                OPEN: 1,
+                CLOSING: 2,
+                CLOSED: 3,
+                send: function () {},
+                close: function () { mockSocket.readyState = 3; },
+                addEventListener: function (type, fn) {
+                  listeners[type] = listeners[type] || [];
+                  listeners[type].push(fn);
+                },
+                removeEventListener: function () {},
+                dispatchEvent: function () { return true; },
+              };
+              return mockSocket;
+            }
+            return new OriginalWebSocket(url, protocols);
+          }
+          SafeWebSocket.prototype = OriginalWebSocket.prototype;
+          SafeWebSocket.CONNECTING = OriginalWebSocket.CONNECTING;
+          SafeWebSocket.OPEN = OriginalWebSocket.OPEN;
+          SafeWebSocket.CLOSING = OriginalWebSocket.CLOSING;
+          SafeWebSocket.CLOSED = OriginalWebSocket.CLOSED;
+          window.WebSocket = SafeWebSocket;
+        }
+      })();
+    </script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&family=Noto+Serif+TC:wght@600;700;900&family=JetBrains+Mono:wght@700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Noto Serif TC', 'Plus Jakarta Sans', serif;
+            background-color: #F6F1E8;
+            color: #111827;
+            margin: 0;
+            padding: 0;
+        }
+        .font-sans-ui {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .newspaper-container {
+            max-width: 960px;
+            margin: 1.5rem auto;
+            background-color: #FFFDF9;
+            border: 3px solid #111827;
+            box-shadow: 6px 6px 0px #111827;
+        }
+        .newspaper-masthead {
+            border-bottom: 3px double #111827;
+        }
+        .headline-stamp {
+            display: inline-block;
+            border: 2px solid #B91C1C;
+            color: #B91C1C;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            transform: rotate(-1.5deg);
+        }
+        .double-border-bottom {
+            border-bottom: 3px double #111827;
+        }
+        .double-border-top {
+            border-top: 3px double #111827;
+        }
+        .gs-btn-yellow {
+            background-color: #FACC15;
+            color: #111827;
+            border: 2.5px solid #111827;
+            box-shadow: 3px 3px 0px #111827;
+            font-weight: 900;
+            transition: all 0.15s ease-in-out;
+        }
+        .gs-btn-yellow:hover {
+            background-color: #FDE047;
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px #111827;
+        }
+        .gs-btn-yellow:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #111827;
+        }
+    </style>
+</head>
+<body class="p-2 sm:p-4 md:p-6 font-sans-ui">
+
+    <div class="newspaper-container p-4 sm:p-6 md:p-8 space-y-6">
+
+        <!-- 1. 報頭頂欄 (Masthead Top Strip) -->
+        <div class="flex flex-wrap items-center justify-between text-xs font-mono font-black border-b-2 border-[#111827] pb-2 gap-2">
+            <div class="flex items-center gap-2">
+                <span class="bg-[#B91C1C] text-white px-2 py-0.5 uppercase tracking-wider">MAGA PROTOCOL</span>
+                <span>第 11 期 · 每日抗炎生活指南</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span>出刊日期：2026年10月23日</span>
+                <span>香港版 ‧ 兩次抗癌幸存者視角</span>
+            </div>
+        </div>
+
+        <!-- 2. 大報頭 (Newspaper Masthead) -->
+        <header class="text-center newspaper-masthead pb-4 space-y-2">
+            <div class="flex items-center justify-center gap-2">
+                <span class="text-xs sm:text-sm font-mono font-black tracking-widest text-slate-700 uppercase">
+                    BIOLOGICAL SOVEREIGNTY ‧ 踢爆毒素偽術 ‧ 奪回身體主權
+                </span>
+            </div>
+            <h1 class="text-5xl sm:text-7xl md:text-8xl font-black text-[#111827] tracking-tight leading-none font-serif py-1">
+                抗炎日報
+            </h1>
+            <div class="text-sm sm:text-base md:text-lg font-mono font-black tracking-widest text-[#B91C1C] uppercase">
+                DAILY FLOW · DAY 11 SPECIAL // PREM 22 市井踢爆精華版 (20% TEASER)
+            </div>
+
+            <!-- 免責與導航條 -->
+            <div class="border-y-2 border-[#111827] bg-[#FEF9C3] py-2 px-3 text-xs font-bold flex flex-wrap items-center justify-between gap-2 text-left">
+                <span class="text-[#854D0E]">
+                    ⚠️ <strong>白兵宣告：</strong>純屬個人抗炎經驗，唔係醫療診斷。咪再畀商業銷售當水魚洗腦！
+                </span>
+                <div class="flex items-center gap-2">
+                    <a href="day-10.html" class="underline hover:text-black font-black">第10日對照表 ↗</a>
+                    <span>|</span>
+                    <a href="index.html" class="underline hover:text-black font-black">MAGASite 物資庫 ↗</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- 3. 頭條大字報 (Main Headline) -->
+        <section class="space-y-4">
+            <div class="flex items-center gap-2">
+                <span class="headline-stamp text-xs sm:text-sm">【今日頭條 · 市井開片】</span>
+                <span class="font-mono text-xs font-black text-slate-500">CRON JOB 排程 ✕ MUTEX LOCK 互斥</span>
+            </div>
+
+            <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-[#111827] leading-tight font-serif">
+                咪撚再好似水魚咁一粒過混吞！<br>
+                <span class="bg-[#FACC15] px-2 py-0.5 inline-block mt-1 border-2 border-[#111827] shadow-[3px_3px_0px_#111827]">
+                    食錯 Timing 同阻斷食物，等於倒錢落咸水海兼爛胃！
+                </span>
+            </h2>
+
+            <p class="text-sm sm:text-base font-bold text-slate-800 leading-relaxed border-l-4 border-[#B91C1C] pl-3 py-1">
+                聽住！出面成班健康 KOL 同藥廠 sale 屎最鍾意同你講「每日食一把維他命好自律」。DLLM，你條腸胃係精華受體，唔撚係垃圾桶！
+                你邊飲黑咖啡邊食鐵質、空腹配杯凍水吞 D3，身體完全吸唔到不突止，仲搞到腸壁黏膜發炎爛透！今日抗炎日報第11日，用最市井白話，直接踢爆四大補劑命門！
+            </p>
+        </section>
+
+        <!-- 4. 四大命門市井版 (20% 核心精華 Bento Grid) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <!-- 命門 1: D3 & 魚油 -->
+            <div class="p-4 bg-white border-2 border-[#111827] shadow-[3px_3px_0px_#111827] space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="font-mono font-black text-xs bg-red-100 text-[#BE123C] px-2 py-0.5 rounded border border-red-300">
+                        命門 01 // 脂溶性
+                    </span>
+                    <span class="text-xs font-black text-red-600">嚴禁空腹凍水</span>
+                </div>
+                <h3 class="font-black text-lg text-[#111827] font-serif">
+                    D3 同魚油要「坐船」：冇油等於屙返出嚟！
+                </h3>
+                <p class="text-xs sm:text-sm font-bold text-slate-700 leading-relaxed">
+                    維他命 D3 同魚油全部係<strong>脂溶性</strong>！你空腹隊杯清水吞，佢哋冇船坐穿唔過小腸，直接沉底排走，幾百蚊即刻倒落海！<br>
+                    <strong>市井解法：</strong>跟第一餐大餐（早餐或斷食後午餐）食，一定要咬舊牛油果或者食隻放養雞蛋！油脂一落肚先會激發膽汁乳化，完整吸收兼夾徹底斷絕打嗝成口死魚腥味 (Fish burps)！
+                </p>
+            </div>
+
+            <!-- 命門 2: 鋅 (Zinc) -->
+            <div class="p-4 bg-white border-2 border-[#111827] shadow-[3px_3px_0px_#111827] space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="font-mono font-black text-xs bg-emerald-100 text-[#047857] px-2 py-0.5 rounded border border-emerald-300">
+                        命門 02 // 植酸死鎖
+                    </span>
+                    <span class="text-xs font-black text-emerald-700">兩餐中間空腹</span>
+                </div>
+                <h3 class="font-black text-lg text-[#111827] font-serif">
+                    食鋅咪撚配麥皮：植酸一咬住直接報廢！
+                </h3>
+                <p class="text-xs sm:text-sm font-bold text-slate-700 leading-relaxed">
+                    鋅最鍾意空腹（餐後約 2 個鐘），通道最順暢。但好多人一空腹食鋅就胃抽筋想嘔。想伴餐？得！<br>
+                    <strong>死穴警報：</strong>伴餐嗰陣<strong>千祈咪撚食全穀物、麥皮、堅果同豆類</strong>！呢啲嘢塞滿「植酸 (Phytic Acid)」，植酸一見到鋅離子就死死咬住鎖死通道，你吞幾多粒鋅都係零吸收！
+                </p>
+            </div>
+
+            <!-- 命門 3: 鐵質 (Iron) -->
+            <div class="p-4 bg-white border-2 border-[#111827] shadow-[3px_3px_0px_#111827] space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="font-mono font-black text-xs bg-amber-100 text-[#B45309] px-2 py-0.5 rounded border border-amber-300">
+                        命門 03 // 咖啡因死敵
+                    </span>
+                    <span class="text-xs font-black text-amber-700">前後隔離 2 小時</span>
+                </div>
+                <h3 class="font-black text-lg text-[#111827] font-serif">
+                    鐵質見到黑咖啡濃茶：一秒收皮！
+                </h3>
+                <p class="text-xs sm:text-sm font-bold text-slate-700 leading-relaxed">
+                    好多打工仔朝早邊飲齋啡邊吞鐵丸，真係抵你個人面青口唇白！咖啡因同茶多酚係鐵質嘅終極天敵，見面就將鐵質鎖死喺門外，吸收率直接歸零！<br>
+                    <strong>神級助攻：</strong>食鐵質放喺早午餐之間 (Mid-morning)，前後 2 個鐘滴咖啡不沾！改為隊杯<strong>新鮮現榨橙汁（連白肉纖維）</strong>，天然維他命 C 一秒將鐵還原，吸收率爆升幾倍！
+                </p>
+            </div>
+
+            <!-- 命門 4: 鎂 (Magnesium) -->
+            <div class="p-4 bg-white border-2 border-[#111827] shadow-[3px_3px_0px_#111827] space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="font-mono font-black text-xs bg-indigo-100 text-[#4338CA] px-2 py-0.5 rounded border border-indigo-300">
+                        命門 04 // 晚間分拆
+                    </span>
+                    <span class="text-xs font-black text-indigo-700">小劑量早晚分拆</span>
+                </div>
+                <h3 class="font-black text-lg text-[#111827] font-serif">
+                    咪一嘢暴吞鎂丸：受體飽和直接瀉水！
+                </h3>
+                <p class="text-xs sm:text-sm font-bold text-slate-700 leading-relaxed">
+                    鎂係負責放鬆大腦副交感神經同搞深層睡眠嘅神物。但腸道吸收鎂嘅受體好細，你一鋪過食大劑量，個腸吸收唔切，直接引發高滲透壓滑腸，半夜衝去廁所屙水！<br>
+                    <strong>黃金法則：</strong>分拆做每日兩次小劑量！傍晚 19:00 食一次，臨訓 22:00 食多次，微量同化，成晚瞓到隻豬咁兼深層修復！
+                </p>
+            </div>
+
+        </section>
+
+        <!-- 5. 報紙短評：RFK Jr. 倒轉金字塔市井總結 (The Law) -->
+        <section class="border-2 border-[#111827] p-4 bg-[#FFFDF9] space-y-2">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-mono font-black uppercase bg-[#111827] text-white px-2 py-0.5">
+                    RFK JR. 倒轉金字塔定律
+                </span>
+                <span class="text-xs font-black text-slate-600">奪回身體生物主權</span>
+            </div>
+            <h3 class="font-black text-base sm:text-lg text-[#111827] font-serif">
+                點解你成日「虛不受補」？因為你連底層邏輯都調轉晒！
+            </h3>
+            <p class="text-xs sm:text-sm font-bold text-slate-700 leading-relaxed">
+                傳統衛道之士叫你日日食穀物麥皮種子油，然後叫你狂吞補充劑。結果種子油引爆腸漏，植酸鎖死礦物質，咖啡因鎖死鐵質，你副偈點會唔爆標出事？<br>
+                <strong>MAGA 真正鐵律：</strong><br>
+                1. <strong>塔底最厚：</strong>食 Real Whole Foods，草飼牛脂、牛油果、放養雞蛋，提供最強油脂載體！<br>
+                2. <strong>中層排程：</strong>微量元素嚴格跟鐘食，互不干擾！<br>
+                3. <strong>頂層剔除：</strong>踢走工業種子油、植酸、咖啡因阻斷，清淤排毒！
+            </p>
+        </section>
+
+        <!-- 6. 核心轉化 CTA：引導解鎖 PREM 22 完整 100% 戰略頁面 -->
+        <section class="border-3 border-[#111827] p-5 sm:p-6 bg-[#FEFCE8] text-center space-y-4 shadow-[4px_4px_0px_#111827]">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EF4444] text-white font-mono text-xs font-black">
+                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                <span>以上內容只係 PREM 22 核心 20% 精華</span>
+            </div>
+
+            <h3 class="text-xl sm:text-3xl font-black text-[#111827] font-serif">
+                想攞埋其餘 80% 完整戰略？<br>
+                即刻解鎖 PREM 22 專屬戰略庫！
+            </h3>
+
+            <p class="text-xs sm:text-sm font-bold text-slate-700 max-w-xl mx-auto leading-relaxed">
+                完整 PREM 22 頁面包含：<br>
+                <strong>① 24小時個人化動態排程計算器</strong>（輸入你起身時間，即時計出全日 4 大吸收視窗）<br>
+                <strong>② 退休創業家 24 小時原型落地 Roadmap</strong>（Hour 0 至 Hour 24 落地步驟）<br>
+                <strong>③ 香港實體 Real Foods 食物鏈地圖</strong>（街市牛油果、本地草飼牛脂、原生發酵酸種乳酪定位點）<br>
+                <strong>④ 2026 潮語白兵對話劇本 ✕ 3D 渲染規格</strong>
+            </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+                <a href="prem-22-timing-protocol.html" class="gs-btn-yellow px-6 py-3 text-sm sm:text-base font-black inline-flex items-center gap-2">
+                    <i data-lucide="key" class="w-4 h-4"></i>
+                    <span>🔥 直通 PREM 22 完整戰略頁面 ↗</span>
+                </a>
+                <a href="index.html#resource-section" class="px-5 py-3 rounded-xl bg-white hover:bg-slate-100 border-2 border-[#111827] shadow-[2px_2px_0px_#111827] text-xs sm:text-sm font-black text-slate-800 inline-flex items-center gap-1.5">
+                    <i data-lucide="shield" class="w-4 h-4"></i>
+                    <span>輸入 Passkey (cc00 / 4lome) 解鎖全部 22 份戰略物資</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 7. 報尾存檔導航 (Archive Footer Strip) -->
+        <footer class="double-border-top pt-4 text-center space-y-3 font-mono text-xs font-bold text-slate-600">
+            <div class="flex flex-wrap items-center justify-center gap-3 text-slate-800">
+                <a href="dailyflow.html" class="hover:text-[#B91C1C] underline font-black">📰 抗炎日報首頁</a>
+                <span>·</span>
+                <a href="day-10.html" class="hover:text-[#B91C1C] underline">第10日：多系統病徵對照表</a>
+                <span>·</span>
+                <span class="text-[#B91C1C] font-black">第11日：補劑 Timing 市井踢爆 (本期)</span>
+                <span>·</span>
+                <a href="prem-22-timing-protocol.html" class="hover:text-[#B91C1C] underline">PREM 22 完整版</a>
+            </div>
+            <p class="text-[11px] text-slate-500">
+                MAGA 抗炎日報 DAILY FLOW © 2026 // Make Anti-inflammatory Great Again · 香港製造
+            </p>
+        </footer>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
