@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-HK" id="root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@ERICWONGKHK — Polyphenol 多酚 · EVOO 全指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+HK:wght@300;400;600;700&family=Noto+Sans+HK:wght@300;400;500;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans HK','Noto Serif HK',serif;background:#07090d;color:#e8e2d4;line-height:1.7;overflow-x:hidden;font-size:15px}
+a{color:inherit;text-decoration:none}
+
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.layer{position:relative;z-index:2}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:15px 28px;display:flex;justify-content:space-between;align-items:center;background:rgba(7,9,13,0.8);backdrop-filter:blur(16px);border-bottom:1px solid rgba(180,155,90,0.11)}
+.nav-brand{font-family:'EB Garamond',serif;font-size:15px;letter-spacing:.05em;color:rgba(200,175,110,0.88)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-label{font-size:10px;letter-spacing:.08em;color:rgba(200,175,110,0.38);text-transform:uppercase}
+.lang-btn{font-size:11px;padding:5px 14px;border-radius:99px;border:1px solid rgba(180,148,75,0.28);background:rgba(180,148,75,0.06);color:rgba(200,175,110,0.75);cursor:pointer;letter-spacing:.06em;transition:all .2s;font-family:'Noto Sans HK',sans-serif}
+.lang-btn:hover{background:rgba(180,148,75,0.14);color:rgba(200,175,110,1)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative}
+.hero-eyebrow{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(180,148,75,0.55);margin-bottom:22px;font-weight:300}
+.hero-name{font-family:'EB Garamond',serif;font-size:clamp(46px,9vw,96px);font-weight:400;line-height:.95;color:#e8dfc8;margin-bottom:11px}
+.hero-name a{border-bottom:1px solid rgba(180,148,75,0.28);padding-bottom:2px;transition:border-color .2s}
+.hero-name a:hover{border-color:rgba(180,148,75,0.7)}
+.hero-sub{font-family:'Noto Serif HK',serif;font-size:clamp(16px,3vw,23px);font-weight:300;color:rgba(180,148,75,0.68);letter-spacing:.08em;margin-bottom:32px}
+.hero-sep{width:42px;height:1px;background:linear-gradient(90deg,transparent,rgba(180,148,75,0.42),transparent);margin:0 auto 32px}
+.hero-tagline{font-family:'EB Garamond',serif;font-size:clamp(14px,2vw,18px);font-style:italic;color:rgba(220,200,160,0.52);max-width:500px;line-height:1.88}
+.grade-pills{margin-top:40px;display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.grade-pill{font-size:11px;padding:7px 16px;border-radius:99px;border:1px solid;transition:opacity .2s;cursor:pointer}
+.gp-evoo{border-color:rgba(52,211,153,.24);color:#6ee7b7;background:rgba(52,211,153,.05)}
+.gp-voo{border-color:rgba(180,148,75,.24);color:#c9a84c;background:rgba(180,148,75,.05)}
+.gp-ord{border-color:rgba(148,148,148,.18);color:#9ca3af;background:rgba(148,148,148,.04)}
+.gp-lamp{border-color:rgba(220,38,38,.18);color:#f87171;background:rgba(220,38,38,.04)}
+.grade-pill:hover{opacity:.72}
+
+.scroll-cue{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;color:rgba(180,148,75,0.26);font-size:9px;letter-spacing:.18em;text-transform:uppercase;animation:sfloat 2.7s ease-in-out infinite}
+@keyframes sfloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(5px)}}
+.scroll-arr{width:1px;height:30px;background:linear-gradient(180deg,rgba(180,148,75,0.32),transparent)}
+
+/* CONTENT */
+.content-wrap{max-width:760px;margin:0 auto;padding:72px 24px 120px}
+.chapter{margin-bottom:68px}
+.chapter-num{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(180,148,75,0.36);font-weight:300;margin-bottom:7px}
+.chapter-title{font-family:'EB Garamond',serif;font-size:clamp(23px,4vw,35px);font-weight:400;color:#e0d4b4;line-height:1.2;margin-bottom:28px}
+.chapter-title em{font-style:italic;color:rgba(180,148,75,0.8)}
+.sec-title{font-family:'Noto Serif HK',serif;font-size:clamp(14px,2vw,17px);font-weight:600;color:#d4c49a;margin-top:40px;margin-bottom:13px}
+.sec-title:first-child{margin-top:0}
+.body-text{font-family:'Noto Serif HK',serif;font-size:14.5px;color:rgba(220,205,170,0.74);line-height:1.95;margin-bottom:17px}
+.body-text strong{color:rgba(220,205,170,.92);font-weight:600}
+
+/* ── EVOO QUALITY TABLE (from Table 1) ── */
+.quality-table-wrap{margin:28px 0;overflow-x:auto}
+.quality-table{width:100%;border-collapse:collapse;min-width:520px}
+.quality-table thead tr{border-bottom:1px solid rgba(180,148,75,0.18)}
+.quality-table th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(180,148,75,0.42);font-weight:400;padding:10px 13px;text-align:left;font-family:'Noto Sans HK',sans-serif;white-space:nowrap}
+.quality-table td{padding:11px 13px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12.5px;vertical-align:middle;line-height:1.55}
+.quality-table tr:hover td{background:rgba(180,148,75,0.03)}
+.qt-num{font-family:'EB Garamond',serif;font-size:16px;color:rgba(180,148,75,0.45);text-align:center;min-width:28px}
+.qt-criterion{font-weight:600;color:#d4c49a;font-size:13px}
+.qt-criterion small{display:block;font-size:10px;color:rgba(180,148,75,0.48);font-weight:400;letter-spacing:.03em;margin-top:2px}
+.qt-pass{color:#6ee7b7;font-family:'EB Garamond',serif;font-size:14px}
+.qt-fail{color:#f87171;font-family:'EB Garamond',serif;font-size:14px}
+.qt-note{color:rgba(220,205,170,0.55);font-size:11.5px}
+.qt-badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:99px;font-weight:700;letter-spacing:.04em}
+.qt-pass-badge{background:rgba(52,211,153,.09);color:#6ee7b7;border:1px solid rgba(52,211,153,.18)}
+.qt-fail-badge{background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.15)}
+
+/* FFA GRADE TABLE */
+.ffa-table{width:100%;border-collapse:collapse;margin:24px 0}
+.ffa-table th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(180,148,75,0.4);font-weight:400;padding:9px 13px;text-align:left;border-bottom:1px solid rgba(180,148,75,0.13);font-family:'Noto Sans HK',sans-serif}
+.ffa-table td{padding:11px 13px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12.5px;vertical-align:top}
+.ffa-table tr:hover td{background:rgba(180,148,75,0.03)}
+.ffa-score{font-family:'EB Garamond',serif;font-size:15px;color:#c9a84c}
+.ffa-grade{font-size:10.5px;font-weight:700;letter-spacing:.03em}
+.ffa-desc{color:rgba(220,205,170,0.6);font-size:12px;line-height:1.6}
+.fg-best{color:#6ee7b7}.fg-good{color:#c9a84c}.fg-meh{color:#9ca3af}.fg-bad{color:#f87171}
+
+/* POLYPHENOL CARDS */
+.poly-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0}
+@media(max-width:520px){.poly-grid{grid-template-columns:1fr}}
+.poly-card{background:rgba(180,148,75,0.04);border:1px solid rgba(180,148,75,0.1);border-radius:10px;padding:16px 18px}
+.poly-name{font-family:'EB Garamond',serif;font-size:16px;color:#d4b86a;margin-bottom:4px;font-style:italic}
+.poly-cn{font-size:10px;color:rgba(180,148,75,0.42);margin-bottom:8px;letter-spacing:.04em}
+.poly-desc{font-size:11.5px;color:rgba(220,205,170,0.6);line-height:1.7}
+
+/* THREADS */
+.threads-hd{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.threads-icon{width:25px;height:25px;border-radius:7px;background:rgba(180,148,75,0.09);display:flex;align-items:center;justify-content:center;font-size:13px}
+.threads-lbl{font-family:'EB Garamond',serif;font-size:16px;color:#d4c49a;font-style:italic}
+.thread-cards{display:flex;flex-direction:column;gap:13px}
+.thread-card{background:rgba(255,255,255,0.022);border:1px solid rgba(180,148,75,0.09);border-radius:11px;padding:17px 18px;display:flex;align-items:flex-start;gap:13px;transition:border-color .2s,background .2s}
+.thread-card:hover{border-color:rgba(180,148,75,0.24);background:rgba(180,148,75,0.04)}
+.tc-num{font-family:'EB Garamond',serif;font-size:21px;color:rgba(180,148,75,0.26);min-width:24px;line-height:1;padding-top:2px}
+.tc-body{flex:1}
+.tc-title{font-family:'Noto Serif HK',serif;font-size:13px;color:#d4c49a;margin-bottom:5px;font-weight:600}
+.tc-excerpt{font-size:11.5px;color:rgba(200,180,130,0.5);line-height:1.65}
+.tc-link{display:inline-flex;align-items:center;gap:4px;margin-top:7px;font-size:10.5px;color:rgba(180,148,75,0.52);letter-spacing:.04em;font-family:'Noto Sans HK',sans-serif}
+.tc-link:hover{color:rgba(180,148,75,0.82)}
+
+/* GRADE LIST */
+.grade-list{border:1px solid rgba(180,148,75,0.1);border-radius:12px;overflow:hidden;margin-top:18px}
+.grade-item{display:flex;align-items:center;justify-content:space-between;padding:14px 19px;border-bottom:1px solid rgba(180,148,75,0.06);transition:background .18s;gap:12px}
+.grade-item:last-child{border-bottom:none}
+.grade-item:hover{background:rgba(180,148,75,0.04)}
+.grade-item-text{font-family:'Noto Serif HK',serif;font-size:13.5px;color:#d4c49a;flex:1;line-height:1.4}
+.grade-item-sub{font-size:10px;color:rgba(180,148,75,0.4);font-family:'Noto Sans HK',sans-serif;display:block;margin-top:2px}
+.grade-badge{font-size:9.5px;padding:3px 9px;border-radius:99px;font-weight:600;white-space:nowrap}
+.gb-evoo{background:rgba(52,211,153,.08);color:#6ee7b7;border:1px solid rgba(52,211,153,.16)}
+.gb-voo{background:rgba(180,148,75,.1);color:#c9a84c;border:1px solid rgba(180,148,75,.18)}
+.gb-ord{background:rgba(148,148,148,.08);color:#9ca3af;border:1px solid rgba(148,148,148,.15)}
+.gb-lamp{background:rgba(220,38,38,.07);color:#f87171;border:1px solid rgba(220,38,38,.13)}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid rgba(180,148,75,0.08);margin:50px 0}
+
+/* COMING SOON BLUR */
+.coming-wrap{position:relative;margin-top:48px;border-radius:12px;overflow:hidden}
+.coming-blur{filter:blur(5px);opacity:.28;pointer-events:none;user-select:none;padding:28px 0}
+.coming-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;z-index:5;background:rgba(7,9,13,0.32)}
+.coming-badge{background:rgba(180,148,75,0.07);border:1px solid rgba(180,148,75,0.17);border-radius:8px;padding:9px 20px;font-family:'EB Garamond',serif;font-size:16px;color:rgba(180,148,75,0.7);font-style:italic}
+.coming-sub{font-size:9.5px;color:rgba(180,148,75,0.35);letter-spacing:.14em;text-transform:uppercase}
+
+footer{border-top:1px solid rgba(180,148,75,0.07);padding:34px 24px;text-align:center;position:relative;z-index:2}
+footer p{font-size:10.5px;color:rgba(180,148,75,0.26);letter-spacing:.06em}
+
+@media(max-width:600px){nav{padding:12px 16px}.content-wrap{padding:52px 16px 72px}.grade-pills{gap:7px}.grade-pill{font-size:10px;padding:6px 13px}}
+
+/* ── LANG HIDDEN ── */
+[data-en]{display:none}
+html[lang=en] [data-zh]{display:none}
+html[lang=en] [data-en]{display:block}
+html[lang=en] span[data-en]{display:inline}
+html[lang=en] span[data-zh]{display:none}
+
+/* BAR CHART */
+.bar-chart-wrap{margin:32px 0 28px;background:rgba(180,148,75,0.03);border:1px solid rgba(180,148,75,0.1);border-radius:12px;padding:22px 20px 18px}
+.bar-chart-title{font-family:'EB Garamond',serif;font-size:15px;color:#d4c49a;margin-bottom:18px;font-style:italic;text-align:center}
+.bar-row{display:flex;align-items:center;margin-bottom:11px;gap:12px}
+.bar-label{font-size:11px;color:rgba(220,205,170,0.7);min-width:110px;text-align:right;font-family:'Noto Sans HK',sans-serif;line-height:1.3}
+.bar-track{flex:1;height:18px;background:rgba(255,255,255,0.04);border-radius:6px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:10px;font-weight:600;color:#07090d;transition:width .6s ease}
+.bar-fill.b1{background:linear-gradient(90deg,#34d399,#6ee7b7);width:16%}
+.bar-fill.b2{background:linear-gradient(90deg,#34d399,#6ee7b7);width:40%}
+.bar-fill.b3{background:linear-gradient(90deg,#c9a84c,#e8d48b);width:11%}
+.bar-fill.b4{background:linear-gradient(90deg,#c9a84c,#e8d48b);width:5%}
+.bar-fill.b5{background:linear-gradient(90deg,#34d399,#6ee7b7);width:50%}
+.bar-fill.b6{background:linear-gradient(90deg,#6ee7b7,#a7f3d0);width:70%}
+.bar-fill.b7{background:linear-gradient(90deg,#c9a84c,#e8d48b);width:35%}
+.bar-val{font-size:10px;color:rgba(180,148,75,0.55);min-width:70px;font-family:'EB Garamond',serif}
+.bar-note{font-size:10px;color:rgba(180,148,75,0.35);text-align:center;margin-top:14px;letter-spacing:.04em}
+@media(max-width:520px){.bar-label{min-width:80px;font-size:10px}.bar-val{min-width:55px;font-size:9px}}
+
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav class="layer">
+  <div class="nav-brand">@ericwongkhk</div>
+  <div class="nav-right">
+    <span class="nav-label" data-zh>多酚 · EVOO 全指南</span>
+    <span class="nav-label" data-en>Polyphenol · EVOO Guide</span>
+    <button class="lang-btn" id="lang-toggle" onclick="toggleLang()">English</button>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="layer hero">
+  <p class="hero-eyebrow">
+    <span data-zh>Make Anti-inflammatory Great Again</span>
+    <span data-en>Make Anti-inflammatory Great Again</span>
+  </p>
+  <h2 class="hero-name"><a href="https://threads.com/ericwongkhk" target="_blank">@ERICWONGKHK</a></h2>
+  <h4 class="hero-sub">
+    <span data-zh>Polyphenol · 多酚</span>
+    <span data-en>Polyphenol · 多酚</span>
+  </h4>
+  <div class="hero-sep"></div>
+  <p class="hero-tagline">
+    <span data-zh>唔係搞緊養生餐。係幫你搞清楚每日飲落肚嘅油，係救你定係殺你。</span>
+    <span data-en>This isn't wellness content. This is about whether the oil you drink daily is saving you — or slowly killing you.</span>
+  </p>
+  <div class="grade-pills">
+    <div class="grade-pill gp-evoo"><span data-zh>特級初榨橄欖油 EVOO</span><span data-en>Extra Virgin Olive Oil</span></div>
+    <div class="grade-pill gp-voo"><span data-zh>良級初榨 Virgin</span><span data-en>Virgin Olive Oil</span></div>
+    <div class="grade-pill gp-ord"><span data-zh>普通初榨 Ordinary</span><span data-en>Ordinary Virgin</span></div>
+    <div class="grade-pill gp-lamp"><span data-zh>初榨橄欖燈油 Lampante</span><span data-en>Lampante Virgin</span></div>
+  </div>
+  <div class="scroll-cue"><div class="scroll-arr"></div><span>Scroll</span></div>
+</section>
+
+<!-- ══ MAIN CONTENT ══ -->
+<main class="content-wrap layer">
+
+  <!-- CH1: FFA + QUALITY CRITERIA -->
+  <article class="chapter" id="ch1">
+    <p class="chapter-num"><span data-zh>Chapter 01</span><span data-en>Chapter 01</span></p>
+    <h3 class="chapter-title">
+      <span data-zh>地基戰爭 — 重新設計<br><em>健康金字塔與酸價 (FFA) 權力遊戲</em></span>
+      <span data-en>Foundation War — Redesigning<br><em>the Health Pyramid & the FFA Power Game</em></span>
+    </h3>
+
+    <p class="body-text">
+      <span data-zh>唔好意思，我唔想俾你以為呢篇係咩養生雞湯，係咁嘅，喺 2026 年呢場抗炎大戰，啲傳統 NPC 專家真係導9你，淨係識講特級初榨橄欖油。📣 其實「食油」呢樣嘢，係你副機體嘅「運輸架撐」，直接決定咗你需唔需要多酚 Polyphenol 揀橄欖油唔係因為佢有咩神奇療效，唔好傻啦。你要記住 EVOO 其實就係橄欖果汁，啲抗氧化物隨時間同高溫會流失晒，所以買油請你睇採收日期，唔好傻傻地睇有效日期。想知多酚 benefit？但講真，搞呢啲嘢確實係好煩而且貴到仆街。
+
+EVOO 國際質量標準 — Table 1 七大檢測指標
+
+根據國際橄欖理事會 (IOC) 標準，一支油要稱之為 Extra Virgin，必須一次過過晒以下七關。任何一關唔掂，即係自動降級，冇得講</strong>threads@ericwongkhk</span>
+      <span data-en>Look, I'm not trying to sell you some wellness soup here. In the 2026 inflammation war, those traditional "expert" NPCs are straight-up trolling you by just mentioning "Extra Virgin Olive Oil." 📣 The truth is, the fats you eat are your body's "transportation gear"—that's what determines your need for Polyphenols.
+
+Why olive oil? It's not about some magic cure. Just remember: EVOO is basically olive juice. Those antioxidants vanish with time and heat, so check the harvest date, not the expiration date. Want the polyphenol benefits? But honestly, it’s a total hassle and expensive as hell.
+
+EVOO International Quality Standards — Table 1: Seven Key Metrics
+
+Per IOC standards, for an oil to be called Extra Virgin, it has to pass all seven of these tests. Fail even one, and it's an automatic downgrade. Period.</strong> Check out threads@ericwongkhk</span>
+    </p>
+
+    <!-- SECTION: EVOO Quality Criteria (Table 1) -->
+    <p class="sec-title">
+      <span data-zh>EVOO 國際質量標準 — Table 1 七大檢測指標</span>
+      <span data-en>EVOO International Quality Criteria — Table 1: 7 Key Parameters</span>
+    </p>
+    <p class="body-text">
+      <span data-zh>根據國際橄欖理事會 (IOC) 標準，一支油要成為 Extra Virgin，必須同時通過以下七關。任何一關失敗，即自動降級。</span>
+      <span data-en>According to the International Olive Council (IOC), an oil must pass all seven of the following tests simultaneously to be classified as Extra Virgin. Fail any one — and it's automatically downgraded.</span>
+    </p>
+
+    <div class="quality-table-wrap">
+      <table class="quality-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th><span data-zh>檢測項目</span><span data-en>Criterion</span></th>
+            <th><span data-zh>✓ 通過標準 (EVOO)</span><span data-en>✓ Pass (EVOO)</span></th>
+            <th><span data-zh>✕ 失敗降級</span><span data-en>✕ Fail → Downgrade</span></th>
+            <th><span data-zh>實戰意義</span><span data-en>What It Means</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="qt-num">1</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>酸價 Acidity (FFA %)</span>
+                <span data-en>Acidity (FFA %)</span>
+                <small>Free Fatty Acid</small>
+              </div>
+            </td>
+            <td><span class="qt-pass">≤ 0.80%</span></td>
+            <td><span class="qt-fail">&gt; 0.80%</span> <span class="qt-badge qt-fail-badge">→ VOO</span></td>
+            <td class="qt-note"><span data-zh>橄欖受損程度。越低越新鮮，頂級莊園可達 0.1%。</span><span data-en>Olive damage index. Lower = fresher. Top estates hit 0.1%.</span></td>
+          </tr>
+          <tr>
+            <td class="qt-num">2</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>過氧化值 Peroxide Value</span>
+                <span data-en>Peroxide Value</span>
+                <small>mEq O₂/kg</small>
+              </div>
+            </td>
+            <td><span class="qt-pass">≤ 20.0</span></td>
+            <td><span class="qt-fail">&gt; 20.0</span> <span class="qt-badge qt-fail-badge">→ LOO</span></td>
+            <td class="qt-note"><span data-zh>氧化程度。超標即係已開始酸敗，多酚受破壞。</span><span data-en>Oxidation level. Over limit = rancidity has begun, polyphenols compromised.</span></td>
+          </tr>
+          <tr>
+            <td class="qt-num">3</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>紫外線吸收 K₂₇₀</span>
+                <span data-en>UV Spectrometry K₂₇₀/₂₆₈</span>
+                <small>UV Absorb.</small>
+              </div>
+            </td>
+            <td><span class="qt-pass">≤ 0.22</span></td>
+            <td><span class="qt-fail">&gt; 0.22</span> <span class="qt-badge qt-fail-badge">→ VOO</span></td>
+            <td class="qt-note"><span data-zh>偵測精煉油混入。超標即有漂白廢油成份。</span><span data-en>Detects refined oil adulteration. Over limit = bleached waste oil present.</span></td>
+          </tr>
+          <tr>
+            <td class="qt-num">4</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>ΔK 差值</span>
+                <span data-en>UV Spectrometry ΔK</span>
+                <small>Delta K</small>
+              </div>
+            </td>
+            <td><span class="qt-pass">≤ 0.01</span></td>
+            <td><span class="qt-fail">&gt; 0.01</span> <span class="qt-badge qt-fail-badge">→ LOO</span></td>
+            <td class="qt-note"><span data-zh>進一步確認精煉混油。係 K₂₇₀ 嘅補充驗證。</span><span data-en>Cross-check for refined oil blending. Supplements K₂₇₀ test.</span></td>
+          </tr>
+          <tr>
+            <td class="qt-num">5</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>紫外線吸收 K₂₃₂</span>
+                <span data-en>UV Spectrometry K₂₃₂</span>
+                <small>UV Absorb.</small>
+              </div>
+            </td>
+            <td><span class="qt-pass">≤ 2.50</span></td>
+            <td><span class="qt-fail">&gt; 2.50</span> <span class="qt-badge qt-fail-badge">→ VOO</span></td>
+            <td class="qt-note"><span data-zh>早期氧化偵測。反映初始氧化損傷，比過氧化值更敏感。</span><span data-en>Early-stage oxidation detection. More sensitive than peroxide value.</span></td>
+          </tr>
+          <tr>
+            <td class="qt-num">6</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>感官評核 Organoleptic</span>
+                <span data-en>Organoleptic Assessment</span>
+                <small>Panel Test</small>
+              </div>
+            </td>
+            <td>
+              <span class="qt-pass" style="font-size:12px">
+                <span data-zh>果香中位數 &gt; 0<br>缺陷中位數 = 0</span>
+                <span data-en>Fruity median &gt; 0<br>Defects median = 0</span>
+              </span>
+            </td>
+            <td>
+              <span class="qt-fail" style="font-size:12px">
+                <span data-zh>冇果香 / 有缺陷</span>
+                <span data-en>No fruitiness / Defects present</span>
+              </span>
+            </td>
+            <td class="qt-note"><span data-zh>專業評鑑員味覺檢測。識唔識出果香、辣味、苦味？呢步係人手把關。</span><span data-en>Expert taste panel check. Can they detect fruitiness, pepperiness, bitterness? This is the human gatekeeper.</span></td>
+          </tr>
+          <tr>
+            <td class="qt-num">7</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>脂肪酸乙酯 FAEE</span>
+                <span data-en>Fatty Acid Ethyl Esters</span>
+                <small>mg/kg</small>
+              </div>
+            </td>
+            <td><span class="qt-pass">≤ 35 mg/kg</span></td>
+            <td><span class="qt-fail">&gt; 35 mg/kg</span> <span class="qt-badge qt-fail-badge">→ VOO</span></td>
+            <td class="qt-note"><span data-zh>發酵損傷標記。過高代表橄欖採收後處理不當或發酵過度。</span><span data-en>Fermentation damage marker. Too high = improper post-harvest handling or over-fermentation.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <!-- Visual Bar Chart for EVOO Criteria -->
+  <div class="bar-chart-wrap">
+    <div class="bar-chart-title">
+      <span data-zh>七大指標 · 通過門檻視覺化</span>
+      <span data-en>7 Criteria · Pass Threshold Visual</span>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>1. 酸價 FFA</span><span data-en>1. Acidity FFA</span></div>
+      <div class="bar-track"><div class="bar-fill b1">≤0.80%</div></div>
+      <div class="bar-val">strict</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>2. 過氧化值</span><span data-en>2. Peroxide</span></div>
+      <div class="bar-track"><div class="bar-fill b2">≤20.0</div></div>
+      <div class="bar-val">mEq O₂/kg</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>3. K₂₇₀</span><span data-en>3. K₂₇₀</span></div>
+      <div class="bar-track"><div class="bar-fill b3">≤0.22</div></div>
+      <div class="bar-val">UV</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>4. ΔK</span><span data-en>4. ΔK</span></div>
+      <div class="bar-track"><div class="bar-fill b4">≤0.01</div></div>
+      <div class="bar-val">UV</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>5. K₂₃₂</span><span data-en>5. K₂₃₂</span></div>
+      <div class="bar-track"><div class="bar-fill b5">≤2.50</div></div>
+      <div class="bar-val">UV</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>6. 感官評核</span><span data-en>6. Organoleptic</span></div>
+      <div class="bar-track"><div class="bar-fill b6">果香&gt;0 · 缺陷=0</div></div>
+      <div class="bar-val">Panel</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>7. FAEE</span><span data-en>7. FAEE</span></div>
+      <div class="bar-track"><div class="bar-fill b7">≤35 mg/kg</div></div>
+      <div class="bar-val">esters</div>
+    </div>
+    <div class="bar-note">
+      <span data-zh>條愈短 = 門檻愈嚴 · 全部通過先算 Extra Virgin</span>
+      <span data-en>Shorter bar = stricter threshold · All must pass for Extra Virgin</span>
+    </div>
+  </div>
+
+  <!-- FFA Grade breakdown -->
+  <p class="sec-title" id="ch1-ffa">
+    <span data-zh>酸價 (FFA) 階級全拆解</span>
+    <span data-en>FFA Acidity Grade Breakdown</span>
+  </p>
+  <p class="body-text">
+    <span data-zh>IOC 訂嘅 0.80% 只係底線。對我哋機體玩家嚟講，真正嘅戰場係 0.80% 以下嘅分層——差距可以係 8 倍以上。</span>
+    <span data-en>IOC's 0.80% is the floor, not the goal. For us biohackers, the real game is in the tiers below 0.80% — where quality can vary by 8× or more.</span>
+  </p>
+  <table class="ffa-table">
+    <thead>
+      <tr>
+        <th><span data-zh>FFA 酸價</span><span data-en>FFA Acidity</span></th>
+        <th><span data-zh>評級</span><span data-en>Grade</span></th>
+        <th><span data-zh>實情</span><span data-en>Reality</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="ffa-score">0.1–0.3%</span></td>
+        <td><span class="ffa-grade fg-best"><span data-zh>🏆 頂級莊園</span><span data-en>🏆 Estate Elite</span></span></td>
+        <td class="ffa-desc"><span data-zh>橄欖未落地已壓榨。O-Med、PepperGreen 等級。多酚最完整，直通細胞。</span><span data-en>Pressed before the olive hits the ground. O-Med, PepperGreen tier. Maximum polyphenols intact.</span></td>
+      </tr>
+      <tr>
+        <td><span class="ffa-score">≤ 0.80%</span></td>
+        <td><span class="ffa-grade fg-good"><span data-zh>✓ 黃金標準</span><span data-en>✓ Gold Standard</span></span></td>
+        <td class="ffa-desc"><span data-zh>IOC 底線，抗炎穩定，係認真玩家嘅最低要求。</span><span data-en>IOC floor. Anti-inflammatory stable. Minimum acceptable for serious players.</span></td>
+      </tr>
+      <tr>
+        <td><span class="ffa-score">≤ 2.0%</span></td>
+        <td><span class="ffa-grade fg-meh"><span data-zh>△ Virgin (VOO)</span><span data-en>△ Virgin (VOO)</span></span></td>
+        <td class="ffa-desc"><span data-zh>容許輕微缺陷，機體運作開始 Lag，唔係 EVOO 等級。</span><span data-en>Minor defects permitted. Bio-machine begins to lag. Not EVOO grade.</span></td>
+      </tr>
+      <tr>
+        <td><span class="ffa-score">≤ 3.3%</span></td>
+        <td><span class="ffa-grade fg-meh"><span data-zh>✗ Ordinary</span><span data-en>✗ Ordinary</span></span></td>
+        <td class="ffa-desc"><span data-zh>冇乜抗炎藥效，純粹潤滑喉嚨用。</span><span data-en>Negligible anti-inflammatory value. Throat lubricant, nothing more.</span></td>
+      </tr>
+      <tr>
+        <td><span class="ffa-score">&gt; 3.3%</span></td>
+        <td><span class="ffa-grade fg-bad"><span data-zh>💀 Lampante</span><span data-en>💀 Lampante</span></span></td>
+        <td class="ffa-desc"><span data-zh>工業廢料，酸臭到入唔到口，只可以被精煉。食咗直入發炎地獄。</span><span data-en>Industrial waste. Too rancid to eat. Refined or used as lamp oil. Ingesting it accelerates inflammation.</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="sec-title">
+    <span data-zh>踢爆「三味整容」精煉油真相</span>
+    <span data-en>Exposing the "Triple Cosmetic" Refining Scam</span>
+  </p>
+  <p class="body-text">
+    <span data-zh><strong>漂白（掩人耳目）</strong> — 用化學劑或活性碳洗走廢油嘅瘀黑色，將氧化證據掩蓋。<br><strong>抽除（毀屍滅跡）</strong> — 用高溫水蒸氣抽走腐爛橄欖嘅酸臭味，令你飲緊完全冇多酚嘅化學無味水。<br><strong>洗底（化學整容）</strong> — 用強鹼中和游離脂肪酸，夾硬㩒低酸價；數據靚咗，但油脂結構已生晒鏽。<br><strong>橄欖油渣 (Pomace)</strong> — 用 Hexane 化學溶劑喺渣入面夾硬「抽」出嚟，食咗直入發炎地獄。</span>
+    <span data-en><strong>Bleaching (cover-up)</strong> — Chemical agents or activated carbon strip the dark discolouration from rancid oil, hiding oxidation evidence.<br><strong>Deodorising (evidence disposal)</strong> — High-temperature steam strips the rancid smell, leaving you drinking chemically neutralised water with zero polyphenols.<br><strong>Neutralisation (chemical facelift)</strong> — Strong alkali forces FFA numbers down; the data looks clean but the fat structure is rusted through.<br><strong>Pomace Oil</strong> — Hexane solvent forcibly extracts oil from the leftover pulp. Consuming it fast-tracks systemic inflammation.</span>
+  </p>
+
+  <hr class="divider">
+
+  <!-- CH2: POLYPHENOLS -->
+  <article class="chapter" id="ch2">
+    <p class="chapter-num">Chapter 02</p>
+    <h3 class="chapter-title">
+      <span data-zh>醫療級核心 — <em>多酚 (Polyphenols) 深度拆解</em></span>
+      <span data-en>Medical-Grade Core — <em>Polyphenols Deep Dive</em></span>
+    </h3>
+
+    <p class="body-text">
+      <span data-zh>如果你買橄欖油只係為咗「脂肪」，咁你真係白費心機。多酚係生飲嘅唯一靈魂，亦係地中海飲食健康嘅核心秘密。</span>
+      <span data-en>If you're buying olive oil just for the "fat," you're missing the entire point. Polyphenols are the sole reason for drinking it raw — the true core of the Mediterranean diet's health outcomes.</span>
+    </p>
+
+    <p class="sec-title">
+      <span data-zh>關鍵多酚成份分析</span>
+      <span data-en>Key Polyphenol Component Analysis</span>
+    </p>
+    <div class="poly-grid">
+      <div class="poly-card">
+        <div class="poly-name">Oleocanthal</div>
+        <div class="poly-cn"><span data-zh>刺激醛</span><span data-en>Oleocanthal</span></div>
+        <div class="poly-desc"><span data-zh>具有類似 Ibuprofen 嘅抗發炎效果。喉嚨嗰種辣味（Peppery Kick）就係佢——冇辣味即係冇藥效嘅廢油。</span><span data-en>Anti-inflammatory effect similar to Ibuprofen. That peppery kick in your throat IS the drug — no burn means no medicine.</span></div>
+      </div>
+      <div class="poly-card">
+        <div class="poly-name">Oleacein</div>
+        <div class="poly-cn"><span data-zh>油橄欖苦素</span><span data-en>Oleacein</span></div>
+        <div class="poly-desc"><span data-zh>專門保護心血管、預防血管硬化。高等級油含量可達普通油嘅 75 倍。</span><span data-en>Specifically protects cardiovascular system and prevents arterial hardening. Premium oils can contain 75× more than standard oils.</span></div>
+      </div>
+      <div class="poly-card">
+        <div class="poly-name">Hydroxytyrosol</div>
+        <div class="poly-cn"><span data-zh>羥基酪醇</span><span data-en>Hydroxytyrosol</span></div>
+        <div class="poly-desc"><span data-zh>最強自由基清除劑。歐盟規定每日攝取至少 5mg 先可以聲稱對心血管有益。</span><span data-en>Strongest free-radical scavenger known. EU regulations require minimum 5mg daily intake before cardiovascular benefit claims are permitted.</span></div>
+      </div>
+      <div class="poly-card">
+        <div class="poly-name">Oleuropein</div>
+        <div class="poly-cn"><span data-zh>橄欖苦苷</span><span data-en>Oleuropein</span></div>
+        <div class="poly-desc"><span data-zh>苦味來源，具有抗氧化及保護神經功能。早摘油含量特別高。</span><span data-en>Source of bitterness. Antioxidant and neuroprotective functions. Especially high in early-harvest oils.</span></div>
+      </div>
+    </div>
+
+    <p class="sec-title">
+      <span data-zh>Early Harvest 早摘嘅博弈</span>
+      <span data-en>The Early Harvest Trade-Off</span>
+    </p>
+    <p class="body-text">
+      <span data-zh>點解 9–10 月採收嘅油咁貴？因為橄欖仲係青色嗰陣，多酚含量係巔峰。雖然產量低，但藥用價值極高。隨著果實成熟變黑，入面嘅金液增加但<strong>多酚會急劇下跌</strong>。</span>
+      <span data-en>Why are September–October harvest oils so expensive? The olive is still green — polyphenols are at peak concentration. Yes, yield is low, but medicinal value is highest. As the fruit ripens and blackens, oil content rises but <strong>polyphenol levels drop sharply</strong>.</span>
+    </p>
+
+    <p class="sec-title">
+      <span data-zh>數據軍備競賽：NMR vs HPLC</span>
+      <span data-en>The Data Arms Race: NMR vs HPLC</span>
+    </p>
+    <p class="body-text">
+      <span data-zh>市面上品牌聲稱多酚過 2000mg，你要小心測試方法。<strong>NMR 測出嚟嘅數值通常比 HPLC 高出 40%–60%</strong>，好多品牌用 NMR 數據做 Marketing 係誤導。只信任 HPLC 或 LC-MS/MS 測法，呢啲先符合國際臨床標準。</span>
+      <span data-en>Brands claiming polyphenol counts over 2000mg — watch the testing method. <strong>NMR readings typically run 40–60% higher than HPLC</strong>. Many brands use NMR for marketing — that's misleading. Trust only HPLC or LC-MS/MS methods; those meet international clinical standards.</span>
+    </p>
+  </article>
+
+  <hr class="divider">
+
+  <!-- THREADS NOTES -->
+  <article class="chapter" id="ch3">
+    <div class="threads-hd">
+      <div class="threads-icon">🧵</div>
+      <div class="threads-lbl">
+        <span data-zh>@ericwongkhk — EVOO 品油筆記</span>
+        <span data-en>@ericwongkhk — EVOO Tasting Notes</span>
+      </div>
+    </div>
+
+    <div class="thread-cards">
+
+      <a class="thread-card" href="https://www.threads.com/share/I-jhfgYc-/" target="_blank">
+        <span class="tc-num">1</span>
+        <div class="tc-body">
+          <div class="tc-title">
+            <span data-zh>🫒 小豆島オリーブオイル — 日本手摘限定莊園油</span>
+            <span data-en>🫒 Shodoshima Olive Oil — Japan Hand-Picked Estate</span>
+          </div>
+          <div class="tc-excerpt">
+            <span data-zh>香川縣小豆島，日本橄欖油嘅發源地。自社農園手摘一番搾，數量限定 No.1207，本年度收穫本數 7500 本。深色玻璃瓶封光，嚴謹壓榨工序。</span>
+            <span data-en>Kagawa Prefecture, Shodoshima — Japan's olive oil birthplace. Own-farm hand-picked first press, limited edition No.1207, 7,500 trees harvested this season. Dark glass bottle UV protection, rigorous pressing protocol.</span>
+          </div>
+          <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>Read full note on Threads ↗</span></span>
+        </div>
+      </a>
+
+      <a class="thread-card" href="https://www.threads.com/share/FpMzbFUzw/" target="_blank">
+        <span class="tc-num">2</span>
+        <div class="tc-body">
+          <div class="tc-title">
+            <span data-zh>🫒 Ánfora de Queiles — 西班牙有機 Arróniz EVOO</span>
+            <span data-en>🫒 Ánfora de Queiles — Spanish Organic Arróniz EVOO</span>
+          </div>
+          <div class="tc-excerpt">
+            <span data-zh>西班牙 Navarra 產區。Arróniz 品種，Ecológico 有機認證，全白幾何設計樽身。EVOO 等級，早摘多酚豐富，風味清雅帶青草香。</span>
+            <span data-en>Navarra region, Spain. Arróniz variety, Ecológico organic certified, signature all-white geometric bottle. EVOO grade, early harvest, polyphenol-rich with fresh grass aroma.</span>
+          </div>
+          <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>Read full note on Threads ↗</span></span>
+        </div>
+      </a>
+
+      <a class="thread-card" href="https://www.threads.com/share/HbqxM87B-/" target="_blank">
+        <span class="tc-num">3</span>
+        <div class="tc-body">
+          <div class="tc-title">
+            <span data-zh>🫒 ILIADA Greek Classic — Kalamata PDO 卡拉馬塔</span>
+            <span data-en>🫒 ILIADA Greek Classic — Kalamata PDO</span>
+          </div>
+          <div class="tc-excerpt">
+            <span data-zh>希臘 Kalamata PDO 認證，Koroneiki 單一品種，1L 大容量。上白下黑標誌樽身，金色錫箔封口。PDO 區域認證級 EVOO，多酚含量穩定，CP 值高。</span>
+            <span data-en>Greece Kalamata PDO certified, single-variety Koroneiki, 1L format. Iconic white-top black-body bottle, gold foil seal. PDO-level EVOO, consistent polyphenols, excellent value-for-money.</span>
+          </div>
+          <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>Read full note on Threads ↗</span></span>
+        </div>
+      </a>
+
+      <a class="thread-card" href="https://www.threads.com/share/FzU1SYcTP/" target="_blank">
+        <span class="tc-num">4</span>
+        <div class="tc-body">
+          <div class="tc-title"><span data-zh>🫒 品油筆記 #4</span><span data-en>🫒 Tasting Note #4</span></div>
+          <div class="tc-excerpt"><span data-zh>喺 Threads 睇完整品油筆記。</span><span data-en>Full tasting note available on Threads.</span></div>
+          <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>View on Threads ↗</span></span>
+        </div>
+      </a>
+
+      <a class="thread-card" href="https://www.threads.com/share/H4ZJSEtc2/" target="_blank">
+        <span class="tc-num">5</span>
+        <div class="tc-body">
+          <div class="tc-title"><span data-zh>🫒 品油筆記 #5</span><span data-en>🫒 Tasting Note #5</span></div>
+          <div class="tc-excerpt"><span data-zh>喺 Threads 睇完整品油筆記。</span><span data-en>Full tasting note available on Threads.</span></div>
+          <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>View on Threads ↗</span></span>
+        </div>
+      </a>
+
+    </div>
+  </article>
+
+  <hr class="divider">
+
+  <!-- GRADE LIST -->
+  <article class="chapter" id="grade-list">
+    <p class="chapter-num">
+      <span data-zh>分級參考</span><span data-en>Grade Reference</span>
+    </p>
+    <h3 class="chapter-title">
+      <span data-zh>橄欖油四大等級</span>
+      <span data-en>Four Grades of Olive Oil</span>
+    </h3>
+    <div class="grade-list">
+      <div class="grade-item">
+        <div class="grade-item-text">
+          <span data-zh>特級初榨橄欖油</span><span data-en>Extra Virgin Olive Oil</span>
+          <span class="grade-item-sub">Extra Virgin Olive Oil · EVOO</span>
+        </div>
+        <span class="grade-badge gb-evoo">FFA ≤ 0.80%</span>
+      </div>
+      <div class="grade-item">
+        <div class="grade-item-text">
+          <span data-zh>良級初榨橄欖油</span><span data-en>Virgin Olive Oil</span>
+          <span class="grade-item-sub">Virgin Olive Oil · VOO</span>
+        </div>
+        <span class="grade-badge gb-voo">FFA ≤ 2.0%</span>
+      </div>
+      <div class="grade-item">
+        <div class="grade-item-text">
+          <span data-zh>普通初榨橄欖油</span><span data-en>Ordinary Virgin Olive Oil</span>
+          <span class="grade-item-sub">Ordinary Virgin Olive Oil</span>
+        </div>
+        <span class="grade-badge gb-ord">FFA ≤ 3.3%</span>
+      </div>
+      <div class="grade-item">
+        <div class="grade-item-text">
+          <span data-zh>初榨橄欖燈油</span><span data-en>Lampante Virgin Olive Oil</span>
+          <span class="grade-item-sub">Lampante Virgin Olive Oil</span>
+        </div>
+        <span class="grade-badge gb-lamp">FFA &gt; 3.3%</span>
+      </div>
+    </div>
+  </article>
+
+  <hr class="divider">
+
+  <!-- COMING SOON (Guide 2 blur zone) -->
+  <div class="coming-wrap">
+    <div class="coming-blur">
+      <p class="sec-title" style="margin-top:0"><span data-zh>特級初榨橄欖油最貼地指南 2</span><span data-en>Practical EVOO Guide Part 2</span></p>
+      <p class="body-text"><span data-zh>2026 香港橄欖油推薦指南。由最平價、最高 CP 值開始，揀一支真正適合每日食用嘅橄欖油。入門首選：GAEA 特級初榨橄欖油。升級之選：PepperGreen Estate 澳翠莊園。</span><span data-en>2026 Hong Kong Olive Oil Recommendation Guide. Starting from best value, working up to premium estates. Entry pick: GAEA Extra Virgin. Upgrade: PepperGreen Estate.</span></p>
+      <p class="body-text"><span data-zh>第三章：烹飪拆解 煙點大 Scam 與氧化穩定性嘅真理。2018 年澳洲研究顯示，EVOO 係最穩定嘅烹飪油，喺 180°C 高溫下產生嘅極性化合物最少。</span><span data-en>Chapter 3: Cooking Myths — The Smoke Point Scam & Oxidative Stability Truth. 2018 Australian research shows EVOO is the most stable cooking oil, producing the fewest polar compounds at 180°C.</span></p>
+      <p class="body-text"><span data-zh>第四章：條碼照妖鏡。84 碼西班牙，80-83 碼意大利，520 碼希臘，619 碼突尼西亞。標籤寫意大利但條碼係 619 即係 Aura Scam。</span><span data-en>Chapter 4: Barcode Fraud Detector. 84 = Spain, 80-83 = Italy, 520 = Greece, 619 = Tunisia. Label says Italy but barcode is 619? That's Aura Scam.</span></p>
+      <p class="body-text"><span data-zh>第五章：24 小時原型驗證法。冰箱冷藏 4°C 24 小時，凝固係 Firm，水咁樣就係廢油。喉嚨 Kick 度測試：有辣感先係真抗炎藥 Oleocanthal。</span><span data-en>Chapter 5: 24-Hour Prototype Validation. Refrigerate at 4°C for 24 hours — solidifies = legitimate; stays liquid = cosmetically treated waste oil. Throat test: burning sensation = real Oleocanthal medicine.</span></p>
+      <p class="body-text"><span data-zh>第六章：全球 10 大生飲品牌。PepperGreen FFA 0.1%，Suerte Alta 多酚達 1400mg，O-Med 酸價 0.1% Rizz 爆棚，Amala 藥用派極致。</span><span data-en>Chapter 6: Global Top 10 Raw-Drinking Brands. PepperGreen FFA 0.1%, Suerte Alta polyphenols 1400mg, O-Med FFA 0.1% maximum detail, Amala medical-grade extreme.</span></p>
+      <div class="thread-cards" style="margin-top:18px;opacity:.7">
+        <div class="thread-card">
+          <span class="tc-num">6</span>
+          <div class="tc-body">
+            <div class="tc-title"><span data-zh>🫒 品油筆記 #6</span><span data-en>🫒 Tasting Note #6</span></div>
+            <div class="tc-excerpt"><span data-zh>喺 Threads 睇完整品油筆記。</span><span data-en>Full tasting note available on Threads.</span></div>
+            <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>View on Threads ↗</span></span>
+          </div>
+        </div>
+
+        <div class="thread-card">
+          <span class="tc-num">7</span>
+          <div class="tc-body">
+            <div class="tc-title"><span data-zh>🫒 品油筆記 #7</span><span data-en>🫒 Tasting Note #7</span></div>
+            <div class="tc-excerpt"><span data-zh>喺 Threads 睇完整品油筆記。</span><span data-en>Full tasting note available on Threads.</span></div>
+            <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>View on Threads ↗</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="coming-overlay">
+      <div class="coming-badge">
+        <span data-zh>興建中</span><span data-en>Under Construction</span>
+      </div>
+      <div class="coming-sub">
+        <span data-zh>指南 2 · 更多品油筆記 · 即將公開</span>
+        <span data-en>Guide 2 · More Tasting Notes · Coming Soon</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="layer">
+  <p>
+    <a href="https://threads.com/ericwongkhk" target="_blank" style="color:rgba(180,148,75,0.48)">@ericwongkhk</a>
+    &nbsp;·&nbsp;
+    <span data-zh>Polyphenol · 多酚 · EVOO</span>
+    <span data-en>Polyphenol · Polyphenols · EVOO</span>
+  </p>
+  <p style="margin-top:5px">Make Anti-inflammatory Great Again</p>
+</footer>
+
+<script>
+// Canvas background
+(function(){
+  var c=document.getElementById("bg-canvas"),ctx=c.getContext("2d"),W,H,orbs=[];
+  var cols=["rgba(120,100,40,","rgba(80,140,60,","rgba(160,120,30,","rgba(60,120,80,","rgba(140,90,20,","rgba(40,80,60,"];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  function Orb(){
+    this.x=Math.random()*W||400;this.y=Math.random()*H||400;
+    this.r=Math.random()*220+100;
+    this.vx=(Math.random()-.5)*.19;this.vy=(Math.random()-.5)*.15;
+    this.col=cols[Math.floor(Math.random()*cols.length)];
+    this.a=Math.random()*.16+.05;
+  }
+  Orb.prototype.update=function(){
+    this.x+=this.vx;this.y+=this.vy;
+    if(this.x<-this.r)this.x=W+this.r;if(this.x>W+this.r)this.x=-this.r;
+    if(this.y<-this.r)this.y=H+this.r;if(this.y>H+this.r)this.y=-this.r;
+  };
+  Orb.prototype.draw=function(){
+    var g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r);
+    g.addColorStop(0,this.col+this.a+")");g.addColorStop(1,this.col+"0)");
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill();
+  };
+  function init(){resize();orbs=[];var n=Math.min(13,Math.floor((W||800)*(H||600)/75000)+5);for(var i=0;i<n;i++)orbs.push(new Orb());}
+  function tick(){ctx.clearRect(0,0,W,H);ctx.fillStyle="#07090d";ctx.fillRect(0,0,W,H);for(var i=0;i<orbs.length;i++){orbs[i].update();orbs[i].draw();}requestAnimationFrame(tick);}
+  window.addEventListener("resize",resize);init();tick();
+})();
+
+// Language toggle
+var currentLang = 'zh';
+function toggleLang(){
+  var root = document.getElementById('root');
+  var btn = document.getElementById('lang-toggle');
+  if(currentLang === 'zh'){
+    currentLang = 'en';
+    root.setAttribute('lang','en');
+    btn.textContent = '廣東話';
+  } else {
+    currentLang = 'zh';
+    root.setAttribute('lang','zh-HK');
+    btn.textContent = 'English';
+  }
+}
+</script>
+</body>
+</html>
