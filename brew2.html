@@ -180,12 +180,12 @@
     <!-- =================================================================== -->
     <section id="view-customer" class="space-y-6">
 
-      <!-- Top Row: FPS (Faster Payment System) Top Priority Payment -->
+      <!-- Top Row: FPS Top Transfer Notice (No QR Code · Bank / Phone / Amount · WhatsApp Verification) -->
       <div class="tactile-card p-5 bg-[#FFFBEB]">
         <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-stone-200">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded bg-emerald-700 text-white font-mono text-xs font-black">TOP PRIORITY</span>
-            <h2 class="font-black text-base sm:text-lg text-stone-900">🇭🇰 FPS (Faster Payment System)</h2>
+            <h2 class="font-black text-base sm:text-lg text-stone-900">🇭🇰 FPS Transfer (No QR Code Required)</h2>
             <button type="button" onclick="toggleHint('hint-customer-fps')" class="info-badge" title="Payment Guide">i</button>
           </div>
           <div class="flex items-center gap-2 text-xs font-bold text-stone-500">
@@ -194,134 +194,151 @@
             <span>Order <strong id="cust-top-order-id" class="font-mono text-stone-900">#00</strong></span>
             <button
               type="button"
-              onclick="resetToZeroAndReload('customer')"
-              class="tactile-btn ml-1 px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 font-black text-xs flex items-center gap-1 shadow-sm"
-              title="Reset order sequence & amount to 0 (#00 / HK$0) and reload"
+              onclick="resetToZeroSafe('customer')"
+              class="tactile-btn ml-1 px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 font-black text-xs flex items-center gap-1 shadow-sm"
+              title="Reset order ID & amount to 0 (Cannot change after payment)"
             >
-              🔄 Reset 0 / Reload
+              🔄 Reset 0
             </button>
           </div>
         </div>
 
         <!-- Collapsible 'i' Hint for FPS -->
         <div id="hint-customer-fps" class="hidden mt-3 p-3 rounded-xl bg-amber-100/70 border border-stone-300 text-xs text-stone-800 space-y-1">
-          <p class="font-bold">📌 FPS Payment Steps:</p>
-          <p>1. Tap "Copy Phone" below or scan the FPS QR Code in your banking app.</p>
-          <p>2. Enter your Order ID in the transfer remarks (e.g. <span class="font-mono font-bold">#01</span>), and tap "💬 Send to WhatsApp" to notify the barista immediately.</p>
+          <p class="font-bold">📌 FPS Payment & Verification Steps:</p>
+          <p>1. Select your bank below, open your Mobile Banking App and choose FPS.</p>
+          <p>2. Enter FPS Mobile <span class="font-mono font-bold text-stone-900">9123 6789</span> and the payable amount. Include Order ID (e.g. <span class="font-mono font-bold">#01</span>) in memo.</p>
+          <p>3. Tap "💬 Send Screenshot via WhatsApp" to notify the barista brewer directly.</p>
+          <p>4. The barista verifies the amount & time with 1 click, synchronizing in real time to start brewing!</p>
         </div>
 
-        <!-- Main FPS Active Card -->
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-          <!-- Left: FPS Number & Amount -->
-          <div class="md:col-span-7 p-4 rounded-xl bg-white border-2 border-stone-900 space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-stone-500">FPS Phone Number</span>
-              <span class="text-xs font-bold text-emerald-700">🟢 Instant Verification</span>
-            </div>
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div id="cust-fps-phone-display" class="text-2xl sm:text-3xl font-black font-mono tracking-tight text-stone-900 tabular-nums">
-                9123 6789
+        <!-- Main FPS Prompt Grid (No QR Code!) -->
+        <div class="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+          <!-- Left 6 Cols: Bank, Phone, Amount Prompts -->
+          <div class="lg:col-span-6 p-4 rounded-xl bg-white border-2 border-stone-900 space-y-3.5 flex flex-col justify-between">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-black text-stone-700 flex items-center gap-1">
+                  <span>🏦 Customer's Bank</span>
+                </span>
+                <span class="text-xs font-bold text-emerald-700">🟢 Live Reconcile</span>
               </div>
-              <button
-                type="button"
-                onclick="copyFpsPhone()"
-                class="tactile-btn px-3 py-1.5 rounded-lg bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs"
+              <select
+                id="cust-bank-select"
+                onchange="updateBankFpsPrompt()"
+                class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 text-xs sm:text-sm font-bold bg-amber-50 text-stone-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
               >
-                📋 Copy Phone
-              </button>
-            </div>
-            <div class="pt-2 border-t border-stone-200 flex items-center justify-between">
-              <div>
-                <span class="text-xs font-bold text-stone-500 block">Total Due (HKD)</span>
-                <span id="cust-fps-amount-display" class="text-2xl font-black font-mono text-emerald-700 tabular-nums">HK$0</span>
+                <option value="HSBC">HSBC (004)</option>
+                <option value="Hang Seng Bank">Hang Seng Bank (024)</option>
+                <option value="BOC HK">BOC HK (012)</option>
+                <option value="Standard Chartered">Standard Chartered (003)</option>
+                <option value="Mox Bank">Mox Bank (388)</option>
+                <option value="ZA Bank">ZA Bank (387)</option>
+                <option value="Bank of East Asia (BEA)">Bank of East Asia (BEA) (015)</option>
+                <option value="Citibank HK">Citibank HK (250)</option>
+                <option value="Dah Sing Bank">Dah Sing Bank (040)</option>
+                <option value="Other HK Bank">Other HK Bank</option>
+              </select>
+              <div id="cust-bank-hint-text" class="text-[11px] font-bold text-stone-600 bg-stone-50 p-2 rounded-lg border border-stone-200">
+                💡 Open your <strong id="cust-active-bank-name" class="text-stone-900">HSBC</strong> App and select "FPS Transfer".
               </div>
-              <div class="flex flex-wrap gap-2">
+            </div>
+
+            <!-- Phone Number & Amount Row -->
+            <div class="pt-2 border-t border-stone-200 grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+              <div>
+                <span class="text-xs font-bold text-stone-500 block mb-0.5">FPS Receiver Mobile</span>
+                <div id="cust-fps-phone-display" class="text-2xl font-black font-mono tracking-tight text-stone-900 tabular-nums">
+                  9123 6789
+                </div>
                 <button
                   type="button"
-                  onclick="copyFpsReceiptPrompt()"
-                  class="tactile-btn px-3 py-2 rounded-lg bg-stone-900 text-white font-black text-xs"
+                  onclick="copyFpsPhone()"
+                  class="tactile-btn mt-1 px-3 py-1.5 rounded-lg bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs inline-flex items-center gap-1 shadow-sm"
                 >
-                  📲 Copy Payment Prompt
+                  📋 Copy Mobile
                 </button>
+              </div>
+              <div class="sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-stone-100">
+                <span class="text-xs font-bold text-stone-500 block mb-0.5">Payable Amount (HKD)</span>
+                <span id="cust-fps-amount-display" class="text-3xl font-black font-mono text-emerald-700 tabular-nums">HK$0</span>
+                <div class="text-[11px] font-mono text-stone-500 mt-0.5">
+                  Memo: <strong id="cust-fps-memo-order-id" class="text-stone-900">#00</strong>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Right: Dual QR Code Switcher (FPS vs WhatsApp) + Paused Methods -->
-          <div class="md:col-span-5 p-3.5 rounded-xl bg-white border-2 border-stone-900 space-y-2.5">
-            <!-- QR Tabs Switcher -->
-            <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-lg border border-stone-300 text-xs font-black">
-              <button
-                type="button"
-                id="qr-tab-fps"
-                onclick="switchCustQrTab('fps')"
-                class="flex-1 py-1 rounded bg-stone-900 text-amber-300 shadow-sm text-center"
-              >
-                🇭🇰 FPS Pay QR
-              </button>
-              <button
-                type="button"
-                id="qr-tab-wa"
-                onclick="switchCustQrTab('wa')"
-                class="flex-1 py-1 rounded text-stone-600 hover:text-stone-900 text-center"
-              >
-                💬 Barista WhatsApp
-              </button>
-            </div>
+          <!-- Right 6 Cols: WhatsApp Barista Steps & Brewer Confirmation Flow -->
+          <div class="lg:col-span-6 p-4 rounded-xl bg-white border-2 border-stone-900 space-y-3 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-2 border-b border-stone-200">
+                <span class="text-xs font-black text-stone-900 flex items-center gap-1.5">
+                  <span class="w-5 h-5 rounded-full bg-emerald-600 text-white text-[11px] font-mono font-black flex items-center justify-center">✓</span>
+                  <span>WhatsApp Transfer Steps · Barista Confirmation</span>
+                </span>
+                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-300">No QR Code Needed</span>
+              </div>
 
-            <!-- Content Area with clear labels -->
-            <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row items-center gap-3">
-              <img
-                id="cust-fps-qr-img"
-                src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=FPS%3A91236789%3BHKD%3A43%3BORDER%3A01"
-                alt="FPS Payment QR Code"
-                class="w-24 h-24 rounded-lg border border-stone-300 p-1 bg-white shrink-0 shadow-sm"
-              />
-              <div class="space-y-1 text-center sm:text-left">
-                <!-- Dynamic QR Label & Description -->
-                <div id="cust-qr-badge" class="inline-block px-2 py-0.5 rounded bg-emerald-100 border border-emerald-300 text-emerald-900 text-[11px] font-black">
-                  💳 FPS Payment ONLY (Not WhatsApp)
+              <!-- 4 Steps Flow -->
+              <div class="mt-2.5 space-y-2 text-xs">
+                <div class="flex items-start gap-2 bg-stone-50 p-2 rounded-lg border border-stone-200">
+                  <span class="w-5 h-5 rounded bg-stone-900 text-amber-300 font-mono text-[11px] font-black shrink-0 flex items-center justify-center">1</span>
+                  <p class="font-bold text-stone-800">
+                    Open your Banking App, enter FPS Mobile <span class="font-mono font-black text-stone-950">9123 6789</span> and amount.
+                  </p>
                 </div>
-                <div id="cust-qr-title" class="text-xs font-black text-stone-900">
-                  FPS Payment QR Code
+                <div class="flex items-start gap-2 bg-stone-50 p-2 rounded-lg border border-stone-200">
+                  <span class="w-5 h-5 rounded bg-stone-900 text-amber-300 font-mono text-[11px] font-black shrink-0 flex items-center justify-center">2</span>
+                  <p class="font-bold text-stone-800">
+                    Fill in Order ID (e.g. <span class="font-mono font-black text-stone-950" id="cust-step2-order-id">#00</span>) in memo & screenshot receipt.
+                  </p>
                 </div>
-                <p id="cust-qr-desc" class="text-[11px] text-stone-600 leading-snug">
-                  Scan with your HK banking app to auto-fill amount & ref #01
-                </p>
-                <div id="cust-qr-link-wrap" class="pt-0.5">
-                  <a
-                    id="cust-qr-direct-link"
-                    href="javascript:void(0)"
-                    onclick="openActiveQrAction()"
-                    class="text-[11px] font-black text-emerald-700 hover:underline inline-flex items-center gap-1"
-                  >
-                    <span>📲 Copy FPS Payment Text</span>
-                  </a>
+                <div class="flex items-start gap-2 bg-emerald-50 p-2 rounded-lg border border-emerald-300">
+                  <span class="w-5 h-5 rounded bg-emerald-700 text-white font-mono text-[11px] font-black shrink-0 flex items-center justify-center">3</span>
+                  <p class="font-bold text-emerald-950">
+                    Tap the green button below to send screenshot & Order ID to Barista WhatsApp.
+                  </p>
+                </div>
+                <div class="flex items-start gap-2 bg-amber-50 p-2 rounded-lg border border-amber-300">
+                  <span class="w-5 h-5 rounded bg-amber-600 text-white font-mono text-[11px] font-black shrink-0 flex items-center justify-center">4</span>
+                  <p class="font-bold text-amber-950">
+                    Barista verifies amount & time with 1 click to unlock brewing immediately!
+                  </p>
                 </div>
               </div>
             </div>
 
-            <!-- Collapsible Paused Methods (Visa / PayMe / Octopus) -->
-            <details class="pt-1 border-t border-stone-200">
-              <summary class="cursor-pointer text-[11px] font-bold text-stone-500 hover:text-stone-800 flex items-center justify-between">
-                <span>▾ Other Channels (PayMe / Visa Paused)</span>
-                <span class="text-[10px]">⏸️ Paused</span>
-              </summary>
-              <div class="mt-1.5 p-2 rounded-lg bg-stone-100 border border-stone-300 space-y-1 text-[11px] text-stone-500">
-                <div class="flex items-center justify-between">
-                  <span>PayMe</span>
-                  <span class="font-mono font-bold text-rose-600">⏸️ Paused</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span>Visa / Credit Card</span>
-                  <span class="font-mono font-bold text-rose-600">⏸️ Paused</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span>Octopus Card</span>
-                  <span class="font-mono font-bold text-rose-600">⏸️ Paused</span>
-                </div>
+            <!-- Direct Action Buttons -->
+            <div class="space-y-2 pt-2 border-t border-stone-200">
+              <a
+                id="cust-direct-wa-link"
+                href="javascript:void(0)"
+                onclick="openCustomerWhatsApp()"
+                class="tactile-btn w-full py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-sm sm:text-base flex items-center justify-center gap-2 shadow-[2px_2px_0px_#111827] border-2 border-stone-900 transition"
+              >
+                <span>💬 WhatsApp Screenshot & Order ID to Barista</span>
+              </a>
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  onclick="copyFpsReceiptPrompt()"
+                  class="tactile-btn flex-1 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white font-black text-xs text-center"
+                >
+                  📋 Copy Payment Message
+                </button>
+                <details class="shrink-0">
+                  <summary class="cursor-pointer px-2.5 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-600 font-bold text-xs list-none">
+                    ⏸️ Other Payments
+                  </summary>
+                  <div class="absolute z-20 mt-1 p-2.5 rounded-xl bg-white border-2 border-stone-900 shadow-lg text-xs space-y-1 w-44">
+                    <div class="flex justify-between font-bold text-stone-500"><span>PayMe</span><span class="text-rose-600">⏸️ Paused</span></div>
+                    <div class="flex justify-between font-bold text-stone-500"><span>Visa</span><span class="text-rose-600">⏸️ Paused</span></div>
+                    <div class="flex justify-between font-bold text-stone-500"><span>Octopus</span><span class="text-rose-600">⏸️ Paused</span></div>
+                  </div>
+                </details>
               </div>
-            </details>
+            </div>
           </div>
         </div>
       </div>
@@ -453,48 +470,54 @@
             </div>
           </div>
 
-          <!-- Customer Contact Details -->
-          <details class="p-3.5 rounded-xl bg-stone-50 border border-stone-300" open>
-            <summary class="cursor-pointer flex items-center justify-between text-xs font-black text-stone-800">
-              <span>2. Customer Contact Info (WhatsApp / IG Verification)</span>
-              <span class="text-stone-500 font-mono">▾ Expand / Collapse</span>
-            </summary>
-            <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <!-- Customer Contact Details (WhatsApp + IG Dual Verification) -->
+          <div class="p-4 rounded-xl bg-stone-50 border-2 border-stone-900 space-y-3">
+            <div class="flex items-center justify-between border-b border-stone-200 pb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-md bg-stone-900 text-amber-300 font-mono text-xs font-black flex items-center justify-center">2</span>
+                <h3 class="text-sm font-black text-stone-900">Customer Contact (WhatsApp / IG Dual Check)</h3>
+              </div>
+              <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold text-[11px] border border-rose-300">Prevent Contact Mismatches</span>
+            </div>
+            <p class="text-[11px] font-bold text-stone-600 leading-relaxed">
+              ⚠️ Please provide both <strong>WhatsApp Mobile</strong> and <strong>IG Handle</strong>. The barista cross-checks receipt screenshots & Order ID to ensure zero mismatch!
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               <div>
-                <label for="cust-name-input" class="text-[11px] font-bold text-stone-600 block mb-1">Name / Title</label>
+                <label for="cust-name-input" class="text-[11px] font-black text-stone-700 block mb-1">Name</label>
                 <input
                   id="cust-name-input"
                   type="text"
                   value="Ms. Chan"
                   oninput="parseOrderInput()"
                   placeholder="e.g. Ms. Chan"
-                  class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-bold bg-white"
+                  class="w-full rounded-lg border-2 border-stone-900 px-2.5 py-1.5 text-xs font-bold bg-white"
                 />
               </div>
               <div>
-                <label for="cust-whatsapp-input" class="text-[11px] font-bold text-stone-600 block mb-1">WhatsApp Phone</label>
+                <label for="cust-whatsapp-input" class="text-[11px] font-black text-stone-700 block mb-1">WhatsApp (Verify Phone)</label>
                 <input
                   id="cust-whatsapp-input"
                   type="tel"
                   value="9123 4567"
                   oninput="parseOrderInput()"
                   placeholder="9123 4567"
-                  class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
+                  class="w-full rounded-lg border-2 border-stone-900 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
                 />
               </div>
               <div>
-                <label for="cust-ig-input" class="text-[11px] font-bold text-stone-600 block mb-1">IG Handle</label>
+                <label for="cust-ig-input" class="text-[11px] font-black text-stone-700 block mb-1">IG Handle (Verify Account)</label>
                 <input
                   id="cust-ig-input"
                   type="text"
                   value="@chan_hk"
                   oninput="parseOrderInput()"
                   placeholder="@handle"
-                  class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
+                  class="w-full rounded-lg border-2 border-stone-900 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
                 />
               </div>
             </div>
-          </details>
+          </div>
         </div>
 
         <!-- Right 5 Cols: 3. Order Confirmation & Cancellation -->
@@ -763,12 +786,66 @@
               </span>
             </div>
           </div>
-          <div class="flex items-center flex-wrap gap-2">
-            <button type="button" onclick="scrollToCrmSection()" class="px-2.5 py-1 rounded-lg bg-sky-700 hover:bg-sky-600 text-white text-xs font-black">📊 CRM Audit Center</button>
-            <button type="button" onclick="resetToZeroAndReload('brewer')" class="px-2.5 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-amber-300 text-xs font-black border border-amber-400 shadow-sm flex items-center gap-1" title="Reset order sequence & amount to 0 and reload">🔄 Reset 0 / Reload</button>
-            <button type="button" onclick="setShopMode('normal')" class="px-2.5 py-1 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold">🟢 Open / Normal</button>
-            <button type="button" onclick="setShopMode('busy')" class="px-2.5 py-1 rounded-lg bg-amber-700 hover:bg-amber-600 text-white text-xs font-bold">🟡 Brewing - Busy</button>
-            <button type="button" onclick="logoutBrewerWorkspace()" class="px-3 py-1 rounded-lg bg-rose-700 hover:bg-rose-600 text-white text-xs font-black border border-rose-400">🚪 Logout</button>
+          <div class="flex items-center flex-wrap gap-2.5 pt-1 sm:pt-0">
+            <!-- Big Button: 🟢 Normal Orders -->
+            <button
+              type="button"
+              onclick="setShopMode('normal')"
+              id="btn-mode-normal"
+              class="tactile-btn py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[2px_2px_0px_#111827] flex items-center gap-1.5"
+            >
+              <span class="text-base">🟢</span>
+              <span>Open / Taking Orders</span>
+            </button>
+
+            <!-- Big Button: 🟡 Busy Brewing -->
+            <button
+              type="button"
+              onclick="setShopMode('busy')"
+              id="btn-mode-busy"
+              class="tactile-btn py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[2px_2px_0px_#111827] flex items-center gap-1.5"
+            >
+              <span class="text-base">🟡</span>
+              <span>Brewing - Please Wait</span>
+            </button>
+
+            <!-- Big Button: 🔄 Reset 0 (1-time reset, locked after payment) -->
+            <button
+              type="button"
+              onclick="resetToZeroSafe('brewer')"
+              class="tactile-btn py-2.5 px-4 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 text-xs sm:text-sm font-black border-2 border-amber-400 shadow-[2px_2px_0px_#FACC15] flex items-center gap-1.5"
+              title="1-time reset ID & amount to 0 (Locked after payment)"
+            >
+              <span>🔄 Reset 0</span>
+              <span class="text-[10px] text-stone-400 font-normal hidden sm:inline">(Locked after paid)</span>
+            </button>
+
+            <!-- Big Button: ⏱️ Reload (Updates Prep Time) -->
+            <button
+              type="button"
+              onclick="reloadBrewTimeAndQueue('brewer')"
+              class="tactile-btn py-2.5 px-4 rounded-xl bg-sky-700 hover:bg-sky-600 text-white text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[2px_2px_0px_#111827] flex items-center gap-1.5"
+              title="Refresh orders and update prep timestamps"
+            >
+              <span>⏱️ Reload</span>
+              <span class="text-[10px] text-sky-200 font-normal hidden sm:inline">(Update Prep Time)</span>
+            </button>
+
+            <!-- CRM Backend & Logout -->
+            <button
+              type="button"
+              onclick="scrollToCrmSection()"
+              class="px-3 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-black border border-stone-600"
+            >
+              📊 CRM Audit Center
+            </button>
+            <button
+              type="button"
+              onclick="logoutBrewerWorkspace()"
+              class="px-3 py-2 rounded-xl bg-rose-700 hover:bg-rose-600 text-white text-xs font-black border border-rose-400"
+            >
+              🚪 Logout
+            </button>
           </div>
         </div>
 
@@ -861,36 +938,70 @@
                 </div>
               </details>
 
-              <!-- Quick Verify Checkboxes -->
-              <div class="p-3.5 rounded-xl bg-stone-50 border-2 border-stone-900 space-y-2.5">
+              <!-- Quick Verify Checkboxes (Big Tactile Buttons) -->
+              <div class="p-4 rounded-xl bg-stone-50 border-2 border-stone-900 space-y-3">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-black text-stone-900">📸 Verification Checklist (FPS Screenshot)</span>
-                  <button type="button" onclick="simulateCustomerPaid()" class="text-xs font-bold text-emerald-700 hover:underline">
-                    ⚡ 1-Click Verify & Brew
+                  <span class="text-xs font-black text-stone-900">📸 Verification & Unlock (FPS Check)</span>
+                  <span class="text-[11px] font-bold text-stone-500">Touch Controls</span>
+                </div>
+
+                <!-- Big Button: ⚡ 1-Click Verification Unlock -->
+                <button
+                  type="button"
+                  onclick="simulateCustomerPaid()"
+                  class="tactile-btn w-full py-3.5 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-sm sm:text-base border-2 border-stone-900 shadow-[3px_3px_0px_#111827] flex items-center justify-center gap-2 transition active:scale-95"
+                >
+                  <span class="text-lg">⚡</span>
+                  <span>1-Click Verify & Unlock</span>
+                </button>
+
+                <!-- Big Buttons: Amount, Time, Paid (3 touch cards) -->
+                <div class="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    id="btn-chk-amount"
+                    onclick="toggleVerificationStep('amount')"
+                    class="py-3 px-2 rounded-xl border-2 border-stone-900 bg-white text-stone-800 font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-sm transition active:scale-95"
+                  >
+                    <span id="icon-chk-amount" class="text-base sm:text-lg">◻️</span>
+                    <span>Amount Match</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    id="btn-chk-time"
+                    onclick="toggleVerificationStep('time')"
+                    class="py-3 px-2 rounded-xl border-2 border-stone-900 bg-white text-stone-800 font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-sm transition active:scale-95"
+                  >
+                    <span id="icon-chk-time" class="text-base sm:text-lg">◻️</span>
+                    <span>Time Match</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    id="btn-chk-status"
+                    onclick="toggleVerificationStep('status')"
+                    class="py-3 px-2 rounded-xl border-2 border-stone-900 bg-white text-stone-800 font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-sm transition active:scale-95"
+                  >
+                    <span id="icon-chk-status" class="text-base sm:text-lg">◻️</span>
+                    <span>Paid Verified</span>
                   </button>
                 </div>
-                <div class="grid grid-cols-3 gap-1.5 text-[11px] font-bold">
-                  <label class="flex items-center gap-1.5 p-2 rounded bg-white border border-stone-300 cursor-pointer">
-                    <input type="checkbox" id="chk-amount" onchange="checkPaymentVerification()" class="w-3.5 h-3.5 accent-emerald-600" />
-                    <span>Amount</span>
-                  </label>
-                  <label class="flex items-center gap-1.5 p-2 rounded bg-white border border-stone-300 cursor-pointer">
-                    <input type="checkbox" id="chk-time" onchange="checkPaymentVerification()" class="w-3.5 h-3.5 accent-emerald-600" />
-                    <span>Time</span>
-                  </label>
-                  <label class="flex items-center gap-1.5 p-2 rounded bg-white border border-stone-300 cursor-pointer">
-                    <input type="checkbox" id="chk-status" onchange="checkPaymentVerification()" class="w-3.5 h-3.5 accent-emerald-600" />
-                    <span>Transferred</span>
-                  </label>
-                </div>
+
+                <!-- Hidden inputs -->
+                <input type="checkbox" id="chk-amount" class="hidden" onchange="checkPaymentVerification()" />
+                <input type="checkbox" id="chk-time" class="hidden" onchange="checkPaymentVerification()" />
+                <input type="checkbox" id="chk-status" class="hidden" onchange="checkPaymentVerification()" />
+
+                <!-- Big Button: 🔒 Unlock Brewing -->
                 <button
                   type="button"
                   id="unlock-brew-btn"
                   disabled
                   onclick="proceedToBrewing()"
-                  class="tactile-btn w-full py-2.5 rounded-xl bg-emerald-500 text-stone-950 font-black text-xs"
+                  class="tactile-btn w-full py-3.5 px-4 rounded-xl bg-emerald-500 text-stone-950 font-black text-sm sm:text-base border-2 border-stone-900 shadow-[3px_3px_0px_#111827] flex items-center justify-center gap-2 transition"
                 >
-                  🔒 Verify to Unlock "🟠 Brewing"
+                  🔒 Unlock Brewing
                 </button>
               </div>
             </div>
@@ -1142,44 +1253,117 @@
               </table>
             </div>
 
-            <!-- Sub-Tab 4: Backend Email & Passkey Records + Login Audit -->
+            <!-- Sub-Tab 4: Backend Email & Passkey Records + 2-Tier Passkey Control -->
             <div id="crm-panel-accounts" class="hidden space-y-4">
-              <div class="p-3.5 rounded-xl bg-stone-100 border border-stone-300 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <!-- Top Banner & Passkey Mode Indicator -->
+              <div class="p-4 rounded-xl bg-stone-100 border-2 border-stone-900 flex flex-wrap items-center justify-between gap-3 text-xs">
                 <div>
-                  <span class="font-black text-stone-900">🔐 Backend Email & Passkey Registry</span>
-                  <span class="text-stone-600 ml-2">(Tracks all registered emails, 4-digit Passkeys, login frequencies, and last activity)</span>
+                  <div class="flex items-center gap-2">
+                    <span id="crm-auth-mode-badge" class="px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-mono text-xs font-black">Brewer Mode (Isolated)</span>
+                    <strong class="text-sm font-black text-stone-900">Backend Accounts & Audit Date Management</strong>
+                  </div>
+                  <p id="crm-auth-mode-desc" class="text-stone-600 mt-1">
+                    Each registered brewer can only view and edit their own email, passkey, and audit date. Other accounts are protected.
+                  </p>
                 </div>
-                <button
-                  type="button"
-                  onclick="fetchAuthAuditFromServer()"
-                  class="px-2.5 py-1 rounded bg-stone-900 text-white font-bold text-xs"
-                >
-                  🔄 Refresh Records
-                </button>
+
+                <!-- Owner Passkey Unlock Box (No "admin" word shown!) -->
+                <div class="flex items-center gap-2 bg-white p-1.5 rounded-xl border border-stone-400">
+                  <input
+                    type="password"
+                    id="owner-passkey-input"
+                    placeholder="Enter Owner Passkey"
+                    class="px-2.5 py-1 text-xs font-mono rounded-lg border border-stone-300 bg-stone-50 w-36"
+                  />
+                  <button
+                    type="button"
+                    onclick="unlockOwnerMode()"
+                    class="px-3 py-1 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs"
+                  >
+                    Unlock Owner
+                  </button>
+                  <button
+                    type="button"
+                    onclick="fetchAuthAuditFromServer()"
+                    class="px-2.5 py-1 rounded-lg bg-stone-800 text-white font-bold text-xs"
+                    title="Refresh Records"
+                  >
+                    🔄
+                  </button>
+                </div>
               </div>
 
-              <div class="overflow-x-auto">
+              <!-- Owner Add New Brewer Card (Hidden until "imowner" entered) -->
+              <div id="owner-add-brewer-card" class="hidden p-4 rounded-xl bg-amber-50 border-2 border-stone-900 space-y-3">
+                <div class="flex items-center justify-between border-b border-stone-300 pb-2">
+                  <span class="font-black text-xs sm:text-sm text-stone-900">➕ Add Barista Brewer</span>
+                  <span class="text-[11px] font-mono text-amber-900 font-bold">Owner Master Mode Active</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5 items-end">
+                  <div>
+                    <label class="text-[11px] font-black text-stone-700 block mb-1">Email</label>
+                    <input
+                      type="email"
+                      id="new-brewer-email"
+                      placeholder="brewer@cafe.hk"
+                      class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label class="text-[11px] font-black text-stone-700 block mb-1">4-Digit Passkey</label>
+                    <input
+                      type="text"
+                      id="new-brewer-pin"
+                      placeholder="e.g. 0326"
+                      maxlength="4"
+                      class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label class="text-[11px] font-black text-stone-700 block mb-1">Audit Date</label>
+                    <input
+                      type="date"
+                      id="new-brewer-audit-date"
+                      class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onclick="ownerAddBrewerAccount()"
+                    class="tactile-btn py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs"
+                  >
+                    Confirm Add Brewer
+                  </button>
+                </div>
+              </div>
+
+              <!-- Accounts Table -->
+              <div class="overflow-x-auto rounded-xl border-2 border-stone-900 bg-white">
                 <table class="w-full text-left border-collapse text-xs">
                   <thead>
                     <tr class="bg-stone-100 border-b-2 border-stone-900 font-black text-stone-800">
-                      <th class="p-2.5">Registered Email</th>
-                      <th class="p-2.5">4-Digit Passkey</th>
-                      <th class="p-2.5">Login Count</th>
-                      <th class="p-2.5">Registered At</th>
+                      <th class="p-2.5">Email</th>
+                      <th class="p-2.5">Passkey</th>
+                      <th class="p-2.5">Audit Date</th>
+                      <th class="p-2.5">Logins</th>
                       <th class="p-2.5">Last Login</th>
-                      <th class="p-2.5">Last Logout</th>
+                      <th class="p-2.5">Actions</th>
                     </tr>
                   </thead>
                   <tbody id="crm-accounts-tbody" class="divide-y divide-stone-200 font-mono"></tbody>
                 </table>
               </div>
 
+              <!-- Recent Auth Logs -->
               <div class="overflow-x-auto pt-2">
-                <div class="text-xs font-black text-stone-700 mb-1.5">🕒 Recent Login / Logout / Registration Logs</div>
-                <table class="w-full text-left border-collapse text-xs">
+                <div class="text-xs font-black text-stone-700 mb-1.5 flex items-center justify-between">
+                  <span>🕒 Activity Logs (Login / Logout / Register)</span>
+                  <span id="auth-log-scope-hint" class="text-[11px] text-stone-500 font-normal">(Scope: Your Activity Only)</span>
+                </div>
+                <table class="w-full text-left border-collapse text-xs bg-white rounded-xl border border-stone-300">
                   <thead>
                     <tr class="bg-stone-50 border-b border-stone-300 font-bold text-stone-600">
-                      <th class="p-2">Timestamp</th>
+                      <th class="p-2">Time</th>
                       <th class="p-2">Action</th>
                       <th class="p-2">Email</th>
                       <th class="p-2">Passkey</th>
@@ -1192,7 +1376,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </section>
 
@@ -2665,37 +2848,382 @@
       renderAuthAccountsTable();
     }
 
+    
+    // =========================================================================
+    // Enhanced Customer Bank & WhatsApp Flow (No QR Code) - English
+    // =========================================================================
+    function updateBankFpsPrompt() {
+      const bankSelect = document.getElementById('cust-bank-select');
+      const activeBankName = document.getElementById('cust-active-bank-name');
+      if (bankSelect && activeBankName) {
+        const val = bankSelect.value;
+        activeBankName.textContent = val;
+      }
+    }
+
+    function openCustomerWhatsApp() {
+      const bank = document.getElementById('cust-bank-select') ? document.getElementById('cust-bank-select').value : 'Bank';
+      const orderId = document.getElementById('cust-top-order-id') ? document.getElementById('cust-top-order-id').textContent.replace('#', '') : '00';
+      const amount = document.getElementById('customer-order-price') ? document.getElementById('customer-order-price').textContent : '0';
+      const name = document.getElementById('cust-name-input') ? document.getElementById('cust-name-input').value : 'Customer';
+      const phone = document.getElementById('cust-whatsapp-input') ? document.getElementById('cust-whatsapp-input').value : '';
+      const ig = document.getElementById('cust-ig-input') ? document.getElementById('cust-ig-input').value : '';
+      const desc = document.getElementById('customer-order-desc') ? document.getElementById('customer-order-desc').textContent.trim() : 'Pour-over Coffee';
+
+      const msg = "☕【BREW】Hello Barista! I have transferred via " + bank + " FPS.\n" +
+                  "📌 Order ID: #" + orderId + "\n" +
+                  "💰 Amount: $" + amount + " HKD\n" +
+                  "👤 Customer: " + name + " (WhatsApp: " + phone + " · IG: " + ig + ")\n" +
+                  "☕ Drink: " + desc + "\n" +
+                  "📸 FPS transfer screenshot attached. Please verify and brew, thanks!";
+
+      const waUrl = "https://wa.me/85291236789?text=" + encodeURIComponent(msg);
+      window.open(waUrl, '_blank');
+      showToast("💬 WhatsApp opened with order details & screenshot prompt!");
+    }
+
+    // =========================================================================
+    // Barista Mode: Tactile Big Buttons Verification & Reset / Reload - English
+    // =========================================================================
+    let verificationSteps = { amount: false, time: false, status: false };
+
+    function toggleVerificationStep(step) {
+      verificationSteps[step] = !verificationSteps[step];
+      const chk = document.getElementById('chk-' + step);
+      if (chk) chk.checked = verificationSteps[step];
+
+      const btn = document.getElementById('btn-chk-' + step);
+      const icon = document.getElementById('icon-chk-' + step);
+
+      if (btn && icon) {
+        if (verificationSteps[step]) {
+          btn.classList.remove('bg-white', 'text-stone-800');
+          btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-800', 'shadow-[2px_2px_0px_#065F46]');
+          icon.textContent = '✅';
+        } else {
+          btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-800', 'shadow-[2px_2px_0px_#065F46]');
+          btn.classList.add('bg-white', 'text-stone-800');
+          icon.textContent = '◻️';
+        }
+      }
+      checkPaymentVerification();
+    }
+
+    function resetToZeroSafe(source = 'customer') {
+      const orderId = document.getElementById('manual-order-id') ? document.getElementById('manual-order-id').value : '00';
+      const target = kdsOrders.find(o => String(o.id) === String(orderId)) || kdsOrders[0];
+
+      // Locked after payment!
+      if (target && (target.paymentVerified || target.status === '沖緊' || target.status === '搞掂' || target.status === 'Brewing' || target.status === 'Completed')) {
+        showToast("⚠️ Order #" + target.id + " is already paid/verified. Locked after payment!");
+        return;
+      }
+
+      // Perform 1-time reset
+      activeOrderSeq = 0;
+      kdsOrders = [];
+      try {
+        localStorage.removeItem(ORDERS_STORAGE_KEY);
+      } catch (e) {}
+      fetch('/api/brew/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'resetOrders' })
+      }).catch(() => {});
+
+      const id00 = formatOrderId(0);
+      const custTopId = document.getElementById('cust-top-order-id');
+      if (custTopId) custTopId.textContent = '#' + id00;
+      const custMemoId = document.getElementById('cust-fps-memo-order-id');
+      if (custMemoId) custMemoId.textContent = '#' + id00;
+      const custStep2Id = document.getElementById('cust-step2-order-id');
+      if (custStep2Id) custStep2Id.textContent = '#' + id00;
+
+      const manualId = document.getElementById('manual-order-id');
+      if (manualId) manualId.value = id00;
+      const manualAmt = document.getElementById('manual-hkd-amount');
+      if (manualAmt) manualAmt.value = 0;
+      const custFpsAmt = document.getElementById('cust-fps-amount-display');
+      if (custFpsAmt) custFpsAmt.textContent = 'HK$0';
+      const custPrice = document.getElementById('customer-order-price');
+      if (custPrice) custPrice.textContent = '0';
+      const custDesc = document.getElementById('customer-order-desc');
+      if (custDesc) custDesc.textContent = '(Reset to zero, please select drinks)';
+      const orderInput = document.getElementById('order-input');
+      if (orderInput) orderInput.value = '';
+
+      verificationSteps = { amount: false, time: false, status: false };
+      ['amount', 'time', 'status'].forEach(step => {
+        const chk = document.getElementById('chk-' + step);
+        if (chk) chk.checked = false;
+        const btn = document.getElementById('btn-chk-' + step);
+        const icon = document.getElementById('icon-chk-' + step);
+        if (btn && icon) {
+          btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-800', 'shadow-[2px_2px_0px_#065F46]');
+          btn.classList.add('bg-white', 'text-stone-800');
+          icon.textContent = '◻️';
+        }
+      });
+      checkPaymentVerification();
+
+      renderAllOrderViews();
+      showToast("🔄 Order sequence & amount reset to 0 (#00 / HK$0)!");
+    }
+
+    function reloadBrewTimeAndQueue(source = 'brewer') {
+      const nowStr = new Date().toLocaleTimeString('en-HK', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+      kdsOrders.forEach(o => {
+        if ((o.status === '沖緊' || o.status === 'Brewing') && !o.prepStartTime) {
+          o.prepStartTime = nowStr;
+        }
+      });
+      syncOrdersEverywhere();
+      renderAllOrderViews();
+      renderCrmAuditDashboard();
+      showToast("⏱️ Reloaded: Prep time timestamps updated (" + nowStr + ")!");
+    }
+
+    // =========================================================================
+    // 2-Tier Passkey System (Owner "imowner" vs Individual Brewer) - English
+    // =========================================================================
+    let isOwnerMode = false;
+    let currentLoggedBrewerEmail = '4lome.hk@gmail.com';
+    let currentLoggedBrewerPasskey = '0326';
+
+    function unlockOwnerMode() {
+      const passInput = document.getElementById('owner-passkey-input');
+      const pass = passInput ? passInput.value.trim() : '';
+
+      if (pass === 'imowner') {
+        isOwnerMode = true;
+        document.getElementById('crm-auth-mode-badge').textContent = '🌟 Owner Master Mode';
+        document.getElementById('crm-auth-mode-badge').className = 'px-2 py-0.5 rounded bg-amber-400 text-stone-950 font-mono text-xs font-black';
+        document.getElementById('crm-auth-mode-desc').textContent = 'Master permissions active: Modify all emails/passkeys, add/delete brewers, update audit dates, export full CSV.';
+        document.getElementById('owner-add-brewer-card').classList.remove('hidden');
+        document.getElementById('auth-log-scope-hint').textContent = '(Full Global Activity Logs)';
+        if (passInput) passInput.value = '';
+
+        fetchAuthAuditFromServer();
+        showToast('🌟 Owner passkey verified! Entered Owner Master Mode.');
+      } else {
+        showToast('❌ Incorrect passkey. Only owner passkey unlocks full access.');
+      }
+    }
+
+    async function ownerAddBrewerAccount() {
+      if (!isOwnerMode) {
+        showToast('⚠️ Owner passkey required!');
+        return;
+      }
+      const email = document.getElementById('new-brewer-email').value.trim();
+      const pin = document.getElementById('new-brewer-pin').value.trim();
+      const auditDate = document.getElementById('new-brewer-audit-date').value;
+
+      if (!email || !pin || pin.length !== 4) {
+        showToast('⚠️ Please enter valid Email and 4-digit Passkey!');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/brew/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'owner_add_account',
+            passkey: 'imowner',
+            newEmail: email,
+            newPin: pin,
+            auditDate: auditDate || getTodayDateStr()
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('✅ Added Brewer: ' + email);
+          document.getElementById('new-brewer-email').value = '';
+          document.getElementById('new-brewer-pin').value = '';
+          fetchAuthAuditFromServer();
+        } else {
+          showToast('❌ Failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (e) {
+        brewerAccountsRegistry.push({
+          email: email,
+          passkey: pin,
+          pin: pin,
+          auditDate: auditDate || getTodayDateStr(),
+          loginCount: 0,
+          registeredAt: new Date().toISOString(),
+          lastLoginAt: 'Not logged in',
+          lastLogoutAt: null
+        });
+        renderAuthAccountsTable();
+        showToast('✅ Added Brewer (Local): ' + email);
+      }
+    }
+
+    async function ownerEditBrewer(origEmail) {
+      if (!isOwnerMode) {
+        showToast('⚠️ Owner passkey required!');
+        return;
+      }
+      const target = brewerAccountsRegistry.find(a => a.email === origEmail);
+      const newEmail = prompt('Edit Brewer Email:', origEmail);
+      if (!newEmail) return;
+      const newPin = prompt('Edit 4-digit Passkey:', target ? (target.passkey || target.pin || '0326') : '0326');
+      if (!newPin || newPin.length !== 4) {
+        showToast('⚠️ Passkey must be 4 digits!');
+        return;
+      }
+      const newAuditDate = prompt('Edit Audit Date (YYYY-MM-DD):', target && target.auditDate ? target.auditDate : getTodayDateStr());
+
+      try {
+        await fetch('/api/brew/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'owner_update_account',
+            passkey: 'imowner',
+            originalEmail: origEmail,
+            newEmail: newEmail.trim(),
+            newPin: newPin.trim(),
+            auditDate: newAuditDate
+          })
+        });
+        fetchAuthAuditFromServer();
+        showToast('✅ Account updated!');
+      } catch (e) {
+        if (target) {
+          target.email = newEmail.trim();
+          target.passkey = newPin.trim();
+          target.pin = newPin.trim();
+          target.auditDate = newAuditDate;
+        }
+        renderAuthAccountsTable();
+        showToast('✅ Account updated (Local)!');
+      }
+    }
+
+    async function ownerDeleteBrewer(email) {
+      if (!isOwnerMode) {
+        showToast('⚠️ Owner passkey required!');
+        return;
+      }
+      if (!confirm('Are you sure you want to delete Brewer (' + email + ')?')) return;
+
+      try {
+        await fetch('/api/brew/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'owner_delete_account',
+            passkey: 'imowner',
+            email: email
+          })
+        });
+        fetchAuthAuditFromServer();
+        showToast('🗑️ Brewer removed.');
+      } catch (e) {
+        brewerAccountsRegistry = brewerAccountsRegistry.filter(a => a.email !== email);
+        renderAuthAccountsTable();
+        showToast('🗑️ Brewer removed (Local).');
+      }
+    }
+
+    async function brewerEditSelf(email) {
+      const target = brewerAccountsRegistry.find(a => a.email === email);
+      const newEmail = prompt('Edit your Email:', email);
+      if (!newEmail) return;
+      const newPin = prompt('Edit your 4-digit Passkey:', target ? (target.passkey || target.pin || '0326') : '0326');
+      if (!newPin || newPin.length !== 4) {
+        showToast('⚠️ Passkey must be 4 digits!');
+        return;
+      }
+      const newAuditDate = prompt('Set your Audit Date (YYYY-MM-DD):', target && target.auditDate ? target.auditDate : getTodayDateStr());
+
+      try {
+        await fetch('/api/brew/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'brewer_update_self',
+            email: email,
+            pin: target ? (target.passkey || target.pin) : '0326',
+            newEmail: newEmail.trim(),
+            newPin: newPin.trim(),
+            auditDate: newAuditDate
+          })
+        });
+        currentLoggedBrewerEmail = newEmail.trim();
+        currentLoggedBrewerPasskey = newPin.trim();
+        const emailBadge = document.getElementById('active-brewer-email');
+        if (emailBadge) emailBadge.textContent = currentLoggedBrewerEmail;
+        const pinBadge = document.getElementById('active-brewer-pin-badge');
+        if (pinBadge) pinBadge.textContent = currentLoggedBrewerPasskey;
+        fetchAuthAuditFromServer();
+        showToast('✅ Your profile & audit date updated!');
+      } catch (e) {
+        if (target) {
+          target.email = newEmail.trim();
+          target.passkey = newPin.trim();
+          target.pin = newPin.trim();
+          target.auditDate = newAuditDate;
+        }
+        renderAuthAccountsTable();
+        showToast('✅ Profile updated (Local)!');
+      }
+    }
+
     function renderAuthAccountsTable() {
       const accTbody = document.getElementById('crm-accounts-tbody');
       const logsTbody = document.getElementById('crm-auth-logs-tbody');
+
+      const visibleAccounts = isOwnerMode
+        ? brewerAccountsRegistry
+        : brewerAccountsRegistry.filter(a => a.email === currentLoggedBrewerEmail);
+
       if (accTbody) {
-        accTbody.innerHTML = brewerAccountsRegistry.map(acc => `
-          <tr class="hover:bg-stone-50">
-            <td class="p-2.5 font-black text-stone-900">${acc.email}</td>
-            <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-amber-100 border border-stone-800 font-black text-stone-900">${acc.passkey || acc.pin || '----'}</span></td>
-            <td class="p-2.5 font-bold text-emerald-800">${acc.loginCount || 1} logins</td>
-            <td class="p-2.5 text-stone-600">${String(acc.registeredAt || '').replace('T', ' ').slice(0, 19)}</td>
-            <td class="p-2.5 text-stone-900 font-bold">${String(acc.lastLoginAt || '').replace('T', ' ').slice(0, 19)}</td>
-            <td class="p-2.5 text-stone-500">${acc.lastLogoutAt ? String(acc.lastLogoutAt).replace('T', ' ').slice(0, 19) : 'Active Session'}</td>
-          </tr>
-        `).join('');
+        if (visibleAccounts.length === 0) {
+          accTbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-stone-500 font-sans">No accounts recorded</td></tr>';
+        } else {
+          accTbody.innerHTML = visibleAccounts.map(acc => {
+            const auditDate = acc.auditDate || getTodayDateStr();
+            const actionButtons = isOwnerMode
+              ? '<div class="flex gap-1.5"><button type="button" onclick="ownerEditBrewer(\'' + acc.email + '\')" class="px-2 py-1 rounded bg-amber-200 hover:bg-amber-300 text-stone-950 font-black text-xs">✏️ Edit</button><button type="button" onclick="ownerDeleteBrewer(\'' + acc.email + '\')" class="px-2 py-1 rounded bg-rose-200 hover:bg-rose-300 text-rose-950 font-black text-xs">🗑️ Delete</button></div>'
+              : '<button type="button" onclick="brewerEditSelf(\'' + acc.email + '\')" class="px-2.5 py-1 rounded bg-sky-200 hover:bg-sky-300 text-sky-950 font-black text-xs">✏️ Edit Profile</button>';
+
+            return '<tr class="hover:bg-stone-50">' +
+              '<td class="p-2.5 font-black text-stone-900">' + acc.email + '</td>' +
+              '<td class="p-2.5"><span class="px-2 py-0.5 rounded bg-amber-100 border border-stone-800 font-black text-stone-900">' + (acc.passkey || acc.pin || '----') + '</span></td>' +
+              '<td class="p-2.5 font-bold text-stone-800">' + auditDate + '</td>' +
+              '<td class="p-2.5 font-bold text-emerald-800">' + (acc.loginCount || 1) + ' times</td>' +
+              '<td class="p-2.5 text-stone-900 font-bold">' + String(acc.lastLoginAt || '').replace('T', ' ').slice(0, 19) + '</td>' +
+              '<td class="p-2.5">' + actionButtons + '</td>' +
+            '</tr>';
+          }).join('');
+        }
       }
+
       if (logsTbody) {
-        logsTbody.innerHTML = brewerAuthEventLogs.slice(0, 30).map(l => `
-          <tr class="hover:bg-stone-50">
-            <td class="p-2 text-stone-600">${String(l.timestamp || '').replace('T', ' ').slice(0, 19)}</td>
-            <td class="p-2 font-bold text-stone-900">${l.action}</td>
-            <td class="p-2">${l.email}</td>
-            <td class="p-2 font-black text-amber-900">${l.passkey}</td>
-            <td class="p-2 font-sans text-stone-600">${l.note || ''}</td>
-          </tr>
-        `).join('');
+        const visibleLogs = isOwnerMode
+          ? brewerAuthEventLogs.slice(0, 30)
+          : brewerAuthEventLogs.filter(l => l.email === currentLoggedBrewerEmail).slice(0, 20);
+
+        logsTbody.innerHTML = visibleLogs.map(l =>
+          '<tr class="hover:bg-stone-50">' +
+            '<td class="p-2 text-stone-600">' + String(l.timestamp || '').replace('T', ' ').slice(0, 19) + '</td>' +
+            '<td class="p-2 font-bold text-stone-900">' + l.action + '</td>' +
+            '<td class="p-2">' + l.email + '</td>' +
+            '<td class="p-2 font-black text-amber-900">' + l.passkey + '</td>' +
+            '<td class="p-2 font-sans text-stone-600">' + (l.note || '') + '</td>' +
+          '</tr>'
+        ).join('');
       }
     }
 
     async function fetchAuthAuditFromServer() {
       try {
-        const res = await fetch('/api/brew/auth');
+        const query = isOwnerMode ? '?passkey=imowner' : ('?email=' + encodeURIComponent(currentLoggedBrewerEmail));
+        const res = await fetch('/api/brew/auth' + query);
         const data = await res.json();
         if (data && Array.isArray(data.accounts) && data.accounts.length > 0) {
           brewerAccountsRegistry = data.accounts;
@@ -2705,6 +3233,7 @@
         }
         renderAuthAccountsTable();
       } catch (e) {}
+    } catch (e) {}
     }
 
     function exportCrmAuditCsv() {
