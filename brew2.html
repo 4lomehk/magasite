@@ -1,2879 +1,801 @@
 <!DOCTYPE html>
-<html lang="zh-HK">
+<html lang="zh-HK" id="root">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BREW</title>
-  <meta name="description" content="BREW 香港地道廣東話無障礙落單系統：客人 order 與 咖啡師 Brewer 雙向同步、轉數快 FPS 置頂過數、電郵及 4 位 Passkey 記憶登入、後台 CRM 每日核數。" />
-  <meta property="og:title" content="BREW" />
-  <meta property="og:description" content="客人 order · 咖啡師 Brewer 即時同步 · 轉數快 FPS 置頂過數 · CRM 核數" />
-  <meta property="og:type" content="website" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@ERICWONGKHK — Polyphenol 多酚 · EVOO 全指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+HK:wght@300;400;600;700&family=Noto+Sans+HK:wght@300;400;500;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans HK','Noto Serif HK',serif;background:#07090d;color:#e8e2d4;line-height:1.7;overflow-x:hidden;font-size:15px}
+a{color:inherit;text-decoration:none}
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Plus Jakarta Sans, Noto Sans TC, JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.layer{position:relative;z-index:2}
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
-            mono: ['"JetBrains Mono"', '"Noto Sans TC"', 'monospace'],
-          }
-        }
-      }
-    }
-  </script>
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:15px 28px;display:flex;justify-content:space-between;align-items:center;background:rgba(7,9,13,0.8);backdrop-filter:blur(16px);border-bottom:1px solid rgba(180,155,90,0.11)}
+.nav-brand{font-family:'EB Garamond',serif;font-size:15px;letter-spacing:.05em;color:rgba(200,175,110,0.88)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-label{font-size:10px;letter-spacing:.08em;color:rgba(200,175,110,0.38);text-transform:uppercase}
+.lang-btn{font-size:11px;padding:5px 14px;border-radius:99px;border:1px solid rgba(180,148,75,0.28);background:rgba(180,148,75,0.06);color:rgba(200,175,110,0.75);cursor:pointer;letter-spacing:.06em;transition:all .2s;font-family:'Noto Sans HK',sans-serif}
+.lang-btn:hover{background:rgba(180,148,75,0.14);color:rgba(200,175,110,1)}
 
-  <style>
-    body {
-      background-color: #F6F2EC;
-      color: #1C1917;
-      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
-    }
-    .tabular-nums {
-      font-variant-numeric: tabular-nums;
-    }
-    .tactile-card {
-      background: #FFFFFF;
-      border: 2px solid #1C1917;
-      box-shadow: 4px 4px 0px #1C1917;
-      border-radius: 1rem;
-    }
-    .tactile-btn {
-      border: 2px solid #1C1917;
-      box-shadow: 2.5px 2.5px 0px #1C1917;
-      transition: all 0.12s ease;
-    }
-    .tactile-btn:hover:not(:disabled) {
-      transform: translate(-1px, -1px);
-      box-shadow: 3.5px 3.5px 0px #1C1917;
-    }
-    .tactile-btn:active:not(:disabled) {
-      transform: translate(1.5px, 1.5px);
-      box-shadow: 1px 1px 0px #1C1917;
-    }
-    .tactile-btn:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-    .info-badge {
-      width: 1.35rem;
-      height: 1.35rem;
-      border-radius: 9999px;
-      border: 1.5px solid #1C1917;
-      background-color: #FEF3C7;
-      color: #1C1917;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.12s ease;
-      flex-shrink: 0;
-    }
-    .info-badge:hover {
-      background-color: #FACC15;
-      transform: scale(1.06);
-    }
-    details > summary {
-      list-style: none;
-    }
-    details > summary::-webkit-details-marker {
-      display: none;
-    }
-  </style>
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative}
+.hero-eyebrow{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(180,148,75,0.55);margin-bottom:22px;font-weight:300}
+.hero-name{font-family:'EB Garamond',serif;font-size:clamp(46px,9vw,96px);font-weight:400;line-height:.95;color:#e8dfc8;margin-bottom:11px}
+.hero-name a{border-bottom:1px solid rgba(180,148,75,0.28);padding-bottom:2px;transition:border-color .2s}
+.hero-name a:hover{border-color:rgba(180,148,75,0.7)}
+.hero-sub{font-family:'Noto Serif HK',serif;font-size:clamp(16px,3vw,23px);font-weight:300;color:rgba(180,148,75,0.68);letter-spacing:.08em;margin-bottom:32px}
+.hero-sep{width:42px;height:1px;background:linear-gradient(90deg,transparent,rgba(180,148,75,0.42),transparent);margin:0 auto 32px}
+.hero-tagline{font-family:'EB Garamond',serif;font-size:clamp(14px,2vw,18px);font-style:italic;color:rgba(220,200,160,0.52);max-width:500px;line-height:1.88}
+.grade-pills{margin-top:40px;display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.grade-pill{font-size:11px;padding:7px 16px;border-radius:99px;border:1px solid;transition:opacity .2s;cursor:pointer}
+.gp-evoo{border-color:rgba(52,211,153,.24);color:#6ee7b7;background:rgba(52,211,153,.05)}
+.gp-voo{border-color:rgba(180,148,75,.24);color:#c9a84c;background:rgba(180,148,75,.05)}
+.gp-ord{border-color:rgba(148,148,148,.18);color:#9ca3af;background:rgba(148,148,148,.04)}
+.gp-lamp{border-color:rgba(220,38,38,.18);color:#f87171;background:rgba(220,38,38,.04)}
+.grade-pill:hover{opacity:.72}
+
+.scroll-cue{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;color:rgba(180,148,75,0.26);font-size:9px;letter-spacing:.18em;text-transform:uppercase;animation:sfloat 2.7s ease-in-out infinite}
+@keyframes sfloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(5px)}}
+.scroll-arr{width:1px;height:30px;background:linear-gradient(180deg,rgba(180,148,75,0.32),transparent)}
+
+/* CONTENT */
+.content-wrap{max-width:760px;margin:0 auto;padding:72px 24px 120px}
+.chapter{margin-bottom:68px}
+.chapter-num{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(180,148,75,0.36);font-weight:300;margin-bottom:7px}
+.chapter-title{font-family:'EB Garamond',serif;font-size:clamp(23px,4vw,35px);font-weight:400;color:#e0d4b4;line-height:1.2;margin-bottom:28px}
+.chapter-title em{font-style:italic;color:rgba(180,148,75,0.8)}
+.sec-title{font-family:'Noto Serif HK',serif;font-size:clamp(14px,2vw,17px);font-weight:600;color:#d4c49a;margin-top:40px;margin-bottom:13px}
+.sec-title:first-child{margin-top:0}
+.body-text{font-family:'Noto Serif HK',serif;font-size:14.5px;color:rgba(220,205,170,0.74);line-height:1.95;margin-bottom:17px}
+.body-text strong{color:rgba(220,205,170,.92);font-weight:600}
+
+/* ── EVOO QUALITY TABLE (from Table 1) ── */
+.quality-table-wrap{margin:28px 0;overflow-x:auto}
+.quality-table{width:100%;border-collapse:collapse;min-width:520px}
+.quality-table thead tr{border-bottom:1px solid rgba(180,148,75,0.18)}
+.quality-table th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(180,148,75,0.42);font-weight:400;padding:10px 13px;text-align:left;font-family:'Noto Sans HK',sans-serif;white-space:nowrap}
+.quality-table td{padding:11px 13px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12.5px;vertical-align:middle;line-height:1.55}
+.quality-table tr:hover td{background:rgba(180,148,75,0.03)}
+.qt-num{font-family:'EB Garamond',serif;font-size:16px;color:rgba(180,148,75,0.45);text-align:center;min-width:28px}
+.qt-criterion{font-weight:600;color:#d4c49a;font-size:13px}
+.qt-criterion small{display:block;font-size:10px;color:rgba(180,148,75,0.48);font-weight:400;letter-spacing:.03em;margin-top:2px}
+.qt-pass{color:#6ee7b7;font-family:'EB Garamond',serif;font-size:14px}
+.qt-fail{color:#f87171;font-family:'EB Garamond',serif;font-size:14px}
+.qt-note{color:rgba(220,205,170,0.55);font-size:11.5px}
+.qt-badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:99px;font-weight:700;letter-spacing:.04em}
+.qt-pass-badge{background:rgba(52,211,153,.09);color:#6ee7b7;border:1px solid rgba(52,211,153,.18)}
+.qt-fail-badge{background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.15)}
+
+/* FFA GRADE TABLE */
+.ffa-table{width:100%;border-collapse:collapse;margin:24px 0}
+.ffa-table th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(180,148,75,0.4);font-weight:400;padding:9px 13px;text-align:left;border-bottom:1px solid rgba(180,148,75,0.13);font-family:'Noto Sans HK',sans-serif}
+.ffa-table td{padding:11px 13px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12.5px;vertical-align:top}
+.ffa-table tr:hover td{background:rgba(180,148,75,0.03)}
+.ffa-score{font-family:'EB Garamond',serif;font-size:15px;color:#c9a84c}
+.ffa-grade{font-size:10.5px;font-weight:700;letter-spacing:.03em}
+.ffa-desc{color:rgba(220,205,170,0.6);font-size:12px;line-height:1.6}
+.fg-best{color:#6ee7b7}.fg-good{color:#c9a84c}.fg-meh{color:#9ca3af}.fg-bad{color:#f87171}
+
+/* POLYPHENOL CARDS */
+.poly-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0}
+@media(max-width:520px){.poly-grid{grid-template-columns:1fr}}
+.poly-card{background:rgba(180,148,75,0.04);border:1px solid rgba(180,148,75,0.1);border-radius:10px;padding:16px 18px}
+.poly-name{font-family:'EB Garamond',serif;font-size:16px;color:#d4b86a;margin-bottom:4px;font-style:italic}
+.poly-cn{font-size:10px;color:rgba(180,148,75,0.42);margin-bottom:8px;letter-spacing:.04em}
+.poly-desc{font-size:11.5px;color:rgba(220,205,170,0.6);line-height:1.7}
+
+/* THREADS */
+.threads-hd{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.threads-icon{width:25px;height:25px;border-radius:7px;background:rgba(180,148,75,0.09);display:flex;align-items:center;justify-content:center;font-size:13px}
+.threads-lbl{font-family:'EB Garamond',serif;font-size:16px;color:#d4c49a;font-style:italic}
+.thread-cards{display:flex;flex-direction:column;gap:13px}
+.thread-card{background:rgba(255,255,255,0.022);border:1px solid rgba(180,148,75,0.09);border-radius:11px;padding:17px 18px;display:flex;align-items:flex-start;gap:13px;transition:border-color .2s,background .2s}
+.thread-card:hover{border-color:rgba(180,148,75,0.24);background:rgba(180,148,75,0.04)}
+.tc-num{font-family:'EB Garamond',serif;font-size:21px;color:rgba(180,148,75,0.26);min-width:24px;line-height:1;padding-top:2px}
+.tc-body{flex:1}
+.tc-title{font-family:'Noto Serif HK',serif;font-size:13px;color:#d4c49a;margin-bottom:5px;font-weight:600}
+.tc-excerpt{font-size:11.5px;color:rgba(200,180,130,0.5);line-height:1.65}
+.tc-link{display:inline-flex;align-items:center;gap:4px;margin-top:7px;font-size:10.5px;color:rgba(180,148,75,0.52);letter-spacing:.04em;font-family:'Noto Sans HK',sans-serif}
+.tc-link:hover{color:rgba(180,148,75,0.82)}
+
+/* GRADE LIST */
+.grade-list{border:1px solid rgba(180,148,75,0.1);border-radius:12px;overflow:hidden;margin-top:18px}
+.grade-item{display:flex;align-items:center;justify-content:space-between;padding:14px 19px;border-bottom:1px solid rgba(180,148,75,0.06);transition:background .18s;gap:12px}
+.grade-item:last-child{border-bottom:none}
+.grade-item:hover{background:rgba(180,148,75,0.04)}
+.grade-item-text{font-family:'Noto Serif HK',serif;font-size:13.5px;color:#d4c49a;flex:1;line-height:1.4}
+.grade-item-sub{font-size:10px;color:rgba(180,148,75,0.4);font-family:'Noto Sans HK',sans-serif;display:block;margin-top:2px}
+.grade-badge{font-size:9.5px;padding:3px 9px;border-radius:99px;font-weight:600;white-space:nowrap}
+.gb-evoo{background:rgba(52,211,153,.08);color:#6ee7b7;border:1px solid rgba(52,211,153,.16)}
+.gb-voo{background:rgba(180,148,75,.1);color:#c9a84c;border:1px solid rgba(180,148,75,.18)}
+.gb-ord{background:rgba(148,148,148,.08);color:#9ca3af;border:1px solid rgba(148,148,148,.15)}
+.gb-lamp{background:rgba(220,38,38,.07);color:#f87171;border:1px solid rgba(220,38,38,.13)}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid rgba(180,148,75,0.08);margin:50px 0}
+
+/* COMING SOON BLUR */
+.coming-wrap{position:relative;margin-top:48px;border-radius:12px;overflow:hidden}
+.coming-blur{filter:blur(5px);opacity:.28;pointer-events:none;user-select:none;padding:28px 0}
+.coming-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;z-index:5;background:rgba(7,9,13,0.32)}
+.coming-badge{background:rgba(180,148,75,0.07);border:1px solid rgba(180,148,75,0.17);border-radius:8px;padding:9px 20px;font-family:'EB Garamond',serif;font-size:16px;color:rgba(180,148,75,0.7);font-style:italic}
+.coming-sub{font-size:9.5px;color:rgba(180,148,75,0.35);letter-spacing:.14em;text-transform:uppercase}
+
+footer{border-top:1px solid rgba(180,148,75,0.07);padding:34px 24px;text-align:center;position:relative;z-index:2}
+footer p{font-size:10.5px;color:rgba(180,148,75,0.26);letter-spacing:.06em}
+
+@media(max-width:600px){nav{padding:12px 16px}.content-wrap{padding:52px 16px 72px}.grade-pills{gap:7px}.grade-pill{font-size:10px;padding:6px 13px}}
+
+/* ── LANG HIDDEN ── */
+[data-en]{display:none}
+html[lang=en] [data-zh]{display:none}
+html[lang=en] [data-en]{display:block}
+html[lang=en] span[data-en]{display:inline}
+html[lang=en] span[data-zh]{display:none}
+
+/* BAR CHART */
+.bar-chart-wrap{margin:32px 0 28px;background:rgba(180,148,75,0.03);border:1px solid rgba(180,148,75,0.1);border-radius:12px;padding:22px 20px 18px}
+.bar-chart-title{font-family:'EB Garamond',serif;font-size:15px;color:#d4c49a;margin-bottom:18px;font-style:italic;text-align:center}
+.bar-row{display:flex;align-items:center;margin-bottom:11px;gap:12px}
+.bar-label{font-size:11px;color:rgba(220,205,170,0.7);min-width:110px;text-align:right;font-family:'Noto Sans HK',sans-serif;line-height:1.3}
+.bar-track{flex:1;height:18px;background:rgba(255,255,255,0.04);border-radius:6px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:10px;font-weight:600;color:#07090d;transition:width .6s ease}
+.bar-fill.b1{background:linear-gradient(90deg,#34d399,#6ee7b7);width:16%}
+.bar-fill.b2{background:linear-gradient(90deg,#34d399,#6ee7b7);width:40%}
+.bar-fill.b3{background:linear-gradient(90deg,#c9a84c,#e8d48b);width:11%}
+.bar-fill.b4{background:linear-gradient(90deg,#c9a84c,#e8d48b);width:5%}
+.bar-fill.b5{background:linear-gradient(90deg,#34d399,#6ee7b7);width:50%}
+.bar-fill.b6{background:linear-gradient(90deg,#6ee7b7,#a7f3d0);width:70%}
+.bar-fill.b7{background:linear-gradient(90deg,#c9a84c,#e8d48b);width:35%}
+.bar-val{font-size:10px;color:rgba(180,148,75,0.55);min-width:70px;font-family:'EB Garamond',serif}
+.bar-note{font-size:10px;color:rgba(180,148,75,0.35);text-align:center;margin-top:14px;letter-spacing:.04em}
+@media(max-width:520px){.bar-label{min-width:80px;font-size:10px}.bar-val{min-width:55px;font-size:9px}}
+
+</style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-amber-300 selection:text-stone-900">
+<body>
 
-  <!-- ===================================================================== -->
-  <!-- TOP HEADER: MagaBrew + 2 Modes ONLY ("客人 order" / "咖啡師 Brewer")   -->
-  <!-- ===================================================================== -->
-  <header class="sticky top-0 z-50 bg-[#1E110B] text-stone-100 border-b-2 border-stone-900">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-      <!-- Brand Title -->
-      <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-amber-400 text-stone-950 border-2 border-white flex items-center justify-center font-black text-lg shrink-0">
-          ☕
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="font-black text-lg sm:text-xl tracking-wider text-white">BREW</h1>
-            <button type="button" onclick="toggleHint('hint-header-intro')" class="info-badge" title="系統簡介">i</button>
-          </div>
-        </div>
-      </div>
+<canvas id="bg-canvas"></canvas>
 
-      <!-- 2-Mode Switcher ("客人 order" & "咖啡師 Brewer") + Sync Status -->
-      <div class="flex items-center flex-wrap gap-2">
-        <div class="flex items-center bg-stone-800 p-1 rounded-xl border border-stone-600" role="tablist">
-          <button
-            type="button"
-            onclick="switchMainView('customer')"
-            id="tab-btn-customer"
-            class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition bg-amber-400 text-stone-950"
-          >
-            📱 客人 order
-          </button>
-          <button
-            type="button"
-            onclick="switchMainView('brewer')"
-            id="tab-btn-brewer"
-            class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-stone-300 hover:text-white flex items-center gap-1.5"
-          >
-            <span>☕ 咖啡師 Brewer</span>
-            <span id="brewer-badge-count" class="px-1.5 py-0.2 rounded bg-stone-700 text-amber-300 font-mono text-xs">2</span>
-            <span id="brewer-lock-icon" class="text-[11px]">🔒</span>
-          </button>
-        </div>
+<!-- NAV -->
+<nav class="layer">
+  <div class="nav-brand">@ericwongkhk</div>
+  <div class="nav-right">
+    <span class="nav-label" data-zh>多酚 · EVOO 全指南</span>
+    <span class="nav-label" data-en>Polyphenol · EVOO Guide</span>
+    <button class="lang-btn" id="lang-toggle" onclick="toggleLang()">English</button>
+  </div>
+</nav>
 
-        <button
-          type="button"
-          onclick="manualSyncOrders()"
-          class="px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-emerald-300 border border-stone-600 text-xs font-bold flex items-center gap-1.5 transition"
-          title="即時同步張單"
-        >
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span id="sync-status-label">同步中</span>
-        </button>
+<!-- ══ HERO ══ -->
+<section class="layer hero">
+  <p class="hero-eyebrow">
+    <span data-zh>Make Anti-inflammatory Great Again</span>
+    <span data-en>Make Anti-inflammatory Great Again</span>
+  </p>
+  <h2 class="hero-name"><a href="https://threads.com/ericwongkhk" target="_blank">@ERICWONGKHK</a></h2>
+  <h4 class="hero-sub">
+    <span data-zh>Polyphenol · 多酚</span>
+    <span data-en>Polyphenol · 多酚</span>
+  </h4>
+  <div class="hero-sep"></div>
+  <p class="hero-tagline">
+    <span data-zh>唔係搞緊養生餐。係幫你搞清楚每日飲落肚嘅油，係救你定係殺你。</span>
+    <span data-en>This isn't wellness content. This is about whether the oil you drink daily is saving you — or slowly killing you.</span>
+  </p>
+  <div class="grade-pills">
+    <div class="grade-pill gp-evoo"><span data-zh>特級初榨橄欖油 EVOO</span><span data-en>Extra Virgin Olive Oil</span></div>
+    <div class="grade-pill gp-voo"><span data-zh>良級初榨 Virgin</span><span data-en>Virgin Olive Oil</span></div>
+    <div class="grade-pill gp-ord"><span data-zh>普通初榨 Ordinary</span><span data-en>Ordinary Virgin</span></div>
+    <div class="grade-pill gp-lamp"><span data-zh>初榨橄欖燈油 Lampante</span><span data-en>Lampante Virgin</span></div>
+  </div>
+  <div class="scroll-cue"><div class="scroll-arr"></div><span>Scroll</span></div>
+</section>
 
-        <!-- Bilingual Switcher -->
-        <div class="flex items-center bg-stone-800 border border-stone-600 rounded-xl p-0.5 text-xs font-black">
-          <span class="px-2.5 py-1 bg-amber-400 text-stone-950 rounded-lg font-black">廣</span>
-          <a href="https://magasite.pages.dev/brew-en.html" class="px-2.5 py-1 text-stone-300 hover:text-white transition">Eng</a>
-        </div>
+<!-- ══ MAIN CONTENT ══ -->
+<main class="content-wrap layer">
 
-        <a
-          href="https://magasite.pages.dev/index.html"
-          class="px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-600 text-xs font-bold transition flex items-center gap-1"
-        >
-          <span>← 返主頁</span>
-        </a>
-      </div>
-    </div>
+  <!-- CH1: FFA + QUALITY CRITERIA -->
+  <article class="chapter" id="ch1">
+    <p class="chapter-num"><span data-zh>Chapter 01</span><span data-en>Chapter 01</span></p>
+    <h3 class="chapter-title">
+      <span data-zh>地基戰爭 — 重新設計<br><em>健康金字塔與酸價 (FFA) 權力遊戲</em></span>
+      <span data-en>Foundation War — Redesigning<br><em>the Health Pyramid & the FFA Power Game</em></span>
+    </h3>
 
-    <!-- Collapsible Header Info ('i' Drawer) -->
-    <div id="hint-header-intro" class="hidden bg-stone-900 border-t border-stone-700 px-4 py-2.5 text-xs text-stone-300">
-      <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-2">
-        <span>💡 <strong>零語音無障礙流程：</strong>客人揀飲品 ➔ 確認張單 ➔ <strong>轉數快 FPS 過數</strong> ➔ 咖啡師對數即沖。支援隨時取消張單及雙向同步。</span>
-        <button type="button" onclick="toggleHint('hint-header-intro')" class="text-amber-300 font-bold hover:underline">收起 ✕</button>
-      </div>
-    </div>
-  </header>
+    <p class="body-text">
+      <span data-zh>呢篇文唔係咩養生雞湯，喺 2026 年嘅抗炎戰場，我哋要將傳統 NPC 專家教你食澱粉做地基嗰套倒轉——油脂先係你副機體嘅「運輸架撐 (Transportation Gear)」決定咗需要多酚 Polyphenol. 點解要揀橄欖油？揀橄欖油，唔係因為佢有神奇療效。記得 EVOO 係橄欖果汁，抗氧化物會隨時間同高溫流失，買油一定要睇採收日期而非有效日期。想知多酚 benefit？But honestly, it was a hassle and expensive.</strong>threads@ericwongkhk</span>
+      <span data-en>Why choose olive oil? Not because it’s some magic cure.
 
-  <!-- ===================================================================== -->
-  <!-- MAIN CONTAINER                                                        -->
-  <!-- ===================================================================== -->
-  <main class="max-w-5xl mx-auto w-full flex-1 p-4 sm:p-6 space-y-6">
+Remember: EVOO is basically olive juice, and its antioxidants break down over time and with heat. When you buy it, check the harvest date, not just the expiration date.
 
-    <!-- =================================================================== -->
-    <!-- VIEW 1: 客人 order (CUSTOMER VIEW)                                  -->
-    <!-- =================================================================== -->
-    <section id="view-customer" class="space-y-6">
+Want to know the king of high-polyphenol oils and its benefits?In 2026's anti-inflammatory battleground, we need to flip the script on the NPC experts who tell you to base your diet on grains. Fat is the "Transportation Gear" of your biological machine — it determines Polyphenol or not.</strong> Check out threads@ericwongkhk</span>
+    </p>
 
-      <!-- Top Row: 轉數快 FPS 置頂過數區 (Moved to Very Top as Requested!) -->
-      <div class="tactile-card p-5 bg-[#FFFBEB]">
-        <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-stone-200">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-emerald-700 text-white font-mono text-xs font-black">置頂收數</span>
-            <h2 class="font-black text-base sm:text-lg text-stone-900">🇭🇰 轉數快 FPS 過數</h2>
-            <button type="button" onclick="toggleHint('hint-customer-fps')" class="info-badge" title="過數提示">i</button>
-          </div>
-          <div class="flex items-center gap-2 text-xs font-bold text-stone-500">
-            <span>只收港紙 HKD</span>
-            <span aria-hidden="true">·</span>
-            <span>單號 <strong id="cust-top-order-id" class="font-mono text-stone-900">#00</strong></span>
-            <button
-              type="button"
-              onclick="resetToZeroAndReload('customer')"
-              class="tactile-btn ml-1 px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 font-black text-xs flex items-center gap-1 shadow-sm"
-              title="單號及金額重設歸零 (#00 / HK$0) 並重新載入"
-            >
-              🔄 重設 0 / 重新載入
-            </button>
-          </div>
-        </div>
+    <!-- SECTION: EVOO Quality Criteria (Table 1) -->
+    <p class="sec-title">
+      <span data-zh>EVOO 國際質量標準 — Table 1 七大檢測指標</span>
+      <span data-en>EVOO International Quality Criteria — Table 1: 7 Key Parameters</span>
+    </p>
+    <p class="body-text">
+      <span data-zh>根據國際橄欖理事會 (IOC) 標準，一支油要成為 Extra Virgin，必須同時通過以下七關。任何一關失敗，即自動降級。</span>
+      <span data-en>According to the International Olive Council (IOC), an oil must pass all seven of the following tests simultaneously to be classified as Extra Virgin. Fail any one — and it's automatically downgraded.</span>
+    </p>
 
-        <!-- Collapsible 'i' Hint for FPS -->
-        <div id="hint-customer-fps" class="hidden mt-3 p-3 rounded-xl bg-amber-100/70 border border-stone-300 text-xs text-stone-800 space-y-1">
-          <p class="font-bold">📌 轉數快過數步驟：</p>
-          <p>1. 撳下面「複製電話」或掃描轉數快 QR Code 過數。</p>
-          <p>2. 過數備註請填寫單號（例如 <span class="font-mono font-bold">#01</span>），過數後直接撳「💬 WhatsApp 傳送」即時通知咖啡師開沖。</p>
-        </div>
-
-        <!-- Main FPS Active Card -->
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-          <!-- Left: FPS Number & Amount -->
-          <div class="md:col-span-7 p-4 rounded-xl bg-white border-2 border-stone-900 space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-stone-500">轉數快 FPS 電話號碼</span>
-              <span class="text-xs font-bold text-emerald-700">🟢 即時對數</span>
-            </div>
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div id="cust-fps-phone-display" class="text-2xl sm:text-3xl font-black font-mono tracking-tight text-stone-900 tabular-nums">
-                9123 6789
+    <div class="quality-table-wrap">
+      <table class="quality-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th><span data-zh>檢測項目</span><span data-en>Criterion</span></th>
+            <th><span data-zh>✓ 通過標準 (EVOO)</span><span data-en>✓ Pass (EVOO)</span></th>
+            <th><span data-zh>✕ 失敗降級</span><span data-en>✕ Fail → Downgrade</span></th>
+            <th><span data-zh>實戰意義</span><span data-en>What It Means</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="qt-num">1</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>酸價 Acidity (FFA %)</span>
+                <span data-en>Acidity (FFA %)</span>
+                <small>Free Fatty Acid</small>
               </div>
-              <button
-                type="button"
-                onclick="copyFpsPhone()"
-                class="tactile-btn px-3 py-1.5 rounded-lg bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs"
-              >
-                📋 複製電話
-              </button>
-            </div>
-            <div class="pt-2 border-t border-stone-200 flex items-center justify-between">
-              <div>
-                <span class="text-xs font-bold text-stone-500 block">應付銀碼 (HKD)</span>
-                <span id="cust-fps-amount-display" class="text-2xl font-black font-mono text-emerald-700 tabular-nums">HK$0</span>
+            </td>
+            <td><span class="qt-pass">≤ 0.80%</span></td>
+            <td><span class="qt-fail">&gt; 0.80%</span> <span class="qt-badge qt-fail-badge">→ VOO</span></td>
+            <td class="qt-note"><span data-zh>橄欖受損程度。越低越新鮮，頂級莊園可達 0.1%。</span><span data-en>Olive damage index. Lower = fresher. Top estates hit 0.1%.</span></td>
+          </tr>
+          <tr>
+            <td class="qt-num">2</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>過氧化值 Peroxide Value</span>
+                <span data-en>Peroxide Value</span>
+                <small>mEq O₂/kg</small>
               </div>
-              <div class="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onclick="copyFpsReceiptPrompt()"
-                  class="tactile-btn px-3 py-2 rounded-lg bg-stone-900 text-white font-black text-xs"
-                >
-                  📲 複製過數訊息
-                </button>
+            </td>
+            <td><span class="qt-pass">≤ 20.0</span></td>
+            <td><span class="qt-fail">&gt; 20.0</span> <span class="qt-badge qt-fail-badge">→ LOO</span></td>
+            <td class="qt-note"><span data-zh>氧化程度。超標即係已開始酸敗，多酚受破壞。</span><span data-en>Oxidation level. Over limit = rancidity has begun, polyphenols compromised.</span></td>
+          </tr>
+          <tr>
+            <td class="qt-num">3</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>紫外線吸收 K₂₇₀</span>
+                <span data-en>UV Spectrometry K₂₇₀/₂₆₈</span>
+                <small>UV Absorb.</small>
               </div>
-            </div>
-          </div>
-
-          <!-- Right: Dual QR Code Switcher (FPS vs WhatsApp) + Paused Methods -->
-          <div class="md:col-span-5 p-3.5 rounded-xl bg-white border-2 border-stone-900 space-y-2.5">
-            <!-- QR Tabs Switcher -->
-            <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-lg border border-stone-300 text-xs font-black">
-              <button
-                type="button"
-                id="qr-tab-fps"
-                onclick="switchCustQrTab('fps')"
-                class="flex-1 py-1 rounded bg-stone-900 text-amber-300 shadow-sm text-center"
-              >
-                🇭🇰 轉數快 FPS
-              </button>
-              <button
-                type="button"
-                id="qr-tab-wa"
-                onclick="switchCustQrTab('wa')"
-                class="flex-1 py-1 rounded text-stone-600 hover:text-stone-900 text-center"
-              >
-                💬 咖啡師 WhatsApp
-              </button>
-            </div>
-
-            <!-- Content Area with clear labels -->
-            <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row items-center gap-3">
-              <img
-                id="cust-fps-qr-img"
-                src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=FPS%3A91236789%3BHKD%3A43%3BORDER%3A01"
-                alt="轉數快 FPS 付款 QR Code"
-                class="w-24 h-24 rounded-lg border border-stone-300 p-1 bg-white shrink-0 shadow-sm"
-              />
-              <div class="space-y-1 text-center sm:text-left">
-                <!-- Dynamic QR Label & Description -->
-                <div id="cust-qr-badge" class="inline-block px-2 py-0.5 rounded bg-emerald-100 border border-emerald-300 text-emerald-900 text-[11px] font-black">
-                  💳 轉數快 FPS 付款專用（不是 WhatsApp）
-                </div>
-                <div id="cust-qr-title" class="text-xs font-black text-stone-900">
-                  轉數快付款 QR Code
-                </div>
-                <p id="cust-qr-desc" class="text-[11px] text-stone-600 leading-snug">
-                  用銀行 App 掃碼即可自動填妥金額及備註 #01
-                </p>
-                <div id="cust-qr-link-wrap" class="pt-0.5">
-                  <a
-                    id="cust-qr-direct-link"
-                    href="javascript:void(0)"
-                    onclick="openActiveQrAction()"
-                    class="text-[11px] font-black text-emerald-700 hover:underline inline-flex items-center gap-1"
-                  >
-                    <span>📲 複製轉數快過數文字</span>
-                  </a>
-                </div>
+            </td>
+            <td><span class="qt-pass">≤ 0.22</span></td>
+            <td><span class="qt-fail">&gt; 0.22</span> <span class="qt-badge qt-fail-badge">→ VOO</span></td>
+            <td class="qt-note"><span data-zh>偵測精煉油混入。超標即有漂白廢油成份。</span><span data-en>Detects refined oil adulteration. Over limit = bleached waste oil present.</span></td>
+          </tr>
+          <tr>
+            <td class="qt-num">4</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>ΔK 差值</span>
+                <span data-en>UV Spectrometry ΔK</span>
+                <small>Delta K</small>
               </div>
-            </div>
-
-            <!-- Collapsible Paused Methods (Visa / PayMe / Octopus) -->
-            <details class="pt-1 border-t border-stone-200">
-              <summary class="cursor-pointer text-[11px] font-bold text-stone-500 hover:text-stone-800 flex items-center justify-between">
-                <span>▾ 其他收款 (PayMe / Visa 暫停)</span>
-                <span class="text-[10px]">⏸️ 暫停中</span>
-              </summary>
-              <div class="mt-1.5 p-2 rounded-lg bg-stone-100 border border-stone-300 space-y-1 text-[11px] text-stone-500">
-                <div class="flex items-center justify-between">
-                  <span>PayMe</span>
-                  <span class="font-mono font-bold text-rose-600">⏸️ 暫停</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span>Visa / 信用卡</span>
-                  <span class="font-mono font-bold text-rose-600">⏸️ 暫停</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span>八達通 Octopus</span>
-                  <span class="font-mono font-bold text-rose-600">⏸️ 暫停</span>
-                </div>
+            </td>
+            <td><span class="qt-pass">≤ 0.01</span></td>
+            <td><span class="qt-fail">&gt; 0.01</span> <span class="qt-badge qt-fail-badge">→ LOO</span></td>
+            <td class="qt-note"><span data-zh>進一步確認精煉混油。係 K₂₇₀ 嘅補充驗證。</span><span data-en>Cross-check for refined oil blending. Supplements K₂₇₀ test.</span></td>
+          </tr>
+          <tr>
+            <td class="qt-num">5</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>紫外線吸收 K₂₃₂</span>
+                <span data-en>UV Spectrometry K₂₃₂</span>
+                <small>UV Absorb.</small>
               </div>
-            </details>
-          </div>
-        </div>
-      </div>
-
-      <!-- Customer Main Grid: Left = 揀嘢飲 & 聯絡資料, Right = 確認張單 & 取消張單 -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-
-        <!-- Left 7 Cols: 1. 揀嘢飲 + 2. 聯絡資料 -->
-        <div class="lg:col-span-7 tactile-card p-5 space-y-5">
-          <div class="flex items-center justify-between border-b border-stone-200 pb-3">
-            <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-md bg-stone-900 text-amber-300 font-mono text-xs font-black flex items-center justify-center">1</span>
-              <h2 class="font-black text-base sm:text-lg text-stone-900">揀嘢飲・落單</h2>
-              <button type="button" onclick="toggleHint('hint-order-rules')" class="info-badge" title="落單提示">i</button>
-            </div>
-            <span class="text-xs font-bold text-stone-500">撳掣或直接打字</span>
-          </div>
-
-          <!-- Collapsible 'i' Hint for Ordering -->
-          <div id="hint-order-rules" class="hidden p-3 rounded-xl bg-stone-100 border border-stone-300 text-xs text-stone-700 space-y-1">
-            <p class="font-bold">💡 點樣落單最快？</p>
-            <p>• 你可以直接撳下面啲掣揀「豆、飲品、杯量、奶類、數量」。</p>
-            <p>• 亦都可以直接打廣東話（例如：<code class="font-mono font-bold">中杯熱 Latte 燕麥奶 1杯</code> 或 <code class="font-mono font-bold">H02 / M / SM / 1</code>）。</p>
-            <p>• 奶類代碼：<code class="font-mono font-bold">FM</code> 全脂奶 · <code class="font-mono font-bold">SM</code> Skin Milk (脫脂奶) · <code class="font-mono font-bold">OM</code> 燕麥奶 (+$4)。</p>
-          </div>
-
-          <!-- Bean Selector -->
-          <div class="space-y-1.5">
-            <label class="text-xs font-black text-stone-700">揀咖啡豆</label>
-            <div class="grid grid-cols-3 gap-2">
-              <button type="button" onclick="selectBean('SOE 單一產地豆')" id="bean-btn-0" class="bean-btn px-2.5 py-2 rounded-lg border-2 border-stone-900 bg-amber-300 font-black text-xs text-stone-900">
-                SOE 單一產地豆
-              </button>
-              <button type="button" onclick="selectBean('House 拼配豆')" id="bean-btn-1" class="bean-btn px-2.5 py-2 rounded-lg border border-stone-300 bg-white font-bold text-xs text-stone-700 hover:bg-stone-100">
-                House 拼配豆
-              </button>
-              <button type="button" onclick="selectBean('Decaf 低因豆')" id="bean-btn-2" class="bean-btn px-2.5 py-2 rounded-lg border border-stone-300 bg-white font-bold text-xs text-stone-700 hover:bg-stone-100">
-                Decaf 低因豆
-              </button>
-            </div>
-          </div>
-
-          <!-- Drink & Size & Milk Selectors -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label for="sel-drink" class="text-xs font-black text-stone-700 block mb-1">飲品</label>
-              <select id="sel-drink" onchange="buildFromVisual()" class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 text-xs sm:text-sm font-bold bg-white">
-                <optgroup label="🔥 熱飲 (Hot)">
-                  <option value="H01">H01 · 熱美式 Americano ($28起)</option>
-                  <option value="H02" selected>H02 · 熱 Latte ($36起)</option>
-                  <option value="H03">H03 · 熱 Cappuccino ($36起)</option>
-                  <option value="H04">H04 · 熱 Flat White ($36起)</option>
-                  <option value="H05">H05 · 熱 Mocha ($40起)</option>
-                </optgroup>
-                <optgroup label="🧊 凍飲 (Iced)">
-                  <option value="C01">C01 · 凍美式 Americano ($32起)</option>
-                  <option value="C02">C02 · 凍 Latte ($40起)</option>
-                  <option value="C03">C03 · 凍 Cappuccino ($40起)</option>
-                  <option value="C04">C04 · 凍 Mocha ($44起)</option>
-                </optgroup>
-                <optgroup label="✨ 特調 (Special)">
-                  <option value="S01">S01 · Dirty ($40)</option>
-                  <option value="S02">S02 · Espresso Tonic ($42)</option>
-                </optgroup>
-              </select>
-            </div>
-
-            <div>
-              <label for="sel-size" class="text-xs font-black text-stone-700 block mb-1">杯量</label>
-              <select id="sel-size" onchange="buildFromVisual()" class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 text-xs sm:text-sm font-bold bg-white">
-                <option value="S">細杯 (S)</option>
-                <option value="M" selected>中杯 (M)</option>
-                <option value="L">大杯 (L)</option>
-                <option value="D">Dirty 專用杯 (D)</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="sel-milk" class="text-xs font-black text-stone-700 block mb-1">奶類 (Full / Skin / Oat) <span id="milk-lock-hint" class="text-amber-700 font-bold"></span></label>
-              <select id="sel-milk" onchange="buildFromVisual()" class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 text-xs sm:text-sm font-bold bg-white transition">
-                <option value="FM">FM · 全脂奶 (Full Milk) +$0</option>
-                <option value="SM">SM · Skin Milk (脫脂奶) +$0</option>
-                <option value="OM" selected>OM · 燕麥奶 (Oat Milk) +$4</option>
-                <option value="-">齋啡免奶 (-)</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="sel-qty" class="text-xs font-black text-stone-700 block mb-1">數量</label>
-              <select id="sel-qty" onchange="buildFromVisual()" class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 text-xs sm:text-sm font-bold bg-white">
-                <option value="1" selected>1 杯</option>
-                <option value="2">2 杯</option>
-                <option value="3">3 杯</option>
-                <option value="4">4 杯</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Natural Language / Code Input Box -->
-          <div class="space-y-1.5">
-            <div class="flex items-center justify-between">
-              <label for="order-input" class="text-xs font-black text-stone-700">落單字句（例如 for example 自由打字修改）</label>
-              <button type="button" onclick="toggleHint('hint-quick-presets')" class="text-xs font-bold text-amber-800 hover:underline flex items-center gap-1">
-                <span>▾ 常用例子</span>
-              </button>
-            </div>
-            <input
-              id="order-input"
-              type="text"
-              value=""
-              oninput="parseOrderInput(true)"
-              placeholder="例如 (for example)：中杯熱 Latte 燕麥奶 1杯"
-              class="w-full rounded-xl border-2 border-stone-900 px-3.5 py-2.5 font-mono text-sm font-bold bg-[#FFFDF9] focus:outline-none focus:ring-2 focus:ring-amber-400"
-            />
-            <!-- Collapsible Quick Presets -->
-            <div id="hint-quick-presets" class="hidden pt-1 flex flex-wrap gap-1.5">
-              <button type="button" onclick="applyQuickPreset('中杯熱 Latte／燕麥奶／1 杯')" class="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 border border-stone-800 text-xs font-bold">
-                中杯熱 Latte 燕麥奶
-              </button>
-              <button type="button" onclick="applyQuickPreset('中杯熱 Latte／Skin Milk／1 杯')" class="px-2.5 py-1 rounded-lg bg-sky-100 hover:bg-sky-200 border border-stone-800 text-xs font-bold">
-                中杯熱 Latte Skin Milk
-              </button>
-              <button type="button" onclick="applyQuickPreset('大杯凍美式／1 杯')" class="px-2.5 py-1 rounded-lg bg-stone-100 hover:bg-stone-200 border border-stone-800 text-xs font-bold">
-                大杯凍美式
-              </button>
-              <button type="button" onclick="applyQuickPreset('Dirty／全脂奶／1 杯')" class="px-2.5 py-1 rounded-lg bg-stone-100 hover:bg-stone-200 border border-stone-800 text-xs font-bold">
-                Dirty 全脂奶
-              </button>
-            </div>
-          </div>
-
-          <!-- Customer Contact Details (Collapsible or Compact) -->
-          <details class="p-3.5 rounded-xl bg-stone-50 border border-stone-300" open>
-            <summary class="cursor-pointer flex items-center justify-between text-xs font-black text-stone-800">
-              <span>2. 客人聯絡資料（WhatsApp / IG 對數用）</span>
-              <span class="text-stone-500 font-mono">▾ 收起 / 展開</span>
-            </summary>
-            <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              <div>
-                <label for="cust-name-input" class="text-[11px] font-bold text-stone-600 block mb-1">稱呼</label>
-                <input
-                  id="cust-name-input"
-                  type="text"
-                  value="陳小姐"
-                  oninput="parseOrderInput()"
-                  placeholder="例如：陳小姐"
-                  class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-bold bg-white"
-                />
+            </td>
+            <td><span class="qt-pass">≤ 2.50</span></td>
+            <td><span class="qt-fail">&gt; 2.50</span> <span class="qt-badge qt-fail-badge">→ VOO</span></td>
+            <td class="qt-note"><span data-zh>早期氧化偵測。反映初始氧化損傷，比過氧化值更敏感。</span><span data-en>Early-stage oxidation detection. More sensitive than peroxide value.</span></td>
+          </tr>
+          <tr>
+            <td class="qt-num">6</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>感官評核 Organoleptic</span>
+                <span data-en>Organoleptic Assessment</span>
+                <small>Panel Test</small>
               </div>
-              <div>
-                <label for="cust-whatsapp-input" class="text-[11px] font-bold text-stone-600 block mb-1">WhatsApp 電話</label>
-                <input
-                  id="cust-whatsapp-input"
-                  type="tel"
-                  value="9123 4567"
-                  oninput="parseOrderInput()"
-                  placeholder="9123 4567"
-                  class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
-                />
-              </div>
-              <div>
-                <label for="cust-ig-input" class="text-[11px] font-bold text-stone-600 block mb-1">IG 帳號</label>
-                <input
-                  id="cust-ig-input"
-                  type="text"
-                  value="@chan_hk"
-                  oninput="parseOrderInput()"
-                  placeholder="@帳號"
-                  class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
-                />
-              </div>
-            </div>
-          </details>
-        </div>
-
-        <!-- Right 5 Cols: 3. 確認張單 & 取消 order -->
-        <div class="lg:col-span-5 space-y-5">
-          <div class="tactile-card p-5 bg-[#FFFDF9] space-y-4">
-            <div class="flex items-center justify-between border-b border-stone-200 pb-3">
-              <div class="flex items-center gap-2">
-                <span class="w-6 h-6 rounded-md bg-emerald-700 text-white font-mono text-xs font-black flex items-center justify-center">3</span>
-                <h2 class="font-black text-base sm:text-lg text-stone-900">確認張單</h2>
-                <button type="button" onclick="toggleHint('hint-confirm-card')" class="info-badge" title="確認說明">i</button>
-              </div>
-              <span id="customer-action-feedback" class="text-xs font-black text-emerald-700">待確認</span>
-            </div>
-
-            <div id="hint-confirm-card" class="hidden p-2.5 rounded-lg bg-stone-100 border border-stone-300 text-xs text-stone-700">
-              撳「✅ 確認落單」就會即時傳去咖啡師 Brewer 看板；如果想改或者唔要，可以隨時撳「❌ 取消張單」。
-            </div>
-
-            <!-- Exact Customer Order Preview Box -->
-            <div class="p-4 rounded-xl bg-[#ECFDF5] border-2 border-stone-900 font-mono text-xs sm:text-sm space-y-1.5 leading-relaxed">
-              <div class="font-black text-stone-900">🧾 你的訂單：</div>
-              <div id="customer-order-desc" class="font-bold text-stone-900">
-                （請選擇飲品或點選上方預設）
-              </div>
-              <div id="customer-contact-preview" class="text-xs text-stone-600">
-                聯絡：陳小姐 · WhatsApp: 9123 4567 · IG: @chan_hk
-              </div>
-              <div class="font-black text-emerald-800 text-base pt-1">
-                金額：$<span id="customer-order-price">0</span>
-              </div>
-            </div>
-
-            <!-- Action Buttons: 確認 / 修改 / 取消 / 重設 0 -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <button
-                type="button"
-                onclick="customerConfirmOrder()"
-                class="tactile-btn py-2.5 px-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
-              >
-                <span>✅ 確認落單</span>
-              </button>
-              <button
-                type="button"
-                onclick="customerModifyOrder()"
-                class="tactile-btn py-2.5 px-2 rounded-xl bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
-              >
-                <span>✏️ 修改</span>
-              </button>
-              <button
-                type="button"
-                onclick="customerCancelActiveOrder()"
-                class="tactile-btn py-2.5 px-2 rounded-xl bg-rose-200 hover:bg-rose-300 text-rose-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
-              >
-                <span>❌ 取消張單</span>
-              </button>
-              <button
-                type="button"
-                onclick="resetToZeroAndReload('customer')"
-                class="tactile-btn py-2.5 px-2 rounded-xl bg-stone-200 hover:bg-stone-300 text-stone-900 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
-                title="單號及金額重設為 0 並重新載入"
-              >
-                <span>🔄 重設 0 / 重新載入</span>
-              </button>
-            </div>
-
-            <!-- WhatsApp / IG Copy Actions -->
-            <div class="flex flex-wrap gap-2 pt-1">
-              <button
-                type="button"
-                onclick="copyText('customer')"
-                class="flex-1 py-2 px-3 rounded-lg bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs"
-              >
-                📋 複製落單字句
-              </button>
-              <button
-                type="button"
-                onclick="openWhatsAppOrder()"
-                class="flex-1 py-2 px-3 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-stone-950 font-black text-xs border border-stone-900"
-              >
-                💬 WhatsApp 傳送
-              </button>
-            </div>
-          </div>
-
-          <!-- Customer Live Order Status Tracker (Synced with Brewer + Cancel Button) -->
-          <div class="tactile-card p-4 bg-white space-y-3">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <h3 class="font-black text-sm text-stone-900">📡 我張單即時進度</h3>
-                <button type="button" onclick="toggleHint('hint-live-tracker')" class="info-badge">i</button>
-              </div>
-              <span class="text-[11px] font-mono text-stone-500">與咖啡師同步</span>
-            </div>
-            <div id="hint-live-tracker" class="hidden p-2 rounded bg-stone-100 text-[11px] text-stone-600">
-              呢度會即時顯示你最近一張單嘅狀態。如果咖啡師仲未沖完，你可以隨時撳「取消張單」。
-            </div>
-            <div id="customer-live-orders-list" class="space-y-2">
-              <!-- Populated by JS -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =================================================================== -->
-    <!-- VIEW 2: 咖啡師 Brewer (BREWER AUTH GATE + KDS DASHBOARD)            -->
-    <!-- =================================================================== -->
-    <section id="view-brewer" class="hidden space-y-6">
-
-      <!-- 2A. BREWER AUTH GATE (Email Registration + 4-Digit PIN Login) -->
-      <div id="brewer-auth-gate" class="max-w-md mx-auto tactile-card p-6 bg-[#FFFDF9] space-y-5 my-6">
-        <div class="flex items-center justify-between border-b border-stone-200 pb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">🔐</span>
-            <h2 id="auth-gate-title" class="font-black text-lg text-stone-900">咖啡師 Brewer 登入</h2>
-          </div>
-          <button type="button" onclick="toggleHint('hint-brewer-auth')" class="info-badge" title="登入說明">i</button>
-        </div>
-
-        <div id="hint-brewer-auth" class="hidden p-3 rounded-xl bg-amber-50 border border-stone-300 text-xs text-stone-700 space-y-1">
-          <p class="font-bold">📌 免重複登入機制：</p>
-          <p>• 首次進入請先用<strong>電郵登記</strong>，並設定一組 <strong>4 位數字 Passkey (PIN)</strong>。</p>
-          <p>• <strong>登入後喺撳「登出」前無需再登入</strong>，切換畫面或刷新網頁都會自動保持登入狀態。</p>
-          <p>• 後台會完整記錄所有登記 Email、Passkey 及登入/登出時間。</p>
-        </div>
-
-        <!-- STEP A: First-time Email Registration Form -->
-        <div id="brewer-register-box" class="space-y-4">
-          <div class="text-xs font-bold text-stone-600">
-            請登記咖啡師電郵及設定 4 位數字 Passkey（登出前無需再登入）
-          </div>
-
-          <!-- Google-style Quick Sign-in Button -->
-          <button
-            type="button"
-            onclick="quickSelectBrewerGoogleEmail('4lome.hk@gmail.com')"
-            class="tactile-btn w-full py-2.5 px-3 rounded-xl border-2 border-stone-900 bg-white hover:bg-stone-50 text-stone-900 flex items-center justify-center gap-2.5 font-bold text-xs shadow-sm transition active:scale-[0.99]"
-          >
-            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-            </svg>
-            <span>以預設 Google 電郵快速登入：<strong>4lome.hk@gmail.com</strong></span>
-          </button>
-
-          <!-- Quick Preset Email Chips -->
-          <div class="flex items-center gap-1.5 pt-0.5">
-            <span class="text-[11px] font-bold text-stone-500">預設帳號：</span>
-            <button type="button" onclick="setRegEmailPreset('4lome.hk@gmail.com')" class="px-2 py-0.5 rounded-md border border-stone-400 bg-stone-100 hover:bg-stone-200 text-[11px] font-mono font-bold text-stone-800">
-              4lome.hk@gmail.com (Google)
-            </button>
-            <button type="button" onclick="setRegEmailPreset('brewer@brew.hk')" class="px-2 py-0.5 rounded-md border border-stone-400 bg-stone-100 hover:bg-stone-200 text-[11px] font-mono font-bold text-stone-800">
-              brewer@brew.hk
-            </button>
-          </div>
-
-          <div class="relative flex py-0.5 items-center">
-            <div class="flex-grow border-t border-stone-200"></div>
-            <span class="flex-shrink mx-2 text-[11px] font-bold text-stone-400">或輸入自訂電郵</span>
-            <div class="flex-grow border-t border-stone-200"></div>
-          </div>
-
-          <div>
-            <label for="reg-email-input" class="text-xs font-black text-stone-800 block mb-1">登記電郵 (Email)</label>
-            <input
-              id="reg-email-input"
-              type="email"
-              value="4lome.hk@gmail.com"
-              placeholder="例如：4lome.hk@gmail.com 或自訂電郵"
-              class="w-full rounded-xl border-2 border-stone-900 px-3.5 py-2.5 text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
-            />
-          </div>
-          <div>
-            <label for="reg-pin-input" class="text-xs font-black text-stone-800 block mb-1">設定 4 位數字 Passkey (4-digit PIN)</label>
-            <input
-              id="reg-pin-input"
-              type="password"
-              inputmode="numeric"
-              maxlength="4"
-              value="0326"
-              placeholder="例如：0326"
-              class="w-full rounded-xl border-2 border-stone-900 px-3.5 py-2.5 text-center font-mono text-xl font-black tracking-[0.5em] bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
-            />
-          </div>
-          <div id="reg-error-msg" class="hidden text-xs font-bold text-rose-600"></div>
-          <button
-            type="button"
-            onclick="handleBrewerRegister()"
-            class="tactile-btn w-full py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-sm"
-          >
-            ✅ 電郵登記並保持登入
-          </button>
-        </div>
-
-        <!-- STEP B: Returning 4-Digit PIN Unlock Pad -->
-        <div id="brewer-pin-box" class="hidden space-y-4">
-          <div class="p-3 rounded-xl bg-stone-100 border border-stone-300 flex items-center justify-between text-xs">
-            <div>
-              <span class="text-stone-500 block">已登記電郵</span>
-              <strong id="locked-brewer-email" class="font-mono text-stone-900">brewer@brew.hk</strong>
-            </div>
-            <span class="text-amber-700 font-bold">已登出 · 請輸入 Passkey</span>
-          </div>
-
-          <div>
-            <label for="login-pin-input" class="text-xs font-black text-stone-800 block mb-1.5 text-center">
-              請輸入 4 位數字 Passkey 登入（登入後免每次登入）
-            </label>
-            <input
-              id="login-pin-input"
-              type="password"
-              inputmode="numeric"
-              maxlength="4"
-              placeholder="••••"
-              oninput="checkPinAutoSubmit(this.value)"
-              class="w-full rounded-xl border-2 border-stone-900 px-4 py-3 text-center font-mono text-2xl font-black tracking-[0.6em] bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
-            />
-          </div>
-
-          <!-- Tactile 4-Digit Keypad -->
-          <div class="grid grid-cols-3 gap-2 pt-1">
-            <button type="button" onclick="pressPinKey('1')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">1</button>
-            <button type="button" onclick="pressPinKey('2')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">2</button>
-            <button type="button" onclick="pressPinKey('3')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">3</button>
-            <button type="button" onclick="pressPinKey('4')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">4</button>
-            <button type="button" onclick="pressPinKey('5')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">5</button>
-            <button type="button" onclick="pressPinKey('6')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">6</button>
-            <button type="button" onclick="pressPinKey('7')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">7</button>
-            <button type="button" onclick="pressPinKey('8')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">8</button>
-            <button type="button" onclick="pressPinKey('9')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">9</button>
-            <button type="button" onclick="clearPinKey()" class="tactile-btn py-2.5 rounded-xl bg-stone-200 hover:bg-stone-300 font-bold text-xs">清除</button>
-            <button type="button" onclick="pressPinKey('0')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">0</button>
-            <button type="button" onclick="handleBrewerPinVerify()" class="tactile-btn py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 font-black text-xs">進入 ➔</button>
-          </div>
-
-          <div id="pin-error-msg" class="hidden text-center text-xs font-bold text-rose-600"></div>
-
-          <!-- Collapsible Reset / Change Email Option -->
-          <details class="pt-2 border-t border-stone-200 text-xs text-stone-500">
-            <summary class="cursor-pointer hover:text-stone-800 font-bold">▾ 轉電郵或重設 4 位密碼</summary>
-            <div class="mt-2 p-2.5 rounded-lg bg-stone-100 space-y-2">
-              <p>如需更換登記電郵或重設密碼，撳下面粒掣即可重新登記：</p>
-              <button type="button" onclick="resetBrewerAuth()" class="px-3 py-1.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-900 font-bold text-xs border border-rose-300">
-                🔄 重新登記電郵及密碼
-              </button>
-            </div>
-          </details>
-        </div>
-      </div>
-
-      <!-- 2B. BREWER UNLOCKED WORKSPACE (KDS + FPS Top Settings + Cancel Order) -->
-      <div id="brewer-workspace" class="hidden space-y-6">
-
-        <!-- Brewer Top Bar: Logged-in Email + Passkey + Logout Button + Shop Status -->
-        <div class="tactile-card p-4 bg-[#1E110B] text-white flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center flex-wrap gap-3">
-            <span class="px-2.5 py-1 rounded-lg bg-amber-400 text-stone-950 font-black text-xs">☕ 咖啡師 Brewer</span>
-            <div class="text-xs flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span class="text-stone-300">免重登保持連線：</span>
-              <strong id="active-brewer-email" class="font-mono text-amber-300">4lome.hk@gmail.com</strong>
-              <span class="px-1.5 py-0.5 rounded bg-stone-800 border border-stone-600 font-mono text-[11px] text-stone-300">
-                Passkey: <strong id="active-brewer-pin-badge" class="text-emerald-300">0326</strong>
+            </td>
+            <td>
+              <span class="qt-pass" style="font-size:12px">
+                <span data-zh>果香中位數 &gt; 0<br>缺陷中位數 = 0</span>
+                <span data-en>Fruity median &gt; 0<br>Defects median = 0</span>
               </span>
-            </div>
-          </div>
-          <div class="flex items-center flex-wrap gap-2">
-            <button type="button" onclick="scrollToCrmSection()" class="px-2.5 py-1 rounded-lg bg-sky-700 hover:bg-sky-600 text-white text-xs font-black">📊 後台 CRM 核數</button>
-            <button type="button" onclick="resetToZeroAndReload('brewer')" class="px-2.5 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-amber-300 text-xs font-black border border-amber-400 shadow-sm flex items-center gap-1" title="單號及訂單歸零重設並重新載入">🔄 重設 0 / 重新載入 (Reset 0 / Reload)</button>
-            <button type="button" onclick="setShopMode('normal')" class="px-2.5 py-1 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold">🟢 正常接單</button>
-            <button type="button" onclick="setShopMode('busy')" class="px-2.5 py-1 rounded-lg bg-amber-700 hover:bg-amber-600 text-white text-xs font-bold">🟡 沖緊稍等</button>
-            <button type="button" onclick="logoutBrewerWorkspace()" class="px-3 py-1 rounded-lg bg-rose-700 hover:bg-rose-600 text-white text-xs font-black border border-rose-400">🚪 登出</button>
-          </div>
-        </div>
-
-        <!-- Brewer Main Grid: Left = 轉數快 FPS 置頂設定 & 對數, Right = 沖啡看板 (KDS) -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-
-          <!-- Left 5 Cols: 轉數快 FPS 置頂收數設定 & 對數解鎖 -->
-          <div class="lg:col-span-5 space-y-5">
-            <div class="tactile-card p-5 bg-white space-y-4">
-              <div class="flex items-center justify-between border-b border-stone-200 pb-3">
-                <div class="flex items-center gap-2">
-                  <span class="px-2 py-0.5 rounded bg-emerald-700 text-white font-mono text-xs font-black">置頂</span>
-                  <h3 class="font-black text-base text-stone-900">🇭🇰 轉數快 FPS 報價及對數</h3>
-                  <button type="button" onclick="toggleHint('hint-brewer-fps')" class="info-badge" title="對數說明">i</button>
-                </div>
+            </td>
+            <td>
+              <span class="qt-fail" style="font-size:12px">
+                <span data-zh>冇果香 / 有缺陷</span>
+                <span data-en>No fruitiness / Defects present</span>
+              </span>
+            </td>
+            <td class="qt-note"><span data-zh>專業評鑑員味覺檢測。識唔識出果香、辣味、苦味？呢步係人手把關。</span><span data-en>Expert taste panel check. Can they detect fruitiness, pepperiness, bitterness? This is the human gatekeeper.</span></td>
+          </tr>
+          <tr>
+            <td class="qt-num">7</td>
+            <td>
+              <div class="qt-criterion">
+                <span data-zh>脂肪酸乙酯 FAEE</span>
+                <span data-en>Fatty Acid Ethyl Esters</span>
+                <small>mg/kg</small>
               </div>
+            </td>
+            <td><span class="qt-pass">≤ 35 mg/kg</span></td>
+            <td><span class="qt-fail">&gt; 35 mg/kg</span> <span class="qt-badge qt-fail-badge">→ VOO</span></td>
+            <td class="qt-note"><span data-zh>發酵損傷標記。過高代表橄欖採收後處理不當或發酵過度。</span><span data-en>Fermentation damage marker. Too high = improper post-harvest handling or over-fermentation.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
 
-              <div id="hint-brewer-fps" class="hidden p-3 rounded-xl bg-amber-50 border border-stone-300 text-xs text-stone-700 space-y-1">
-                <p>• 每次收費可手動微調港紙銀碼，改完即刻同步去「客人 order」畫面。</p>
-                <p>• 轉數快 FPS 放喺最頂；Visa、PayMe、八達通已設為「暫停」。</p>
-              </div>
-
-              <!-- Order ID & Manual HKD Amount -->
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label for="manual-order-id" class="text-xs font-black text-stone-700 block mb-1">對數單號 (#)</label>
-                  <input
-                    id="manual-order-id"
-                    type="text"
-                    value="00"
-                    oninput="updatePaymentTemplates()"
-                    class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 font-mono text-base font-black bg-stone-50"
-                  />
-                </div>
-                <div>
-                  <label for="manual-hkd-amount" class="text-xs font-black text-stone-700 block mb-1">應收港紙 (HKD $)</label>
-                  <input
-                    id="manual-hkd-amount"
-                    type="number"
-                    value="0"
-                    oninput="updatePaymentTemplates()"
-                    class="w-full rounded-lg border-2 border-emerald-700 px-3 py-2 font-mono text-base font-black bg-emerald-50 text-emerald-950"
-                  />
-                </div>
-              </div>
-
-              <!-- FPS Phone Number Config (Top Priority) -->
-              <div class="p-3.5 rounded-xl bg-[#ECFDF5] border-2 border-stone-900 space-y-2.5">
-                <div class="flex items-center justify-between">
-                  <label for="fps-phone-input" class="text-xs font-black text-emerald-950">🇭🇰 轉數快 FPS 電話號碼 (使用中)</label>
-                  <span class="text-[11px] font-bold text-emerald-700">置頂啟用</span>
-                </div>
-                <div class="flex gap-2">
-                  <input
-                    id="fps-phone-input"
-                    type="text"
-                    value="9123 6789"
-                    oninput="updatePaymentTemplates()"
-                    class="flex-1 rounded-lg border-2 border-stone-900 px-3 py-1.5 font-mono text-sm font-black bg-white"
-                  />
-                  <button
-                    type="button"
-                    onclick="copyFpsReceiptPrompt()"
-                    class="tactile-btn px-3 py-1.5 rounded-lg bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs"
-                  >
-                    複製催過數訊息
-                  </button>
-                </div>
-              </div>
-
-              <!-- Paused Payment Methods Notice (Visa / PayMe / Octopus) -->
-              <details class="p-3 rounded-xl bg-stone-100 border border-stone-300 text-xs">
-                <summary class="cursor-pointer font-bold text-stone-700 flex items-center justify-between">
-                  <span>⏸️ 其他收款方式（Visa · PayMe · 八達通 暫停）</span>
-                  <span class="font-mono text-stone-500">▾</span>
-                </summary>
-                <div class="mt-2.5 space-y-1.5 text-stone-600 border-t border-stone-200 pt-2">
-                  <div class="flex items-center justify-between">
-                    <span>PayMe QR</span>
-                    <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold text-[11px]">暫停使用</span>
-                  </div>
-                  <div class="flex items-center justify-between">
-                    <span>Visa / 信用卡</span>
-                    <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold text-[11px]">暫停使用</span>
-                  </div>
-                  <div class="flex items-center justify-between">
-                    <span>八達通 Octopus</span>
-                    <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold text-[11px]">暫停使用</span>
-                  </div>
-                </div>
-              </details>
-
-              <!-- Quick Verify Checkboxes -->
-              <div class="p-3.5 rounded-xl bg-stone-50 border-2 border-stone-900 space-y-2.5">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-black text-stone-900">📸 對數解鎖（核對轉數快截圖）</span>
-                  <button type="button" onclick="simulateCustomerPaid()" class="text-xs font-bold text-emerald-700 hover:underline">
-                    ⚡ 一鍵對數解鎖
-                  </button>
-                </div>
-                <div class="grid grid-cols-3 gap-1.5 text-[11px] font-bold">
-                  <label class="flex items-center gap-1.5 p-2 rounded bg-white border border-stone-300 cursor-pointer">
-                    <input type="checkbox" id="chk-amount" onchange="checkPaymentVerification()" class="w-3.5 h-3.5 accent-emerald-600" />
-                    <span>銀碼啱</span>
-                  </label>
-                  <label class="flex items-center gap-1.5 p-2 rounded bg-white border border-stone-300 cursor-pointer">
-                    <input type="checkbox" id="chk-time" onchange="checkPaymentVerification()" class="w-3.5 h-3.5 accent-emerald-600" />
-                    <span>時間啱</span>
-                  </label>
-                  <label class="flex items-center gap-1.5 p-2 rounded bg-white border border-stone-300 cursor-pointer">
-                    <input type="checkbox" id="chk-status" onchange="checkPaymentVerification()" class="w-3.5 h-3.5 accent-emerald-600" />
-                    <span>已過數</span>
-                  </label>
-                </div>
-                <button
-                  type="button"
-                  id="unlock-brew-btn"
-                  disabled
-                  onclick="proceedToBrewing()"
-                  class="tactile-btn w-full py-2.5 rounded-xl bg-emerald-500 text-stone-950 font-black text-xs"
-                >
-                  🔒 對數後解鎖「🟠 沖緊」
-                </button>
-              </div>
-            </div>
-
-            <!-- Collapsible Menu Reference (MCP Test Hidden) -->
-            <details class="tactile-card p-4 bg-white">
-              <summary class="cursor-pointer font-black text-sm text-stone-900 flex items-center justify-between">
-                <span>📋 價目表</span>
-                <span class="text-xs font-mono text-stone-500">▾ 展開</span>
-              </summary>
-              <div class="mt-3 pt-3 border-t border-stone-200 space-y-3 text-xs">
-                <div class="font-bold text-stone-700">
-                  • 熱美式 $28/$32/$36 · 熱奶啡 $36/$40/$44 · 熱 Mocha $40/$44/$48<br/>
-                  • 凍美式 $32/$36/$40 · 凍奶啡 $40/$44/$48 · Dirty $40 · Tonic $42<br/>
-                  • 奶類：FM 全脂奶 (+$0) · SM Skin Milk 脫脂奶 (+$0) · OM 燕麥奶 (+$4)
-                </div>
-                <div class="hidden">
-                  <button type="button" onclick="testLiveMcpEndpoint()" class="px-2.5 py-1.5 rounded bg-stone-900 text-amber-300 font-bold text-xs">
-                    ⚡ 測試 /api/brew/mcp
-                  </button>
-                  <button type="button" onclick="copyMcpConfigJson()" class="px-2.5 py-1.5 rounded bg-stone-200 text-stone-900 font-bold text-xs">
-                    📋 複製 MCP JSON
-                  </button>
-                </div>
-                <div id="mcp-live-status" class="hidden font-mono text-[11px] text-emerald-700"></div>
-              </div>
-            </details>
-          </div>
-
-          <!-- Right 7 Cols: 沖啡看板 (KDS) with Cancel Order Function -->
-          <div class="lg:col-span-7 tactile-card p-5 bg-white space-y-4">
-            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200 pb-3">
-              <div class="flex items-center gap-2">
-                <h3 class="font-black text-base sm:text-lg text-stone-900">🖥️ 沖啡看板 (KDS)</h3>
-                <button type="button" onclick="toggleHint('hint-kds-board')" class="info-badge" title="看板說明">i</button>
-              </div>
-              <!-- Filter Tabs -->
-              <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-lg border border-stone-300 text-xs font-bold">
-                <button type="button" onclick="setKdsFilter('active')" id="kds-filter-active" class="px-2.5 py-1 rounded bg-stone-900 text-white">進行中</button>
-                <button type="button" onclick="setKdsFilter('all')" id="kds-filter-all" class="px-2.5 py-1 rounded text-stone-600 hover:text-stone-900">全部</button>
-                <button type="button" onclick="setKdsFilter('cancelled')" id="kds-filter-cancelled" class="px-2.5 py-1 rounded text-stone-600 hover:text-stone-900">已取消</button>
-              </div>
-            </div>
-
-            <div id="hint-kds-board" class="hidden p-3 rounded-xl bg-stone-100 border border-stone-300 text-xs text-stone-700 space-y-1">
-              <p>• 客人一落單或者取消張單，呢度會即時同步更新。</p>
-              <p>• 每張單都可以撳「🔍 對數」、「🟠 沖緊」、「🟢 搞掂」或者「❌ 取消張單」。</p>
-            </div>
-
-            <!-- KDS Order List -->
-            <div id="kds-orders-list" class="space-y-3">
-              <!-- Populated by JS -->
-            </div>
-          </div>
-
-        </div>
-
-        <!-- =============================================================== -->
-        <!-- 2C. 後台記錄 & CRM 基本核數中心 (Email & Passkey / 每日總數 / 次數 / 金額 / 時間 / 百分比) -->
-        <!-- =============================================================== -->
-        <div id="brewer-crm-section" class="tactile-card p-5 bg-[#FFFDF9] space-y-5">
-          <div class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-stone-900 pb-3">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded bg-stone-900 text-amber-300 font-mono text-xs font-black">CRM & AUDIT</span>
-              <h3 class="font-black text-base sm:text-lg text-stone-900">📊 後台記錄 · 每日核數及 CRM 報表</h3>
-              <button type="button" onclick="toggleHint('hint-crm-audit')" class="info-badge" title="後台核數說明">i</button>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
-              <label for="crm-date-filter" class="text-xs font-black text-stone-700">核數日期：</label>
-              <select
-                id="crm-date-filter"
-                onchange="renderCrmAuditDashboard()"
-                class="rounded-lg border-2 border-stone-900 px-2.5 py-1 text-xs font-mono font-bold bg-white"
-              >
-                <option value="ALL">全部日子 (All Days)</option>
-              </select>
-              <button
-                type="button"
-                onclick="exportCrmAuditCsv()"
-                class="tactile-btn px-3 py-1 rounded-lg bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs"
-              >
-                📥 匯出 CSV 核數表
-              </button>
-            </div>
-          </div>
-
-          <div id="hint-crm-audit" class="hidden p-3 rounded-xl bg-amber-50 border border-stone-300 text-xs text-stone-700 space-y-1">
-            <p>• <strong>後台記錄 Email & Passkey</strong>：自動保存所有登記電郵、4 位 Passkey、登入次數、最後登入及登出時間。</p>
-            <p>• <strong>每日核數指標</strong>：即時追查及計算每日總單數、總杯數、實收金額、總營業額、時間分佈及相關百分比（對數率、取消率、奶類佔比、渠道佔比）。</p>
-          </div>
-
-          <!-- KPI Summary Cards (每日總數, 次數, 金額, 時間, 相關百分比) -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <div class="p-3.5 rounded-xl bg-white border-2 border-stone-900 space-y-1">
-              <span class="text-[11px] font-bold text-stone-500 block">總次數 / 總杯數</span>
-              <div class="text-xl font-black font-mono text-stone-900 tabular-nums">
-                <span id="crm-kpi-orders">0</span> 單 <span class="text-xs text-stone-500">/ <span id="crm-kpi-cups">0</span> 杯</span>
-              </div>
-              <div id="crm-kpi-active-sub" class="text-[11px] font-mono text-stone-600">有效 0 單 · 取消 0 單</div>
-            </div>
-
-            <div class="p-3.5 rounded-xl bg-[#ECFDF5] border-2 border-stone-900 space-y-1">
-              <span class="text-[11px] font-bold text-emerald-900 block">已對數實收金額</span>
-              <div id="crm-kpi-verified-amt" class="text-xl font-black font-mono text-emerald-800 tabular-nums">$0</div>
-              <div id="crm-kpi-gross-sub" class="text-[11px] font-mono text-emerald-700">有效總額 $0</div>
-            </div>
-
-            <div class="p-3.5 rounded-xl bg-amber-50 border-2 border-stone-900 space-y-1">
-              <span class="text-[11px] font-bold text-amber-900 block">待對數金額 (佔比)</span>
-              <div id="crm-kpi-pending-amt" class="text-xl font-black font-mono text-amber-800 tabular-nums">$0</div>
-              <div id="crm-kpi-pending-pct" class="text-[11px] font-mono font-bold text-amber-800">0% 待核對</div>
-            </div>
-
-            <div class="p-3.5 rounded-xl bg-white border-2 border-stone-900 space-y-1">
-              <span class="text-[11px] font-bold text-stone-500 block">對數完成率 (%)</span>
-              <div id="crm-kpi-verify-pct" class="text-xl font-black font-mono text-emerald-700 tabular-nums">0%</div>
-              <div id="crm-kpi-aov" class="text-[11px] font-mono text-stone-600">平均每單 $0</div>
-            </div>
-
-            <div class="p-3.5 rounded-xl bg-rose-50 border-2 border-stone-900 space-y-1">
-              <span class="text-[11px] font-bold text-rose-900 block">取消率 / 取消金額</span>
-              <div id="crm-kpi-cancel-pct" class="text-xl font-black font-mono text-rose-700 tabular-nums">0%</div>
-              <div id="crm-kpi-cancel-amt" class="text-[11px] font-mono text-rose-700">取消額 $0</div>
-            </div>
-
-            <div class="p-3.5 rounded-xl bg-stone-100 border-2 border-stone-900 space-y-1">
-              <span class="text-[11px] font-bold text-stone-600 block">首單至尾單時間</span>
-              <div id="crm-kpi-time-span" class="text-base font-black font-mono text-stone-900 tabular-nums">--:-- ~ --:--</div>
-              <div id="crm-kpi-peak-hour" class="text-[11px] font-mono text-stone-600">高峰時段：--</div>
-            </div>
-          </div>
-
-          <!-- Percentage Breakdown Bars (奶類佔比 / 落單渠道佔比 / 咖啡豆佔比) -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="p-4 rounded-xl bg-white border border-stone-300 space-y-2">
-              <div class="flex items-center justify-between text-xs font-black text-stone-800">
-                <span>🥛 奶類相關百分比</span>
-                <span class="font-mono text-[11px] text-stone-500">按有效單計</span>
-              </div>
-              <div id="crm-pct-milk-list" class="space-y-1.5 text-xs"></div>
-            </div>
-
-            <div class="p-4 rounded-xl bg-white border border-stone-300 space-y-2">
-              <div class="flex items-center justify-between text-xs font-black text-stone-800">
-                <span>💬 落單渠道及收款百分比</span>
-                <span class="font-mono text-[11px] text-stone-500">WhatsApp / IG / FPS</span>
-              </div>
-              <div id="crm-pct-channel-list" class="space-y-1.5 text-xs"></div>
-            </div>
-
-            <div class="p-4 rounded-xl bg-white border border-stone-300 space-y-2">
-              <div class="flex items-center justify-between text-xs font-black text-stone-800">
-                <span>🫘 咖啡豆及狀態百分比</span>
-                <span class="font-mono text-[11px] text-stone-500">SOE / House / Decaf</span>
-              </div>
-              <div id="crm-pct-bean-list" class="space-y-1.5 text-xs"></div>
-            </div>
-          </div>
-
-          <!-- Sub-Tabs for Detailed CRM Tables -->
-          <div class="space-y-3">
-            <div class="flex flex-wrap items-center gap-2 border-b border-stone-200 pb-2">
-              <button
-                type="button"
-                onclick="switchCrmSubTab('daily')"
-                id="crm-subtab-daily"
-                class="px-3 py-1.5 rounded-lg bg-stone-900 text-amber-300 text-xs font-black"
-              >
-                📅 每日總數及百分比匯總
-              </button>
-              <button
-                type="button"
-                onclick="switchCrmSubTab('customers')"
-                id="crm-subtab-customers"
-                class="px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200 text-xs font-bold"
-              >
-                👥 客人 CRM 次數・金額・百分比
-              </button>
-              <button
-                type="button"
-                onclick="switchCrmSubTab('orders')"
-                id="crm-subtab-orders"
-                class="px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200 text-xs font-bold"
-              >
-                🕒 訂單時間及金額明細
-              </button>
-              <button
-                type="button"
-                onclick="switchCrmSubTab('accounts')"
-                id="crm-subtab-accounts"
-                class="px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200 text-xs font-bold"
-              >
-                🔑 後台 Email & Passkey 記錄
-              </button>
-            </div>
-
-            <!-- Sub-Tab 1: Daily Summary Table -->
-            <div id="crm-panel-daily" class="overflow-x-auto">
-              <table class="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr class="bg-stone-100 border-b-2 border-stone-900 font-black text-stone-800">
-                    <th class="p-2.5">日期</th>
-                    <th class="p-2.5">總次數 (單/杯)</th>
-                    <th class="p-2.5">有效金額</th>
-                    <th class="p-2.5">已對數實收</th>
-                    <th class="p-2.5">待對數金額</th>
-                    <th class="p-2.5">對數率 (%)</th>
-                    <th class="p-2.5">取消率 (%)</th>
-                    <th class="p-2.5">首尾單時間</th>
-                  </tr>
-                </thead>
-                <tbody id="crm-daily-tbody" class="divide-y divide-stone-200 font-mono"></tbody>
-              </table>
-            </div>
-
-            <!-- Sub-Tab 2: Customer CRM Table -->
-            <div id="crm-panel-customers" class="hidden overflow-x-auto">
-              <table class="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr class="bg-stone-100 border-b-2 border-stone-900 font-black text-stone-800">
-                    <th class="p-2.5">客人稱呼</th>
-                    <th class="p-2.5">WhatsApp / IG</th>
-                    <th class="p-2.5">落單次數 (有效/總計)</th>
-                    <th class="p-2.5">累計消費 ($ HKD)</th>
-                    <th class="p-2.5">佔總營業額 (%)</th>
-                    <th class="p-2.5">已對數金額</th>
-                    <th class="p-2.5">最後落單時間</th>
-                  </tr>
-                </thead>
-                <tbody id="crm-customers-tbody" class="divide-y divide-stone-200 font-mono"></tbody>
-              </table>
-            </div>
-
-            <!-- Sub-Tab 3: Order Time & Audit Log Table -->
-            <div id="crm-panel-orders" class="hidden overflow-x-auto">
-              <table class="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr class="bg-stone-100 border-b-2 border-stone-900 font-black text-stone-800">
-                    <th class="p-2.5">單號</th>
-                    <th class="p-2.5">日期 · 時間</th>
-                    <th class="p-2.5">客人 (WhatsApp/IG)</th>
-                    <th class="p-2.5">飲品內容</th>
-                    <th class="p-2.5">金額</th>
-                    <th class="p-2.5">佔當日總額 (%)</th>
-                    <th class="p-2.5">狀態</th>
-                  </tr>
-                </thead>
-                <tbody id="crm-orders-tbody" class="divide-y divide-stone-200 font-mono"></tbody>
-              </table>
-            </div>
-
-            <!-- Sub-Tab 4: Backend Email & Passkey Records + Login Audit -->
-            <div id="crm-panel-accounts" class="hidden space-y-4">
-              <div class="p-3.5 rounded-xl bg-stone-100 border border-stone-300 flex flex-wrap items-center justify-between gap-2 text-xs">
-                <div>
-                  <span class="font-black text-stone-900">🔐 後台 Email & Passkey 帳號記錄表</span>
-                  <span class="text-stone-600 ml-2">（記錄所有登記電郵、4 位 Passkey、登入次數及最後活動時間）</span>
-                </div>
-                <button
-                  type="button"
-                  onclick="fetchAuthAuditFromServer()"
-                  class="px-2.5 py-1 rounded bg-stone-900 text-white font-bold text-xs"
-                >
-                  🔄 刷新後台記錄
-                </button>
-              </div>
-
-              <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr class="bg-stone-100 border-b-2 border-stone-900 font-black text-stone-800">
-                      <th class="p-2.5">登記 Email</th>
-                      <th class="p-2.5">4 位 Passkey</th>
-                      <th class="p-2.5">登入次數</th>
-                      <th class="p-2.5">首次登記時間</th>
-                      <th class="p-2.5">最後登入時間</th>
-                      <th class="p-2.5">最後登出時間</th>
-                    </tr>
-                  </thead>
-                  <tbody id="crm-accounts-tbody" class="divide-y divide-stone-200 font-mono"></tbody>
-                </table>
-              </div>
-
-              <div class="overflow-x-auto pt-2">
-                <div class="text-xs font-black text-stone-700 mb-1.5">🕒 最近登入 / 登出 / 登記 時間紀錄</div>
-                <table class="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr class="bg-stone-50 border-b border-stone-300 font-bold text-stone-600">
-                      <th class="p-2">時間</th>
-                      <th class="p-2">動作</th>
-                      <th class="p-2">Email</th>
-                      <th class="p-2">Passkey</th>
-                      <th class="p-2">備註</th>
-                    </tr>
-                  </thead>
-                  <tbody id="crm-auth-logs-tbody" class="divide-y divide-stone-200 font-mono text-[11px]"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-stone-900 text-white border-2 border-amber-400 px-4 py-3 rounded-xl shadow-lg text-xs sm:text-sm font-bold flex items-center gap-2">
-    <span id="toast-text">已複製</span>
+  <!-- Visual Bar Chart for EVOO Criteria -->
+  <div class="bar-chart-wrap">
+    <div class="bar-chart-title">
+      <span data-zh>七大指標 · 通過門檻視覺化</span>
+      <span data-en>7 Criteria · Pass Threshold Visual</span>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>1. 酸價 FFA</span><span data-en>1. Acidity FFA</span></div>
+      <div class="bar-track"><div class="bar-fill b1">≤0.80%</div></div>
+      <div class="bar-val">strict</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>2. 過氧化值</span><span data-en>2. Peroxide</span></div>
+      <div class="bar-track"><div class="bar-fill b2">≤20.0</div></div>
+      <div class="bar-val">mEq O₂/kg</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>3. K₂₇₀</span><span data-en>3. K₂₇₀</span></div>
+      <div class="bar-track"><div class="bar-fill b3">≤0.22</div></div>
+      <div class="bar-val">UV</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>4. ΔK</span><span data-en>4. ΔK</span></div>
+      <div class="bar-track"><div class="bar-fill b4">≤0.01</div></div>
+      <div class="bar-val">UV</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>5. K₂₃₂</span><span data-en>5. K₂₃₂</span></div>
+      <div class="bar-track"><div class="bar-fill b5">≤2.50</div></div>
+      <div class="bar-val">UV</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>6. 感官評核</span><span data-en>6. Organoleptic</span></div>
+      <div class="bar-track"><div class="bar-fill b6">果香&gt;0 · 缺陷=0</div></div>
+      <div class="bar-val">Panel</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span data-zh>7. FAEE</span><span data-en>7. FAEE</span></div>
+      <div class="bar-track"><div class="bar-fill b7">≤35 mg/kg</div></div>
+      <div class="bar-val">esters</div>
+    </div>
+    <div class="bar-note">
+      <span data-zh>條愈短 = 門檻愈嚴 · 全部通過先算 Extra Virgin</span>
+      <span data-en>Shorter bar = stricter threshold · All must pass for Extra Virgin</span>
+    </div>
   </div>
 
-  <!-- ===================================================================== -->
-  <!-- JAVASCRIPT ENGINE                                                     -->
-  <!-- ===================================================================== -->
-  <script>
-    // 1. Menu & Pricing
-    const MENU = {
-      'H01': { name: '熱美式', type: 'black', prices: { S: 28, M: 32, L: 36 } },
-      'H02': { name: '熱 Latte', type: 'milk', prices: { S: 36, M: 40, L: 44 } },
-      'H03': { name: '熱 Cappuccino', type: 'milk', prices: { S: 36, M: 40, L: 44 } },
-      'H04': { name: '熱 Flat White', type: 'milk', prices: { S: 36, M: 40, L: 44 } },
-      'H05': { name: '熱 Mocha', type: 'milk', prices: { S: 40, M: 44, L: 48 } },
-      'C01': { name: '凍美式', type: 'black', prices: { S: 32, M: 36, L: 40 } },
-      'C02': { name: '凍 Latte', type: 'milk', prices: { S: 40, M: 44, L: 48 } },
-      'C03': { name: '凍 Cappuccino', type: 'milk', prices: { S: 40, M: 44, L: 48 } },
-      'C04': { name: '凍 Mocha', type: 'milk', prices: { S: 44, M: 48, L: 52 } },
-      'S01': { name: 'Dirty', type: 'milk', prices: { D: 40, M: 40, S: 40, L: 44 } },
-      'S02': { name: 'Espresso Tonic', type: 'black', prices: { M: 42, L: 46, S: 42 } }
-    };
-
-    const SIZE_NAMES = { S: '細杯', M: '中杯', L: '大杯', D: 'Dirty專用杯' };
-    const MILK_NAMES = {
-      FM: { label: '全脂奶', add: 0 },
-      SM: { label: 'Skin Milk (脫脂奶)', add: 0 },
-      OM: { label: '燕麥奶', add: 4 },
-      D: { label: '全脂奶', add: 0 },
-      O: { label: '燕麥奶', add: 4 },
-      '-': { label: '免奶', add: 0 }
-    };
-
-    function getTodayDateStr() {
-      return new Date().toISOString().slice(0, 10);
-    }
-
-    // 2. State
-    let currentView = 'customer'; // 'customer' | 'brewer'
-    let kdsFilter = 'active';     // 'active' | 'all' | 'cancelled'
-    let crmSubTab = 'daily';      // 'daily' | 'customers' | 'orders' | 'accounts'
-    let selectedBean = 'SOE 單一產地豆';
-    let currentParsedOrder = {
-      valid: false,
-      code: 'H02',
-      size: 'M',
-      milk: 'OM',
-      qty: 0,
-      bean: 'SOE 單一產地豆',
-      customerName: '陳小姐',
-      whatsapp: '9123 4567',
-      igHandle: '@chan_hk',
-      customerDesc: '（請選擇飲品或點選上方預設）',
-      kdsDesc: '（未點選）',
-      totalPrice: 0
-    };
-
-    // Brewer Auth & Persistent Session State (No re-login needed until Logout!)
-    const BREWER_AUTH_KEY = 'brew_brewer_auth_v2';
-    const BREWER_SESSION_KEY = 'brew_brewer_session_unlocked_v2';
-    const BREWER_ACCOUNTS_KEY = 'brew_brewer_accounts_log_v2';
-    const BREWER_AUTH_LOGS_KEY = 'brew_brewer_auth_events_v2';
-
-    let brewerUnlocked = false;
-    let brewerAccountsRegistry = [
-      {
-        email: '4lome.hk@gmail.com',
-        passkey: '0326',
-        registeredAt: '2026-10-26 21:00:00',
-        lastLoginAt: '2026-10-26 21:00:00',
-        loginCount: 1
-      },
-      {
-        email: 'brewer@brew.hk',
-        passkey: '0326',
-        registeredAt: '2026-10-09 09:00:00',
-        lastLoginAt: '2026-10-09 14:00:00',
-        loginCount: 1
-      }
-    ];
-    let brewerAuthEventLogs = [
-      {
-        id: 1,
-        action: 'register',
-        email: '4lome.hk@gmail.com',
-        passkey: '0326',
-        timestamp: '2026-10-26 21:00:00',
-        note: '預設 Google 咖啡師帳號'
-      }
-    ];
-
-    // Orders State & Sequence (starts clean from #00 / HK$0)
-    const ORDERS_STORAGE_KEY = 'brew_orders_v3';
-    const syncChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('brew_sync_v3') : null;
-
-    let activeOrderSeq = 0;
-    let currentCustQrTab = 'fps'; // 'fps' | 'wa'
-
-    function formatOrderId(id) {
-      const num = parseInt(String(id ?? '0').replace(/\D/g, ''), 10);
-      if (isNaN(num) || num === 0) return '00';
-      return String(num).padStart(2, '0');
-    }
-
-    let kdsOrders = [];
-
-    // Dual QR Switcher Helper (明確註明係 WhatsApp 定轉數快)
-    function switchCustQrTab(tab) {
-      currentCustQrTab = tab;
-      const btnFps = document.getElementById('qr-tab-fps');
-      const btnWa = document.getElementById('qr-tab-wa');
-      const badge = document.getElementById('cust-qr-badge');
-      const title = document.getElementById('cust-qr-title');
-      const desc = document.getElementById('cust-qr-desc');
-      const link = document.getElementById('cust-qr-direct-link');
-      const orderIdStr = formatOrderId(activeOrderSeq);
-
-      if (tab === 'fps') {
-        if (btnFps) btnFps.className = 'flex-1 py-1 rounded bg-stone-900 text-amber-300 shadow-sm text-center font-black';
-        if (btnWa) btnWa.className = 'flex-1 py-1 rounded text-stone-600 hover:text-stone-900 text-center font-bold';
-        if (badge) {
-          badge.className = 'inline-block px-2 py-0.5 rounded bg-emerald-100 border border-emerald-300 text-emerald-900 text-[11px] font-black';
-          badge.textContent = '💳 轉數快 FPS 付款專用（不是 WhatsApp）';
-        }
-        if (title) title.textContent = '轉數快付款 QR Code';
-        if (desc) desc.textContent = `用銀行 App 掃碼即可自動填妥金額及備註 #${orderIdStr}`;
-        if (link) link.innerHTML = '<span>📲 複製轉數快過數文字</span>';
-      } else {
-        if (btnWa) btnWa.className = 'flex-1 py-1 rounded bg-[#25D366] text-stone-950 shadow-sm text-center font-black';
-        if (btnFps) btnFps.className = 'flex-1 py-1 rounded text-stone-600 hover:text-stone-900 text-center font-bold';
-        if (badge) {
-          badge.className = 'inline-block px-2 py-0.5 rounded bg-green-100 border border-green-300 text-green-950 text-[11px] font-black';
-          badge.textContent = '💬 咖啡師 WhatsApp 聯絡專用（不是轉數快）';
-        }
-        if (title) title.textContent = '咖啡師 WhatsApp 聯絡 QR Code';
-        if (desc) desc.textContent = '用相機或 WhatsApp 掃碼即時打開對話傳送訂單';
-        if (link) link.innerHTML = '<span>💬 打開 WhatsApp 對話</span>';
-      }
-      updateActiveQrCodeImage();
-    }
-
-    function updateActiveQrCodeImage() {
-      const qrImg = document.getElementById('cust-fps-qr-img');
-      if (!qrImg) return;
-      const orderIdStr = formatOrderId(activeOrderSeq);
-      const amount = currentParsedOrder?.totalPrice || 43;
-      const fpsPhone = (document.getElementById('fps-phone-input')?.value || '9123 6789').replace(/\s+/g, '');
-
-      if (currentCustQrTab === 'fps') {
-        const fpsPayload = `FPS:${fpsPhone};HKD:${amount};ORDER:${orderIdStr}`;
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(fpsPayload)}`;
-        qrImg.alt = '轉數快 FPS 付款 QR Code';
-      } else {
-        const waText = `☕【BREW 訂單 #${orderIdStr}】\n飲品：${currentParsedOrder?.customerDesc || ''}\n金額：$${amount} HKD\n聯絡：${currentParsedOrder?.customerName || '客人'} (${currentParsedOrder?.whatsapp || ''})\n已備妥轉數快付款，請咖啡師確認開沖！`;
-        const waUrl = `https://wa.me/852${fpsPhone}?text=${encodeURIComponent(waText)}`;
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(waUrl)}`;
-        qrImg.alt = '咖啡師 WhatsApp 聯絡 QR Code';
-      }
-    }
-
-    function openActiveQrAction() {
-      if (currentCustQrTab === 'fps') {
-        copyFpsReceiptPrompt();
-      } else {
-        openWhatsAppOrder();
-      }
-    }
-
-    // 3. Toggle 'i' Hint Helper
-    function toggleHint(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.toggle('hidden');
-    }
-
-    // 4. Switch Between "客人 order" and "咖啡師 Brewer"
-    function switchMainView(view) {
-      currentView = view;
-      const custSec = document.getElementById('view-customer');
-      const brewSec = document.getElementById('view-brewer');
-      const btnCust = document.getElementById('tab-btn-customer');
-      const btnBrew = document.getElementById('tab-btn-brewer');
-
-      if (view === 'customer') {
-        custSec.classList.remove('hidden');
-        brewSec.classList.add('hidden');
-        btnCust.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition bg-amber-400 text-stone-950';
-        btnBrew.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-stone-300 hover:text-white flex items-center gap-1.5';
-      } else {
-        custSec.classList.add('hidden');
-        brewSec.classList.remove('hidden');
-        btnBrew.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition bg-amber-400 text-stone-950 flex items-center gap-1.5';
-        btnCust.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-stone-300 hover:text-white';
-        renderBrewerAuthGateOrWorkspace();
-      }
-      renderAllOrderViews();
-    }
-
-    // 5. Persistent Brewer Email Registration & 4-Digit Passkey Logic (No re-login before Logout)
-    function getSavedBrewerAuth() {
-      try {
-        const raw = localStorage.getItem(BREWER_AUTH_KEY) || localStorage.getItem('magabrew_brewer_auth_v1');
-        return raw ? JSON.parse(raw) : null;
-      } catch (e) {
-        return null;
-      }
-    }
-
-    function isBrewerSessionPersisted() {
-      try {
-        return localStorage.getItem(BREWER_SESSION_KEY) === 'true';
-      } catch (e) {
-        return false;
-      }
-    }
-
-    function setBrewerSessionPersisted(unlocked) {
-      brewerUnlocked = Boolean(unlocked);
-      try {
-        localStorage.setItem(BREWER_SESSION_KEY, unlocked ? 'true' : 'false');
-      } catch (e) {}
-    }
-
-    function recordLocalAuthEvent(action, email, passkey, note) {
-      const ts = new Date().toISOString().replace('T', ' ').slice(0, 19);
-      try {
-        const savedAcc = localStorage.getItem(BREWER_ACCOUNTS_KEY);
-        if (savedAcc) brewerAccountsRegistry = JSON.parse(savedAcc);
-      } catch (e) {}
-      try {
-        const savedLogs = localStorage.getItem(BREWER_AUTH_LOGS_KEY);
-        if (savedLogs) brewerAuthEventLogs = JSON.parse(savedLogs);
-      } catch (e) {}
-
-      let acc = brewerAccountsRegistry.find(a => a.email === email);
-      if (!acc && email) {
-        acc = {
-          email,
-          passkey: passkey || '----',
-          registeredAt: ts,
-          lastLoginAt: ts,
-          loginCount: 1
-        };
-        brewerAccountsRegistry.unshift(acc);
-      } else if (acc) {
-        if (passkey) acc.passkey = passkey;
-        if (action === 'login' || action === 'register') {
-          acc.lastLoginAt = ts;
-          acc.loginCount = (acc.loginCount || 0) + (action === 'login' ? 1 : 0);
-        }
-        if (action === 'logout') {
-          acc.lastLogoutAt = ts;
-        }
-      }
-
-      brewerAuthEventLogs.unshift({
-        id: brewerAuthEventLogs.length + 1,
-        action,
-        email,
-        passkey: passkey || (acc ? acc.passkey : '----'),
-        timestamp: ts,
-        note
-      });
-
-      try {
-        localStorage.setItem(BREWER_ACCOUNTS_KEY, JSON.stringify(brewerAccountsRegistry));
-        localStorage.setItem(BREWER_AUTH_LOGS_KEY, JSON.stringify(brewerAuthEventLogs.slice(0, 200)));
-      } catch (e) {}
-    }
-
-    function saveBrewerAuth(email, pin) {
-      const data = { email: email.trim().toLowerCase(), pin: String(pin).trim(), updatedAt: new Date().toISOString() };
-      try {
-        localStorage.setItem(BREWER_AUTH_KEY, JSON.stringify(data));
-      } catch (e) {}
-      setBrewerSessionPersisted(true);
-      recordLocalAuthEvent('register', data.email, data.pin, '登記電郵及 4 位 Passkey 並保持登入');
-
-      fetch('/api/brew/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'register', email: data.email, pin: data.pin })
-      }).then(() => fetchAuthAuditFromServer()).catch(() => {});
-      return data;
-    }
-
-    function updateHeaderLockBadge() {
-      const lockIcon = document.getElementById('brewer-lock-icon');
-      const saved = getSavedBrewerAuth();
-      if (brewerUnlocked && saved) {
-        if (lockIcon) lockIcon.textContent = '🔓';
-      } else {
-        if (lockIcon) lockIcon.textContent = '🔒';
-      }
-    }
-
-    function renderBrewerAuthGateOrWorkspace() {
-      const gate = document.getElementById('brewer-auth-gate');
-      const workspace = document.getElementById('brewer-workspace');
-      const regBox = document.getElementById('brewer-register-box');
-      const pinBox = document.getElementById('brewer-pin-box');
-      const saved = getSavedBrewerAuth();
-
-      // If already logged in and not logged out, go straight into workspace without asking PIN again
-      if (brewerUnlocked && saved && saved.email && saved.pin) {
-        gate.classList.add('hidden');
-        workspace.classList.remove('hidden');
-        updateHeaderLockBadge();
-        const activeEmailEl = document.getElementById('active-brewer-email');
-        if (activeEmailEl) activeEmailEl.textContent = saved.email;
-        const activePinEl = document.getElementById('active-brewer-pin-badge');
-        if (activePinEl) activePinEl.textContent = saved.pin;
-        renderCrmAuditDashboard();
-        return;
-      }
-
-      gate.classList.remove('hidden');
-      workspace.classList.add('hidden');
-      updateHeaderLockBadge();
-
-      if (!saved || !saved.email || !saved.pin) {
-        document.getElementById('auth-gate-title').textContent = '咖啡師 Brewer 電郵登記';
-        regBox.classList.remove('hidden');
-        pinBox.classList.add('hidden');
-      } else {
-        document.getElementById('auth-gate-title').textContent = '輸入 4 位 Passkey 登入 Brewer';
-        regBox.classList.add('hidden');
-        pinBox.classList.remove('hidden');
-        document.getElementById('locked-brewer-email').textContent = saved.email;
-        const pinInput = document.getElementById('login-pin-input');
-        if (pinInput) {
-          pinInput.value = '';
-          setTimeout(() => pinInput.focus(), 50);
-        }
-      }
-    }
-
-    function handleBrewerRegister() {
-      const email = (document.getElementById('reg-email-input').value || '').trim();
-      const pin = (document.getElementById('reg-pin-input').value || '').trim();
-      const errEl = document.getElementById('reg-error-msg');
-
-      if (!email || !email.includes('@')) {
-        errEl.textContent = '⚠️ 請輸入有效電郵地址（例如 brewer@brew.hk）';
-        errEl.classList.remove('hidden');
-        return;
-      }
-      if (!/^\d{4}$/.test(pin)) {
-        errEl.textContent = '⚠️ Passkey 必須係 4 位數字（例如 0326）';
-        errEl.classList.remove('hidden');
-        return;
-      }
-
-      errEl.classList.add('hidden');
-      saveBrewerAuth(email, pin);
-      renderBrewerAuthGateOrWorkspace();
-      resetBaristaOrderSequence();
-      showToast('✅ 電郵已登記，落單次序已由 #01 重新開始！');
-    }
-
-    function pressPinKey(digit) {
-      const input = document.getElementById('login-pin-input');
-      if (!input) return;
-      if (input.value.length < 4) {
-        input.value += digit;
-        checkPinAutoSubmit(input.value);
-      }
-    }
-
-    function clearPinKey() {
-      const input = document.getElementById('login-pin-input');
-      if (input) input.value = '';
-      const errEl = document.getElementById('pin-error-msg');
-      if (errEl) errEl.classList.add('hidden');
-    }
-
-    function checkPinAutoSubmit(val) {
-      if (val && val.length === 4) {
-        handleBrewerPinVerify();
-      }
-    }
-
-    function handleBrewerPinVerify() {
-      const input = document.getElementById('login-pin-input');
-      const errEl = document.getElementById('pin-error-msg');
-      const saved = getSavedBrewerAuth();
-      const entered = (input ? input.value : '').trim();
-
-      if (!saved) {
-        renderBrewerAuthGateOrWorkspace();
-        return;
-      }
-
-      if (entered === saved.pin) {
-        errEl.classList.add('hidden');
-        setBrewerSessionPersisted(true);
-        recordLocalAuthEvent('login', saved.email, saved.pin, '4 位 Passkey 驗證成功（保持免重登狀態）');
-        fetch('/api/brew/auth', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'verify', email: saved.email, pin: entered })
-        }).then(() => fetchAuthAuditFromServer()).catch(() => {});
-        renderBrewerAuthGateOrWorkspace();
-        resetBaristaOrderSequence();
-        showToast('🔓 登入成功！落單次序已由 #01 重新開始');
-      } else {
-        errEl.textContent = '❌ 4 位 Passkey 唔啱，請再試';
-        errEl.classList.remove('hidden');
-        if (input) input.value = '';
-      }
-    }
-
-    function logoutBrewerWorkspace() {
-      const saved = getSavedBrewerAuth();
-      setBrewerSessionPersisted(false);
-      if (saved) {
-        recordLocalAuthEvent('logout', saved.email, saved.pin, '咖啡師主動撳「登出」');
-        fetch('/api/brew/auth', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'logout', email: saved.email })
-        }).catch(() => {});
-      }
-      renderBrewerAuthGateOrWorkspace();
-      showToast('🚪 已登出咖啡師 Brewer（下次進入需輸入 4 位 Passkey）');
-    }
-
-    function resetBrewerAuth() {
-      try {
-        localStorage.removeItem(BREWER_AUTH_KEY);
-      } catch (e) {}
-      setBrewerSessionPersisted(false);
-      fetch('/api/brew/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'reset' })
-      }).catch(() => {});
-      renderBrewerAuthGateOrWorkspace();
-      showToast('🔄 已重設，請重新登記電郵及 4 位 Passkey');
-    }
-
-    function scrollToCrmSection() {
-      const el = document.getElementById('brewer-crm-section');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // Google-style Quick Sign-in & Preset helpers
-    function quickSelectBrewerGoogleEmail(email = '4lome.hk@gmail.com') {
-      const emailInput = document.getElementById('reg-email-input');
-      const pinInput = document.getElementById('reg-pin-input');
-      if (emailInput) emailInput.value = email;
-      if (pinInput && !pinInput.value) pinInput.value = '0326';
-      handleBrewerRegister();
-      showToast(`✅ 已以預設 Google 電郵 (${email}) 登入！`);
-    }
-
-    function setRegEmailPreset(email) {
-      const emailInput = document.getElementById('reg-email-input');
-      if (emailInput) {
-        emailInput.value = email;
-        emailInput.focus();
-      }
-      showToast(`📧 已填入電郵：${email}`);
-    }
-
-    // 6. Reset to Zero / Reload & Ordering & Natural Language Parser
-    function resetToZeroAndReload(source = 'customer') {
-      activeOrderSeq = 0;
-      kdsOrders = [];
-      try {
-        localStorage.removeItem(ORDERS_STORAGE_KEY);
-      } catch (e) {}
-
-      fetch('/api/brew/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'resetOrders' })
-      }).catch(() => {});
-
-      const id00 = formatOrderId(0);
-      const custTopId = document.getElementById('cust-top-order-id');
-      if (custTopId) custTopId.textContent = `#${id00}`;
-
-      const manualId = document.getElementById('manual-order-id');
-      if (manualId) manualId.value = id00;
-
-      const manualAmt = document.getElementById('manual-hkd-amount');
-      if (manualAmt) manualAmt.value = 0;
-
-      const custFpsAmt = document.getElementById('cust-fps-amount-display');
-      if (custFpsAmt) custFpsAmt.textContent = 'HK$0';
-
-      const custPrice = document.getElementById('customer-order-price');
-      if (custPrice) custPrice.textContent = '0';
-
-      const custDesc = document.getElementById('customer-order-desc');
-      if (custDesc) custDesc.textContent = '（已重設歸零，請重新點選飲品）';
-
-      const orderInput = document.getElementById('order-input');
-      if (orderInput) orderInput.value = '';
-
-      const feedback = document.getElementById('customer-action-feedback');
-      if (feedback) feedback.textContent = '🔄 系統已重設歸零 (#00 / HK$0)！';
-
-      currentParsedOrder = {
-        valid: false,
-        raw: '',
-        code: 'H02',
-        size: 'M',
-        milk: 'OM',
-        qty: 0,
-        bean: selectedBean,
-        customerName: (document.getElementById('cust-name-input')?.value || '客人').trim(),
-        whatsapp: (document.getElementById('cust-whatsapp-input')?.value || '').trim(),
-        igHandle: (document.getElementById('cust-ig-input')?.value || '').trim(),
-        customerDesc: '（已重設歸零，請點選飲品）',
-        kdsDesc: '（未點選）',
-        totalPrice: 0
-      };
-
-      updateActiveQrCodeImage();
-      renderAllOrderViews();
-      fetchOrdersFromServer(true);
-
-      if (source === 'brewer') {
-        showToast('🔄 咖啡師端已完成歸零 (#00 / HK$0) 並重新載入！');
-      } else {
-        showToast('🔄 客人端已完成歸零 (#00 / HK$0) 並重新載入！');
-      }
-    }
-
-    function resetBaristaOrderSequence() {
-      resetToZeroAndReload('brewer');
-    }
-
-    function selectBean(beanName) {
-      selectedBean = beanName;
-      document.querySelectorAll('.bean-btn').forEach((btn) => {
-        if (btn.textContent.trim() === beanName) {
-          btn.className = 'bean-btn px-2.5 py-2 rounded-lg border-2 border-stone-900 bg-amber-300 font-black text-xs text-stone-900';
-        } else {
-          btn.className = 'bean-btn px-2.5 py-2 rounded-lg border border-stone-300 bg-white font-bold text-xs text-stone-700 hover:bg-stone-100';
-        }
-      });
-      if (document.getElementById('order-input').value.trim()) {
-        parseOrderInput();
-      }
-    }
-
-    // Auto-alignment: Locks milk for black coffees, locks Dirty parameters
-    function alignDrinkSelection(code) {
-      const drinkObj = MENU[code] || MENU['H02'];
-      const selMilk = document.getElementById('sel-milk');
-      const selSize = document.getElementById('sel-size');
-      const milkLockHint = document.getElementById('milk-lock-hint');
-
-      if (drinkObj.type === 'black') {
-        if (selMilk) {
-          selMilk.value = '-';
-          selMilk.disabled = true;
-          selMilk.classList.add('opacity-50', 'bg-stone-100', 'cursor-not-allowed');
-        }
-        if (selSize && selSize.disabled) {
-          selSize.disabled = false;
-          selSize.classList.remove('opacity-50', 'bg-stone-100', 'cursor-not-allowed');
-        }
-        if (milkLockHint) milkLockHint.textContent = ' (黑咖啡免奶)';
-      } else if (code === 'S01') {
-        // Dirty: Dedicated cup + cold whole milk
-        if (selSize) {
-          selSize.value = 'D';
-          selSize.disabled = true;
-          selSize.classList.add('opacity-50', 'bg-stone-100', 'cursor-not-allowed');
-        }
-        if (selMilk) {
-          selMilk.value = 'FM';
-          selMilk.disabled = true;
-          selMilk.classList.add('opacity-50', 'bg-stone-100', 'cursor-not-allowed');
-        }
-        if (milkLockHint) milkLockHint.textContent = ' (Dirty 專用凍全脂奶)';
-      } else {
-        // Standard milk coffees (Latte, Cap, Flat White, Mocha)
-        if (selSize && selSize.disabled) {
-          selSize.disabled = false;
-          selSize.classList.remove('opacity-50', 'bg-stone-100', 'cursor-not-allowed');
-          if (selSize.value === 'D') selSize.value = 'M';
-        }
-        if (selMilk) {
-          selMilk.disabled = false;
-          selMilk.classList.remove('opacity-50', 'bg-stone-100', 'cursor-not-allowed');
-          if (selMilk.value === '-') selMilk.value = 'FM';
-        }
-        if (milkLockHint) milkLockHint.textContent = '';
-      }
-    }
-
-    function buildFromVisual() {
-      const code = document.getElementById('sel-drink').value;
-      alignDrinkSelection(code);
-
-      const size = document.getElementById('sel-size').value;
-      const milk = document.getElementById('sel-milk').value;
-      const qty = document.getElementById('sel-qty').value;
-
-      const drinkObj = MENU[code];
-      const sizeText = SIZE_NAMES[size] || '中杯';
-      const milkText = milk === '-' ? '' : `／${MILK_NAMES[milk]?.label || '全脂奶'}`;
-      document.getElementById('order-input').value = `${sizeText}${drinkObj.name}${milkText}／${qty} 杯`;
-      parseOrderInput(false);
-    }
-
-    function applyQuickPreset(text) {
-      document.getElementById('order-input').value = text;
-      parseOrderInput(true);
-    }
-
-    function parseNaturalLanguageOrCode(rawStr) {
-      const normalized = rawStr.trim();
-      const upper = normalized.toUpperCase();
-      const slashParts = upper.split('/').map(s => s.trim()).filter(Boolean);
-
-      if (slashParts.length >= 2 && MENU[slashParts[0]]) {
-        const code = slashParts[0];
-        const drink = MENU[code];
-        const sizeRaw = slashParts[1] || 'M';
-        const size = ['S', 'M', 'L', 'D'].includes(sizeRaw) ? sizeRaw : 'M';
-        let milk = slashParts[2] || (drink.type === 'black' ? '-' : 'FM');
-        if (drink.type === 'black') milk = '-';
-        else if (!['FM', 'SM', 'OM', 'D', 'O'].includes(milk)) milk = 'FM';
-        const qtyRaw = slashParts[3] || '1';
-        const qty = Math.max(1, Math.min(20, parseInt(qtyRaw, 10) || 1));
-        return { code, size, milk, qty };
-      }
-
-      let code = 'H02';
-      const isCold = /凍|冰|ICED|ICE|COLD/i.test(normalized);
-      if (/DIRTY|S01/i.test(normalized)) code = 'S01';
-      else if (/TONIC|S02|湯力/i.test(normalized)) code = 'S02';
-      else if (/MOCHA|朱古力|摩卡|H05|C04/i.test(normalized)) code = isCold ? 'C04' : 'H05';
-      else if (/FLAT\s*WHITE|小白|H04/i.test(normalized)) code = 'H04';
-      else if (/CAPPUCCINO|卡布|泡沫|H03|C03/i.test(normalized)) code = isCold ? 'C03' : 'H03';
-      else if (/AMERICANO|美式|齋啡|黑咖啡|H01|C01/i.test(normalized)) code = isCold ? 'C01' : 'H01';
-      else if (/LATTE|鮮奶咖啡|拿鐵|H02|C02/i.test(normalized)) code = isCold ? 'C02' : 'H02';
-
-      let size = code === 'S01' ? 'D' : 'M';
-      if (/細杯|細|SMALL|\bS\b/i.test(normalized)) size = 'S';
-      else if (/大杯|大|LARGE|\bL\b/i.test(normalized)) size = 'L';
-      else if (/中杯|中|MEDIUM|\bM\b/i.test(normalized)) size = 'M';
-
-      let milk = MENU[code].type === 'black' ? '-' : 'FM';
-      if (MENU[code].type !== 'black') {
-        if (/SKIN\s*MILK|SKIM\s*MILK|脫脂|低脂|\bSM\b/i.test(normalized)) milk = 'SM';
-        else if (/OAT|燕麥|植物奶|\bOM\b/i.test(normalized)) milk = 'OM';
-        else if (/FULL|全脂|鮮奶|\bFM\b/i.test(normalized)) milk = 'FM';
-      }
-
-      let qty = 1;
-      const qtyMatch = normalized.match(/(\d+)\s*(?:杯|cups?)/i) || normalized.match(/[/／]\s*(\d+)\s*$/);
-      if (qtyMatch) qty = Math.max(1, Math.min(20, parseInt(qtyMatch[1], 10) || 1));
-
-      return { code, size, milk, qty };
-    }
-
-    function parseOrderInput(isFromTyping = false) {
-      const raw = document.getElementById('order-input').value.trim();
-      const custName = (document.getElementById('cust-name-input')?.value || '客人').trim();
-      const custWhatsapp = (document.getElementById('cust-whatsapp-input')?.value || '').trim();
-      const custIg = (document.getElementById('cust-ig-input')?.value || '').trim();
-
-      if (!raw) {
-        currentParsedOrder = {
-          valid: false,
-          raw: '',
-          code: 'H02',
-          size: 'M',
-          milk: 'OM',
-          qty: 0,
-          bean: selectedBean,
-          customerName: custName,
-          whatsapp: custWhatsapp,
-          igHandle: custIg,
-          customerDesc: '（請選擇飲品或點選上方預設）',
-          kdsDesc: '（未點選）',
-          totalPrice: 0
-        };
-        document.getElementById('customer-order-desc').textContent = currentParsedOrder.customerDesc;
-        document.getElementById('customer-contact-preview').textContent =
-          `聯絡：${custName || '未填'}${custWhatsapp ? ' · WhatsApp: ' + custWhatsapp : ''}${custIg ? ' · IG: ' + custIg : ''}`;
-        document.getElementById('customer-order-price').textContent = '0';
-        const activeOrderIdStr = formatOrderId(activeOrderSeq);
-        document.getElementById('cust-top-order-id').textContent = `#${activeOrderIdStr}`;
-        document.getElementById('cust-fps-amount-display').textContent = 'HK$0';
-        const manualAmt = document.getElementById('manual-hkd-amount');
-        if (manualAmt) manualAmt.value = 0;
-        const manualId = document.getElementById('manual-order-id');
-        if (manualId) manualId.value = activeOrderIdStr;
-        updateActiveQrCodeImage();
-        return;
-      }
-
-      const parsed = parseNaturalLanguageOrCode(raw);
-      const { code, size, milk, qty } = parsed;
-      const drink = MENU[code] || MENU['H02'];
-
-      if (isFromTyping) {
-        document.getElementById('sel-drink').value = code;
-        alignDrinkSelection(code);
-        document.getElementById('sel-size').value = size;
-        if (drink.type !== 'black' && code !== 'S01') {
-          document.getElementById('sel-milk').value = milk;
-        }
-        document.getElementById('sel-qty').value = String(qty);
-      }
-
-      let basePrice = drink.prices[size] ?? drink.prices['M'] ?? 36;
-      const milkAdd = drink.type === 'milk' ? (MILK_NAMES[milk]?.add || 0) : 0;
-      let unitPrice = basePrice + milkAdd;
-
-      if (code === 'H02' && size === 'M' && (milk === 'OM' || milk === 'O')) {
-        unitPrice = 43;
-      } else if (code === 'H02' && size === 'M' && (milk === 'SM' || milk === 'FM')) {
-        unitPrice = 39;
-      }
-
-      const totalPrice = unitPrice * qty;
-      const sizeLabel = size === 'D' ? '' : SIZE_NAMES[size];
-      const milkPart = drink.type === 'black' ? '' : `／${MILK_NAMES[milk]?.label || '全脂奶'}`;
-      const kdsDesc = `${sizeLabel}${drink.name}${milkPart}／${qty} 杯`;
-      const customerDesc = `${selectedBean} / ${kdsDesc}`;
-
-      currentParsedOrder = {
-        valid: true,
-        raw,
-        code,
-        size,
-        milk,
-        qty,
-        bean: selectedBean,
-        customerName: custName,
-        whatsapp: custWhatsapp,
-        igHandle: custIg,
-        customerDesc,
-        kdsDesc,
-        totalPrice
-      };
-
-      document.getElementById('customer-order-desc').textContent = customerDesc;
-      document.getElementById('customer-contact-preview').textContent =
-        `聯絡：${custName || '未填'}${custWhatsapp ? ' · WhatsApp: ' + custWhatsapp : ''}${custIg ? ' · IG: ' + custIg : ''}`;
-      document.getElementById('customer-order-price').textContent = totalPrice;
-
-      // Real-time synchronization of Top FPS Card and Barista inputs
-      const activeOrderIdStr = formatOrderId(activeOrderSeq > 0 ? activeOrderSeq : 1);
-      document.getElementById('cust-top-order-id').textContent = `#${activeOrderIdStr}`;
-      document.getElementById('cust-fps-amount-display').textContent = totalPrice === 0 ? 'HK$0' : `HK$${totalPrice}`;
-      const manualAmt = document.getElementById('manual-hkd-amount');
-      if (manualAmt) manualAmt.value = totalPrice;
-      const manualId = document.getElementById('manual-order-id');
-      if (manualId) manualId.value = activeOrderIdStr;
-
-      updateActiveQrCodeImage();
-    }
-
-    // 7. Confirm / Modify / Cancel Order (Bi-directional Sync)
-    function customerConfirmOrder() {
-      if (!currentParsedOrder || !currentParsedOrder.raw || currentParsedOrder.totalPrice === 0) {
-        buildFromVisual();
-      }
-      const existingNums = kdsOrders.map(o => parseInt(String(o.id).replace(/\D/g, ''), 10)).filter(n => !isNaN(n));
-      const nextNum = existingNums.length > 0 ? Math.max(...existingNums) + 1 : (activeOrderSeq > 0 ? activeOrderSeq : 1);
-      activeOrderSeq = nextNum;
-      const nextId = formatOrderId(nextNum);
-
-      const now = new Date();
-      const timeStr = now.toTimeString().slice(0, 5);
-      const dateStr = now.toISOString().slice(0, 10);
-
-      const newOrder = {
-        id: nextId,
-        bean: currentParsedOrder.bean,
-        code: currentParsedOrder.code,
-        size: currentParsedOrder.size,
-        milk: currentParsedOrder.milk,
-        qty: currentParsedOrder.qty || 1,
-        raw: currentParsedOrder.raw,
-        customerDesc: currentParsedOrder.customerDesc,
-        kdsDesc: currentParsedOrder.kdsDesc,
-        amount: currentParsedOrder.totalPrice,
-        customerName: currentParsedOrder.customerName || '客人',
-        whatsapp: currentParsedOrder.whatsapp || '',
-        igHandle: currentParsedOrder.igHandle || '',
-        paymentMethod: 'fps',
-        paymentVerified: false,
-        status: '待對數',
-        channel: currentParsedOrder.whatsapp ? 'WhatsApp' : 'IG DM',
-        date: dateStr,
-        time: timeStr
-      };
-
-      kdsOrders.unshift(newOrder);
-
-      const manualId = document.getElementById('manual-order-id');
-      if (manualId) manualId.value = nextId;
-      const manualAmt = document.getElementById('manual-hkd-amount');
-      if (manualAmt) manualAmt.value = currentParsedOrder.totalPrice;
-      document.getElementById('cust-top-order-id').textContent = `#${nextId}`;
-      document.getElementById('customer-action-feedback').textContent = `✅ 已落單 #${nextId} (請用上方轉數快付款)`;
-
-      syncOrdersEverywhere(newOrder);
-      updatePaymentTemplates();
-      renderAllOrderViews();
-      showToast(`✅ 訂單 #${nextId} 已傳送！請用頂部轉數快付款`);
-    }
-
-    function customerModifyOrder() {
-      const input = document.getElementById('order-input');
-      input.focus();
-      input.select();
-      document.getElementById('customer-action-feedback').textContent = '✏️ 修改緊...';
-    }
-
-    function customerCancelActiveOrder() {
-      const activeOrder = kdsOrders.find(o => o.status !== '已取消' && o.status !== '搞掂');
-      if (!activeOrder) {
-        showToast('⚠️ 暫時無進行中嘅訂單可以取消');
-        return;
-      }
-      cancelOrderById(activeOrder.id, '客人');
-    }
-
-    function cancelOrderById(orderId, cancelledBy = '咖啡師') {
-      const target = kdsOrders.find(o => String(o.id) === String(orderId));
-      if (!target) return;
-
-      target.status = '已取消';
-      target.cancelledBy = cancelledBy;
-      target.cancelledAt = new Date().toTimeString().slice(0, 5);
-
-      const fb = document.getElementById('customer-action-feedback');
-      if (fb) fb.textContent = `❌ 訂單 #${orderId} 已取消 (${cancelledBy})`;
-
-      try {
-        localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(kdsOrders));
-        if (syncChannel) syncChannel.postMessage({ type: 'ORDERS_UPDATED', orders: kdsOrders });
-      } catch (e) {}
-
-      fetch('/api/brew/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'cancel', id: orderId, cancelledBy })
-      }).catch(() => {});
-
-      renderAllOrderViews();
-      showToast(`❌ 訂單 #${orderId} 已取消並即時同步`);
-    }
-
-    function restoreOrderById(orderId) {
-      const target = kdsOrders.find(o => String(o.id) === String(orderId));
-      if (!target) return;
-      target.status = target.paymentVerified ? '沖緊' : '待對數';
-      syncOrdersEverywhere(target);
-      renderAllOrderViews();
-      showToast(`↺ 訂單 #${orderId} 已恢復`);
-    }
-
-    // 8. Payment Templates & Real-time FPS Sync
-    function updatePaymentTemplates() {
-      const orderId = document.getElementById('manual-order-id')?.value || formatOrderId(activeOrderSeq);
-      const amount = parseInt(document.getElementById('manual-hkd-amount')?.value, 10) || currentParsedOrder.totalPrice || 0;
-      const fpsPhone = (document.getElementById('fps-phone-input')?.value || '9123 6789').trim();
-
-      document.getElementById('cust-top-order-id').textContent = `#${orderId}`;
-      document.getElementById('cust-fps-phone-display').textContent = fpsPhone;
-      document.getElementById('cust-fps-amount-display').textContent = amount === 0 ? 'HK$0' : `HK$${amount}`;
-
-      updateActiveQrCodeImage();
-
-      const targetOrder = kdsOrders.find(o => String(o.id) === String(orderId));
-      if (targetOrder && targetOrder.amount !== amount) {
-        targetOrder.amount = amount;
-        syncOrdersEverywhere(targetOrder);
-        renderAllOrderViews();
-      }
-    }
-
-    function copyFpsPhone() {
-      const fpsPhone = (document.getElementById('fps-phone-input')?.value || '9123 6789').trim();
-      navigator.clipboard.writeText(fpsPhone.replace(/\s+/g, '')).then(() => {
-        showToast(`📋 已複製轉數快電話：${fpsPhone}`);
-      });
-    }
-
-    function copyFpsReceiptPrompt() {
-      const orderId = document.getElementById('manual-order-id')?.value || formatOrderId(activeOrderSeq);
-      const amount = document.getElementById('manual-hkd-amount')?.value || currentParsedOrder.totalPrice || '43';
-      const fpsPhone = (document.getElementById('fps-phone-input')?.value || '9123 6789').trim();
-      const msg = `🇭🇰 BREW 轉數快 FPS 過數提示\n單號：#${orderId}\n應付港紙：$${amount}\n轉數快電話：${fpsPhone}\n（備註請填 #${orderId}，過數後撳 WhatsApp 即可通知咖啡師開沖 ☕）`;
-      navigator.clipboard.writeText(msg).then(() => {
-        showToast('📋 已複製轉數快過數訊息');
-      });
-    }
-
-    // 9. Streamlined 1-Click Barista Actions (解決繁複對數與回覆流程)
-    function baristaOneClickAcceptAndBrew(orderId) {
-      const target = kdsOrders.find(o => String(o.id) === String(orderId));
-      if (!target) return;
-      target.paymentVerified = true;
-      target.status = '沖緊';
-      target.verifiedAt = new Date().toTimeString().slice(0, 5);
-      syncOrdersEverywhere(target);
-      renderAllOrderViews();
-      showToast(`⚡ 訂單 #${orderId} 已一鍵確認收款並開始開沖！`);
-    }
-
-    function baristaOneClickDone(orderId) {
-      const target = kdsOrders.find(o => String(o.id) === String(orderId));
-      if (!target) return;
-      target.status = '搞掂';
-      target.completedAt = new Date().toTimeString().slice(0, 5);
-      syncOrdersEverywhere(target);
-      renderAllOrderViews();
-      showToast(`🟢 訂單 #${orderId} 沖好搞掂！`);
-    }
-
-    function baristaQuickWhatsAppReply(orderId, type) {
-      const target = kdsOrders.find(o => String(o.id) === String(orderId));
-      if (!target) return;
-      const phone = (target.whatsapp || '').replace(/\s+/g, '');
-      const fpsPhone = (document.getElementById('fps-phone-input')?.value || '9123 6789').trim();
-
-      let msg = '';
-      if (type === 'paid') {
-        msg = `☕【BREW】收到！單號 #${orderId} (${target.kdsDesc}) 已確認收款，咖啡師正為你開沖，完成後即通知取啡！`;
-      } else if (type === 'request_fps') {
-        msg = `☕【BREW】收到你張單 #${orderId} (${target.kdsDesc})！總額 $${target.amount} HKD。請轉數快 FPS 至 ${fpsPhone} (備註 #${orderId})，收到即刻為你開沖！`;
-      } else if (type === 'ready') {
-        msg = `☕【BREW】你的咖啡 #${orderId} (${target.kdsDesc}) 已經搞掂！請前往吧檯出示單號取啡 😋`;
-      }
-
-      const waUrl = phone
-        ? `https://wa.me/852${phone}?text=${encodeURIComponent(msg)}`
-        : `https://wa.me/?text=${encodeURIComponent(msg)}`;
-      window.open(waUrl, '_blank');
-    }
-
-    function checkPaymentVerification() {
-      const c1 = document.getElementById('chk-amount').checked;
-      const c2 = document.getElementById('chk-time').checked;
-      const c3 = document.getElementById('chk-status').checked;
-      const btn = document.getElementById('unlock-brew-btn');
-      const orderId = document.getElementById('manual-order-id').value || formatOrderId(activeOrderSeq);
-
-      if (c1 && c2 && c3) {
-        btn.disabled = false;
-        btn.textContent = `✅ 對數完成！解鎖 #${orderId} 進入「🟠 沖緊」`;
-      } else {
-        btn.disabled = true;
-        btn.textContent = `🔒 對數後解鎖「🟠 沖緊」`;
-      }
-    }
-
-    function simulateCustomerPaid() {
-      document.getElementById('chk-amount').checked = true;
-      document.getElementById('chk-time').checked = true;
-      document.getElementById('chk-status').checked = true;
-      checkPaymentVerification();
-      proceedToBrewing();
-    }
-
-    function proceedToBrewing() {
-      const orderId = document.getElementById('manual-order-id').value;
-      const target = kdsOrders.find(o => String(o.id) === String(orderId)) || kdsOrders[0];
-      if (target) {
-        target.paymentVerified = true;
-        target.status = '沖緊';
-        target.verifiedAt = new Date().toTimeString().slice(0, 5);
-        syncOrdersEverywhere(target);
-        renderAllOrderViews();
-        showToast(`🟠 訂單 #${target.id} 已對數，開始沖啡！`);
-      }
-      document.getElementById('chk-amount').checked = false;
-      document.getElementById('chk-time').checked = false;
-      document.getElementById('chk-status').checked = false;
-      checkPaymentVerification();
-    }
-
-    function advanceOrderStatus(orderId, nextStatus) {
-      const order = kdsOrders.find(o => String(o.id) === String(orderId));
-      if (!order) return;
-
-      if (nextStatus === '沖緊' && !order.paymentVerified) {
-        document.getElementById('manual-order-id').value = order.id;
-        document.getElementById('manual-hkd-amount').value = order.amount;
-        updatePaymentTemplates();
-        showToast(`⚠️ 請先為 #${order.id} 對數解鎖`);
-        return;
-      }
-
-      order.status = nextStatus;
-      if (nextStatus === '搞掂') {
-        order.completedAt = new Date().toTimeString().slice(0, 5);
-      }
-      syncOrdersEverywhere(order);
-      renderAllOrderViews();
-      showToast(`✅ 訂單 #${order.id} 狀態更新為：${nextStatus}`);
-    }
-
-    function loadOrderIntoVerifier(orderId) {
-      const order = kdsOrders.find(o => String(o.id) === String(orderId));
-      if (!order) return;
-      document.getElementById('manual-order-id').value = order.id;
-      document.getElementById('manual-hkd-amount').value = order.amount;
-      updatePaymentTemplates();
-      showToast(`🎯 已揀中訂單 #${order.id} ($${order.amount})`);
-    }
-
-    // 10. Render Customer Live Tracker, Brewer KDS Board & CRM Audit Dashboard
-    function setKdsFilter(filter) {
-      kdsFilter = filter;
-      ['active', 'all', 'cancelled'].forEach(f => {
-        const btn = document.getElementById(`kds-filter-${f}`);
-        if (btn) {
-          btn.className = f === filter
-            ? 'px-2.5 py-1 rounded bg-stone-900 text-white'
-            : 'px-2.5 py-1 rounded text-stone-600 hover:text-stone-900';
-        }
-      });
-      renderAllOrderViews();
-    }
-
-    function renderAllOrderViews() {
-      // Badge count (active orders)
-      const activeCount = kdsOrders.filter(o => o.status !== '搞掂' && o.status !== '已取消').length;
-      const badge = document.getElementById('brewer-badge-count');
-      if (badge) badge.textContent = activeCount;
-
-      // 10A. Render Customer Live Orders Tracker
-      const custList = document.getElementById('customer-live-orders-list');
-      if (custList) {
-        const recent = kdsOrders.slice(0, 3);
-        custList.innerHTML = recent.map(o => {
-          const isCancelled = o.status === '已取消';
-          const isDone = o.status === '搞掂';
-          const statusColor = isCancelled
-            ? 'text-rose-700 bg-rose-50 border-rose-300'
-            : isDone
-            ? 'text-emerald-800 bg-emerald-50 border-emerald-300'
-            : o.status === '沖緊'
-            ? 'text-amber-900 bg-amber-100 border-amber-400'
-            : 'text-stone-800 bg-stone-100 border-stone-300';
-
-          return `
-            <div class="p-3 rounded-xl border ${statusColor} flex flex-wrap items-center justify-between gap-2 text-xs">
-              <div>
-                <div class="font-black text-stone-900">
-                  #${o.id} · ${o.kdsDesc} <span class="font-mono">($${o.amount})</span>
-                </div>
-                <div class="text-[11px] text-stone-600">
-                  狀態：<strong>${o.status}</strong> ${o.cancelledBy ? `(${o.cancelledBy}取消)` : ''} · 時間：${o.time || '--:--'}
-                </div>
-              </div>
-              <div class="flex items-center gap-1.5">
-                ${!isCancelled && !isDone ? `
-                  <button
-                    type="button"
-                    onclick="cancelOrderById(${o.id}, '客人')"
-                    class="px-2.5 py-1 rounded-lg bg-rose-200 hover:bg-rose-300 text-rose-950 font-black text-[11px] border border-stone-900"
-                  >
-                    ❌ 取消張單
-                  </button>
-                ` : ''}
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      // 10B. Render Brewer KDS Board
-      const kdsContainer = document.getElementById('kds-orders-list');
-      if (kdsContainer) {
-        const filtered = kdsOrders.filter(o => {
-          if (kdsFilter === 'active') return o.status !== '已取消' && o.status !== '搞掂';
-          if (kdsFilter === 'cancelled') return o.status === '已取消';
-          return true;
-        });
-
-        if (filtered.length === 0) {
-          kdsContainer.innerHTML = `
-            <div class="p-6 rounded-xl bg-stone-50 border border-dashed border-stone-300 text-center text-xs text-stone-500 font-bold">
-              暫時無符合條件嘅訂單
-            </div>
-          `;
-        } else {
-          kdsContainer.innerHTML = filtered.map(order => {
-            const isCancelled = order.status === '已取消';
-            const isDone = order.status === '搞掂';
-            const isBrewing = order.status === '沖緊';
-
-            let cardBg = 'bg-white border-stone-900';
-            let statusTag = '⏳ 待對數';
-            if (isCancelled) {
-              cardBg = 'bg-rose-50/70 border-rose-400 opacity-85';
-              statusTag = `❌ 已取消 (${order.cancelledBy || '系統'})`;
-            } else if (isBrewing) {
-              cardBg = 'bg-amber-50 border-stone-900';
-              statusTag = '🟠 沖緊';
-            } else if (isDone) {
-              cardBg = 'bg-emerald-50/60 border-stone-400';
-              statusTag = '🟢 搞掂';
-            }
-
-            return `
-              <div class="p-4 rounded-xl border-2 ${cardBg} space-y-3 transition">
-                <div class="flex flex-wrap items-start justify-between gap-2">
-                  <div>
-                    <div class="flex items-center gap-2">
-                      <span class="font-mono font-black text-base text-stone-900">#${order.id}</span>
-                      <span class="text-xs font-bold text-stone-600">· ${order.date || getTodayDateStr()} ${order.time} · ${order.customerName || '客人'}</span>
-                      <span class="text-xs font-black text-stone-900">${statusTag}</span>
-                    </div>
-                    <div class="text-sm font-black text-stone-900 mt-1">${order.kdsDesc}</div>
-                    <div class="text-xs text-stone-600">
-                      豆：${order.bean}
-                      ${order.whatsapp ? ` · WhatsApp: <span class="font-mono">${order.whatsapp}</span>` : ''}
-                      ${order.igHandle ? ` · IG: <span class="font-mono">${order.igHandle}</span>` : ''}
-                    </div>
-                  </div>
-                  <div class="text-right">
-                    <span class="text-xl font-black font-mono text-emerald-800 tabular-nums">$${order.amount}</span>
-                    <span class="block text-[10px] font-mono text-stone-500">轉數快 FPS</span>
-                  </div>
-                </div>
-
-                <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-stone-200">
-                  <div class="flex flex-wrap gap-1.5">
-                    ${!isCancelled && !order.paymentVerified ? `
-                      <button
-                        type="button"
-                        onclick="baristaOneClickAcceptAndBrew('${order.id}')"
-                        class="tactile-btn px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs flex items-center gap-1 shadow-sm"
-                        title="撳呢個掣即刻確認已收 FPS 並開始沖啡"
-                      >
-                        <span>⚡ 一鍵接單確認收款並開沖</span>
-                      </button>
-                      <button
-                        type="button"
-                        onclick="baristaQuickWhatsAppReply('${order.id}', 'paid')"
-                        class="px-2.5 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-stone-950 font-black text-xs border border-stone-900 flex items-center gap-1"
-                        title="一鍵發送已確認開沖 WhatsApp 訊息"
-                      >
-                        <span>💬 1-Click 回覆已接單</span>
-                      </button>
-                      <button
-                        type="button"
-                        onclick="baristaQuickWhatsAppReply('${order.id}', 'request_fps')"
-                        class="px-2 py-1.5 rounded-lg bg-amber-200 hover:bg-amber-300 text-stone-900 font-bold text-xs border border-stone-400"
-                        title="發送轉數快付款要求"
-                      >
-                        <span>📲 催付傳 FPS</span>
-                      </button>
-                    ` : ''}
-                    ${!isCancelled && order.paymentVerified && !isDone ? `
-                      <button
-                        type="button"
-                        onclick="baristaOneClickDone('${order.id}')"
-                        class="tactile-btn px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs flex items-center gap-1 shadow-sm"
-                      >
-                        <span>🟢 搞掂可取 (通知客人)</span>
-                      </button>
-                      <button
-                        type="button"
-                        onclick="baristaQuickWhatsAppReply('${order.id}', 'ready')"
-                        class="px-2.5 py-1.5 rounded-lg bg-green-100 hover:bg-green-200 text-green-950 font-black text-xs border border-green-700"
-                      >
-                        <span>💬 叫號 WhatsApp</span>
-                      </button>
-                    ` : ''}
-                    ${isCancelled ? `
-                      <button
-                        type="button"
-                        onclick="restoreOrderById('${order.id}')"
-                        class="px-2.5 py-1 rounded-lg bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold text-xs"
-                      >
-                        ↺ 恢復張單
-                      </button>
-                    ` : `
-                      <button
-                        type="button"
-                        onclick="cancelOrderById('${order.id}', '咖啡師')"
-                        class="px-2.5 py-1.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-900 font-black text-xs border border-rose-400"
-                      >
-                        ❌ 取消張單
-                      </button>
-                    `}
-                  </div>
-                </div>
-              </div>
-            `;
-          }).join('');
-        }
-      }
-
-      // 10C. Render CRM & Daily Audit Dashboard
-      renderCrmAuditDashboard();
-    }
-
-    // 11. CRM & Daily Reconciliation Engine (每日總數, 次數, 金額, 時間, 相關百分比)
-    function switchCrmSubTab(tab) {
-      crmSubTab = tab;
-      ['daily', 'customers', 'orders', 'accounts'].forEach(t => {
-        const btn = document.getElementById(`crm-subtab-${t}`);
-        const panel = document.getElementById(`crm-panel-${t}`);
-        if (btn) {
-          btn.className = t === tab
-            ? 'px-3 py-1.5 rounded-lg bg-stone-900 text-amber-300 text-xs font-black'
-            : 'px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200 text-xs font-bold';
-        }
-        if (panel) {
-          if (t === tab) panel.classList.remove('hidden');
-          else panel.classList.add('hidden');
-        }
-      });
-      renderCrmAuditDashboard();
-    }
-
-    function pct(part, total) {
-      if (!total || total <= 0) return '0.0%';
-      return ((part / total) * 100).toFixed(1) + '%';
-    }
-
-    function extractOrderCups(o) {
-      if (o.qty && Number(o.qty) > 0) return Number(o.qty);
-      const m = String(o.kdsDesc || '').match(/(\d+)\s*杯/);
-      return m ? Math.max(1, parseInt(m[1], 10)) : 1;
-    }
-
-    function renderPctBars(containerId, items, totalCount) {
-      const el = document.getElementById(containerId);
-      if (!el) return;
-      el.innerHTML = items.map(item => {
-        const ratio = totalCount > 0 ? Math.round((item.count / totalCount) * 1000) / 10 : 0;
-        return `
-          <div class="space-y-1">
-            <div class="flex items-center justify-between text-[11px]">
-              <span class="font-bold text-stone-800">${item.label}</span>
-              <span class="font-mono font-black text-stone-900">${item.count} 單 · $${item.amount} (${ratio.toFixed(1)}%)</span>
-            </div>
-            <div class="w-full h-2 rounded-full bg-stone-200 overflow-hidden">
-              <div class="${item.color || 'bg-amber-500'} h-full rounded-full" style="width: ${Math.min(100, ratio)}%"></div>
-            </div>
+  <!-- FFA Grade breakdown -->
+  <p class="sec-title" id="ch1-ffa">
+    <span data-zh>酸價 (FFA) 階級全拆解</span>
+    <span data-en>FFA Acidity Grade Breakdown</span>
+  </p>
+  <p class="body-text">
+    <span data-zh>IOC 訂嘅 0.80% 只係底線。對我哋機體玩家嚟講，真正嘅戰場係 0.80% 以下嘅分層——差距可以係 8 倍以上。</span>
+    <span data-en>IOC's 0.80% is the floor, not the goal. For us biohackers, the real game is in the tiers below 0.80% — where quality can vary by 8× or more.</span>
+  </p>
+  <table class="ffa-table">
+    <thead>
+      <tr>
+        <th><span data-zh>FFA 酸價</span><span data-en>FFA Acidity</span></th>
+        <th><span data-zh>評級</span><span data-en>Grade</span></th>
+        <th><span data-zh>實情</span><span data-en>Reality</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="ffa-score">0.1–0.3%</span></td>
+        <td><span class="ffa-grade fg-best"><span data-zh>🏆 頂級莊園</span><span data-en>🏆 Estate Elite</span></span></td>
+        <td class="ffa-desc"><span data-zh>橄欖未落地已壓榨。O-Med、PepperGreen 等級。多酚最完整，直通細胞。</span><span data-en>Pressed before the olive hits the ground. O-Med, PepperGreen tier. Maximum polyphenols intact.</span></td>
+      </tr>
+      <tr>
+        <td><span class="ffa-score">≤ 0.80%</span></td>
+        <td><span class="ffa-grade fg-good"><span data-zh>✓ 黃金標準</span><span data-en>✓ Gold Standard</span></span></td>
+        <td class="ffa-desc"><span data-zh>IOC 底線，抗炎穩定，係認真玩家嘅最低要求。</span><span data-en>IOC floor. Anti-inflammatory stable. Minimum acceptable for serious players.</span></td>
+      </tr>
+      <tr>
+        <td><span class="ffa-score">≤ 2.0%</span></td>
+        <td><span class="ffa-grade fg-meh"><span data-zh>△ Virgin (VOO)</span><span data-en>△ Virgin (VOO)</span></span></td>
+        <td class="ffa-desc"><span data-zh>容許輕微缺陷，機體運作開始 Lag，唔係 EVOO 等級。</span><span data-en>Minor defects permitted. Bio-machine begins to lag. Not EVOO grade.</span></td>
+      </tr>
+      <tr>
+        <td><span class="ffa-score">≤ 3.3%</span></td>
+        <td><span class="ffa-grade fg-meh"><span data-zh>✗ Ordinary</span><span data-en>✗ Ordinary</span></span></td>
+        <td class="ffa-desc"><span data-zh>冇乜抗炎藥效，純粹潤滑喉嚨用。</span><span data-en>Negligible anti-inflammatory value. Throat lubricant, nothing more.</span></td>
+      </tr>
+      <tr>
+        <td><span class="ffa-score">&gt; 3.3%</span></td>
+        <td><span class="ffa-grade fg-bad"><span data-zh>💀 Lampante</span><span data-en>💀 Lampante</span></span></td>
+        <td class="ffa-desc"><span data-zh>工業廢料，酸臭到入唔到口，只可以被精煉。食咗直入發炎地獄。</span><span data-en>Industrial waste. Too rancid to eat. Refined or used as lamp oil. Ingesting it accelerates inflammation.</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="sec-title">
+    <span data-zh>踢爆「三味整容」精煉油真相</span>
+    <span data-en>Exposing the "Triple Cosmetic" Refining Scam</span>
+  </p>
+  <p class="body-text">
+    <span data-zh><strong>漂白（掩人耳目）</strong> — 用化學劑或活性碳洗走廢油嘅瘀黑色，將氧化證據掩蓋。<br><strong>抽除（毀屍滅跡）</strong> — 用高溫水蒸氣抽走腐爛橄欖嘅酸臭味，令你飲緊完全冇多酚嘅化學無味水。<br><strong>洗底（化學整容）</strong> — 用強鹼中和游離脂肪酸，夾硬㩒低酸價；數據靚咗，但油脂結構已生晒鏽。<br><strong>橄欖油渣 (Pomace)</strong> — 用 Hexane 化學溶劑喺渣入面夾硬「抽」出嚟，食咗直入發炎地獄。</span>
+    <span data-en><strong>Bleaching (cover-up)</strong> — Chemical agents or activated carbon strip the dark discolouration from rancid oil, hiding oxidation evidence.<br><strong>Deodorising (evidence disposal)</strong> — High-temperature steam strips the rancid smell, leaving you drinking chemically neutralised water with zero polyphenols.<br><strong>Neutralisation (chemical facelift)</strong> — Strong alkali forces FFA numbers down; the data looks clean but the fat structure is rusted through.<br><strong>Pomace Oil</strong> — Hexane solvent forcibly extracts oil from the leftover pulp. Consuming it fast-tracks systemic inflammation.</span>
+  </p>
+
+  <hr class="divider">
+
+  <!-- CH2: POLYPHENOLS -->
+  <article class="chapter" id="ch2">
+    <p class="chapter-num">Chapter 02</p>
+    <h3 class="chapter-title">
+      <span data-zh>醫療級核心 — <em>多酚 (Polyphenols) 深度拆解</em></span>
+      <span data-en>Medical-Grade Core — <em>Polyphenols Deep Dive</em></span>
+    </h3>
+
+    <p class="body-text">
+      <span data-zh>如果你買橄欖油只係為咗「脂肪」，咁你真係白費心機。多酚係生飲嘅唯一靈魂，亦係地中海飲食健康嘅核心秘密。</span>
+      <span data-en>If you're buying olive oil just for the "fat," you're missing the entire point. Polyphenols are the sole reason for drinking it raw — the true core of the Mediterranean diet's health outcomes.</span>
+    </p>
+
+    <p class="sec-title">
+      <span data-zh>關鍵多酚成份分析</span>
+      <span data-en>Key Polyphenol Component Analysis</span>
+    </p>
+    <div class="poly-grid">
+      <div class="poly-card">
+        <div class="poly-name">Oleocanthal</div>
+        <div class="poly-cn"><span data-zh>刺激醛</span><span data-en>Oleocanthal</span></div>
+        <div class="poly-desc"><span data-zh>具有類似 Ibuprofen 嘅抗發炎效果。喉嚨嗰種辣味（Peppery Kick）就係佢——冇辣味即係冇藥效嘅廢油。</span><span data-en>Anti-inflammatory effect similar to Ibuprofen. That peppery kick in your throat IS the drug — no burn means no medicine.</span></div>
+      </div>
+      <div class="poly-card">
+        <div class="poly-name">Oleacein</div>
+        <div class="poly-cn"><span data-zh>油橄欖苦素</span><span data-en>Oleacein</span></div>
+        <div class="poly-desc"><span data-zh>專門保護心血管、預防血管硬化。高等級油含量可達普通油嘅 75 倍。</span><span data-en>Specifically protects cardiovascular system and prevents arterial hardening. Premium oils can contain 75× more than standard oils.</span></div>
+      </div>
+      <div class="poly-card">
+        <div class="poly-name">Hydroxytyrosol</div>
+        <div class="poly-cn"><span data-zh>羥基酪醇</span><span data-en>Hydroxytyrosol</span></div>
+        <div class="poly-desc"><span data-zh>最強自由基清除劑。歐盟規定每日攝取至少 5mg 先可以聲稱對心血管有益。</span><span data-en>Strongest free-radical scavenger known. EU regulations require minimum 5mg daily intake before cardiovascular benefit claims are permitted.</span></div>
+      </div>
+      <div class="poly-card">
+        <div class="poly-name">Oleuropein</div>
+        <div class="poly-cn"><span data-zh>橄欖苦苷</span><span data-en>Oleuropein</span></div>
+        <div class="poly-desc"><span data-zh>苦味來源，具有抗氧化及保護神經功能。早摘油含量特別高。</span><span data-en>Source of bitterness. Antioxidant and neuroprotective functions. Especially high in early-harvest oils.</span></div>
+      </div>
+    </div>
+
+    <p class="sec-title">
+      <span data-zh>Early Harvest 早摘嘅博弈</span>
+      <span data-en>The Early Harvest Trade-Off</span>
+    </p>
+    <p class="body-text">
+      <span data-zh>點解 9–10 月採收嘅油咁貴？因為橄欖仲係青色嗰陣，多酚含量係巔峰。雖然產量低，但藥用價值極高。隨著果實成熟變黑，入面嘅金液增加但<strong>多酚會急劇下跌</strong>。</span>
+      <span data-en>Why are September–October harvest oils so expensive? The olive is still green — polyphenols are at peak concentration. Yes, yield is low, but medicinal value is highest. As the fruit ripens and blackens, oil content rises but <strong>polyphenol levels drop sharply</strong>.</span>
+    </p>
+
+    <p class="sec-title">
+      <span data-zh>數據軍備競賽：NMR vs HPLC</span>
+      <span data-en>The Data Arms Race: NMR vs HPLC</span>
+    </p>
+    <p class="body-text">
+      <span data-zh>市面上品牌聲稱多酚過 2000mg，你要小心測試方法。<strong>NMR 測出嚟嘅數值通常比 HPLC 高出 40%–60%</strong>，好多品牌用 NMR 數據做 Marketing 係誤導。只信任 HPLC 或 LC-MS/MS 測法，呢啲先符合國際臨床標準。</span>
+      <span data-en>Brands claiming polyphenol counts over 2000mg — watch the testing method. <strong>NMR readings typically run 40–60% higher than HPLC</strong>. Many brands use NMR for marketing — that's misleading. Trust only HPLC or LC-MS/MS methods; those meet international clinical standards.</span>
+    </p>
+  </article>
+
+  <hr class="divider">
+
+  <!-- THREADS NOTES -->
+  <article class="chapter" id="ch3">
+    <div class="threads-hd">
+      <div class="threads-icon">🧵</div>
+      <div class="threads-lbl">
+        <span data-zh>@ericwongkhk — EVOO 品油筆記</span>
+        <span data-en>@ericwongkhk — EVOO Tasting Notes</span>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
+        <span style="font-size:10.5px;padding:3px 10px;border-radius:99px;background:rgba(180,148,75,0.18);border:1px solid rgba(180,148,75,0.38);color:#e8dfc8;letter-spacing:0.04em;font-weight:600;">
+          <span data-zh>📅 已按最新排序 (Sort by Latest · 1 ➔ 7 款實戰筆記)</span>
+          <span data-en>📅 Sorted by Latest (Notes 1 ➔ 7)</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="thread-cards">
+
+      <!-- #1 (LATEST · SORT BY LATEST) -->
+      <a class="thread-card" href="https://www.threads.com/share/FwSrd8XlR/" target="_blank">
+        <span class="tc-num">1</span>
+        <div class="tc-body">
+          <div style="display:inline-block;margin-bottom:6px;">
+            <span style="font-size:10px;padding:2px 8px;border-radius:4px;background:#8B0000;color:#fff;font-weight:700;letter-spacing:0.04em;">🔥 Sort by Latest · 最新品油筆記</span>
           </div>
-        `;
-      }).join('');
-    }
+          <div class="tc-title">
+            <span data-zh>🫒 意大利特倫托省 Casaliva — 加達湖手摘 10 小時內萃取奇蹟</span>
+            <span data-en>🫒 Trentino-Alto Adige Casaliva — Lake Garda Hand-Picked 10hr Extraction</span>
+          </div>
+          <div class="tc-excerpt">
+            <span data-zh>意大利特倫提諾-上阿迪傑（特倫托省）產 EVOO，品種 Casaliva，手摘 + 10 小時內萃取。中度青果香，中苦中辣，帶有青杏仁、青蘋果、花、芳香草藥、鮮割青草香氣；新鮮、複雜、持久、平衡度各方面都極為優秀；感動，加達湖嘅農產品質素奇蹟（~300 HKD / 500ml 網購自羅馬 EVOO 專門店）。</span>
+            <span data-en>Trentino-Alto Adige (Trento), Italy. Single-variety Casaliva, hand-picked and extracted within 10 hours. Medium green fruitiness, balanced bitterness and pungency with green almond, green apple, floral, aromatic herbs, and freshly cut grass notes (~300 HKD / 500ml).</span>
+          </div>
+          <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>Read full note on Threads ↗</span></span>
+        </div>
+      </a>
 
-    function renderCrmAuditDashboard() {
-      const dateSelect = document.getElementById('crm-date-filter');
-      if (!dateSelect) return;
+      <!-- #2 (SORT BY LATEST) -->
+      <a class="thread-card" href="https://www.threads.com/share/HNekxGfJE/" target="_blank">
+        <span class="tc-num">2</span>
+        <div class="tc-body">
+          <div style="display:inline-block;margin-bottom:6px;">
+            <span style="font-size:10px;padding:2px 8px;border-radius:4px;background:#8B0000;color:#fff;font-weight:700;letter-spacing:0.04em;">🔥 Sort by Latest · 最新品油筆記</span>
+          </div>
+          <div class="tc-title">
+            <span data-zh>🫒 意大利普利亞 巴里省 PDO — Cima Di Bitonto + Coratina</span>
+            <span data-en>🫒 Puglia Bari PDO — Cima Di Bitonto + Coratina</span>
+          </div>
+          <div class="tc-excerpt">
+            <span data-zh>意大利普利亞巴里省產 EVOO，品種 Cima Di Bitonto + Coratina。輕至中度熟果香，中大苦中辣，帶有杏仁、果乾、肉桂香氣；熟果香味淡雅持久，多酚苦辣感相當突出，高性價比意大利 PDO 代表（~130 HKD / 1000ml 上海 Costco）。</span>
+            <span data-en>Bari, Puglia, Italy PDO EVOO. Blend of Cima Di Bitonto and high-polyphenol Coratina. Light-to-medium ripe fruitiness, bold bitterness and medium pungency with almond, dried fruit, and cinnamon notes (~130 HKD / 1000ml).</span>
+          </div>
+          <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>Read full note on Threads ↗</span></span>
+        </div>
+      </a>
 
-      // Populate unique dates in dropdown
-      const uniqueDates = Array.from(new Set(kdsOrders.map(o => o.date || getTodayDateStr()))).sort().reverse();
-      const currentSelected = dateSelect.value || 'ALL';
-      const existingOptions = Array.from(dateSelect.options).map(o => o.value);
-      uniqueDates.forEach(d => {
-        if (!existingOptions.includes(d)) {
-          const opt = document.createElement('option');
-          opt.value = d;
-          opt.textContent = `${d} ${d === getTodayDateStr() ? '(今日)' : ''}`;
-          dateSelect.appendChild(opt);
-        }
-      });
-      if (existingOptions.includes(currentSelected)) {
-        dateSelect.value = currentSelected;
-      }
+      <!-- #3 -->
+      <a class="thread-card" href="https://www.threads.com/share/I-jhfgYc-/" target="_blank">
+        <span class="tc-num">3</span>
+        <div class="tc-body">
+          <div class="tc-title">
+            <span data-zh>🫒 日本四國 香川縣產 EVOO — 小豆島 Mission + Lucca + Nevadillo Blanco 手摘限定</span>
+            <span data-en>🫒 Kagawa Shodoshima — Japan Hand-Picked Mission Blend</span>
+          </div>
+          <div class="tc-excerpt">
+            <span data-zh>日本四國香川縣小豆島產 EVOO，品種 Mission + Lucca + Nevadillo Blanco，手摘一番搾。輕至中度果香，中苦中小辣，帶有青杏仁、尤加利、肉桂、八角、迷迭香芳香；極為新鮮而且相當平衡；好味但係非常之貴（~260 HKD / 200ml 購自小豆島商店）。</span>
+            <span data-en>Shodoshima, Kagawa Prefecture. Blend of Mission, Lucca & Nevadillo Blanco, hand-picked first press. Light-to-medium fruitiness, balanced bitterness and pungency with green almond, eucalyptus, cinnamon, star anise and rosemary (~260 HKD / 200ml).</span>
+          </div>
+          <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>Read full note on Threads ↗</span></span>
+        </div>
+      </a>
 
-      const selectedDate = dateSelect.value || 'ALL';
-      const scopedOrders = selectedDate === 'ALL'
-        ? kdsOrders
-        : kdsOrders.filter(o => (o.date || getTodayDateStr()) === selectedDate);
+      <!-- #4 -->
+      <a class="thread-card" href="https://www.threads.com/share/FpMzbFUzw/" target="_blank">
+        <span class="tc-num">4</span>
+        <div class="tc-body">
+          <div class="tc-title">
+            <span data-zh>🫒 Ánfora de Queiles — 西班牙有機 Arróniz EVOO</span>
+            <span data-en>🫒 Ánfora de Queiles — Spanish Organic Arróniz EVOO</span>
+          </div>
+          <div class="tc-excerpt">
+            <span data-zh>西班牙 Navarra 納瓦拉省產有機 EVOO，少見品種 Arróniz，Ecológico 有機認證，4 小時內萃取。輕度青果香，中大苦中小辣，帶有葉、杏仁、西芹、青椒香氣；非常新鮮持久，苦澀味突出（~90 HKD / 250ml 未計運費，網購自馬德里 EVOO 專門店）。</span>
+            <span data-en>Navarra, Spain. Rare Arróniz variety, Ecológico organic certified, extracted within 4 hours. Light green fruitiness, bold bitterness and mild pungency with leaf, almond, celery and green pepper notes (~90 HKD / 250ml).</span>
+          </div>
+          <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>Read full note on Threads ↗</span></span>
+        </div>
+      </a>
 
-      const totalCount = scopedOrders.length;
-      const cancelledOrders = scopedOrders.filter(o => o.status === '已取消');
-      const activeOrders = scopedOrders.filter(o => o.status !== '已取消');
-      const verifiedOrders = activeOrders.filter(o => o.paymentVerified || o.status === '沖緊' || o.status === '搞掂');
-      const pendingOrders = activeOrders.filter(o => !o.paymentVerified && o.status === '待對數');
+      <!-- #5 -->
+      <a class="thread-card" href="https://www.threads.com/share/HbqxM87B-/" target="_blank">
+        <span class="tc-num">5</span>
+        <div class="tc-body">
+          <div class="tc-title">
+            <span data-zh>🫒 ILIADA Greek Classic — 希臘麥西尼亞州 Koroneiki Kalamata PDO</span>
+            <span data-en>🫒 ILIADA Greek Classic — Kalamata PDO Koroneiki</span>
+          </div>
+          <div class="tc-excerpt">
+            <span data-zh>希臘伯羅奔尼撒麥西尼亞州產 EVOO，Koroneiki 單一品種，Kalamata PDO 認證。輕至中度熟果香，微苦小辣，帶有熟香蕉、果乾、堅果類、鮮割青草香氣；多酚含量穩定，好過超市常見牌子唔少，粗用一流（~120 HKD / 1000ml 上海 Costco）。</span>
+            <span data-en>Messenia, Peloponnese, Greece. Single-variety Koroneiki with Kalamata PDO certification. Light-to-medium ripe fruitiness, gentle bitterness and mild pepper with ripe banana, dried fruit, nut and freshly cut grass aromas (~120 HKD / 1000ml).</span>
+          </div>
+          <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>Read full note on Threads ↗</span></span>
+        </div>
+      </a>
 
-      const totalCups = activeOrders.reduce((s, o) => s + extractOrderCups(o), 0);
-      const grossValidAmount = activeOrders.reduce((s, o) => s + (Number(o.amount) || 0), 0);
-      const verifiedAmount = verifiedOrders.reduce((s, o) => s + (Number(o.amount) || 0), 0);
-      const pendingAmount = pendingOrders.reduce((s, o) => s + (Number(o.amount) || 0), 0);
-      const cancelledAmount = cancelledOrders.reduce((s, o) => s + (Number(o.amount) || 0), 0);
-      const aov = activeOrders.length > 0 ? Math.round(grossValidAmount / activeOrders.length) : 0;
+      <!-- #6 (FULL UPDATE · SORT OFR LASTED) -->
+      <a class="thread-card" href="https://www.threads.com/share/FzU1SYcTP/" target="_blank">
+        <span class="tc-num">6</span>
+        <div class="tc-body">
+          <div style="display:inline-block;margin-bottom:6px;">
+            <span style="font-size:10px;padding:2px 8px;border-radius:4px;background:#8B0000;color:#fff;font-weight:700;letter-spacing:0.04em;">🔥 Sort ofr lasted · 最新品油筆記</span>
+          </div>
+          <div class="tc-title">
+            <span data-zh>🫒 日本香川縣小豆島オリーブオイル — 自社農園手摘一番搾限定油</span>
+            <span data-en>🫒 Kagawa Shodoshima Estate EVOO — Single Estate First Cold Press</span>
+          </div>
+          <div class="tc-excerpt">
+            <span data-zh>日本香川縣小豆島，日本橄欖油嘅發源地！自社農園純手摘一番搾限定，深色抗光玻璃瓶封光。輕至中度青果香，中苦中小辣，帶有青杏仁、尤加利葉、肉桂、八角與迷迭香芳香；口感極為新鮮、乾淨且平衡度絕佳，日本頂級職人冷榨工藝代表。</span>
+            <span data-en>Shodoshima, Kagawa Prefecture — Japan's olive oil heritage. Single-estate hand-picked first cold extraction in UV-shielding dark bottle. Light-to-medium green fruitiness, mild bitterness and pungency with notes of green almond, eucalyptus, cinnamon, star anise, and fresh rosemary.</span>
+          </div>
+          <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>Read full note on Threads ↗</span></span>
+        </div>
+      </a>
 
-      // Time distribution & peak hour
-      const times = scopedOrders.map(o => o.time || '').filter(Boolean).sort();
-      const timeSpanText = times.length > 0 ? `${times[0]} ~ ${times[times.length - 1]}` : '--:-- ~ --:--';
-      const hourCounts = {};
-      scopedOrders.forEach(o => {
-        const hr = String(o.time || '14:00').split(':')[0];
-        if (hr) hourCounts[hr] = (hourCounts[hr] || 0) + 1;
-      });
-      let peakHour = '--';
-      let maxHrCount = 0;
-      Object.entries(hourCounts).forEach(([hr, cnt]) => {
-        if (cnt > maxHrCount) {
-          maxHrCount = cnt;
-          peakHour = `${hr}:00 (${cnt}單)`;
-        }
-      });
+      <!-- #7 (FULL UPDATE · SORT OFR LASTED) -->
+      <a class="thread-card" href="https://www.threads.com/share/H4ZJSEtc2/" target="_blank">
+        <span class="tc-num">7</span>
+        <div class="tc-body">
+          <div style="display:inline-block;margin-bottom:6px;">
+            <span style="font-size:10px;padding:2px 8px;border-radius:4px;background:#8B0000;color:#fff;font-weight:700;letter-spacing:0.04em;">🔥 Sort ofr lasted · 最新品油筆記</span>
+          </div>
+          <div class="tc-title">
+            <span data-zh>🫒 阿根廷門多薩邁普縣有機 EVOO — 稀有頂級品種 Arauco 10 小時內萃取</span>
+            <span data-en>🫒 Mendoza Maipú Organic EVOO — Rare Variety Arauco 10hr Cold Extraction</span>
+          </div>
+          <div class="tc-excerpt">
+            <span data-zh>阿根廷門多薩邁普縣（Maipú, Mendoza）產有機認證 EVOO，品種 Arauco，10 小時內萃取。中至重度果香，完全偏向青果，中大苦中辣且辣味持久；番茄葉、蘋果、西芹、青木瓜、薑嘅香味非常新鮮，香味複雜又持久，亦相當平衡；十分優秀出色嘅一款新世界 EVOO（~310 HKD / 500ml）。</span>
+            <span data-en>Maipú, Mendoza, Argentina. Certified organic single-variety Arauco, extracted within 10 hours. Medium-to-intense green fruitiness, robust bitterness, and long-lasting peppery finish. Fresh aromas of tomato leaf, apple, celery, green papaya, and ginger; exceptionally complex and well-balanced New World benchmark (~310 HKD / 500ml).</span>
+          </div>
+          <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>Read full note on Threads ↗</span></span>
+        </div>
+      </a>
 
-      // Update Top KPI Cards
-      document.getElementById('crm-kpi-orders').textContent = totalCount;
-      document.getElementById('crm-kpi-cups').textContent = totalCups;
-      document.getElementById('crm-kpi-active-sub').textContent = `有效 ${activeOrders.length} 單 · 取消 ${cancelledOrders.length} 單`;
+    </div>
+  </article>
 
-      document.getElementById('crm-kpi-verified-amt').textContent = `$${verifiedAmount}`;
-      document.getElementById('crm-kpi-gross-sub').textContent = `有效總額 $${grossValidAmount} (${pct(verifiedAmount, grossValidAmount)} 已收)`;
+  <hr class="divider">
 
-      document.getElementById('crm-kpi-pending-amt').textContent = `$${pendingAmount}`;
-      document.getElementById('crm-kpi-pending-pct').textContent = `${pendingOrders.length} 單 (${pct(pendingAmount, grossValidAmount)} 待收)`;
+  <!-- GRADE LIST -->
+  <article class="chapter" id="grade-list">
+    <p class="chapter-num">
+      <span data-zh>分級參考</span><span data-en>Grade Reference</span>
+    </p>
+    <h3 class="chapter-title">
+      <span data-zh>橄欖油四大等級</span>
+      <span data-en>Four Grades of Olive Oil</span>
+    </h3>
+    <div class="grade-list">
+      <div class="grade-item">
+        <div class="grade-item-text">
+          <span data-zh>特級初榨橄欖油</span><span data-en>Extra Virgin Olive Oil</span>
+          <span class="grade-item-sub">Extra Virgin Olive Oil · EVOO</span>
+        </div>
+        <span class="grade-badge gb-evoo">FFA ≤ 0.80%</span>
+      </div>
+      <div class="grade-item">
+        <div class="grade-item-text">
+          <span data-zh>良級初榨橄欖油</span><span data-en>Virgin Olive Oil</span>
+          <span class="grade-item-sub">Virgin Olive Oil · VOO</span>
+        </div>
+        <span class="grade-badge gb-voo">FFA ≤ 2.0%</span>
+      </div>
+      <div class="grade-item">
+        <div class="grade-item-text">
+          <span data-zh>普通初榨橄欖油</span><span data-en>Ordinary Virgin Olive Oil</span>
+          <span class="grade-item-sub">Ordinary Virgin Olive Oil</span>
+        </div>
+        <span class="grade-badge gb-ord">FFA ≤ 3.3%</span>
+      </div>
+      <div class="grade-item">
+        <div class="grade-item-text">
+          <span data-zh>初榨橄欖燈油</span><span data-en>Lampante Virgin Olive Oil</span>
+          <span class="grade-item-sub">Lampante Virgin Olive Oil</span>
+        </div>
+        <span class="grade-badge gb-lamp">FFA &gt; 3.3%</span>
+      </div>
+    </div>
+  </article>
 
-      document.getElementById('crm-kpi-verify-pct').textContent = pct(verifiedOrders.length, activeOrders.length);
-      document.getElementById('crm-kpi-aov').textContent = `平均每單 $${aov}`;
+  <hr class="divider">
 
-      document.getElementById('crm-kpi-cancel-pct').textContent = pct(cancelledOrders.length, totalCount);
-      document.getElementById('crm-kpi-cancel-amt').textContent = `取消額 $${cancelledAmount}`;
+  <!-- COMING SOON (Guide 2 blur zone) -->
+  <div class="coming-wrap">
+    <div class="coming-blur">
+      <p class="sec-title" style="margin-top:0"><span data-zh>特級初榨橄欖油最貼地指南 2</span><span data-en>Practical EVOO Guide Part 2</span></p>
+      <p class="body-text"><span data-zh>2026 香港橄欖油推薦指南。由最平價、最高 CP 值開始，揀一支真正適合每日食用嘅橄欖油。入門首選：GAEA 特級初榨橄欖油。升級之選：PepperGreen Estate 澳翠莊園。</span><span data-en>2026 Hong Kong Olive Oil Recommendation Guide. Starting from best value, working up to premium estates. Entry pick: GAEA Extra Virgin. Upgrade: PepperGreen Estate.</span></p>
+      <p class="body-text"><span data-zh>第三章：烹飪拆解 煙點大 Scam 與氧化穩定性嘅真理。2018 年澳洲研究顯示，EVOO 係最穩定嘅烹飪油，喺 180°C 高溫下產生嘅極性化合物最少。</span><span data-en>Chapter 3: Cooking Myths — The Smoke Point Scam & Oxidative Stability Truth. 2018 Australian research shows EVOO is the most stable cooking oil, producing the fewest polar compounds at 180°C.</span></p>
+      <p class="body-text"><span data-zh>第四章：條碼照妖鏡。84 碼西班牙，80-83 碼意大利，520 碼希臘，619 碼突尼西亞。標籤寫意大利但條碼係 619 即係 Aura Scam。</span><span data-en>Chapter 4: Barcode Fraud Detector. 84 = Spain, 80-83 = Italy, 520 = Greece, 619 = Tunisia. Label says Italy but barcode is 619? That's Aura Scam.</span></p>
+      <p class="body-text"><span data-zh>第五章：24 小時原型驗證法。冰箱冷藏 4°C 24 小時，凝固係 Firm，水咁樣就係廢油。喉嚨 Kick 度測試：有辣感先係真抗炎藥 Oleocanthal。</span><span data-en>Chapter 5: 24-Hour Prototype Validation. Refrigerate at 4°C for 24 hours — solidifies = legitimate; stays liquid = cosmetically treated waste oil. Throat test: burning sensation = real Oleocanthal medicine.</span></p>
+      <p class="body-text"><span data-zh>第六章：全球 10 大生飲品牌。PepperGreen FFA 0.1%，Suerte Alta 多酚達 1400mg，O-Med 酸價 0.1% Rizz 爆棚，Amala 藥用派極致。</span><span data-en>Chapter 6: Global Top 10 Raw-Drinking Brands. PepperGreen FFA 0.1%, Suerte Alta polyphenols 1400mg, O-Med FFA 0.1% maximum detail, Amala medical-grade extreme.</span></p>
+      <div class="thread-cards" style="margin-top:18px;opacity:.7">
+        <div class="thread-card">
+          <span class="tc-num">6</span>
+          <div class="tc-body">
+            <div class="tc-title"><span data-zh>🫒 品油筆記 #6</span><span data-en>🫒 Tasting Note #6</span></div>
+            <div class="tc-excerpt"><span data-zh>喺 Threads 睇完整品油筆記。</span><span data-en>Full tasting note available on Threads.</span></div>
+            <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>View on Threads ↗</span></span>
+          </div>
+        </div>
 
-      document.getElementById('crm-kpi-time-span').textContent = timeSpanText;
-      document.getElementById('crm-kpi-peak-hour').textContent = `高峰時段：${peakHour}`;
+        <div class="thread-card">
+          <span class="tc-num">7</span>
+          <div class="tc-body">
+            <div class="tc-title"><span data-zh>🫒 品油筆記 #7</span><span data-en>🫒 Tasting Note #7</span></div>
+            <div class="tc-excerpt"><span data-zh>喺 Threads 睇完整品油筆記。</span><span data-en>Full tasting note available on Threads.</span></div>
+            <span class="tc-link"><span data-zh>喺 Threads 睇全文 ↗</span><span data-en>View on Threads ↗</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="coming-overlay">
+      <div class="coming-badge">
+        <span data-zh>興建中</span><span data-en>Under Construction</span>
+      </div>
+      <div class="coming-sub">
+        <span data-zh>指南 2 · 更多品油筆記 · 即將公開</span>
+        <span data-en>Guide 2 · More Tasting Notes · Coming Soon</span>
+      </div>
+    </div>
+  </div>
 
-      // Percentage Breakdown 1: Milk
-      const oatOrders = activeOrders.filter(o => o.milk === 'OM' || /燕麥/.test(o.kdsDesc));
-      const skinOrders = activeOrders.filter(o => o.milk === 'SM' || /Skin|脫脂/i.test(o.kdsDesc));
-      const fullOrders = activeOrders.filter(o => o.milk === 'FM' || /全脂/.test(o.kdsDesc));
-      const blackOrders = activeOrders.filter(o => o.milk === '-' || (!/燕麥|Skin|脫脂|全脂/i.test(o.kdsDesc)));
+</main>
 
-      renderPctBars('crm-pct-milk-list', [
-        { label: 'OM 燕麥奶', count: oatOrders.length, amount: oatOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-amber-500' },
-        { label: 'SM Skin Milk (脫脂)', count: skinOrders.length, amount: skinOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-sky-500' },
-        { label: 'FM 全脂奶', count: fullOrders.length, amount: fullOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-emerald-500' },
-        { label: '齋啡免奶 (-)', count: blackOrders.length, amount: blackOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-stone-600' }
-      ], activeOrders.length);
+<footer class="layer">
+  <p>
+    <a href="https://threads.com/ericwongkhk" target="_blank" style="color:rgba(180,148,75,0.48)">@ericwongkhk</a>
+    &nbsp;·&nbsp;
+    <span data-zh>Polyphenol · 多酚 · EVOO</span>
+    <span data-en>Polyphenol · Polyphenols · EVOO</span>
+  </p>
+  <p style="margin-top:5px">Make Anti-inflammatory Great Again</p>
+</footer>
 
-      // Percentage Breakdown 2: Channel
-      const waOrders = activeOrders.filter(o => /whatsapp/i.test(o.channel || '') || Boolean(o.whatsapp));
-      const igOrders = activeOrders.filter(o => !(/whatsapp/i.test(o.channel || '') || Boolean(o.whatsapp)));
-      renderPctBars('crm-pct-channel-list', [
-        { label: 'WhatsApp 落單', count: waOrders.length, amount: waOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-emerald-600' },
-        { label: 'IG DM 落單', count: igOrders.length, amount: igOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-fuchsia-600' },
-        { label: '🇭🇰 轉數快 FPS 收款', count: activeOrders.length, amount: grossValidAmount, color: 'bg-stone-900' }
-      ], activeOrders.length);
+<script>
+// Canvas background
+(function(){
+  var c=document.getElementById("bg-canvas"),ctx=c.getContext("2d"),W,H,orbs=[];
+  var cols=["rgba(120,100,40,","rgba(80,140,60,","rgba(160,120,30,","rgba(60,120,80,","rgba(140,90,20,","rgba(40,80,60,"];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  function Orb(){
+    this.x=Math.random()*W||400;this.y=Math.random()*H||400;
+    this.r=Math.random()*220+100;
+    this.vx=(Math.random()-.5)*.19;this.vy=(Math.random()-.5)*.15;
+    this.col=cols[Math.floor(Math.random()*cols.length)];
+    this.a=Math.random()*.16+.05;
+  }
+  Orb.prototype.update=function(){
+    this.x+=this.vx;this.y+=this.vy;
+    if(this.x<-this.r)this.x=W+this.r;if(this.x>W+this.r)this.x=-this.r;
+    if(this.y<-this.r)this.y=H+this.r;if(this.y>H+this.r)this.y=-this.r;
+  };
+  Orb.prototype.draw=function(){
+    var g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r);
+    g.addColorStop(0,this.col+this.a+")");g.addColorStop(1,this.col+"0)");
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill();
+  };
+  function init(){resize();orbs=[];var n=Math.min(13,Math.floor((W||800)*(H||600)/75000)+5);for(var i=0;i<n;i++)orbs.push(new Orb());}
+  function tick(){ctx.clearRect(0,0,W,H);ctx.fillStyle="#07090d";ctx.fillRect(0,0,W,H);for(var i=0;i<orbs.length;i++){orbs[i].update();orbs[i].draw();}requestAnimationFrame(tick);}
+  window.addEventListener("resize",resize);init();tick();
+})();
 
-      // Percentage Breakdown 3: Beans
-      const soeOrders = activeOrders.filter(o => /SOE/i.test(o.bean || ''));
-      const houseOrders = activeOrders.filter(o => /House/i.test(o.bean || ''));
-      const decafOrders = activeOrders.filter(o => /Decaf/i.test(o.bean || ''));
-      renderPctBars('crm-pct-bean-list', [
-        { label: 'SOE 單一產地豆', count: soeOrders.length, amount: soeOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-amber-600' },
-        { label: 'House 拼配豆', count: houseOrders.length, amount: houseOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-stone-700' },
-        { label: 'Decaf 低因豆', count: decafOrders.length, amount: decafOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-teal-600' }
-      ], activeOrders.length);
-
-      // Table 1: Daily Summary Table
-      const dailyTbody = document.getElementById('crm-daily-tbody');
-      if (dailyTbody) {
-        const byDate = {};
-        kdsOrders.forEach(o => {
-          const d = o.date || getTodayDateStr();
-          if (!byDate[d]) byDate[d] = [];
-          byDate[d].push(o);
-        });
-        const sortedDays = Object.keys(byDate).sort().reverse();
-        dailyTbody.innerHTML = sortedDays.map(d => {
-          const list = byDate[d];
-          const act = list.filter(o => o.status !== '已取消');
-          const canc = list.filter(o => o.status === '已取消');
-          const ver = act.filter(o => o.paymentVerified || o.status === '沖緊' || o.status === '搞掂');
-          const pend = act.filter(o => !o.paymentVerified && o.status === '待對數');
-          const cups = act.reduce((s, o) => s + extractOrderCups(o), 0);
-          const validAmt = act.reduce((s, o) => s + Number(o.amount || 0), 0);
-          const verAmt = ver.reduce((s, o) => s + Number(o.amount || 0), 0);
-          const pendAmt = pend.reduce((s, o) => s + Number(o.amount || 0), 0);
-          const tList = list.map(o => o.time || '').filter(Boolean).sort();
-          const tSpan = tList.length ? `${tList[0]} ~ ${tList[tList.length - 1]}` : '--';
-
-          return `
-            <tr class="hover:bg-stone-50">
-              <td class="p-2.5 font-black text-stone-900">${d}</td>
-              <td class="p-2.5">${list.length} 單 (${cups} 杯)</td>
-              <td class="p-2.5 font-bold text-stone-900">$${validAmt}</td>
-              <td class="p-2.5 font-black text-emerald-700">$${verAmt}</td>
-              <td class="p-2.5 font-bold text-amber-700">$${pendAmt}</td>
-              <td class="p-2.5 font-bold text-emerald-800">${pct(ver.length, act.length)}</td>
-              <td class="p-2.5 font-bold text-rose-700">${pct(canc.length, list.length)}</td>
-              <td class="p-2.5 text-stone-600">${tSpan}</td>
-            </tr>
-          `;
-        }).join('');
-      }
-
-      // Table 2: Customer CRM Audit Table
-      const custTbody = document.getElementById('crm-customers-tbody');
-      if (custTbody) {
-        const custMap = {};
-        scopedOrders.forEach(o => {
-          const key = (o.whatsapp || o.igHandle || o.customerName || '匿名客人').trim();
-          if (!custMap[key]) {
-            custMap[key] = {
-              name: o.customerName || '客人',
-              whatsapp: o.whatsapp || '-',
-              ig: o.igHandle || '-',
-              totalOrders: 0,
-              validOrders: 0,
-              validSpend: 0,
-              verifiedSpend: 0,
-              lastTime: `${o.date || getTodayDateStr()} ${o.time || ''}`
-            };
-          }
-          const c = custMap[key];
-          c.totalOrders += 1;
-          if (o.status !== '已取消') {
-            c.validOrders += 1;
-            c.validSpend += Number(o.amount || 0);
-            if (o.paymentVerified || o.status === '沖緊' || o.status === '搞掂') {
-              c.verifiedSpend += Number(o.amount || 0);
-            }
-          }
-        });
-
-        const custRows = Object.values(custMap).sort((a, b) => b.validSpend - a.validSpend);
-        custTbody.innerHTML = custRows.map(c => `
-          <tr class="hover:bg-stone-50">
-            <td class="p-2.5 font-black text-stone-900">${c.name}</td>
-            <td class="p-2.5 text-stone-600">${c.whatsapp} / ${c.ig}</td>
-            <td class="p-2.5">${c.validOrders} 有效 / 共 ${c.totalOrders} 次</td>
-            <td class="p-2.5 font-black text-stone-900">$${c.validSpend}</td>
-            <td class="p-2.5 font-bold text-amber-800">${pct(c.validSpend, grossValidAmount)}</td>
-            <td class="p-2.5 font-bold text-emerald-700">$${c.verifiedSpend}</td>
-            <td class="p-2.5 text-stone-500">${c.lastTime}</td>
-          </tr>
-        `).join('');
-      }
-
-      // Table 3: Detailed Orders Time & Percentage Table
-      const ordersTbody = document.getElementById('crm-orders-tbody');
-      if (ordersTbody) {
-        ordersTbody.innerHTML = scopedOrders.map(o => {
-          const isCanc = o.status === '已取消';
-          const rowPct = isCanc ? '0.0% (已取消)' : pct(Number(o.amount || 0), grossValidAmount);
-          return `
-            <tr class="hover:bg-stone-50 ${isCanc ? 'text-rose-700 bg-rose-50/40' : ''}">
-              <td class="p-2.5 font-black">#${o.id}</td>
-              <td class="p-2.5">${o.date || getTodayDateStr()} ${o.time || '--:--'}</td>
-              <td class="p-2.5">${o.customerName || '客人'} (${o.whatsapp || o.igHandle || '-'})</td>
-              <td class="p-2.5 font-sans font-bold">${o.kdsDesc}</td>
-              <td class="p-2.5 font-black">$${o.amount}</td>
-              <td class="p-2.5">${rowPct}</td>
-              <td class="p-2.5 font-bold">${o.status}</td>
-            </tr>
-          `;
-        }).join('');
-      }
-
-      // Table 4: Backend Email & Passkey Records
-      renderAuthAccountsTable();
-    }
-
-    function renderAuthAccountsTable() {
-      const accTbody = document.getElementById('crm-accounts-tbody');
-      const logsTbody = document.getElementById('crm-auth-logs-tbody');
-      if (accTbody) {
-        accTbody.innerHTML = brewerAccountsRegistry.map(acc => `
-          <tr class="hover:bg-stone-50">
-            <td class="p-2.5 font-black text-stone-900">${acc.email}</td>
-            <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-amber-100 border border-stone-800 font-black text-stone-900">${acc.passkey || acc.pin || '----'}</span></td>
-            <td class="p-2.5 font-bold text-emerald-800">${acc.loginCount || 1} 次</td>
-            <td class="p-2.5 text-stone-600">${String(acc.registeredAt || '').replace('T', ' ').slice(0, 19)}</td>
-            <td class="p-2.5 text-stone-900 font-bold">${String(acc.lastLoginAt || '').replace('T', ' ').slice(0, 19)}</td>
-            <td class="p-2.5 text-stone-500">${acc.lastLogoutAt ? String(acc.lastLogoutAt).replace('T', ' ').slice(0, 19) : '保持登入中'}</td>
-          </tr>
-        `).join('');
-      }
-      if (logsTbody) {
-        logsTbody.innerHTML = brewerAuthEventLogs.slice(0, 30).map(l => `
-          <tr class="hover:bg-stone-50">
-            <td class="p-2 text-stone-600">${String(l.timestamp || '').replace('T', ' ').slice(0, 19)}</td>
-            <td class="p-2 font-bold text-stone-900">${l.action}</td>
-            <td class="p-2">${l.email}</td>
-            <td class="p-2 font-black text-amber-900">${l.passkey}</td>
-            <td class="p-2 font-sans text-stone-600">${l.note || ''}</td>
-          </tr>
-        `).join('');
-      }
-    }
-
-    async function fetchAuthAuditFromServer() {
-      try {
-        const res = await fetch('/api/brew/auth');
-        const data = await res.json();
-        if (data && Array.isArray(data.accounts) && data.accounts.length > 0) {
-          brewerAccountsRegistry = data.accounts;
-        }
-        if (data && Array.isArray(data.authLogs) && data.authLogs.length > 0) {
-          brewerAuthEventLogs = data.authLogs;
-        }
-        renderAuthAccountsTable();
-      } catch (e) {}
-    }
-
-    function exportCrmAuditCsv() {
-      const headers = ['單號', '日期', '時間', '客人稱呼', 'WhatsApp', 'IG', '咖啡豆', '飲品內容', '金額(HKD)', '狀態', '已對數'];
-      const rows = kdsOrders.map(o => [
-        `#${o.id}`,
-        o.date || getTodayDateStr(),
-        o.time || '',
-        `"${(o.customerName || '').replace(/"/g, '""')}"`,
-        `"${(o.whatsapp || '').replace(/"/g, '""')}"`,
-        `"${(o.igHandle || '').replace(/"/g, '""')}"`,
-        `"${(o.bean || '').replace(/"/g, '""')}"`,
-        `"${(o.kdsDesc || '').replace(/"/g, '""')}"`,
-        o.amount || 0,
-        o.status || '',
-        o.paymentVerified ? 'YES' : 'NO'
-      ]);
-      const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `BREW_CRM_Audit_${getTodayDateStr()}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('📥 已匯出 BREW CRM 核數 CSV 報表');
-    }
-
-    // 12. Real-time Multi-Tab & Server Sync
-    function syncOrdersEverywhere(changedOrder) {
-      try {
-        localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(kdsOrders));
-        if (syncChannel) {
-          syncChannel.postMessage({ type: 'ORDERS_UPDATED', orders: kdsOrders });
-        }
-      } catch (e) {}
-
-      if (changedOrder) {
-        fetch('/api/brew/orders', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(changedOrder)
-        }).catch(() => {});
-      }
-    }
-
-    async function fetchOrdersFromServer(silent = true) {
-      try {
-        const res = await fetch('/api/brew/orders');
-        const data = await res.json();
-        if (data && Array.isArray(data.orders) && data.orders.length > 0) {
-          kdsOrders = data.orders;
-          localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(kdsOrders));
-          renderAllOrderViews();
-          if (!silent) showToast('🔄 已同伺服器同步最新訂單');
-        }
-      } catch (e) {
-        if (!silent) showToast('⚠️ 離線模式：已使用本機同步');
-      }
-    }
-
-    function manualSyncOrders() {
-      fetchOrdersFromServer(false);
-      fetchAuthAuditFromServer();
-    }
-
-    if (syncChannel) {
-      syncChannel.onmessage = (event) => {
-        if (event.data && event.data.type === 'ORDERS_UPDATED' && Array.isArray(event.data.orders)) {
-          kdsOrders = event.data.orders;
-          renderAllOrderViews();
-        }
-      };
-    }
-
-    window.addEventListener('storage', (event) => {
-      if (event.key === ORDERS_STORAGE_KEY && event.newValue) {
-        try {
-          kdsOrders = JSON.parse(event.newValue);
-          renderAllOrderViews();
-        } catch (e) {}
-      }
-    });
-
-    // 13. Utility Actions (Copy / WhatsApp / Shop Mode / MCP)
-    function copyText(type) {
-      const text = `🧾 BREW 落單：\n${currentParsedOrder.customerDesc}\n聯絡：${currentParsedOrder.customerName} (${currentParsedOrder.whatsapp})\n應付港紙：$${currentParsedOrder.totalPrice}`;
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('📋 已複製落單字句');
-      });
-    }
-
-    function openWhatsAppOrder() {
-      const text = `🧾 BREW 落單：\n${currentParsedOrder.customerDesc}\n稱呼：${currentParsedOrder.customerName}\n金額：$${currentParsedOrder.totalPrice}\n✅ 確認落單，轉數快過數後傳截圖`;
-      const link = document.createElement('a');
-      link.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    function setShopMode(mode) {
-      const label = document.getElementById('sync-status-label');
-      if (mode === 'busy') {
-        if (label) label.textContent = '沖緊稍等';
-        showToast('🟡 已設為「沖緊稍等」');
-      } else {
-        if (label) label.textContent = '同步中';
-        showToast('🟢 已設為「正常接單」');
-      }
-    }
-
-    async function testLiveMcpEndpoint() {
-      const statusEl = document.getElementById('mcp-live-status');
-      try {
-        const res = await fetch('/api/brew/mcp');
-        const data = await res.json();
-        if (statusEl) statusEl.textContent = `🟢 MCP 正常 (${data.serverInfo?.name || 'brew-order-mcp'})`;
-        showToast('⚡ MCP 駁口連線成功');
-      } catch (e) {
-        if (statusEl) statusEl.textContent = '⚠️ 無法連線';
-      }
-    }
-
-    function copyMcpConfigJson() {
-      const cfg = JSON.stringify({
-        mcpServers: {
-          "brew-order": {
-            url: window.location.origin + "/api/brew/mcp",
-            transport: "http-jsonrpc"
-          }
-        }
-      }, null, 2);
-      navigator.clipboard.writeText(cfg).then(() => showToast('📋 已複製 MCP 設定 JSON'));
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      const text = document.getElementById('toast-text');
-      text.textContent = msg;
-      toast.classList.remove('hidden');
-      clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(() => {
-        toast.classList.add('hidden');
-      }, 2600);
-    }
-
-    // Init
-    window.addEventListener('DOMContentLoaded', () => {
-      if (window.lucide) window.lucide.createIcons();
-
-      // Restore persistent Brewer login session (no need to re-login until Logout is clicked)
-      const savedAuth = getSavedBrewerAuth();
-      if (savedAuth && savedAuth.email && savedAuth.pin && isBrewerSessionPersisted()) {
-        brewerUnlocked = true;
-      }
-      updateHeaderLockBadge();
-
-      parseOrderInput();
-      updatePaymentTemplates();
-      renderAllOrderViews();
-      fetchOrdersFromServer(true);
-      fetchAuthAuditFromServer();
-      setInterval(() => fetchOrdersFromServer(true), 3000);
-    });
-  </script>
+// Language toggle
+var currentLang = 'zh';
+function toggleLang(){
+  var root = document.getElementById('root');
+  var btn = document.getElementById('lang-toggle');
+  if(currentLang === 'zh'){
+    currentLang = 'en';
+    root.setAttribute('lang','en');
+    btn.textContent = '廣東話';
+  } else {
+    currentLang = 'zh';
+    root.setAttribute('lang','zh-HK');
+    btn.textContent = 'English';
+  }
+}
+</script>
 </body>
 </html>
