@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BREW 咖啡落單</title>
+<style>
+*{box-sizing:border-box;margin:0}
+:root{--bg:#fff;--fg:#141413;--mut:#6b6a66;--card:#f6f3ee;--line:#e4ded3;--acc:#d97757;--ok:#2f8f5b;--warn:#e8a317;color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141413;--fg:#f4f1ea;--mut:#a8a399;--card:#1f1e1c;--line:#34322e;--acc:#e08a6b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141413;--fg:#f4f1ea;--mut:#a8a399;--card:#1f1e1c;--line:#34322e;--acc:#e08a6b;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 -apple-system,"PingFang HK","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;min-height:100%;padding-bottom:120px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.wrap{max-width:480px;margin:0 auto;padding:0 16px}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:52px}
+.logo{font-weight:900;font-size:20px;letter-spacing:.04em}
+.seg{display:flex;background:var(--card);border-radius:12px;padding:3px}
+.seg button{border:0;background:none;color:var(--mut);font:inherit;font-weight:700;font-size:13px;padding:6px 12px;border-radius:9px;cursor:pointer;min-height:34px}
+.seg button.on{background:var(--fg);color:var(--bg)}
+.seg i{font-style:normal;background:var(--warn);color:#141413;border-radius:9px;padding:0 6px;margin-left:4px;font-size:12px}
+.hero{text-align:center;padding:26px 0 8px;position:relative}
+.mw{position:relative;width:150px;margin:0 auto}
+.mw svg{width:150px;height:auto;animation:bob 2.4s ease-in-out infinite;overflow:visible}
+.badge{position:absolute;right:-14px;top:2px;background:var(--fg);color:var(--bg);font-weight:800;font-size:12px;padding:3px 11px;border-radius:99px}
+h1{font-size:28px;font-weight:900;line-height:1.2;margin-top:14px}
+.sub{color:var(--mut);margin-top:4px}
+.pop .mw{animation:pop .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes bob{50%{transform:translateY(-6px)}}
+@keyframes pop{0%{transform:scale(.7)}100%{transform:scale(1)}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(232,163,23,.6)}100%{box-shadow:0 0 0 12px rgba(232,163,23,0)}}
+.prog{display:flex;gap:6px;margin:14px 0 4px}
+.prog div{flex:1;font-size:12px;color:var(--mut);font-weight:700}
+.prog div::before{content:"";display:block;height:5px;border-radius:3px;background:var(--line);margin-bottom:5px}
+.prog div.on{color:var(--fg)}.prog div.on::before{background:var(--acc)}
+.shop{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;margin:10px 0}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--mut)}.dot.ok{background:var(--ok)}
+section{margin-top:20px}
+h3{font-size:14px;font-weight:800;margin-bottom:8px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.lab{font-size:12px;color:var(--mut);margin:10px 0 6px;font-weight:700}
+.chip{border:1.5px solid var(--line);background:var(--bg);color:var(--fg);border-radius:14px;padding:9px 13px;font:inherit;font-weight:700;min-height:46px;cursor:pointer;text-align:left;transition:transform .12s}
+.chip:active{transform:scale(.96)}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.chip small{display:block;font-weight:500;font-size:12px;opacity:.8}
+.qty{display:flex;align-items:center;gap:14px}
+.qty button{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);font-size:22px;cursor:pointer}
+.qty b{font-size:20px;min-width:24px;text-align:center}
+input[type=text]{width:100%;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);border-radius:12px;padding:12px;font:inherit;margin-top:8px}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.card{background:var(--card);border-radius:18px;padding:16px;margin-top:16px}
+.big{font-size:34px;font-weight:900;font-variant-numeric:tabular-nums}
+.kv{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.kv:first-child{border-top:0}
+.kv b{font-size:20px;font-variant-numeric:tabular-nums}
+.mini{border:1.5px solid var(--fg);background:none;color:var(--fg);border-radius:10px;padding:6px 12px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;min-height:36px}
+ol{padding-left:20px;margin-top:6px}li{margin:6px 0}
+.link{background:none;border:0;color:var(--mut);text-decoration:underline;font:inherit;font-size:13px;cursor:pointer;margin-top:12px;padding:6px 0}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--bg);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
+.bar .wrap{display:flex;align-items:center;gap:14px;padding:0}
+.tot{font-size:12px;color:var(--mut);line-height:1.2}.tot b{display:block;font-size:24px;color:var(--fg);font-variant-numeric:tabular-nums}
+.btn{flex:1;border:0;border-radius:16px;background:var(--acc);color:#fff;font:inherit;font-weight:900;font-size:17px;min-height:54px;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;padding:0 14px}
+.btn:active{transform:scale(.97)}.btn:disabled{background:var(--line);color:var(--mut);cursor:not-allowed}
+.btn.ok{background:var(--ok)}.btn.warn{background:var(--warn);color:#141413}.btn.dark{background:var(--fg);color:var(--bg)}
+.btn.inline{flex:none;width:100%;margin-top:14px}
+.ord{background:var(--card);border-radius:18px;padding:14px;margin-top:12px}
+.ord.hot{animation:ring 1.4s ease-out infinite}
+.ord h4{font-size:18px;font-weight:900;display:flex;justify-content:space-between}
+.pill{font-size:12px;font-weight:800;border-radius:99px;padding:2px 10px;background:var(--line);color:var(--fg)}
+.pill.paid{background:var(--warn);color:#141413}.pill.making{background:var(--acc);color:#fff}.pill.ready{background:var(--ok);color:#fff}
+.m{color:var(--mut);font-size:14px;margin-top:2px}
+#toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:12px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:30;max-width:90%}
+#toast.on{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <span class="logo">BREW</span>
+  <div class="seg" role="tablist">
+    <button id="t-c" role="tab" onclick="go('customer')">我要落單</button>
+    <button id="t-b" role="tab" onclick="go('brewer')">咖啡師<i id="cnt" hidden>0</i></button>
+  </div>
+</div></header>
+<main class="wrap" id="app"></main>
+<div id="bar"></div>
+<div id="toast" role="status"></div>
+<script>
+const PHONE="9123 6789",WA="85291236789";
+const D=[["H01","熱美式",28,"熱",1],["H02","熱 Latte",36,"熱"],["H03","熱 Cappuccino",36,"熱"],["H04","熱 Flat White",36,"熱"],["H05","熱 Mocha",40,"熱"],["C01","凍美式",32,"凍",1],["C02","凍 Latte",40,"凍"],["C03","凍 Cappuccino",40,"凍"],["C04","凍 Mocha",44,"凍"],["S01","Dirty",40,"特調"],["S02","Espresso Tonic",42,"特調",1]].map(([id,n,p,g,b])=>({id,n,p,g,b:!!b}));
+const SZ={S:"細杯",M:"中杯",L:"大杯"},ML={FM:"全脂奶",SM:"脫脂奶",OM:"燕麥奶 +$4"};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const no=n=>"#"+String(n).padStart(2,"0");
+let view="customer",mem=null,myId=null,last="";
+try{myId=+localStorage.getItem("brew2my")||null}catch(e){}
+const sel={bean:"house",drink:"H02",size:"M",milk:"OM",qty:1,note:"",name:""};
+function load(){try{const s=localStorage.getItem("brew2");if(s)return JSON.parse(s)}catch(e){}return mem||{shop:false,soe:"",seq:0,orders:[]}}
+function save(d){mem=d;try{localStorage.setItem("brew2",JSON.stringify(d))}catch(e){}}
+function setMy(v){myId=v;try{v?localStorage.setItem("brew2my",v):localStorage.removeItem("brew2my")}catch(e){}}
+const cur=()=>D.find(x=>x.id===sel.drink);
+function price(){const d=cur();let p=d.p;if(d.g!=="特調")p+=sel.size==="L"?4:sel.size==="S"?-4:0;if(!d.b&&sel.milk==="OM")p+=4;if(sel.bean==="soe")p+=5;return p*sel.qty}
+function desc(soe){const d=cur(),a=[sel.bean==="soe"?"SOE"+(soe?" "+soe:""):"自家豆",d.n];if(d.g!=="特調")a.push(SZ[sel.size]);if(!d.b)a.push(ML[sel.milk].replace(" +$4",""));return a.join(" / ")+" × "+sel.qty}
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("on"),1800)}
+function copy(t,m){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast(m),()=>toast("請手動複製："+t))}
+function waText(o){return `BREW ${no(o.id)} 已過數 HK$${o.total}\n${o.desc}`+(o.note?"\n備註："+o.note:"")+(o.name?"\n稱呼："+o.name:"")+"\n（付款截圖如下）"}
+function go(v){view=v;render()}
+function pick(k,v){sel[k]=v;render()}
+function step(n){sel.qty=Math.max(1,Math.min(10,sel.qty+n));render()}
+function place(){const d=load();if(!d.shop)return toast("咖啡師未開始接單");d.seq++;const o={id:d.seq,s:"unpaid",desc:desc(d.soe),total:price(),note:sel.note,name:sel.name};d.orders.push(o);save(d);setMy(o.id);render()}
+function withdraw(){const d=load();d.orders=d.orders.filter(x=>x.id!==myId);save(d);setMy(null);render()}
+function paid(){const d=load(),o=d.orders.find(x=>x.id===myId);if(!o)return;o.s="paid";save(d);window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(waText(o)),"_blank");render()}
+function setS(id,s){const d=load(),o=d.orders.find(x=>x.id===id);if(o){o.s=s;save(d);render()}}
+function shop(v){const d=load();d.shop=v;save(d);render()}
+function soe(v){const d=load();d.soe=v;save(d)}
+let armed=false;
+function reset(){if(!armed){armed=true;toast("再撳一次確認清空所有訂單");setTimeout(()=>armed=false,3000);return}armed=false;save({shop:load().shop,soe:load().soe,seq:0,orders:[]});setMy(null);render()}
+
+const MASCOT=`<svg viewBox="0 0 16 14" aria-hidden="true"><ellipse cx="8" cy="13.2" rx="6" ry=".7" fill="currentColor" opacity=".12"/><g fill="var(--acc)"><rect x="3" y="1" width="10" height="7"/><rect x="1" y="3" width="2" height="3"/><rect x="13" y="3" width="2" height="3"/><rect x="4" y="8" width="2" height="3"/><rect x="10" y="8" width="2" height="3"/><rect x="7" y="8" width="2" height="2"/></g><g fill="none" stroke="#141413" stroke-width=".6" stroke-linecap="square"><polyline points="5,3.2 6.8,4.2 5,5.2"/><polyline points="11,3.2 9.2,4.2 11,5.2"/></g></svg>`;
+
+function hero(n,t,s){return `<div class="hero ${last!==view+t?"pop":""}"><div class="mw">${MASCOT}<span class="badge">第 ${n} 步</span></div><h1>${t}</h1><p class="sub">${s}</p></div><div class="prog">${["落單","過數","沖製","取貨"].map((x,i)=>`<div class="${i<n?"on":""}">${x}</div>`).join("")}</div>`}
+
+function chips(g){return D.filter(x=>x.g===g).map(x=>`<button class="chip${sel.drink===x.id?" on":""}" onclick="pick('drink','${x.id}')">${x.n}<small>HK$${x.p}</small></button>`).join("")}
+
+function customer(d){
+  const o=d.orders.find(x=>x.id===myId);
+  if(myId&&(!o||o.s==="done"))setMy(null);
+  const my=myId?o:null,st=my?my.s:"menu",bar=$("#bar");
+  let h="",b="";
+  if(st==="menu"){
+    h=hero(1,d.shop?"今日飲乜？":"咖啡師未開舖",d.shop?"揀好撳底部掣，下一步會教你點付款":"咖啡師撳開始接單後，呢頁會自動更新");
+    h+=`<div class="shop"><span class="dot ${d.shop?"ok":""}"></span>${d.shop?"正常接單":"暫時未接單"}</div>`;
+    const c=cur();
+    h+=`<section><h3>咖啡豆</h3><div class="g2"><button class="chip${sel.bean==="house"?" on":""}" onclick="pick('bean','house')">自家豆<small>招牌平衡</small></button><button class="chip${sel.bean==="soe"?" on":""}" onclick="pick('bean','soe')">SOE 單一產地<small>${d.soe?esc(d.soe)+"，":""}加 HK$5</small></button></div></section>`;
+    h+=`<section><h3>飲品</h3><div class="lab">熱飲</div><div class="row">${chips("熱")}</div><div class="lab">凍飲</div><div class="row">${chips("凍")}</div><div class="lab">特調</div><div class="row">${chips("特調")}</div></section>`;
+    if(c.g!=="特調")h+=`<section><h3>杯量</h3><div class="row">${Object.keys(SZ).map(k=>`<button class="chip${sel.size===k?" on":""}" onclick="pick('size','${k}')">${SZ[k]}<small>${k==="S"?"-$4":k==="L"?"+$4":"標準"}</small></button>`).join("")}</div></section>`;
+    if(!c.b)h+=`<section><h3>奶類</h3><div class="row">${Object.keys(ML).map(k=>`<button class="chip${sel.milk===k?" on":""}" onclick="pick('milk','${k}')">${ML[k]}</button>`).join("")}</div></section>`;
+    h+=`<section><h3>數量</h3><div class="qty"><button onclick="step(-1)" aria-label="減少">−</button><b>${sel.qty}</b><button onclick="step(1)" aria-label="增加">+</button></div></section>`;
+    h+=`<section><h3>稱呼與備註（選填）</h3><input type="text" value="${esc(sel.name)}" placeholder="稱呼，例如陳小姐" oninput="sel.name=this.value"><input type="text" value="${esc(sel.note)}" placeholder="備註，例如少冰" oninput="sel.note=this.value"></section>`;
+    b=`<div class="wrap"><div class="tot">應付<b>HK$${price()}</b></div><button class="btn" ${d.shop?"":"disabled"} onclick="place()">${d.shop?"落單，去付款":"未開始接單"}</button></div>`;
+  }else if(st==="unpaid"){
+    h=hero(2,"去銀行 App 轉數快","過咗數返嚟撳底部掣，WhatsApp 會自動帶住張單");
+    h+=`<div class="card"><div class="kv"><span>單號</span><b>${no(my.id)}</b></div><div class="kv"><span>${esc(my.desc)}</span></div><div class="kv"><span>轉數快號碼<br><b>${PHONE}</b></span><button class="mini" onclick="copy('${PHONE.replace(" ","")}','已複製電話')">複製</button></div><div class="kv"><span>金額<br><b>HK$${my.total}</b></span><button class="mini" onclick="copy('${my.total}','已複製金額')">複製</button></div></div>`;
+    h+=`<div class="card"><h3>3 步完成</h3><ol><li>打開銀行 App，揀轉數快，貼上電話同金額</li><li>備註填 <b>${no(my.id)}</b>，確認過數</li><li>返嚟撳「我已過數」，WhatsApp 傳截圖俾咖啡師</li></ol></div><button class="link" onclick="withdraw()">修改或取消張單</button>`;
+    b=`<div class="wrap"><button class="btn ok" onclick="paid()">我已過數，通知咖啡師</button></div>`;
+  }else{
+    const m={paid:[3,"已通知咖啡師","等佢確認收到款項，好快有回音"],making:[3,"🟡 沖緊稍等","咖啡師已確認，正在沖製"],ready:[4,"好咗！可以取貨","取貨時報單號 "+no(my.id)]}[st];
+    h=hero(m[0],m[1],m[2]);
+    h+=`<div class="card"><div class="kv"><span>單號</span><b>${no(my.id)}</b></div><div class="kv"><span>${esc(my.desc)}</span><b>HK$${my.total}</b></div></div>`;
+    if(st==="paid")h+=`<a class="btn dark inline" target="_blank" rel="noopener" href="https://wa.me/${WA}?text=${encodeURIComponent(waText(my))}">WhatsApp 補傳付款截圖</a>`;
+    b=st==="ready"?`<div class="wrap"><button class="btn ok" onclick="setMy(null);render()">再落一杯</button></div>`:"";
+    if(st==="ready"&&last!==view+m[1])try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){}
+    last=view+m[1];
+  }
+  if(st==="menu"||st==="unpaid")last=view+(st==="menu"?(d.shop?"今日飲乜？":"咖啡師未開舖"):"去銀行 App 轉數快");
+  $("#app").innerHTML=h;bar.innerHTML=b?`<div class="bar">${b}</div>`:"";
+}
+
+function brewer(d){
+  const q=d.orders.filter(x=>x.s!=="done"),L={unpaid:"等過數",paid:"已過數",making:"製作中",ready:"可取貨"};
+  const act=o=>o.s==="unpaid"?`<button class="btn inline" disabled>等客人過數</button>`:o.s==="paid"?`<button class="btn warn inline" onclick="setS(${o.id},'making')">🟡 沖緊稍等</button>`:o.s==="making"?`<button class="btn ok inline" onclick="setS(${o.id},'ready')">好咗，通知取貨</button>`:`<button class="btn dark inline" onclick="setS(${o.id},'done')">客人已取走</button>`;
+  let h=`<div class="hero"><div class="mw">${MASCOT}</div><h1>${d.shop?"正常接單中":"未開始接單"}</h1><p class="sub">${d.shop?"客人現在可以落單":"撳下面開始，客人頁面即時顯示"}</p></div>`;
+  h+=`<button class="btn ${d.shop?"dark":"ok"} inline" onclick="shop(${!d.shop})">${d.shop?"暫停接單":"開始接單"}</button>`;
+  h+=`<section><h3>今日 SOE 豆（選填）</h3><input type="text" value="${esc(d.soe)}" placeholder="例如 衣索比亞 耶加雪菲" oninput="soe(this.value)"></section><section><h3>訂單 ${q.length} 張</h3>`;
+  h+=q.length?q.map(o=>`<div class="ord ${o.s==="paid"?"hot":""}"><h4><span>${no(o.id)}${o.name?" "+esc(o.name):""}</span><span class="pill ${o.s}">${L[o.s]}</span></h4><p class="m">${esc(o.desc)}，HK$${o.total}</p>${o.note?`<p class="m">備註：${esc(o.note)}</p>`:""}${act(o)}</div>`).join(""):`<p class="m">暫時未有訂單。客人落單後會出現喺度。</p>`;
+  h+=`</section><button class="link" onclick="reset()">清空今日訂單</button>`;
+  if(!document.activeElement||document.activeElement.tagName!=="INPUT")$("#app").innerHTML=h;
+  $("#bar").innerHTML="";
+}
+
+function render(){
+  const d=load(),n=d.orders.filter(x=>x.s==="paid").length;
+  $("#t-c").className=view==="customer"?"on":"";$("#t-b").className=view==="brewer"?"on":"";
+  $("#t-c").setAttribute("aria-selected",view==="customer");$("#t-b").setAttribute("aria-selected",view==="brewer");
+  const c=$("#cnt");c.hidden=!n;c.textContent=n;
+  view==="customer"?customer(d):brewer(d);
+}
+window.addEventListener("storage",()=>{if(!document.activeElement||document.activeElement.tagName!=="INPUT")render()});
+render();
+</script>
+</body>
+</html>
