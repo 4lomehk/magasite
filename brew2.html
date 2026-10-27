@@ -191,7 +191,15 @@
           <div class="flex items-center gap-2 text-xs font-bold text-stone-500">
             <span>只收港紙 HKD</span>
             <span aria-hidden="true">·</span>
-            <span>單號 <strong id="cust-top-order-id" class="font-mono text-stone-900">#01</strong></span>
+            <span>單號 <strong id="cust-top-order-id" class="font-mono text-stone-900">#00</strong></span>
+            <button
+              type="button"
+              onclick="resetToZeroAndReload('customer')"
+              class="tactile-btn ml-1 px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 font-black text-xs flex items-center gap-1 shadow-sm"
+              title="單號及金額重設歸零 (#00 / HK$0) 並重新載入"
+            >
+              🔄 重設 0 / 重新載入
+            </button>
           </div>
         </div>
 
@@ -225,7 +233,7 @@
             <div class="pt-2 border-t border-stone-200 flex items-center justify-between">
               <div>
                 <span class="text-xs font-bold text-stone-500 block">應付銀碼 (HKD)</span>
-                <span id="cust-fps-amount-display" class="text-2xl font-black font-mono text-emerald-700 tabular-nums">$43</span>
+                <span id="cust-fps-amount-display" class="text-2xl font-black font-mono text-emerald-700 tabular-nums">HK$0</span>
               </div>
               <div class="flex flex-wrap gap-2">
                 <button
@@ -423,8 +431,8 @@
             <input
               id="order-input"
               type="text"
-              value="中杯熱 Latte／燕麥奶／1 杯"
-              oninput="parseOrderInput()"
+              value=""
+              oninput="parseOrderInput(true)"
               placeholder="例如 (for example)：中杯熱 Latte 燕麥奶 1杯"
               class="w-full rounded-xl border-2 border-stone-900 px-3.5 py-2.5 font-mono text-sm font-bold bg-[#FFFDF9] focus:outline-none focus:ring-2 focus:ring-amber-400"
             />
@@ -509,38 +517,46 @@
             <div class="p-4 rounded-xl bg-[#ECFDF5] border-2 border-stone-900 font-mono text-xs sm:text-sm space-y-1.5 leading-relaxed">
               <div class="font-black text-stone-900">🧾 你的訂單：</div>
               <div id="customer-order-desc" class="font-bold text-stone-900">
-                SOE 單一產地豆 / 中杯熱 Latte／燕麥奶／1 杯
+                （請選擇飲品或點選上方預設）
               </div>
               <div id="customer-contact-preview" class="text-xs text-stone-600">
                 聯絡：陳小姐 · WhatsApp: 9123 4567 · IG: @chan_hk
               </div>
               <div class="font-black text-emerald-800 text-base pt-1">
-                金額：$<span id="customer-order-price">43</span>
+                金額：$<span id="customer-order-price">0</span>
               </div>
             </div>
 
-            <!-- Action Buttons: 確認 / 修改 / 取消 -->
-            <div class="grid grid-cols-3 gap-2">
+            <!-- Action Buttons: 確認 / 修改 / 取消 / 重設 0 -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 type="button"
                 onclick="customerConfirmOrder()"
-                class="tactile-btn py-2.5 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
+                class="tactile-btn py-2.5 px-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
               >
                 <span>✅ 確認落單</span>
               </button>
               <button
                 type="button"
                 onclick="customerModifyOrder()"
-                class="tactile-btn py-2.5 px-3 rounded-xl bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
+                class="tactile-btn py-2.5 px-2 rounded-xl bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
               >
                 <span>✏️ 修改</span>
               </button>
               <button
                 type="button"
                 onclick="customerCancelActiveOrder()"
-                class="tactile-btn py-2.5 px-3 rounded-xl bg-rose-200 hover:bg-rose-300 text-rose-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
+                class="tactile-btn py-2.5 px-2 rounded-xl bg-rose-200 hover:bg-rose-300 text-rose-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
               >
                 <span>❌ 取消張單</span>
+              </button>
+              <button
+                type="button"
+                onclick="resetToZeroAndReload('customer')"
+                class="tactile-btn py-2.5 px-2 rounded-xl bg-stone-200 hover:bg-stone-300 text-stone-900 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
+                title="單號及金額重設為 0 並重新載入"
+              >
+                <span>🔄 重設 0 / 重新載入</span>
               </button>
             </div>
 
@@ -610,12 +626,46 @@
           <div class="text-xs font-bold text-stone-600">
             請登記咖啡師電郵及設定 4 位數字 Passkey（登出前無需再登入）
           </div>
+
+          <!-- Google-style Quick Sign-in Button -->
+          <button
+            type="button"
+            onclick="quickSelectBrewerGoogleEmail('4lome.hk@gmail.com')"
+            class="tactile-btn w-full py-2.5 px-3 rounded-xl border-2 border-stone-900 bg-white hover:bg-stone-50 text-stone-900 flex items-center justify-center gap-2.5 font-bold text-xs shadow-sm transition active:scale-[0.99]"
+          >
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>以預設 Google 電郵快速登入：<strong>4lome.hk@gmail.com</strong></span>
+          </button>
+
+          <!-- Quick Preset Email Chips -->
+          <div class="flex items-center gap-1.5 pt-0.5">
+            <span class="text-[11px] font-bold text-stone-500">預設帳號：</span>
+            <button type="button" onclick="setRegEmailPreset('4lome.hk@gmail.com')" class="px-2 py-0.5 rounded-md border border-stone-400 bg-stone-100 hover:bg-stone-200 text-[11px] font-mono font-bold text-stone-800">
+              4lome.hk@gmail.com (Google)
+            </button>
+            <button type="button" onclick="setRegEmailPreset('brewer@brew.hk')" class="px-2 py-0.5 rounded-md border border-stone-400 bg-stone-100 hover:bg-stone-200 text-[11px] font-mono font-bold text-stone-800">
+              brewer@brew.hk
+            </button>
+          </div>
+
+          <div class="relative flex py-0.5 items-center">
+            <div class="flex-grow border-t border-stone-200"></div>
+            <span class="flex-shrink mx-2 text-[11px] font-bold text-stone-400">或輸入自訂電郵</span>
+            <div class="flex-grow border-t border-stone-200"></div>
+          </div>
+
           <div>
             <label for="reg-email-input" class="text-xs font-black text-stone-800 block mb-1">登記電郵 (Email)</label>
             <input
               id="reg-email-input"
               type="email"
-              placeholder="brewer@brew.hk"
+              value="4lome.hk@gmail.com"
+              placeholder="例如：4lome.hk@gmail.com 或自訂電郵"
               class="w-full rounded-xl border-2 border-stone-900 px-3.5 py-2.5 text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
             />
           </div>
@@ -626,6 +676,7 @@
               type="password"
               inputmode="numeric"
               maxlength="4"
+              value="0326"
               placeholder="例如：0326"
               class="w-full rounded-xl border-2 border-stone-900 px-3.5 py-2.5 text-center font-mono text-xl font-black tracking-[0.5em] bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
             />
@@ -706,7 +757,7 @@
             <div class="text-xs flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
               <span class="text-stone-300">免重登保持連線：</span>
-              <strong id="active-brewer-email" class="font-mono text-amber-300">brewer@brew.hk</strong>
+              <strong id="active-brewer-email" class="font-mono text-amber-300">4lome.hk@gmail.com</strong>
               <span class="px-1.5 py-0.5 rounded bg-stone-800 border border-stone-600 font-mono text-[11px] text-stone-300">
                 Passkey: <strong id="active-brewer-pin-badge" class="text-emerald-300">0326</strong>
               </span>
@@ -714,7 +765,7 @@
           </div>
           <div class="flex items-center flex-wrap gap-2">
             <button type="button" onclick="scrollToCrmSection()" class="px-2.5 py-1 rounded-lg bg-sky-700 hover:bg-sky-600 text-white text-xs font-black">📊 後台 CRM 核數</button>
-            <button type="button" onclick="resetBaristaOrderSequence()" class="px-2.5 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-amber-300 text-xs font-bold border border-amber-400" title="落單次序重頭由 01 開始">🔄 重設由 #01 開始</button>
+            <button type="button" onclick="resetToZeroAndReload('brewer')" class="px-2.5 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-amber-300 text-xs font-black border border-amber-400 shadow-sm flex items-center gap-1" title="單號及訂單歸零重設並重新載入">🔄 重設 0 / 重新載入 (Reset 0 / Reload)</button>
             <button type="button" onclick="setShopMode('normal')" class="px-2.5 py-1 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold">🟢 正常接單</button>
             <button type="button" onclick="setShopMode('busy')" class="px-2.5 py-1 rounded-lg bg-amber-700 hover:bg-amber-600 text-white text-xs font-bold">🟡 沖緊稍等</button>
             <button type="button" onclick="logoutBrewerWorkspace()" class="px-3 py-1 rounded-lg bg-rose-700 hover:bg-rose-600 text-white text-xs font-black border border-rose-400">🚪 登出</button>
@@ -747,7 +798,7 @@
                   <input
                     id="manual-order-id"
                     type="text"
-                    value="01"
+                    value="00"
                     oninput="updatePaymentTemplates()"
                     class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 font-mono text-base font-black bg-stone-50"
                   />
@@ -757,7 +808,7 @@
                   <input
                     id="manual-hkd-amount"
                     type="number"
-                    value="43"
+                    value="0"
                     oninput="updatePaymentTemplates()"
                     class="w-full rounded-lg border-2 border-emerald-700 px-3 py-2 font-mono text-base font-black bg-emerald-50 text-emerald-950"
                   />
@@ -1191,18 +1242,18 @@
     let crmSubTab = 'daily';      // 'daily' | 'customers' | 'orders' | 'accounts'
     let selectedBean = 'SOE 單一產地豆';
     let currentParsedOrder = {
-      valid: true,
+      valid: false,
       code: 'H02',
       size: 'M',
       milk: 'OM',
-      qty: 1,
+      qty: 0,
       bean: 'SOE 單一產地豆',
       customerName: '陳小姐',
       whatsapp: '9123 4567',
       igHandle: '@chan_hk',
-      customerDesc: 'SOE 單一產地豆 / 中杯熱 Latte／燕麥奶／1 杯',
-      kdsDesc: '中杯熱 Latte／燕麥奶／1 杯',
-      totalPrice: 43
+      customerDesc: '（請選擇飲品或點選上方預設）',
+      kdsDesc: '（未點選）',
+      totalPrice: 0
     };
 
     // Brewer Auth & Persistent Session State (No re-login needed until Logout!)
@@ -1213,6 +1264,13 @@
 
     let brewerUnlocked = false;
     let brewerAccountsRegistry = [
+      {
+        email: '4lome.hk@gmail.com',
+        passkey: '0326',
+        registeredAt: '2026-10-26 21:00:00',
+        lastLoginAt: '2026-10-26 21:00:00',
+        loginCount: 1
+      },
       {
         email: 'brewer@brew.hk',
         passkey: '0326',
@@ -1225,48 +1283,27 @@
       {
         id: 1,
         action: 'register',
-        email: 'brewer@brew.hk',
+        email: '4lome.hk@gmail.com',
         passkey: '0326',
-        timestamp: '2026-10-09 09:00:00',
-        note: '系統預設咖啡師帳號'
+        timestamp: '2026-10-26 21:00:00',
+        note: '預設 Google 咖啡師帳號'
       }
     ];
 
-    // Orders State & Sequence (starts clean from #01)
+    // Orders State & Sequence (starts clean from #00 / HK$0)
     const ORDERS_STORAGE_KEY = 'brew_orders_v3';
     const syncChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('brew_sync_v3') : null;
 
-    let activeOrderSeq = 1;
+    let activeOrderSeq = 0;
     let currentCustQrTab = 'fps'; // 'fps' | 'wa'
 
     function formatOrderId(id) {
-      const num = parseInt(String(id || '1').replace(/\D/g, ''), 10) || 1;
+      const num = parseInt(String(id ?? '0').replace(/\D/g, ''), 10);
+      if (isNaN(num) || num === 0) return '00';
       return String(num).padStart(2, '0');
     }
 
-    let kdsOrders = [
-      {
-        id: '01',
-        bean: 'SOE 單一產地豆',
-        code: 'H02',
-        size: 'M',
-        milk: 'OM',
-        qty: 1,
-        raw: '中杯熱 Latte／燕麥奶／1 杯',
-        customerDesc: 'SOE 單一產地豆 / 中杯熱 Latte／燕麥奶／1 杯',
-        kdsDesc: '中杯熱 Latte／燕麥奶／1 杯',
-        amount: 43,
-        customerName: '陳小姐',
-        whatsapp: '9123 4567',
-        igHandle: '@chan_hk',
-        paymentMethod: 'fps',
-        paymentVerified: false,
-        status: '待對數',
-        channel: 'WhatsApp',
-        date: getTodayDateStr(),
-        time: '14:35'
-      }
-    ];
+    let kdsOrders = [];
 
     // Dual QR Switcher Helper (明確註明係 WhatsApp 定轉數快)
     function switchCustQrTab(tab) {
@@ -1607,27 +1644,93 @@
       if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // 6. Barista Sequence Reset & Ordering & Natural Language Parser
-    function resetBaristaOrderSequence() {
-      activeOrderSeq = 1;
+    // Google-style Quick Sign-in & Preset helpers
+    function quickSelectBrewerGoogleEmail(email = '4lome.hk@gmail.com') {
+      const emailInput = document.getElementById('reg-email-input');
+      const pinInput = document.getElementById('reg-pin-input');
+      if (emailInput) emailInput.value = email;
+      if (pinInput && !pinInput.value) pinInput.value = '0326';
+      handleBrewerRegister();
+      showToast(`✅ 已以預設 Google 電郵 (${email}) 登入！`);
+    }
+
+    function setRegEmailPreset(email) {
+      const emailInput = document.getElementById('reg-email-input');
+      if (emailInput) {
+        emailInput.value = email;
+        emailInput.focus();
+      }
+      showToast(`📧 已填入電郵：${email}`);
+    }
+
+    // 6. Reset to Zero / Reload & Ordering & Natural Language Parser
+    function resetToZeroAndReload(source = 'customer') {
+      activeOrderSeq = 0;
       kdsOrders = [];
       try {
         localStorage.removeItem(ORDERS_STORAGE_KEY);
       } catch (e) {}
+
       fetch('/api/brew/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'resetOrders' })
       }).catch(() => {});
 
-      const id01 = formatOrderId(1);
-      const manualId = document.getElementById('manual-order-id');
-      if (manualId) manualId.value = id01;
+      const id00 = formatOrderId(0);
       const custTopId = document.getElementById('cust-top-order-id');
-      if (custTopId) custTopId.textContent = `#${id01}`;
-      parseOrderInput();
+      if (custTopId) custTopId.textContent = `#${id00}`;
+
+      const manualId = document.getElementById('manual-order-id');
+      if (manualId) manualId.value = id00;
+
+      const manualAmt = document.getElementById('manual-hkd-amount');
+      if (manualAmt) manualAmt.value = 0;
+
+      const custFpsAmt = document.getElementById('cust-fps-amount-display');
+      if (custFpsAmt) custFpsAmt.textContent = 'HK$0';
+
+      const custPrice = document.getElementById('customer-order-price');
+      if (custPrice) custPrice.textContent = '0';
+
+      const custDesc = document.getElementById('customer-order-desc');
+      if (custDesc) custDesc.textContent = '（已重設歸零，請重新點選飲品）';
+
+      const orderInput = document.getElementById('order-input');
+      if (orderInput) orderInput.value = '';
+
+      const feedback = document.getElementById('customer-action-feedback');
+      if (feedback) feedback.textContent = '🔄 系統已重設歸零 (#00 / HK$0)！';
+
+      currentParsedOrder = {
+        valid: false,
+        raw: '',
+        code: 'H02',
+        size: 'M',
+        milk: 'OM',
+        qty: 0,
+        bean: selectedBean,
+        customerName: (document.getElementById('cust-name-input')?.value || '客人').trim(),
+        whatsapp: (document.getElementById('cust-whatsapp-input')?.value || '').trim(),
+        igHandle: (document.getElementById('cust-ig-input')?.value || '').trim(),
+        customerDesc: '（已重設歸零，請點選飲品）',
+        kdsDesc: '（未點選）',
+        totalPrice: 0
+      };
+
+      updateActiveQrCodeImage();
       renderAllOrderViews();
-      showToast('☕ 咖啡師已登入，落單次序已由 #01 重新開始！');
+      fetchOrdersFromServer(true);
+
+      if (source === 'brewer') {
+        showToast('🔄 咖啡師端已完成歸零 (#00 / HK$0) 並重新載入！');
+      } else {
+        showToast('🔄 客人端已完成歸零 (#00 / HK$0) 並重新載入！');
+      }
+    }
+
+    function resetBaristaOrderSequence() {
+      resetToZeroAndReload('brewer');
     }
 
     function selectBean(beanName) {
@@ -1639,7 +1742,9 @@
           btn.className = 'bean-btn px-2.5 py-2 rounded-lg border border-stone-300 bg-white font-bold text-xs text-stone-700 hover:bg-stone-100';
         }
       });
-      parseOrderInput();
+      if (document.getElementById('order-input').value.trim()) {
+        parseOrderInput();
+      }
     }
 
     // Auto-alignment: Locks milk for black coffees, locks Dirty parameters
@@ -1762,7 +1867,38 @@
       const custWhatsapp = (document.getElementById('cust-whatsapp-input')?.value || '').trim();
       const custIg = (document.getElementById('cust-ig-input')?.value || '').trim();
 
-      const parsed = parseNaturalLanguageOrCode(raw || '中杯熱 Latte／燕麥奶／1 杯');
+      if (!raw) {
+        currentParsedOrder = {
+          valid: false,
+          raw: '',
+          code: 'H02',
+          size: 'M',
+          milk: 'OM',
+          qty: 0,
+          bean: selectedBean,
+          customerName: custName,
+          whatsapp: custWhatsapp,
+          igHandle: custIg,
+          customerDesc: '（請選擇飲品或點選上方預設）',
+          kdsDesc: '（未點選）',
+          totalPrice: 0
+        };
+        document.getElementById('customer-order-desc').textContent = currentParsedOrder.customerDesc;
+        document.getElementById('customer-contact-preview').textContent =
+          `聯絡：${custName || '未填'}${custWhatsapp ? ' · WhatsApp: ' + custWhatsapp : ''}${custIg ? ' · IG: ' + custIg : ''}`;
+        document.getElementById('customer-order-price').textContent = '0';
+        const activeOrderIdStr = formatOrderId(activeOrderSeq);
+        document.getElementById('cust-top-order-id').textContent = `#${activeOrderIdStr}`;
+        document.getElementById('cust-fps-amount-display').textContent = 'HK$0';
+        const manualAmt = document.getElementById('manual-hkd-amount');
+        if (manualAmt) manualAmt.value = 0;
+        const manualId = document.getElementById('manual-order-id');
+        if (manualId) manualId.value = activeOrderIdStr;
+        updateActiveQrCodeImage();
+        return;
+      }
+
+      const parsed = parseNaturalLanguageOrCode(raw);
       const { code, size, milk, qty } = parsed;
       const drink = MENU[code] || MENU['H02'];
 
@@ -1814,9 +1950,9 @@
       document.getElementById('customer-order-price').textContent = totalPrice;
 
       // Real-time synchronization of Top FPS Card and Barista inputs
-      const activeOrderIdStr = formatOrderId(activeOrderSeq);
+      const activeOrderIdStr = formatOrderId(activeOrderSeq > 0 ? activeOrderSeq : 1);
       document.getElementById('cust-top-order-id').textContent = `#${activeOrderIdStr}`;
-      document.getElementById('cust-fps-amount-display').textContent = `$${totalPrice}`;
+      document.getElementById('cust-fps-amount-display').textContent = totalPrice === 0 ? 'HK$0' : `HK$${totalPrice}`;
       const manualAmt = document.getElementById('manual-hkd-amount');
       if (manualAmt) manualAmt.value = totalPrice;
       const manualId = document.getElementById('manual-order-id');
@@ -1827,8 +1963,11 @@
 
     // 7. Confirm / Modify / Cancel Order (Bi-directional Sync)
     function customerConfirmOrder() {
+      if (!currentParsedOrder || !currentParsedOrder.raw || currentParsedOrder.totalPrice === 0) {
+        buildFromVisual();
+      }
       const existingNums = kdsOrders.map(o => parseInt(String(o.id).replace(/\D/g, ''), 10)).filter(n => !isNaN(n));
-      const nextNum = existingNums.length > 0 ? Math.max(...existingNums) + 1 : activeOrderSeq;
+      const nextNum = existingNums.length > 0 ? Math.max(...existingNums) + 1 : (activeOrderSeq > 0 ? activeOrderSeq : 1);
       activeOrderSeq = nextNum;
       const nextId = formatOrderId(nextNum);
 
@@ -1932,7 +2071,7 @@
 
       document.getElementById('cust-top-order-id').textContent = `#${orderId}`;
       document.getElementById('cust-fps-phone-display').textContent = fpsPhone;
-      document.getElementById('cust-fps-amount-display').textContent = `$${amount}`;
+      document.getElementById('cust-fps-amount-display').textContent = amount === 0 ? 'HK$0' : `HK$${amount}`;
 
       updateActiveQrCodeImage();
 
