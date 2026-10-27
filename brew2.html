@@ -195,11 +195,10 @@
             <button
               type="button"
               onclick="resetToZeroAndReload('customer')"
-              class="tactile-btn ml-1 py-2 px-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] flex items-center gap-1.5 cursor-pointer transition active:translate-y-0.5"
+              class="tactile-btn ml-1 px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 font-black text-xs flex items-center gap-1 shadow-sm"
               title="Reset order sequence & amount to 0 (#00 / HK$0) and reload"
             >
-              <span class="text-sm">🔄</span>
-              <span>Reset 0 / Reload</span>
+              🔄 Reset 0 / Reload
             </button>
           </div>
         </div>
@@ -554,11 +553,10 @@
               <button
                 type="button"
                 onclick="resetToZeroAndReload('customer')"
-                class="tactile-btn py-3 px-3 rounded-xl bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2.5px_2.5px_0px_#1C1917] flex items-center justify-center gap-1.5 transition active:translate-y-0.5 cursor-pointer"
+                class="tactile-btn py-2.5 px-2 rounded-xl bg-stone-200 hover:bg-stone-300 text-stone-900 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
                 title="Reset order & amount to 0 and reload"
               >
-                <span class="text-sm">🔄</span>
-                <span>Reset 0 / Reload</span>
+                <span>🔄 Reset 0 / Reload</span>
               </button>
             </div>
 
@@ -765,41 +763,12 @@
               </span>
             </div>
           </div>
-          <div class="flex items-center flex-wrap gap-2.5 pt-1">
-            <!-- Big Tactile Button: 🔄 Reset 0 / Reload -->
-            <button
-              type="button"
-              onclick="resetToZeroAndReload('brewer')"
-              class="tactile-btn py-3 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[3px_3px_0px_#1C1917] flex items-center gap-2 cursor-pointer transition active:translate-y-0.5"
-              title="Reset order sequence & amount to 0 and reload"
-            >
-              <span class="text-base">🔄</span>
-              <span>Reset 0 / Reload</span>
-            </button>
-
-            <!-- Big Tactile Button: 🟢 Open / Normal -->
-            <button
-              type="button"
-              onclick="setShopMode('normal')"
-              class="tactile-btn py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-stone-950 text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[3px_3px_0px_#1C1917] flex items-center gap-2 cursor-pointer transition active:translate-y-0.5"
-            >
-              <span class="text-base">🟢</span>
-              <span>Accepting Orders</span>
-            </button>
-
-            <!-- Big Tactile Button: 🟡 Brewing - Busy -->
-            <button
-              type="button"
-              onclick="setShopMode('busy')"
-              class="tactile-btn py-3 px-4 rounded-xl bg-amber-300 hover:bg-amber-200 text-stone-950 text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[3px_3px_0px_#1C1917] flex items-center gap-2 cursor-pointer transition active:translate-y-0.5"
-            >
-              <span class="text-base">🟡</span>
-              <span>Brewing / Please Wait</span>
-            </button>
-
-            <!-- CRM Audit & Logout -->
-            <button type="button" onclick="scrollToCrmSection()" class="tactile-btn py-3 px-3.5 rounded-xl bg-sky-700 hover:bg-sky-600 text-white text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917]">📊 CRM Audit Center</button>
-            <button type="button" onclick="logoutBrewerWorkspace()" class="tactile-btn py-3 px-3.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917]">🚪 Logout</button>
+          <div class="flex items-center flex-wrap gap-2">
+            <button type="button" onclick="scrollToCrmSection()" class="px-2.5 py-1 rounded-lg bg-sky-700 hover:bg-sky-600 text-white text-xs font-black">📊 CRM Audit Center</button>
+            <button type="button" onclick="resetToZeroAndReload('brewer')" class="px-2.5 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-amber-300 text-xs font-black border border-amber-400 shadow-sm flex items-center gap-1" title="Reset order sequence & amount to 0 and reload">🔄 Reset 0 / Reload</button>
+            <button type="button" onclick="setShopMode('normal')" class="px-2.5 py-1 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold">🟢 Open / Normal</button>
+            <button type="button" onclick="setShopMode('busy')" class="px-2.5 py-1 rounded-lg bg-amber-700 hover:bg-amber-600 text-white text-xs font-bold">🟡 Brewing - Busy</button>
+            <button type="button" onclick="logoutBrewerWorkspace()" class="px-3 py-1 rounded-lg bg-rose-700 hover:bg-rose-600 text-white text-xs font-black border border-rose-400">🚪 Logout</button>
           </div>
         </div>
 
@@ -892,72 +861,34 @@
                 </div>
               </details>
 
-              <!-- Big Tactile Verify & Unlock Panel -->
-              <div class="p-4 rounded-2xl bg-stone-100 border-2 border-stone-900 shadow-[3px_3px_0px_#1C1917] space-y-3">
+              <!-- Quick Verify Checkboxes -->
+              <div class="p-3.5 rounded-xl bg-stone-50 border-2 border-stone-900 space-y-2.5">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs sm:text-sm font-black text-stone-900">📸 Verification Checklist (FPS Screenshot)</span>
-                  <span class="text-[11px] font-mono text-stone-500 font-bold">FPS Audit Lock</span>
+                  <span class="text-xs font-black text-stone-900">📸 Verification Checklist (FPS Screenshot)</span>
+                  <button type="button" onclick="simulateCustomerPaid()" class="text-xs font-bold text-emerald-700 hover:underline">
+                    ⚡ 1-Click Verify & Brew
+                  </button>
                 </div>
-
-                <!-- Big Tactile Button: ⚡ 1-Click Verify & Brew -->
-                <button
-                  type="button"
-                  id="btn-quick-verify-all"
-                  onclick="simulateCustomerPaid()"
-                  class="tactile-btn w-full py-3.5 px-4 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-stone-950 font-black text-sm sm:text-base border-2 border-stone-900 shadow-[3.5px_3.5px_0px_#1C1917] flex items-center justify-center gap-2 cursor-pointer transition active:translate-y-0.5"
-                >
-                  <span class="text-lg">⚡</span>
-                  <span>1-Click Verify & Brew</span>
-                </button>
-
-                <!-- Big Tactile Buttons: Amount, Time, Transferred (3 Big Buttons) -->
-                <div class="grid grid-cols-3 gap-2">
-                  <!-- Big Button 1: Amount Correct -->
-                  <button
-                    type="button"
-                    id="btn-chk-amount"
-                    onclick="toggleAuditBigBtn('amount')"
-                    class="tactile-btn py-3.5 px-2 rounded-xl bg-white text-stone-800 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] flex flex-col items-center justify-center gap-1 transition active:translate-y-0.5 cursor-pointer"
-                  >
-                    <span id="icon-chk-amount" class="text-base font-mono">⬜</span>
+                <div class="grid grid-cols-3 gap-1.5 text-[11px] font-bold">
+                  <label class="flex items-center gap-1.5 p-2 rounded bg-white border border-stone-300 cursor-pointer">
+                    <input type="checkbox" id="chk-amount" onchange="checkPaymentVerification()" class="w-3.5 h-3.5 accent-emerald-600" />
                     <span>Amount</span>
-                  </button>
-
-                  <!-- Big Button 2: Time Correct -->
-                  <button
-                    type="button"
-                    id="btn-chk-time"
-                    onclick="toggleAuditBigBtn('time')"
-                    class="tactile-btn py-3.5 px-2 rounded-xl bg-white text-stone-800 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] flex flex-col items-center justify-center gap-1 transition active:translate-y-0.5 cursor-pointer"
-                  >
-                    <span id="icon-chk-time" class="text-base font-mono">⬜</span>
+                  </label>
+                  <label class="flex items-center gap-1.5 p-2 rounded bg-white border border-stone-300 cursor-pointer">
+                    <input type="checkbox" id="chk-time" onchange="checkPaymentVerification()" class="w-3.5 h-3.5 accent-emerald-600" />
                     <span>Time</span>
-                  </button>
-
-                  <!-- Big Button 3: Transferred -->
-                  <button
-                    type="button"
-                    id="btn-chk-status"
-                    onclick="toggleAuditBigBtn('status')"
-                    class="tactile-btn py-3.5 px-2 rounded-xl bg-white text-stone-800 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] flex flex-col items-center justify-center gap-1 transition active:translate-y-0.5 cursor-pointer"
-                  >
-                    <span id="icon-chk-status" class="text-base font-mono">⬜</span>
+                  </label>
+                  <label class="flex items-center gap-1.5 p-2 rounded bg-white border border-stone-300 cursor-pointer">
+                    <input type="checkbox" id="chk-status" onchange="checkPaymentVerification()" class="w-3.5 h-3.5 accent-emerald-600" />
                     <span>Transferred</span>
-                  </button>
+                  </label>
                 </div>
-
-                <!-- Hidden inputs for backward-compatibility -->
-                <input type="checkbox" id="chk-amount" class="hidden" onchange="syncAuditBtnStates()" />
-                <input type="checkbox" id="chk-time" class="hidden" onchange="syncAuditBtnStates()" />
-                <input type="checkbox" id="chk-status" class="hidden" onchange="syncAuditBtnStates()" />
-
-                <!-- Unlock Brew Button -->
                 <button
                   type="button"
                   id="unlock-brew-btn"
                   disabled
                   onclick="proceedToBrewing()"
-                  class="tactile-btn w-full py-3.5 px-4 rounded-xl bg-emerald-500 text-stone-950 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2.5px_2.5px_0px_#1C1917] transition"
+                  class="tactile-btn w-full py-2.5 rounded-xl bg-emerald-500 text-stone-950 font-black text-xs"
                 >
                   🔒 Verify to Unlock "🟠 Brewing"
                 </button>
@@ -1212,148 +1143,21 @@
             </div>
 
             <!-- Sub-Tab 4: Backend Email & Passkey Records + Login Audit -->
-            <!-- Sub-Tab 4: Backend Email & Passkey Records + Login Audit -->
             <div id="crm-panel-accounts" class="hidden space-y-4">
-              <!-- Top Key Verification & Access Gate (2 Password Tiers: imowner for Full Access / Brewer 4-digit Passkey) -->
-              <div class="p-3.5 rounded-xl bg-amber-50 border-2 border-stone-900 shadow-sm flex flex-wrap items-center justify-between gap-3 text-xs">
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="font-black text-stone-900">🔐 Passkey Access:</span>
-                  <input
-                    type="password"
-                    id="crm-access-key-input"
-                    onkeydown="if(event.key==='Enter') verifyCrmAccountAccess()"
-                    placeholder="Enter 4-digit Passkey or Master Key (e.g. imowner)"
-                    class="rounded-lg border-2 border-stone-900 px-3 py-1.5 text-xs font-mono font-bold bg-white w-64 shadow-inner"
-                  />
-                  <button
-                    type="button"
-                    onclick="verifyCrmAccountAccess()"
-                    class="tactile-btn py-1.5 px-3.5 rounded-lg bg-stone-900 text-amber-300 font-black text-xs cursor-pointer"
-                  >
-                    🔑 Unlock & Enter
-                  </button>
-                  <button
-                    type="button"
-                    onclick="lockCrmAccountAccess()"
-                    class="tactile-btn py-1.5 px-3 rounded-lg bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold text-xs cursor-pointer"
-                  >
-                    🔄 Revert to Barista
-                  </button>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span id="crm-access-badge" class="px-2.5 py-1 rounded-lg bg-stone-900 text-amber-300 font-mono font-black text-xs">
-                    Unverified
-                  </span>
-                  <button
-                    type="button"
-                    onclick="fetchAuthAuditFromServer()"
-                    class="tactile-btn px-2.5 py-1 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-900 font-bold text-xs border border-stone-400 cursor-pointer"
-                  >
-                    🔄 Refresh
-                  </button>
-                </div>
-              </div>
-
-              <!-- Scope Status Banner -->
-              <div id="crm-access-banner" class="p-3 rounded-xl border-2 text-xs font-bold space-y-1"></div>
-
-              <!-- Audit Date Filter & CSV Export Toolbar -->
-              <div class="p-3.5 rounded-xl bg-white border-2 border-stone-900 flex flex-wrap items-center justify-between gap-3 text-xs">
-                <div class="flex items-center gap-2 flex-wrap">
-                  <label for="crm-accounts-audit-date" class="font-black text-stone-900">📅 Audit Date:</label>
-                  <input
-                    type="date"
-                    id="crm-accounts-audit-date"
-                    onchange="applyAccountDateFilter()"
-                    class="border-2 border-stone-900 rounded-lg px-2.5 py-1 font-mono text-xs font-bold bg-white"
-                  />
-                  <button
-                    type="button"
-                    onclick="applyAccountDateFilter()"
-                    class="tactile-btn px-2.5 py-1 rounded-lg bg-stone-900 text-amber-300 font-black text-xs cursor-pointer"
-                  >
-                    Filter Date
-                  </button>
-                  <button
-                    type="button"
-                    onclick="resetAccountDateFilter()"
-                    class="tactile-btn px-2 py-1 rounded-lg bg-stone-100 text-stone-800 font-bold text-xs border border-stone-400 cursor-pointer"
-                  >
-                    All Days
-                  </button>
-                  <span id="crm-accounts-filter-label" class="text-stone-500 font-mono text-[11px] ml-1">Showing all orders</span>
+              <div class="p-3.5 rounded-xl bg-stone-100 border border-stone-300 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div>
+                  <span class="font-black text-stone-900">🔐 Backend Email & Passkey Registry</span>
+                  <span class="text-stone-600 ml-2">(Tracks all registered emails, 4-digit Passkeys, login frequencies, and last activity)</span>
                 </div>
                 <button
                   type="button"
-                  id="btn-export-crm-accounts-csv"
-                  onclick="exportCrmAuditCsv()"
-                  class="tactile-btn py-2 px-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs border-2 border-stone-900 shadow-[2.5px_2.5px_0px_#1C1917] flex items-center gap-1.5 cursor-pointer"
+                  onclick="fetchAuthAuditFromServer()"
+                  class="px-2.5 py-1 rounded bg-stone-900 text-white font-bold text-xs"
                 >
-                  <span>📥 Export CSV Audit Report</span>
+                  🔄 Refresh Records
                 </button>
               </div>
 
-              <!-- Master Management Panel: Manual Add Account (imowner Mode Only) -->
-              <div id="crm-owner-add-panel" class="hidden p-3.5 rounded-xl bg-amber-50 border-2 border-stone-900 space-y-2 text-xs">
-                <div class="font-black text-stone-900 flex items-center gap-2">
-                  <span>➕ Manually Add Brewer Account</span>
-                  <span class="text-stone-600 font-normal">(Add new Barista email and 4-digit Passkey)</span>
-                </div>
-                <div class="flex flex-wrap items-center gap-2">
-                  <input
-                    type="email"
-                    id="manual-add-email"
-                    placeholder="Barista email (e.g. barista.zita@brew.hk)"
-                    class="border-2 border-stone-900 rounded-lg px-3 py-1.5 text-xs font-mono font-bold bg-white w-64"
-                  />
-                  <input
-                    type="text"
-                    id="manual-add-pin"
-                    maxlength="4"
-                    placeholder="4-digit Passkey (e.g. 8828)"
-                    class="border-2 border-stone-900 rounded-lg px-3 py-1.5 text-xs font-mono font-black bg-white w-40 text-center"
-                  />
-                  <button
-                    type="button"
-                    onclick="submitManualAddAccount()"
-                    class="tactile-btn py-1.5 px-3.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] cursor-pointer"
-                  >
-                    ➕ Add Account
-                  </button>
-                </div>
-              </div>
-
-              <!-- Brewer Self-Service Panel: Update Own Profile (Brewer Mode Only) -->
-              <div id="crm-brewer-self-edit-panel" class="hidden p-3.5 rounded-xl bg-stone-100 border-2 border-stone-900 space-y-2.5 text-xs">
-                <div class="font-black text-stone-900 flex items-center justify-between">
-                  <span>✏️ Update Personal Credentials (Email & 4-Digit Passkey)</span>
-                  <span class="text-[11px] text-stone-600 font-mono" id="self-edit-status-hint">Modifying own account only</span>
-                </div>
-                <div class="flex flex-wrap items-center gap-2">
-                  <input
-                    type="email"
-                    id="self-edit-email"
-                    placeholder="New email address"
-                    class="border-2 border-stone-900 rounded-lg px-3 py-1.5 text-xs font-mono font-bold bg-white w-64"
-                  />
-                  <input
-                    type="text"
-                    id="self-edit-pin"
-                    maxlength="4"
-                    placeholder="New 4-digit Passkey"
-                    class="border-2 border-stone-900 rounded-lg px-3 py-1.5 text-xs font-mono font-black bg-white w-36 text-center"
-                  />
-                  <button
-                    type="button"
-                    onclick="submitSelfAccountUpdate()"
-                    class="tactile-btn py-1.5 px-3.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] cursor-pointer"
-                  >
-                    💾 Save Updates
-                  </button>
-                </div>
-              </div>
-
-              <!-- Registry Table -->
               <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-xs">
                   <thead>
@@ -1364,19 +1168,14 @@
                       <th class="p-2.5">Registered At</th>
                       <th class="p-2.5">Last Login</th>
                       <th class="p-2.5">Last Logout</th>
-                      <th class="p-2.5" id="crm-accounts-action-th">Action</th>
                     </tr>
                   </thead>
                   <tbody id="crm-accounts-tbody" class="divide-y divide-stone-200 font-mono"></tbody>
                 </table>
               </div>
 
-              <!-- Activity Logs Table -->
               <div class="overflow-x-auto pt-2">
-                <div class="text-xs font-black text-stone-700 mb-1.5 flex items-center justify-between">
-                  <span>🕒 Recent Login / Logout / Registration Logs</span>
-                  <span id="crm-auth-logs-scope-label" class="text-[11px] font-mono text-stone-500"></span>
-                </div>
+                <div class="text-xs font-black text-stone-700 mb-1.5">🕒 Recent Login / Logout / Registration Logs</div>
                 <table class="w-full text-left border-collapse text-xs">
                   <thead>
                     <tr class="bg-stone-50 border-b border-stone-300 font-bold text-stone-600">
@@ -2344,62 +2143,32 @@
       window.open(waUrl, '_blank');
     }
 
-    function toggleAuditBigBtn(type) {
-      const chk = document.getElementById(`chk-${type}`);
-      if (!chk) return;
-      chk.checked = !chk.checked;
-      syncAuditBtnStates();
-      checkPaymentVerification();
-    }
-
-    function syncAuditBtnStates() {
-      ['amount', 'time', 'status'].forEach(type => {
-        const chk = document.getElementById(`chk-${type}`);
-        const btn = document.getElementById(`btn-chk-${type}`);
-        const icon = document.getElementById(`icon-chk-${type}`);
-        if (!chk || !btn || !icon) return;
-        if (chk.checked) {
-          btn.className = "tactile-btn py-3.5 px-2 rounded-xl bg-emerald-400 text-stone-950 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] flex flex-col items-center justify-center gap-1 transition active:translate-y-0.5 cursor-pointer";
-          icon.textContent = "✅";
-        } else {
-          btn.className = "tactile-btn py-3.5 px-2 rounded-xl bg-white text-stone-800 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] flex flex-col items-center justify-center gap-1 transition active:translate-y-0.5 cursor-pointer";
-          icon.textContent = "⬜";
-        }
-      });
-    }
-
     function checkPaymentVerification() {
-      const c1 = document.getElementById('chk-amount')?.checked;
-      const c2 = document.getElementById('chk-time')?.checked;
-      const c3 = document.getElementById('chk-status')?.checked;
+      const c1 = document.getElementById('chk-amount').checked;
+      const c2 = document.getElementById('chk-time').checked;
+      const c3 = document.getElementById('chk-status').checked;
       const btn = document.getElementById('unlock-brew-btn');
-      const orderId = document.getElementById('manual-order-id')?.value || formatOrderId(activeOrderSeq);
+      const orderId = document.getElementById('manual-order-id').value || formatOrderId(activeOrderSeq);
 
-      if (btn) {
-        if (c1 && c2 && c3) {
-          btn.disabled = false;
-          btn.textContent = `✅ Verified! Unlock #${orderId} to "🟠 Brewing"`;
-        } else {
-          btn.disabled = true;
-          btn.textContent = `🔒 Verify to Unlock "🟠 Brewing"`;
-        }
+      if (c1 && c2 && c3) {
+        btn.disabled = false;
+        btn.textContent = `✅ Verified! Unlock #${orderId} to "🟠 Brewing"`;
+      } else {
+        btn.disabled = true;
+        btn.textContent = `🔒 Verify to Unlock "🟠 Brewing"`;
       }
     }
 
     function simulateCustomerPaid() {
-      const c1 = document.getElementById('chk-amount');
-      const c2 = document.getElementById('chk-time');
-      const c3 = document.getElementById('chk-status');
-      if (c1) c1.checked = true;
-      if (c2) c2.checked = true;
-      if (c3) c3.checked = true;
-      syncAuditBtnStates();
+      document.getElementById('chk-amount').checked = true;
+      document.getElementById('chk-time').checked = true;
+      document.getElementById('chk-status').checked = true;
       checkPaymentVerification();
       proceedToBrewing();
     }
 
     function proceedToBrewing() {
-      const orderId = document.getElementById('manual-order-id')?.value || formatOrderId(activeOrderSeq);
+      const orderId = document.getElementById('manual-order-id').value || formatOrderId(activeOrderSeq);
       const target = kdsOrders.find(o => String(o.id) === String(orderId)) || kdsOrders[0];
       if (target) {
         target.paymentVerified = true;
@@ -2409,13 +2178,9 @@
         renderAllOrderViews();
         showToast(`🟠 Order #${target.id} verified, brewing now!`);
       }
-      const c1 = document.getElementById('chk-amount');
-      const c2 = document.getElementById('chk-time');
-      const c3 = document.getElementById('chk-status');
-      if (c1) c1.checked = false;
-      if (c2) c2.checked = false;
-      if (c3) c3.checked = false;
-      syncAuditBtnStates();
+      document.getElementById('chk-amount').checked = false;
+      document.getElementById('chk-time').checked = false;
+      document.getElementById('chk-status').checked = false;
       checkPaymentVerification();
     }
 
@@ -2660,10 +2425,6 @@
         }
       });
       renderCrmAuditDashboard();
-      if (tab === 'accounts') {
-        initDefaultCrmAccess();
-        renderAuthAccountsTable();
-      }
     }
 
     function pct(part, total) {
@@ -2901,518 +2662,54 @@
         }).join('');
       }
 
-      // Table 4: Backend Email & Passkey Records & 2-Tier Authentication
-    let crmAccessMode = null; // 'owner' | 'brewer' | null
-    let crmAccessEmail = null; // matching email when in 'brewer' mode
-    let crmAccountsAuditDate = null; // YYYY-MM-DD filter for account audit & CSV
-
-    function initDefaultCrmAccess() {
-      if (crmAccessMode === null) {
-        const saved = getSavedBrewerAuth();
-        if (saved && saved.email) {
-          crmAccessMode = 'brewer';
-          crmAccessEmail = saved.email.trim().toLowerCase();
-        } else if (brewerAccountsRegistry && brewerAccountsRegistry.length > 0) {
-          crmAccessMode = 'brewer';
-          crmAccessEmail = brewerAccountsRegistry[0].email.trim().toLowerCase();
-        } else {
-          crmAccessMode = 'brewer';
-          crmAccessEmail = '4lome.hk@gmail.com';
-        }
-      }
-    }
-
-    function verifyCrmAccountAccess(keyOverride) {
-      const input = document.getElementById('crm-access-key-input');
-      const key = String(keyOverride !== undefined ? keyOverride : (input ? input.value : '')).trim();
-
-      if (!key) {
-        showToast('⚠️ Please enter 4-digit Passkey or Master Key');
-        return;
-      }
-
-      // 1. Owner Key "imowner" (No display of "admin", reveals all data)
-      if (key === 'imowner') {
-        crmAccessMode = 'owner';
-        crmAccessEmail = null;
-        if (input) input.value = '';
-        fetchAuthAuditFromServer();
-        renderAuthAccountsTable();
-        showToast('👑 Master Access Verified: Showing all accounts & controls');
-        return;
-      }
-
-      // 2. Brewer 4-digit Passkey
-      const localMatch = brewerAccountsRegistry.find(a => String(a.passkey || a.pin).trim() === key);
-      if (localMatch) {
-        crmAccessMode = 'brewer';
-        crmAccessEmail = localMatch.email.trim().toLowerCase();
-        if (input) input.value = '';
-        renderAuthAccountsTable();
-        showToast(`☕ Barista Brewer: ${localMatch.email}`);
-        return;
-      }
-
-      // Check with backend API
-      fetch(`/api/brew/accounts?key=${encodeURIComponent(key)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data && data.success) {
-            crmAccessMode = data.mode;
-            if (data.mode === 'owner') {
-              crmAccessEmail = null;
-              if (Array.isArray(data.accounts)) brewerAccountsRegistry = data.accounts;
-              if (Array.isArray(data.authLogs)) brewerAuthEventLogs = data.authLogs;
-              showToast('👑 Master Access Verified: Showing all accounts & controls');
-            } else if (data.mode === 'brewer') {
-              crmAccessEmail = (data.email || (data.accounts && data.accounts[0]?.email) || '').trim().toLowerCase();
-              if (data.accounts) {
-                data.accounts.forEach(acc => {
-                  const idx = brewerAccountsRegistry.findIndex(a => a.email === acc.email);
-                  if (idx >= 0) brewerAccountsRegistry[idx] = acc;
-                  else brewerAccountsRegistry.push(acc);
-                });
-              }
-              showToast(`☕ Barista Brewer: ${crmAccessEmail}`);
-            }
-            if (input) input.value = '';
-            renderAuthAccountsTable();
-          } else {
-            showToast('⚠️ Invalid Passkey or Password');
-          }
-        })
-        .catch(() => {
-          showToast('⚠️ Verification failed, please try again');
-        });
-    }
-
-    function lockCrmAccountAccess() {
-      const saved = getSavedBrewerAuth();
-      crmAccessMode = 'brewer';
-      crmAccessEmail = (saved && saved.email) ? saved.email.trim().toLowerCase() : (brewerAccountsRegistry[0]?.email || '4lome.hk@gmail.com');
-      const input = document.getElementById('crm-access-key-input');
-      if (input) input.value = '';
-      showToast('☕ Reverted to Barista Brewer personal profile');
       renderAuthAccountsTable();
     }
 
-    function applyAccountDateFilter() {
-      const picker = document.getElementById('crm-accounts-audit-date');
-      const val = picker ? picker.value : '';
-      if (!val) {
-        showToast('⚠️ Please select an audit date first');
-        return;
-      }
-      crmAccountsAuditDate = val;
-      const lbl = document.getElementById('crm-accounts-filter-label');
-      if (lbl) lbl.textContent = `Filtered: ${val}`;
-
-      // Synchronize with general CRM date filter
-      const genSelect = document.getElementById('crm-date-filter');
-      if (genSelect) {
-        genSelect.value = val;
-        renderCrmAuditDashboard();
-      }
-      showToast(`📅 Filtered Audit Date: ${val}`);
-    }
-
-    function resetAccountDateFilter() {
-      crmAccountsAuditDate = null;
-      const picker = document.getElementById('crm-accounts-audit-date');
-      if (picker) picker.value = '';
-      const lbl = document.getElementById('crm-accounts-filter-label');
-      if (lbl) lbl.textContent = 'Showing all orders';
-
-      const genSelect = document.getElementById('crm-date-filter');
-      if (genSelect) {
-        genSelect.value = 'ALL';
-        renderCrmAuditDashboard();
-      }
-      showToast('🔄 Reset to all dates');
-    }
-
     function renderAuthAccountsTable() {
-      initDefaultCrmAccess();
-
       const accTbody = document.getElementById('crm-accounts-tbody');
       const logsTbody = document.getElementById('crm-auth-logs-tbody');
-      const badge = document.getElementById('crm-access-badge');
-      const banner = document.getElementById('crm-access-banner');
-      const ownerAddPanel = document.getElementById('crm-owner-add-panel');
-      const brewerSelfPanel = document.getElementById('crm-brewer-self-edit-panel');
-      const actionTh = document.getElementById('crm-accounts-action-th');
-      const logsScope = document.getElementById('crm-auth-logs-scope-label');
-
-      // 1. Badge & Banner states (Zero mention of "admin")
-      if (crmAccessMode === 'owner') {
-        if (badge) {
-          badge.className = 'px-2.5 py-1 rounded-lg bg-amber-400 text-stone-950 font-mono font-black text-xs border border-stone-900';
-          badge.textContent = '👑 Master Access (All)';
-        }
-        if (banner) {
-          banner.className = 'p-3 rounded-xl bg-amber-100 border-2 border-stone-900 text-xs font-bold text-stone-900 space-y-1';
-          banner.innerHTML = `
-            <div>👑 <strong>Master Access Active:</strong> Displaying all registered emails and 4-digit Passkeys. You can modify any account, manually add brewers, remove accounts, filter audit dates, and export full CSV audit reports.</div>
-          `;
-        }
-        if (ownerAddPanel) ownerAddPanel.classList.remove('hidden');
-        if (brewerSelfPanel) brewerSelfPanel.classList.add('hidden');
-        if (actionTh) actionTh.classList.remove('hidden');
-        if (logsScope) logsScope.textContent = 'All account activity logs';
-      } else {
-        // Default to brewer view - always display brewer!
-        crmAccessMode = 'brewer';
-        if (badge) {
-          badge.className = 'px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-mono font-black text-xs border border-emerald-900';
-          badge.textContent = `☕ Barista Brewer`;
-        }
-        if (banner) {
-          banner.className = 'p-3 rounded-xl bg-emerald-50 border-2 border-emerald-800 text-xs font-bold text-emerald-950 space-y-1';
-          banner.innerHTML = `
-            <div>☕ <strong>Barista Brewer Records:</strong> Displaying account details for <strong class="underline font-mono">${crmAccessEmail || 'Your Account'}</strong>. You can modify your email and 4-digit Passkey below, select an audit date, and export personal CSV reports. To unlock all accounts, enter the Master Key above.</div>
-          `;
-        }
-        if (ownerAddPanel) ownerAddPanel.classList.add('hidden');
-        if (brewerSelfPanel) {
-          brewerSelfPanel.classList.remove('hidden');
-          const currAcc = brewerAccountsRegistry.find(a => a.email === crmAccessEmail);
-          const emailInput = document.getElementById('self-edit-email');
-          const pinInput = document.getElementById('self-edit-pin');
-          const hint = document.getElementById('self-edit-status-hint');
-          const saved = getSavedBrewerAuth();
-          const dispEmail = currAcc?.email || crmAccessEmail || saved?.email || '4lome.hk@gmail.com';
-          const dispPin = currAcc?.passkey || currAcc?.pin || saved?.pin || '0326';
-          if (emailInput && !emailInput.value) emailInput.value = dispEmail;
-          if (pinInput && !pinInput.value) pinInput.value = dispPin;
-          if (hint) hint.textContent = `Current: ${dispEmail} (Passkey: ${dispPin})`;
-        }
-        if (actionTh) actionTh.classList.remove('hidden');
-        if (logsScope) logsScope.textContent = `Activity for ${crmAccessEmail}`;
-      }
-
-      // 2. Filter accounts by access level
-      let visibleAccounts = [];
-      if (crmAccessMode === 'owner') {
-        visibleAccounts = brewerAccountsRegistry;
-      } else {
-        visibleAccounts = brewerAccountsRegistry.filter(a => a.email === crmAccessEmail);
-        if (visibleAccounts.length === 0) {
-          const saved = getSavedBrewerAuth();
-          visibleAccounts = [{
-            email: crmAccessEmail || saved?.email || '4lome.hk@gmail.com',
-            passkey: saved?.pin || '0326',
-            pin: saved?.pin || '0326',
-            loginCount: 1,
-            registeredAt: getTodayDateStr() + ' 09:00:00',
-            lastLoginAt: getTodayDateStr() + ' 09:00:00',
-            lastLogoutAt: null
-          }];
-        }
-      }
-
-      // 3. Render accounts table
       if (accTbody) {
-        accTbody.innerHTML = visibleAccounts.map(acc => {
-          const passkey = acc.passkey || acc.pin || '----';
-          const isOwner = crmAccessMode === 'owner';
-          const actionButtons = isOwner ? `
-            <div class="flex items-center gap-1">
-              <button
-                type="button"
-                onclick="ownerEditAccount('${acc.email}', '${passkey}')"
-                class="tactile-btn px-2 py-1 rounded bg-stone-100 hover:bg-stone-200 text-stone-900 font-black text-[11px] border border-stone-400 cursor-pointer"
-                title="Modify Email & Passkey"
-              >
-                ✏️ Edit
-              </button>
-              <button
-                type="button"
-                onclick="ownerDeleteAccount('${acc.email}')"
-                class="tactile-btn px-2 py-1 rounded bg-rose-100 hover:bg-rose-200 text-rose-900 font-black text-[11px] border border-rose-400 cursor-pointer"
-                title="Remove Account"
-              >
-                🗑️ Remove
-              </button>
-            </div>
-          ` : `
-            <button
-              type="button"
-              onclick="populateBrewerSelfEdit('${acc.email}', '${passkey}')"
-              class="tactile-btn py-1 px-2.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs border border-stone-900 cursor-pointer"
-            >
-              ✏️ Edit Profile
-            </button>
-          `;
-
-          return `
-            <tr class="hover:bg-stone-50">
-              <td class="p-2.5 font-black text-stone-900">${acc.email}</td>
-              <td class="p-2.5">
-                <span class="px-2 py-0.5 rounded bg-amber-100 border border-stone-800 font-black text-stone-900">
-                  ${passkey}
-                </span>
-              </td>
-              <td class="p-2.5 font-bold text-emerald-800">${acc.loginCount || 1} logins</td>
-              <td class="p-2.5 text-stone-600">${String(acc.registeredAt || '').replace('T', ' ').slice(0, 19)}</td>
-              <td class="p-2.5 text-stone-900 font-bold">${String(acc.lastLoginAt || '').replace('T', ' ').slice(0, 19)}</td>
-              <td class="p-2.5 text-stone-500">${acc.lastLogoutAt ? String(acc.lastLogoutAt).replace('T', ' ').slice(0, 19) : 'Active Session'}</td>
-              <td class="p-2.5">${actionButtons}</td>
-            </tr>
-          `;
-        }).join('');
-      }
-
-      // 4. Render activity logs
-      if (logsTbody) {
-        let visibleLogs = brewerAuthEventLogs;
-        if (crmAccessMode === 'brewer') {
-          visibleLogs = brewerAuthEventLogs.filter(l => l.email === crmAccessEmail);
-        }
-        if (visibleLogs.length === 0) {
-          visibleLogs = [{
-            timestamp: getTodayDateStr() + ' 09:00:00',
-            action: 'Login',
-            email: crmAccessEmail || '4lome.hk@gmail.com',
-            passkey: '0326',
-            note: 'Barista active session maintained'
-          }];
-        }
-        logsTbody.innerHTML = visibleLogs.slice(0, 25).map(l => `
+        accTbody.innerHTML = brewerAccountsRegistry.map(acc => `
           <tr class="hover:bg-stone-50">
-            <td class="p-2 text-stone-600">${String(l.timestamp || l.date + ' ' + l.time || '').replace('T', ' ').slice(0, 19)}</td>
+            <td class="p-2.5 font-black text-stone-900">${acc.email}</td>
+            <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-amber-100 border border-stone-800 font-black text-stone-900">${acc.passkey || acc.pin || '----'}</span></td>
+            <td class="p-2.5 font-bold text-emerald-800">${acc.loginCount || 1} logins</td>
+            <td class="p-2.5 text-stone-600">${String(acc.registeredAt || '').replace('T', ' ').slice(0, 19)}</td>
+            <td class="p-2.5 text-stone-900 font-bold">${String(acc.lastLoginAt || '').replace('T', ' ').slice(0, 19)}</td>
+            <td class="p-2.5 text-stone-500">${acc.lastLogoutAt ? String(acc.lastLogoutAt).replace('T', ' ').slice(0, 19) : 'Active Session'}</td>
+          </tr>
+        `).join('');
+      }
+      if (logsTbody) {
+        logsTbody.innerHTML = brewerAuthEventLogs.slice(0, 30).map(l => `
+          <tr class="hover:bg-stone-50">
+            <td class="p-2 text-stone-600">${String(l.timestamp || '').replace('T', ' ').slice(0, 19)}</td>
             <td class="p-2 font-bold text-stone-900">${l.action}</td>
-            <td class="p-2 font-mono">${l.email}</td>
-            <td class="p-2 font-black text-amber-900">${l.passkey || l.pin || '----'}</td>
+            <td class="p-2">${l.email}</td>
+            <td class="p-2 font-black text-amber-900">${l.passkey}</td>
             <td class="p-2 font-sans text-stone-600">${l.note || ''}</td>
           </tr>
         `).join('');
       }
     }
 
-    // Manual Add Account (imowner mode)
-    async function submitManualAddAccount() {
-      const emailInput = document.getElementById('manual-add-email');
-      const pinInput = document.getElementById('manual-add-pin');
-      const email = emailInput?.value.trim().toLowerCase();
-      const pin = pinInput?.value.trim();
-
-      if (!email || !pin || !/^\d{4}$/.test(pin)) {
-        showToast('⚠️ Please enter a valid email and 4-digit Passkey');
-        return;
-      }
-
-      try {
-        const res = await fetch('/api/brew/accounts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ key: 'imowner', action: 'add', email, pin })
-        });
-        const data = await res.json();
-        if (data && data.success) {
-          if (Array.isArray(data.accounts)) brewerAccountsRegistry = data.accounts;
-          if (Array.isArray(data.authLogs)) brewerAuthEventLogs = data.authLogs;
-          if (emailInput) emailInput.value = '';
-          if (pinInput) pinInput.value = '';
-          renderAuthAccountsTable();
-          showToast(`✅ Successfully added Barista account: ${email}`);
-        } else {
-          showToast(`⚠️ ${data?.error || 'Failed to add account'}`);
-        }
-      } catch (e) {
-        if (emailInput) emailInput.value = '';
-        if (pinInput) pinInput.value = '';
-        renderAuthAccountsTable();
-        showToast(`✅ Added account locally: ${email}`);
-      }
-    }
-
-    // Update Own Account (Brewer mode)
-    async function submitSelfAccountUpdate() {
-      const emailInput = document.getElementById('self-edit-email');
-      const pinInput = document.getElementById('self-edit-pin');
-      const newEmail = emailInput?.value.trim().toLowerCase();
-      const newPin = pinInput?.value.trim();
-
-      if (!newEmail || !newPin || !/^\d{4}$/.test(newPin)) {
-        showToast('⚠️ Please enter a valid email and 4-digit Passkey');
-        return;
-      }
-
-      const saved = getSavedBrewerAuth();
-      const currentAcc = brewerAccountsRegistry.find(a => a.email === crmAccessEmail);
-      const currentPin = currentAcc ? (currentAcc.passkey || currentAcc.pin) : (saved?.pin || newPin);
-      const targetEmail = crmAccessEmail || saved?.email || '4lome.hk@gmail.com';
-
-      try {
-        const res = await fetch('/api/brew/accounts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            key: currentPin,
-            action: 'update',
-            targetEmail,
-            newEmail,
-            newPin
-          })
-        });
-        const data = await res.json();
-        if (data && data.success) {
-          saveBrewerAuth(newEmail, newPin);
-          crmAccessEmail = newEmail;
-          if (Array.isArray(data.accounts)) brewerAccountsRegistry = data.accounts;
-          renderAuthAccountsTable();
-          const activeEmailEl = document.getElementById('active-brewer-email');
-          if (activeEmailEl) activeEmailEl.textContent = newEmail;
-          const activePinEl = document.getElementById('active-brewer-pin-badge');
-          if (activePinEl) activePinEl.textContent = newPin;
-          showToast('✅ Successfully updated Barista Email & Passkey!');
-        } else {
-          showToast(`⚠️ ${data?.error || 'Update failed'}`);
-        }
-      } catch (e) {
-        saveBrewerAuth(newEmail, newPin);
-        if (currentAcc) {
-          currentAcc.email = newEmail;
-          currentAcc.pin = newPin;
-          currentAcc.passkey = newPin;
-        }
-        crmAccessEmail = newEmail;
-        renderAuthAccountsTable();
-        const activeEmailEl = document.getElementById('active-brewer-email');
-        if (activeEmailEl) activeEmailEl.textContent = newEmail;
-        const activePinEl = document.getElementById('active-brewer-pin-badge');
-        if (activePinEl) activePinEl.textContent = newPin;
-        showToast('✅ Saved personal updates locally!');
-      }
-    }
-
-    function populateBrewerSelfEdit(email, passkey) {
-      const targetEmail = email || crmAccessEmail;
-      const currAcc = brewerAccountsRegistry.find(a => a.email === targetEmail);
-      const emailInput = document.getElementById('self-edit-email');
-      const pinInput = document.getElementById('self-edit-pin');
-      const targetPin = passkey || (currAcc ? (currAcc.passkey || currAcc.pin) : '0326');
-      if (emailInput) {
-        emailInput.value = targetEmail || '';
-        emailInput.focus();
-      }
-      if (pinInput) {
-        pinInput.value = targetPin || '';
-      }
-      const selfPanel = document.getElementById('crm-brewer-self-edit-panel');
-      if (selfPanel) {
-        selfPanel.classList.remove('hidden');
-        selfPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-      showToast('✏️ Edit in the fields above and click Save Updates');
-    }
-
-    // Owner Edit Any Account
-    async function ownerEditAccount(targetEmail, currentPin) {
-      const newEmail = prompt(`Modify Account ${targetEmail}\nEnter new Email (leave empty to keep unchanged):`, targetEmail);
-      if (newEmail === null) return;
-      const newPin = prompt(`Enter new 4-digit Passkey (leave empty to keep unchanged: ${currentPin}):`, currentPin);
-      if (newPin === null) return;
-
-      const finalEmail = (newEmail.trim() || targetEmail).toLowerCase();
-      const finalPin = newPin.trim() || currentPin;
-
-      if (!/^\d{4}$/.test(finalPin)) {
-        showToast('⚠️ Passkey must be 4 digits');
-        return;
-      }
-
-      try {
-        const res = await fetch('/api/brew/accounts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            key: 'imowner',
-            action: 'update',
-            targetEmail,
-            newEmail: finalEmail,
-            newPin: finalPin
-          })
-        });
-        const data = await res.json();
-        if (data && data.success) {
-          if (Array.isArray(data.accounts)) brewerAccountsRegistry = data.accounts;
-          renderAuthAccountsTable();
-          showToast(`✅ Updated account: ${finalEmail}`);
-        } else {
-          showToast(`⚠️ ${data?.error || 'Update failed'}`);
-        }
-      } catch (e) {
-        const acc = brewerAccountsRegistry.find(a => a.email === targetEmail);
-        if (acc) {
-          acc.email = finalEmail;
-          acc.pin = finalPin;
-          acc.passkey = finalPin;
-        }
-        renderAuthAccountsTable();
-        showToast(`✅ Modified account locally: ${finalEmail}`);
-      }
-    }
-
-    // Owner Delete Account
-    async function ownerDeleteAccount(targetEmail) {
-      if (!confirm(`Are you sure you want to remove account "${targetEmail}"? This cannot be undone.`)) return;
-
-      try {
-        const res = await fetch('/api/brew/accounts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ key: 'imowner', action: 'delete', targetEmail })
-        });
-        const data = await res.json();
-        if (data && data.success) {
-          if (Array.isArray(data.accounts)) brewerAccountsRegistry = data.accounts;
-          renderAuthAccountsTable();
-          showToast(`🗑️ Removed account: ${targetEmail}`);
-        } else {
-          showToast(`⚠️ ${data?.error || 'Deletion failed'}`);
-        }
-      } catch (e) {
-        const idx = brewerAccountsRegistry.findIndex(a => a.email === targetEmail);
-        if (idx >= 0) brewerAccountsRegistry.splice(idx, 1);
-        renderAuthAccountsTable();
-        showToast(`🗑️ Removed account locally: ${targetEmail}`);
-      }
-    }
-
     async function fetchAuthAuditFromServer() {
       try {
-        const keyParam = crmAccessMode === 'owner' ? '?key=imowner' : (crmAccessEmail ? `?email=${encodeURIComponent(crmAccessEmail)}` : '');
-        const res = await fetch('/api/brew/accounts' + keyParam);
+        const res = await fetch('/api/brew/auth');
         const data = await res.json();
-        if (data && data.success) {
-          if (Array.isArray(data.accounts)) brewerAccountsRegistry = data.accounts;
-          if (Array.isArray(data.authLogs)) brewerAuthEventLogs = data.authLogs;
-          renderAuthAccountsTable();
+        if (data && Array.isArray(data.accounts) && data.accounts.length > 0) {
+          brewerAccountsRegistry = data.accounts;
         }
-      } catch (e) {
+        if (data && Array.isArray(data.authLogs) && data.authLogs.length > 0) {
+          brewerAuthEventLogs = data.authLogs;
+        }
         renderAuthAccountsTable();
-      }
+      } catch (e) {}
     }
 
-    // Export CSV Audit Report (Supports Audit Date filter and 2-Tier Access scoping)
-    function exportCrmAuditCsv(forcedMode) {
-      initDefaultCrmAccess();
-      const mode = forcedMode || crmAccessMode || 'brewer';
-      const targetDate = crmAccountsAuditDate || document.getElementById('crm-date-filter')?.value || 'ALL';
-
-      let targetOrders = kdsOrders;
-
-      if (mode === 'brewer' && crmAccessEmail) {
-        targetOrders = targetOrders.filter(o => !o.brewerEmail || o.brewerEmail.toLowerCase() === crmAccessEmail.toLowerCase());
-      }
-
-      if (targetDate && targetDate !== 'ALL') {
-        targetOrders = targetOrders.filter(o => (o.date || getTodayDateStr()) === targetDate);
-      }
-
-      const headers = ['Order ID', 'Date', 'Time', 'Customer', 'WhatsApp', 'IG', 'Beans', 'Items', 'Amount(HKD)', 'Status', 'Verified', 'Brewer Email'];
-      const rows = targetOrders.map(o => [
+    function exportCrmAuditCsv() {
+      const headers = ['Order ID', 'Date', 'Time', 'Customer', 'WhatsApp', 'IG', 'Beans', 'Items', 'Amount(HKD)', 'Status', 'Verified'];
+      const rows = kdsOrders.map(o => [
         `#${o.id}`,
         o.date || getTodayDateStr(),
         o.time || '',
@@ -3423,23 +2720,19 @@
         `"${(o.kdsDesc || '').replace(/"/g, '""')}"`,
         o.amount || 0,
         o.status || '',
-        o.paymentVerified ? 'YES' : 'NO',
-        `"${(o.brewerEmail || crmAccessEmail || 'brewer@brew.hk').replace(/"/g, '""')}"`
+        o.paymentVerified ? 'YES' : 'NO'
       ]);
-
       const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      const dateTag = targetDate !== 'ALL' ? targetDate : getTodayDateStr();
-      const prefix = mode === 'brewer' ? `BREW_Audit_${crmAccessEmail || 'personal'}` : `BREW_Audit_Full`;
-      a.download = `${prefix}_${dateTag}.csv`;
+      a.download = `BREW_CRM_Audit_${getTodayDateStr()}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast(`📥 Exported CSV Report (${rows.length} orders · ${dateTag})`);
+      showToast('📥 Exported BREW CRM Audit CSV');
     }
 
     // 12. Real-time Multi-Tab & Server Sync
@@ -3576,8 +2869,6 @@
       parseOrderInput();
       updatePaymentTemplates();
       renderAllOrderViews();
-      initDefaultCrmAccess();
-      renderAuthAccountsTable();
       fetchOrdersFromServer(true);
       fetchAuthAuditFromServer();
       setInterval(() => fetchOrdersFromServer(true), 3000);
