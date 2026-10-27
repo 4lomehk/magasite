@@ -1,0 +1,2515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BREW · Accessible Coffee Ordering & Barista KDS System</title>
+  <meta name="description" content="BREW: Accessible coffee ordering system. Real-time bi-directional customer-to-barista sync, FPS instant payment, persistent Passkey login, and daily CRM reconciliation." />
+  <meta property="og:title" content="BREW · Coffee Ordering & Barista KDS" />
+  <meta property="og:description" content="Customer orders · Barista real-time sync · FPS top-priority payments · CRM audit" />
+  <meta property="og:type" content="website" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #F6F2EC;
+      color: #1C1917;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .tactile-card {
+      background: #FFFFFF;
+      border: 2px solid #1C1917;
+      box-shadow: 4px 4px 0px #1C1917;
+      border-radius: 1rem;
+    }
+    .tactile-btn {
+      border: 2px solid #1C1917;
+      box-shadow: 2.5px 2.5px 0px #1C1917;
+      transition: all 0.12s ease;
+    }
+    .tactile-btn:hover:not(:disabled) {
+      transform: translate(-1px, -1px);
+      box-shadow: 3.5px 3.5px 0px #1C1917;
+    }
+    .tactile-btn:active:not(:disabled) {
+      transform: translate(1.5px, 1.5px);
+      box-shadow: 1px 1px 0px #1C1917;
+    }
+    .tactile-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .info-badge {
+      width: 1.35rem;
+      height: 1.35rem;
+      border-radius: 9999px;
+      border: 1.5px solid #1C1917;
+      background-color: #FEF3C7;
+      color: #1C1917;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      flex-shrink: 0;
+    }
+    .info-badge:hover {
+      background-color: #FACC15;
+      transform: scale(1.06);
+    }
+    details > summary {
+      list-style: none;
+    }
+    details > summary::-webkit-details-marker {
+      display: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-amber-300 selection:text-stone-900">
+
+  <!-- ===================================================================== -->
+  <!-- TOP HEADER: BREW + 2 Modes ONLY ("Customer Order" / "Barista Brewer") -->
+  <!-- ===================================================================== -->
+  <header class="sticky top-0 z-50 bg-[#1E110B] text-stone-100 border-b-2 border-stone-900">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand Title -->
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-amber-400 text-stone-950 border-2 border-white flex items-center justify-center font-black text-lg shrink-0">
+          ☕
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-black text-lg sm:text-xl tracking-wider text-white">BREW</h1>
+            <button type="button" onclick="toggleHint('hint-header-intro')" class="info-badge" title="System Intro">i</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2-Mode Switcher ("Customer order" & "Barista Brewer") + Language + Sync Status -->
+      <div class="flex items-center flex-wrap gap-2">
+        <div class="flex items-center bg-stone-800 p-1 rounded-xl border border-stone-600" role="tablist">
+          <button
+            type="button"
+            onclick="switchMainView('customer')"
+            id="tab-btn-customer"
+            class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition bg-amber-400 text-stone-950"
+          >
+            📱 Customer Order
+          </button>
+          <button
+            type="button"
+            onclick="switchMainView('brewer')"
+            id="tab-btn-brewer"
+            class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-stone-300 hover:text-white flex items-center gap-1.5"
+          >
+            <span>☕ Barista Brewer</span>
+            <span id="brewer-badge-count" class="px-1.5 py-0.2 rounded bg-stone-700 text-amber-300 font-mono text-xs">2</span>
+            <span id="brewer-lock-icon" class="text-[11px]">🔒</span>
+          </button>
+        </div>
+
+        <button
+          type="button"
+          onclick="manualSyncOrders()"
+          class="px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-emerald-300 border border-stone-600 text-xs font-bold flex items-center gap-1.5 transition"
+          title="Sync Orders Now"
+        >
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="sync-status-label">Syncing</span>
+        </button>
+
+        <!-- Bilingual Switcher -->
+        <div class="flex items-center bg-stone-800 border border-stone-600 rounded-xl p-0.5 text-xs font-black">
+          <a href="https://magasite.pages.dev/brew.html" class="px-2.5 py-1 text-stone-300 hover:text-white transition">廣</a>
+          <span class="px-2.5 py-1 bg-amber-400 text-stone-950 rounded-lg font-black">Eng</span>
+        </div>
+
+        <a
+          href="https://magasite.pages.dev/index-en.html"
+          class="px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-600 text-xs font-bold transition flex items-center gap-1"
+        >
+          <span>← Back to Magasite</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Collapsible Header Info ('i' Drawer) -->
+    <div id="hint-header-intro" class="hidden bg-stone-900 border-t border-stone-700 px-4 py-2.5 text-xs text-stone-300">
+      <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-2">
+        <span>💡 <strong>Accessible Non-Verbal Workflow:</strong> Choose your drink ➔ Confirm order ➔ <strong>FPS instant payment</strong> ➔ Barista verifies & brews immediately. Supports instant cancellation and live two-way sync.</span>
+        <button type="button" onclick="toggleHint('hint-header-intro')" class="text-amber-300 font-bold hover:underline">Close ✕</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN CONTAINER                                                        -->
+  <!-- ===================================================================== -->
+  <main class="max-w-5xl mx-auto w-full flex-1 p-4 sm:p-6 space-y-6">
+
+    <!-- =================================================================== -->
+    <!-- VIEW 1: Customer Order (CUSTOMER VIEW)                              -->
+    <!-- =================================================================== -->
+    <section id="view-customer" class="space-y-6">
+
+      <!-- Top Row: FPS (Faster Payment System) Top Priority Payment -->
+      <div class="tactile-card p-5 bg-[#FFFBEB]">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-stone-200">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-emerald-700 text-white font-mono text-xs font-black">TOP PRIORITY</span>
+            <h2 class="font-black text-base sm:text-lg text-stone-900">🇭🇰 FPS (Faster Payment System)</h2>
+            <button type="button" onclick="toggleHint('hint-customer-fps')" class="info-badge" title="Payment Guide">i</button>
+          </div>
+          <div class="flex items-center gap-2 text-xs font-bold text-stone-500">
+            <span>HKD Only</span>
+            <span aria-hidden="true">·</span>
+            <span>Order <strong id="cust-top-order-id" class="font-mono text-stone-900">#105</strong></span>
+          </div>
+        </div>
+
+        <!-- Collapsible 'i' Hint for FPS -->
+        <div id="hint-customer-fps" class="hidden mt-3 p-3 rounded-xl bg-amber-100/70 border border-stone-300 text-xs text-stone-800 space-y-1">
+          <p class="font-bold">📌 FPS Payment Steps:</p>
+          <p>1. Tap "Copy Phone" below or scan the FPS QR Code in your banking app.</p>
+          <p>2. Enter your Order ID in the transfer remarks (e.g. <span class="font-mono font-bold">#105</span>), and send the receipt screenshot via WhatsApp / IG DM to the barista.</p>
+        </div>
+
+        <!-- Main FPS Active Card -->
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+          <!-- Left: FPS Number & Amount -->
+          <div class="md:col-span-7 p-4 rounded-xl bg-white border-2 border-stone-900 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-stone-500">FPS Phone Number</span>
+              <span class="text-xs font-bold text-emerald-700">🟢 Instant Verification</span>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div id="cust-fps-phone-display" class="text-2xl sm:text-3xl font-black font-mono tracking-tight text-stone-900 tabular-nums">
+                9123 6789
+              </div>
+              <button
+                type="button"
+                onclick="copyFpsPhone()"
+                class="tactile-btn px-3 py-1.5 rounded-lg bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs"
+              >
+                📋 Copy Phone
+              </button>
+            </div>
+            <div class="pt-2 border-t border-stone-200 flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-stone-500 block">Total Due (HKD)</span>
+                <span id="cust-fps-amount-display" class="text-2xl font-black font-mono text-emerald-700 tabular-nums">$43</span>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onclick="copyFpsReceiptPrompt()"
+                  class="tactile-btn px-3 py-2 rounded-lg bg-stone-900 text-white font-black text-xs"
+                >
+                  📲 Copy Payment Prompt
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: FPS QR Code + Paused Methods -->
+          <div class="md:col-span-5 flex flex-col sm:flex-row md:flex-col lg:flex-row items-center gap-3 p-3.5 rounded-xl bg-white border-2 border-stone-900">
+            <img
+              id="cust-fps-qr-img"
+              src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=FPS%3A91236789%3BHKD%3A43%3BORDER%3A105"
+              alt="FPS QR Code"
+              class="w-24 h-24 rounded-lg border border-stone-300 p-1 bg-white shrink-0"
+            />
+            <div class="space-y-1.5 text-center sm:text-left">
+              <div class="text-xs font-black text-stone-900">FPS QR Code</div>
+              <p class="text-[11px] text-stone-600 leading-snug">Scan with any HK banking app or FPS wallet</p>
+              <!-- Collapsible Paused Methods (Visa / PayMe / Octopus) -->
+              <details class="pt-1">
+                <summary class="cursor-pointer text-[11px] font-bold text-stone-500 hover:text-stone-800 flex items-center gap-1">
+                  <span>▾ Other Channels (PayMe / Visa Paused)</span>
+                </summary>
+                <div class="mt-1.5 p-2 rounded-lg bg-stone-100 border border-stone-300 space-y-1 text-[11px] text-stone-500">
+                  <div class="flex items-center justify-between">
+                    <span>PayMe</span>
+                    <span class="font-mono font-bold text-rose-600">⏸️ Paused</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span>Visa / Credit Card</span>
+                    <span class="font-mono font-bold text-rose-600">⏸️ Paused</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span>Octopus Card</span>
+                    <span class="font-mono font-bold text-rose-600">⏸️ Paused</span>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Main Grid: Left = Drink Selection & Contact, Right = Order Confirmation & Live Tracker -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- Left 7 Cols: 1. Drink Customization + 2. Contact Details -->
+        <div class="lg:col-span-7 tactile-card p-5 space-y-5">
+          <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-stone-900 text-amber-300 font-mono text-xs font-black flex items-center justify-center">1</span>
+              <h2 class="font-black text-base sm:text-lg text-stone-900">Pick Drink & Customize</h2>
+              <button type="button" onclick="toggleHint('hint-order-rules')" class="info-badge" title="Ordering Tips">i</button>
+            </div>
+            <span class="text-xs font-bold text-stone-500">Tap options or type directly</span>
+          </div>
+
+          <!-- Collapsible 'i' Hint for Ordering -->
+          <div id="hint-order-rules" class="hidden p-3 rounded-xl bg-stone-100 border border-stone-300 text-xs text-stone-700 space-y-1">
+            <p class="font-bold">💡 Quick Ordering Tips:</p>
+            <p>• Select beans, drinks, cup size, milk, and quantity directly using the controls.</p>
+            <p>• Or type natural text (e.g., <code class="font-mono font-bold">Medium Hot Latte Oat Milk 1 cup</code> or <code class="font-mono font-bold">H02 / M / OM / 1</code>).</p>
+            <p>• Milk codes: <code class="font-mono font-bold">FM</code> Whole Milk · <code class="font-mono font-bold">SM</code> Skim Milk · <code class="font-mono font-bold">OM</code> Oat Milk (+$4).</p>
+          </div>
+
+          <!-- Bean Selector -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-black text-stone-700">Choose Coffee Beans</label>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" onclick="selectBean('SOE Single Origin')" id="bean-btn-0" class="bean-btn px-2.5 py-2 rounded-lg border-2 border-stone-900 bg-amber-300 font-black text-xs text-stone-900">
+                SOE Single Origin
+              </button>
+              <button type="button" onclick="selectBean('House Blend')" id="bean-btn-1" class="bean-btn px-2.5 py-2 rounded-lg border border-stone-300 bg-white font-bold text-xs text-stone-700 hover:bg-stone-100">
+                House Blend
+              </button>
+              <button type="button" onclick="selectBean('Decaf Beans')" id="bean-btn-2" class="bean-btn px-2.5 py-2 rounded-lg border border-stone-300 bg-white font-bold text-xs text-stone-700 hover:bg-stone-100">
+                Decaf Beans
+              </button>
+            </div>
+          </div>
+
+          <!-- Drink & Size & Milk Selectors -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="sel-drink" class="text-xs font-black text-stone-700 block mb-1">Drink</label>
+              <select id="sel-drink" onchange="buildFromVisual()" class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 text-xs sm:text-sm font-bold bg-white">
+                <optgroup label="🔥 Hot Drinks">
+                  <option value="H01">H01 · Hot Americano (from $28)</option>
+                  <option value="H02" selected>H02 · Hot Latte (from $36)</option>
+                  <option value="H03">H03 · Hot Cappuccino (from $36)</option>
+                  <option value="H04">H04 · Hot Flat White (from $36)</option>
+                  <option value="H05">H05 · Hot Mocha (from $40)</option>
+                </optgroup>
+                <optgroup label="🧊 Iced Drinks">
+                  <option value="C01">C01 · Iced Americano (from $32)</option>
+                  <option value="C02">C02 · Iced Latte (from $40)</option>
+                  <option value="C03">C03 · Iced Cappuccino (from $40)</option>
+                  <option value="C04">C04 · Iced Mocha (from $44)</option>
+                </optgroup>
+                <optgroup label="✨ Specials">
+                  <option value="S01">S01 · Dirty ($40)</option>
+                  <option value="S02">S02 · Espresso Tonic ($42)</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <div>
+              <label for="sel-size" class="text-xs font-black text-stone-700 block mb-1">Size</label>
+              <select id="sel-size" onchange="buildFromVisual()" class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 text-xs sm:text-sm font-bold bg-white">
+                <option value="S">Small (S)</option>
+                <option value="M" selected>Medium (M)</option>
+                <option value="L">Large (L)</option>
+                <option value="D">Dirty Dedicated (D)</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="sel-milk" class="text-xs font-black text-stone-700 block mb-1">Milk (Whole / Skim / Oat)</label>
+              <select id="sel-milk" onchange="buildFromVisual()" class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 text-xs sm:text-sm font-bold bg-white">
+                <option value="FM">FM · Whole Milk +$0</option>
+                <option value="SM">SM · Skim Milk +$0</option>
+                <option value="OM" selected>OM · Oat Milk +$4</option>
+                <option value="-">Black / No Milk (-)</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="sel-qty" class="text-xs font-black text-stone-700 block mb-1">Quantity</label>
+              <select id="sel-qty" onchange="buildFromVisual()" class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 text-xs sm:text-sm font-bold bg-white">
+                <option value="1" selected>1 Cup</option>
+                <option value="2">2 Cups</option>
+                <option value="3">3 Cups</option>
+                <option value="4">4 Cups</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Natural Language / Code Input Box -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label for="order-input" class="text-xs font-black text-stone-700">Order Sentence (Editable)</label>
+              <button type="button" onclick="toggleHint('hint-quick-presets')" class="text-xs font-bold text-amber-800 hover:underline flex items-center gap-1">
+                <span>▾ Presets</span>
+              </button>
+            </div>
+            <input
+              id="order-input"
+              type="text"
+              value="Medium Hot Latte / Oat Milk / 1 Cup"
+              oninput="parseOrderInput()"
+              placeholder="e.g.: Medium Hot Latte Oat Milk 1 cup"
+              class="w-full rounded-xl border-2 border-stone-900 px-3.5 py-2.5 font-mono text-sm font-bold bg-[#FFFDF9] focus:outline-none focus:ring-2 focus:ring-amber-400"
+            />
+            <!-- Collapsible Quick Presets -->
+            <div id="hint-quick-presets" class="hidden pt-1 flex flex-wrap gap-1.5">
+              <button type="button" onclick="applyQuickPreset('Medium Hot Latte / Oat Milk / 1 Cup')" class="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 border border-stone-800 text-xs font-bold">
+                Med Hot Latte Oat Milk
+              </button>
+              <button type="button" onclick="applyQuickPreset('Medium Hot Latte / Skim Milk / 1 Cup')" class="px-2.5 py-1 rounded-lg bg-sky-100 hover:bg-sky-200 border border-stone-800 text-xs font-bold">
+                Med Hot Latte Skim Milk
+              </button>
+              <button type="button" onclick="applyQuickPreset('Large Iced Americano / 1 Cup')" class="px-2.5 py-1 rounded-lg bg-stone-100 hover:bg-stone-200 border border-stone-800 text-xs font-bold">
+                Large Iced Americano
+              </button>
+              <button type="button" onclick="applyQuickPreset('Dirty / Whole Milk / 1 Cup')" class="px-2.5 py-1 rounded-lg bg-stone-100 hover:bg-stone-200 border border-stone-800 text-xs font-bold">
+                Dirty Whole Milk
+              </button>
+            </div>
+          </div>
+
+          <!-- Customer Contact Details -->
+          <details class="p-3.5 rounded-xl bg-stone-50 border border-stone-300" open>
+            <summary class="cursor-pointer flex items-center justify-between text-xs font-black text-stone-800">
+              <span>2. Customer Contact Info (WhatsApp / IG Verification)</span>
+              <span class="text-stone-500 font-mono">▾ Expand / Collapse</span>
+            </summary>
+            <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div>
+                <label for="cust-name-input" class="text-[11px] font-bold text-stone-600 block mb-1">Name / Title</label>
+                <input
+                  id="cust-name-input"
+                  type="text"
+                  value="Ms. Chan"
+                  oninput="parseOrderInput()"
+                  placeholder="e.g. Ms. Chan"
+                  class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-bold bg-white"
+                />
+              </div>
+              <div>
+                <label for="cust-whatsapp-input" class="text-[11px] font-bold text-stone-600 block mb-1">WhatsApp Phone</label>
+                <input
+                  id="cust-whatsapp-input"
+                  type="tel"
+                  value="9123 4567"
+                  oninput="parseOrderInput()"
+                  placeholder="9123 4567"
+                  class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
+                />
+              </div>
+              <div>
+                <label for="cust-ig-input" class="text-[11px] font-bold text-stone-600 block mb-1">IG Handle</label>
+                <input
+                  id="cust-ig-input"
+                  type="text"
+                  value="@chan_hk"
+                  oninput="parseOrderInput()"
+                  placeholder="@handle"
+                  class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
+                />
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Right 5 Cols: 3. Order Confirmation & Cancellation -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="tactile-card p-5 bg-[#FFFDF9] space-y-4">
+            <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-md bg-emerald-700 text-white font-mono text-xs font-black flex items-center justify-center">3</span>
+                <h2 class="font-black text-base sm:text-lg text-stone-900">Confirm Order</h2>
+                <button type="button" onclick="toggleHint('hint-confirm-card')" class="info-badge" title="Confirmation Note">i</button>
+              </div>
+              <span id="customer-action-feedback" class="text-xs font-black text-emerald-700">Ready to confirm</span>
+            </div>
+
+            <div id="hint-confirm-card" class="hidden p-2.5 rounded-lg bg-stone-100 border border-stone-300 text-xs text-stone-700">
+              Clicking "✅ Confirm Order" transmits immediately to the Barista KDS board. You can modify or click "❌ Cancel Order" anytime.
+            </div>
+
+            <!-- Exact Customer Order Preview Box -->
+            <div class="p-4 rounded-xl bg-[#ECFDF5] border-2 border-stone-900 font-mono text-xs sm:text-sm space-y-1.5 leading-relaxed">
+              <div class="font-black text-stone-900">🧾 Your Order Summary:</div>
+              <div id="customer-order-desc" class="font-bold text-stone-900">
+                SOE Single Origin / Medium Hot Latte / Oat Milk / 1 Cup
+              </div>
+              <div id="customer-contact-preview" class="text-xs text-stone-600">
+                Contact: Ms. Chan · WhatsApp: 9123 4567 · IG: @chan_hk
+              </div>
+              <div class="font-black text-emerald-800 text-base pt-1">
+                Total Amount: $<span id="customer-order-price">43</span> HKD
+              </div>
+            </div>
+
+            <!-- Action Buttons: Confirm / Modify / Cancel -->
+            <div class="grid grid-cols-3 gap-2">
+              <button
+                type="button"
+                onclick="customerConfirmOrder()"
+                class="tactile-btn py-2.5 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
+              >
+                <span>✅ Place Order</span>
+              </button>
+              <button
+                type="button"
+                onclick="customerModifyOrder()"
+                class="tactile-btn py-2.5 px-3 rounded-xl bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
+              >
+                <span>✏️ Edit</span>
+              </button>
+              <button
+                type="button"
+                onclick="customerCancelActiveOrder()"
+                class="tactile-btn py-2.5 px-3 rounded-xl bg-rose-200 hover:bg-rose-300 text-rose-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
+              >
+                <span>❌ Cancel</span>
+              </button>
+            </div>
+
+            <!-- WhatsApp / IG Copy Actions -->
+            <div class="flex flex-wrap gap-2 pt-1">
+              <button
+                type="button"
+                onclick="copyText('customer')"
+                class="flex-1 py-2 px-3 rounded-lg bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs"
+              >
+                📋 Copy Order Text
+              </button>
+              <button
+                type="button"
+                onclick="openWhatsAppOrder()"
+                class="flex-1 py-2 px-3 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-stone-950 font-black text-xs border border-stone-900"
+              >
+                💬 Send via WhatsApp
+              </button>
+            </div>
+          </div>
+
+          <!-- Customer Live Order Status Tracker (Synced with Brewer) -->
+          <div class="tactile-card p-4 bg-white space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <h3 class="font-black text-sm text-stone-900">📡 Live Order Tracker</h3>
+                <button type="button" onclick="toggleHint('hint-live-tracker')" class="info-badge">i</button>
+              </div>
+              <span class="text-[11px] font-mono text-stone-500">Live Synced with Barista</span>
+            </div>
+            <div id="hint-live-tracker" class="hidden p-2 rounded bg-stone-100 text-[11px] text-stone-600">
+              Displays your recent orders live. While brewing is pending or underway, you can click "Cancel Order" if needed.
+            </div>
+            <div id="customer-live-orders-list" class="space-y-2">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 2: Barista Brewer (BREWER AUTH GATE + KDS DASHBOARD)            -->
+    <!-- =================================================================== -->
+    <section id="view-brewer" class="hidden space-y-6">
+
+      <!-- 2A. BREWER AUTH GATE (Email Registration + 4-Digit PIN Login) -->
+      <div id="brewer-auth-gate" class="max-w-md mx-auto tactile-card p-6 bg-[#FFFDF9] space-y-5 my-6">
+        <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">🔐</span>
+            <h2 id="auth-gate-title" class="font-black text-lg text-stone-900">Barista Brewer Sign In</h2>
+          </div>
+          <button type="button" onclick="toggleHint('hint-brewer-auth')" class="info-badge" title="Sign In Info">i</button>
+        </div>
+
+        <div id="hint-brewer-auth" class="hidden p-3 rounded-xl bg-amber-50 border border-stone-300 text-xs text-stone-700 space-y-1">
+          <p class="font-bold">📌 Persistent Session Logic:</p>
+          <p>• On first access, register with your <strong>Email</strong> and set a <strong>4-digit Passkey PIN</strong>.</p>
+          <p>• <strong>Once logged in, no re-login is required until you click "Logout"</strong>. Switching views or refreshing maintains your active session.</p>
+          <p>• The CRM audit center records all registered emails, Passkeys, and login timestamps.</p>
+        </div>
+
+        <!-- STEP A: First-time Email Registration Form -->
+        <div id="brewer-register-box" class="space-y-4">
+          <div class="text-xs font-bold text-stone-600">
+            Register barista email and set a 4-digit Passkey (stay logged in until manual logout)
+          </div>
+          <div>
+            <label for="reg-email-input" class="text-xs font-black text-stone-800 block mb-1">Barista Email</label>
+            <input
+              id="reg-email-input"
+              type="email"
+              placeholder="brewer@brew.hk"
+              class="w-full rounded-xl border-2 border-stone-900 px-3.5 py-2.5 text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
+            />
+          </div>
+          <div>
+            <label for="reg-pin-input" class="text-xs font-black text-stone-800 block mb-1">Set 4-Digit Passkey PIN</label>
+            <input
+              id="reg-pin-input"
+              type="password"
+              inputmode="numeric"
+              maxlength="4"
+              placeholder="e.g. 0326"
+              class="w-full rounded-xl border-2 border-stone-900 px-3.5 py-2.5 text-center font-mono text-xl font-black tracking-[0.5em] bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
+            />
+          </div>
+          <div id="reg-error-msg" class="hidden text-xs font-bold text-rose-600"></div>
+          <button
+            type="button"
+            onclick="handleBrewerRegister()"
+            class="tactile-btn w-full py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-sm"
+          >
+            ✅ Register Email & Stay Signed In
+          </button>
+        </div>
+
+        <!-- STEP B: Returning 4-Digit PIN Unlock Pad -->
+        <div id="brewer-pin-box" class="hidden space-y-4">
+          <div class="p-3 rounded-xl bg-stone-100 border border-stone-300 flex items-center justify-between text-xs">
+            <div>
+              <span class="text-stone-500 block">Registered Email</span>
+              <strong id="locked-brewer-email" class="font-mono text-stone-900">brewer@brew.hk</strong>
+            </div>
+            <span class="text-amber-700 font-bold">Logged Out · Enter Passkey</span>
+          </div>
+
+          <div>
+            <label for="login-pin-input" class="text-xs font-black text-stone-800 block mb-1.5 text-center">
+              Enter 4-Digit Passkey PIN (Remains unlocked after login)
+            </label>
+            <input
+              id="login-pin-input"
+              type="password"
+              inputmode="numeric"
+              maxlength="4"
+              placeholder="••••"
+              oninput="checkPinAutoSubmit(this.value)"
+              class="w-full rounded-xl border-2 border-stone-900 px-4 py-3 text-center font-mono text-2xl font-black tracking-[0.6em] bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
+            />
+          </div>
+
+          <!-- Tactile 4-Digit Keypad -->
+          <div class="grid grid-cols-3 gap-2 pt-1">
+            <button type="button" onclick="pressPinKey('1')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">1</button>
+            <button type="button" onclick="pressPinKey('2')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">2</button>
+            <button type="button" onclick="pressPinKey('3')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">3</button>
+            <button type="button" onclick="pressPinKey('4')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">4</button>
+            <button type="button" onclick="pressPinKey('5')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">5</button>
+            <button type="button" onclick="pressPinKey('6')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">6</button>
+            <button type="button" onclick="pressPinKey('7')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">7</button>
+            <button type="button" onclick="pressPinKey('8')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">8</button>
+            <button type="button" onclick="pressPinKey('9')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">9</button>
+            <button type="button" onclick="clearPinKey()" class="tactile-btn py-2.5 rounded-xl bg-stone-200 hover:bg-stone-300 font-bold text-xs">Clear</button>
+            <button type="button" onclick="pressPinKey('0')" class="tactile-btn py-2.5 rounded-xl bg-white hover:bg-stone-100 font-mono font-black text-base">0</button>
+            <button type="button" onclick="handleBrewerPinVerify()" class="tactile-btn py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 font-black text-xs">Enter ➔</button>
+          </div>
+
+          <div id="pin-error-msg" class="hidden text-center text-xs font-bold text-rose-600"></div>
+
+          <!-- Collapsible Reset / Change Email Option -->
+          <details class="pt-2 border-t border-stone-200 text-xs text-stone-500">
+            <summary class="cursor-pointer hover:text-stone-800 font-bold">▾ Change Email or Reset Passkey</summary>
+            <div class="mt-2 p-2.5 rounded-lg bg-stone-100 space-y-2">
+              <p>To register a different email or reset credentials, click below:</p>
+              <button type="button" onclick="resetBrewerAuth()" class="px-3 py-1.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-900 font-bold text-xs border border-rose-300">
+                🔄 Reset Email & Passkey
+              </button>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- 2B. BREWER UNLOCKED WORKSPACE (KDS + FPS Top Settings + Cancel Order) -->
+      <div id="brewer-workspace" class="hidden space-y-6">
+
+        <!-- Brewer Top Bar: Logged-in Email + Passkey + Logout Button + Shop Status -->
+        <div class="tactile-card p-4 bg-[#1E110B] text-white flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center flex-wrap gap-3">
+            <span class="px-2.5 py-1 rounded-lg bg-amber-400 text-stone-950 font-black text-xs">☕ Barista Brewer</span>
+            <div class="text-xs flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span class="text-stone-300">Session Active:</span>
+              <strong id="active-brewer-email" class="font-mono text-amber-300">brewer@brew.hk</strong>
+              <span class="px-1.5 py-0.5 rounded bg-stone-800 border border-stone-600 font-mono text-[11px] text-stone-300">
+                Passkey: <strong id="active-brewer-pin-badge" class="text-emerald-300">0326</strong>
+              </span>
+            </div>
+          </div>
+          <div class="flex items-center flex-wrap gap-2">
+            <button type="button" onclick="scrollToCrmSection()" class="px-2.5 py-1 rounded-lg bg-sky-700 hover:bg-sky-600 text-white text-xs font-black">📊 CRM Audit Center</button>
+            <button type="button" onclick="setShopMode('normal')" class="px-2.5 py-1 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold">🟢 Open / Normal</button>
+            <button type="button" onclick="setShopMode('busy')" class="px-2.5 py-1 rounded-lg bg-amber-700 hover:bg-amber-600 text-white text-xs font-bold">🟡 Brewing - Busy</button>
+            <button type="button" onclick="logoutBrewerWorkspace()" class="px-3 py-1 rounded-lg bg-rose-700 hover:bg-rose-600 text-white text-xs font-black border border-rose-400">🚪 Logout</button>
+          </div>
+        </div>
+
+        <!-- Brewer Main Grid: Left = FPS Quote & Reconcile, Right = KDS Board -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+          <!-- Left 5 Cols: FPS Top Pricing & Verification Unlock -->
+          <div class="lg:col-span-5 space-y-5">
+            <div class="tactile-card p-5 bg-white space-y-4">
+              <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded bg-emerald-700 text-white font-mono text-xs font-black">TOP</span>
+                  <h3 class="font-black text-base text-stone-900">🇭🇰 FPS Pricing & Reconcile</h3>
+                  <button type="button" onclick="toggleHint('hint-brewer-fps')" class="info-badge" title="Verification Guide">i</button>
+                </div>
+              </div>
+
+              <div id="hint-brewer-fps" class="hidden p-3 rounded-xl bg-amber-50 border border-stone-300 text-xs text-stone-700 space-y-1">
+                <p>• Adjust the HKD amount per order; updates sync in real time to the customer screen.</p>
+                <p>• FPS is prioritized at the top; Visa, PayMe, and Octopus remain paused.</p>
+              </div>
+
+              <!-- Order ID & Manual HKD Amount -->
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label for="manual-order-id" class="text-xs font-black text-stone-700 block mb-1">Target Order (#)</label>
+                  <input
+                    id="manual-order-id"
+                    type="number"
+                    value="105"
+                    oninput="updatePaymentTemplates()"
+                    class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 font-mono text-base font-black bg-stone-50"
+                  />
+                </div>
+                <div>
+                  <label for="manual-hkd-amount" class="text-xs font-black text-stone-700 block mb-1">Due Amount (HKD $)</label>
+                  <input
+                    id="manual-hkd-amount"
+                    type="number"
+                    value="43"
+                    oninput="updatePaymentTemplates()"
+                    class="w-full rounded-lg border-2 border-emerald-700 px-3 py-2 font-mono text-base font-black bg-emerald-50 text-emerald-950"
+                  />
+                </div>
+              </div>
+
+              <!-- FPS Phone Number Config (Top Priority) -->
+              <div class="p-3.5 rounded-xl bg-[#ECFDF5] border-2 border-stone-900 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <label for="fps-phone-input" class="text-xs font-black text-emerald-950">🇭🇰 FPS Phone Number (Active)</label>
+                  <span class="text-[11px] font-bold text-emerald-700">Top Priority</span>
+                </div>
+                <div class="flex gap-2">
+                  <input
+                    id="fps-phone-input"
+                    type="text"
+                    value="9123 6789"
+                    oninput="updatePaymentTemplates()"
+                    class="flex-1 rounded-lg border-2 border-stone-900 px-3 py-1.5 font-mono text-sm font-black bg-white"
+                  />
+                  <button
+                    type="button"
+                    onclick="copyFpsReceiptPrompt()"
+                    class="tactile-btn px-3 py-1.5 rounded-lg bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs"
+                  >
+                    Copy Prompt
+                  </button>
+                </div>
+              </div>
+
+              <!-- Paused Payment Methods Notice (Visa / PayMe / Octopus) -->
+              <details class="p-3 rounded-xl bg-stone-100 border border-stone-300 text-xs">
+                <summary class="cursor-pointer font-bold text-stone-700 flex items-center justify-between">
+                  <span>⏸️ Other Channels (Visa · PayMe · Octopus Paused)</span>
+                  <span class="font-mono text-stone-500">▾</span>
+                </summary>
+                <div class="mt-2.5 space-y-1.5 text-stone-600 border-t border-stone-200 pt-2">
+                  <div class="flex items-center justify-between">
+                    <span>PayMe QR</span>
+                    <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold text-[11px]">Paused</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span>Visa / Credit Card</span>
+                    <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold text-[11px]">Paused</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span>Octopus Card</span>
+                    <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold text-[11px]">Paused</span>
+                  </div>
+                </div>
+              </details>
+
+              <!-- Quick Verify Checkboxes -->
+              <div class="p-3.5 rounded-xl bg-stone-50 border-2 border-stone-900 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-black text-stone-900">📸 Verification Checklist (FPS Screenshot)</span>
+                  <button type="button" onclick="simulateCustomerPaid()" class="text-xs font-bold text-emerald-700 hover:underline">
+                    ⚡ 1-Click Verify & Brew
+                  </button>
+                </div>
+                <div class="grid grid-cols-3 gap-1.5 text-[11px] font-bold">
+                  <label class="flex items-center gap-1.5 p-2 rounded bg-white border border-stone-300 cursor-pointer">
+                    <input type="checkbox" id="chk-amount" onchange="checkPaymentVerification()" class="w-3.5 h-3.5 accent-emerald-600" />
+                    <span>Amount</span>
+                  </label>
+                  <label class="flex items-center gap-1.5 p-2 rounded bg-white border border-stone-300 cursor-pointer">
+                    <input type="checkbox" id="chk-time" onchange="checkPaymentVerification()" class="w-3.5 h-3.5 accent-emerald-600" />
+                    <span>Time</span>
+                  </label>
+                  <label class="flex items-center gap-1.5 p-2 rounded bg-white border border-stone-300 cursor-pointer">
+                    <input type="checkbox" id="chk-status" onchange="checkPaymentVerification()" class="w-3.5 h-3.5 accent-emerald-600" />
+                    <span>Transferred</span>
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  id="unlock-brew-btn"
+                  disabled
+                  onclick="proceedToBrewing()"
+                  class="tactile-btn w-full py-2.5 rounded-xl bg-emerald-500 text-stone-950 font-black text-xs"
+                >
+                  🔒 Verify to Unlock "🟠 Brewing"
+                </button>
+              </div>
+            </div>
+
+            <!-- Collapsible Menu Price Reference -->
+            <details class="tactile-card p-4 bg-white">
+              <summary class="cursor-pointer font-black text-sm text-stone-900 flex items-center justify-between">
+                <span>📋 Price List Reference</span>
+                <span class="text-xs font-mono text-stone-500">▾ Expand</span>
+              </summary>
+              <div class="mt-3 pt-3 border-t border-stone-200 space-y-3 text-xs">
+                <div class="font-bold text-stone-700">
+                  • Hot Americano $28/$32/$36 · Hot Milk Coffee $36/$40/$44 · Hot Mocha $40/$44/$48<br/>
+                  • Iced Americano $32/$36/$40 · Iced Milk Coffee $40/$44/$48 · Dirty $40 · Tonic $42<br/>
+                  • Milks: FM Whole Milk (+$0) · SM Skim Milk (+$0) · OM Oat Milk (+$4)
+                </div>
+                <div class="hidden">
+                  <button type="button" onclick="testLiveMcpEndpoint()" class="px-2.5 py-1.5 rounded bg-stone-900 text-amber-300 font-bold text-xs">
+                    ⚡ Test /api/brew/mcp
+                  </button>
+                  <button type="button" onclick="copyMcpConfigJson()" class="px-2.5 py-1.5 rounded bg-stone-200 text-stone-900 font-bold text-xs">
+                    📋 Copy MCP JSON
+                  </button>
+                </div>
+                <div id="mcp-live-status" class="hidden font-mono text-[11px] text-emerald-700"></div>
+              </div>
+            </details>
+          </div>
+
+          <!-- Right 7 Cols: Barista KDS Board with Cancel Order Function -->
+          <div class="lg:col-span-7 tactile-card p-5 bg-white space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200 pb-3">
+              <div class="flex items-center gap-2">
+                <h3 class="font-black text-base sm:text-lg text-stone-900">🖥️ Barista KDS Display</h3>
+                <button type="button" onclick="toggleHint('hint-kds-board')" class="info-badge" title="KDS Guide">i</button>
+              </div>
+              <!-- Filter Tabs -->
+              <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-lg border border-stone-300 text-xs font-bold">
+                <button type="button" onclick="setKdsFilter('active')" id="kds-filter-active" class="px-2.5 py-1 rounded bg-stone-900 text-white">Active</button>
+                <button type="button" onclick="setKdsFilter('all')" id="kds-filter-all" class="px-2.5 py-1 rounded text-stone-600 hover:text-stone-900">All</button>
+                <button type="button" onclick="setKdsFilter('cancelled')" id="kds-filter-cancelled" class="px-2.5 py-1 rounded text-stone-600 hover:text-stone-900">Cancelled</button>
+              </div>
+            </div>
+
+            <div id="hint-kds-board" class="hidden p-3 rounded-xl bg-stone-100 border border-stone-300 text-xs text-stone-700 space-y-1">
+              <p>• Updates in real time whenever a customer orders or cancels.</p>
+              <p>• For each order, click "Verify & Brew", "Mark Done", or "Cancel Order".</p>
+            </div>
+
+            <!-- KDS Order List -->
+            <div id="kds-orders-list" class="space-y-3">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- =============================================================== -->
+        <!-- 2C. Backend Records & CRM Daily Audit Center                   -->
+        <!-- =============================================================== -->
+        <div id="brewer-crm-section" class="tactile-card p-5 bg-[#FFFDF9] space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-stone-900 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded bg-stone-900 text-amber-300 font-mono text-xs font-black">CRM & AUDIT</span>
+              <h3 class="font-black text-base sm:text-lg text-stone-900">📊 Backend Records · Daily Audit & CRM Report</h3>
+              <button type="button" onclick="toggleHint('hint-crm-audit')" class="info-badge" title="Audit Guide">i</button>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <label for="crm-date-filter" class="text-xs font-black text-stone-700">Audit Date:</label>
+              <select
+                id="crm-date-filter"
+                onchange="renderCrmAuditDashboard()"
+                class="rounded-lg border-2 border-stone-900 px-2.5 py-1 text-xs font-mono font-bold bg-white"
+              >
+                <option value="ALL">All Days</option>
+              </select>
+              <button
+                type="button"
+                onclick="exportCrmAuditCsv()"
+                class="tactile-btn px-3 py-1 rounded-lg bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs"
+              >
+                📥 Export CSV Audit
+              </button>
+            </div>
+          </div>
+
+          <div id="hint-crm-audit" class="hidden p-3 rounded-xl bg-amber-50 border border-stone-300 text-xs text-stone-700 space-y-1">
+            <p>• <strong>Backend Email & Passkey Records</strong>: Automatically tracks registered emails, 4-digit Passkeys, login frequencies, and last active timestamps.</p>
+            <p>• <strong>Daily Audit Metrics</strong>: Real-time calculation of total order counts, cups, verified revenue, gross volume, timestamps, and percentages (verification rate, cancellation rate, milk shares, channel shares).</p>
+          </div>
+
+          <!-- KPI Summary Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div class="p-3.5 rounded-xl bg-white border-2 border-stone-900 space-y-1">
+              <span class="text-[11px] font-bold text-stone-500 block">Total Orders / Cups</span>
+              <div class="text-xl font-black font-mono text-stone-900 tabular-nums">
+                <span id="crm-kpi-orders">0</span> orders <span class="text-xs text-stone-500">/ <span id="crm-kpi-cups">0</span> cups</span>
+              </div>
+              <div id="crm-kpi-active-sub" class="text-[11px] font-mono text-stone-600">Active 0 · Cancelled 0</div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#ECFDF5] border-2 border-stone-900 space-y-1">
+              <span class="text-[11px] font-bold text-emerald-900 block">Verified Revenue</span>
+              <div id="crm-kpi-verified-amt" class="text-xl font-black font-mono text-emerald-800 tabular-nums">$0</div>
+              <div id="crm-kpi-gross-sub" class="text-[11px] font-mono text-emerald-700">Gross $0</div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-amber-50 border-2 border-stone-900 space-y-1">
+              <span class="text-[11px] font-bold text-amber-900 block">Pending Reconcile</span>
+              <div id="crm-kpi-pending-amt" class="text-xl font-black font-mono text-amber-800 tabular-nums">$0</div>
+              <div id="crm-kpi-pending-pct" class="text-[11px] font-mono font-bold text-amber-800">0% Pending</div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-white border-2 border-stone-900 space-y-1">
+              <span class="text-[11px] font-bold text-stone-500 block">Verification Rate (%)</span>
+              <div id="crm-kpi-verify-pct" class="text-xl font-black font-mono text-emerald-700 tabular-nums">0%</div>
+              <div id="crm-kpi-aov" class="text-[11px] font-mono text-stone-600">AOV $0</div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-rose-50 border-2 border-stone-900 space-y-1">
+              <span class="text-[11px] font-bold text-rose-900 block">Cancellation Rate</span>
+              <div id="crm-kpi-cancel-pct" class="text-xl font-black font-mono text-rose-700 tabular-nums">0%</div>
+              <div id="crm-kpi-cancel-amt" class="text-[11px] font-mono text-rose-700">Cancelled $0</div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-stone-100 border-2 border-stone-900 space-y-1">
+              <span class="text-[11px] font-bold text-stone-600 block">Operating Hours</span>
+              <div id="crm-kpi-time-span" class="text-base font-black font-mono text-stone-900 tabular-nums">--:-- ~ --:--</div>
+              <div id="crm-kpi-peak-hour" class="text-[11px] font-mono text-stone-600">Peak: --</div>
+            </div>
+          </div>
+
+          <!-- Percentage Breakdown Bars -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-4 rounded-xl bg-white border border-stone-300 space-y-2">
+              <div class="flex items-center justify-between text-xs font-black text-stone-800">
+                <span>🥛 Milk Type Breakdown</span>
+                <span class="font-mono text-[11px] text-stone-500">Active Orders</span>
+              </div>
+              <div id="crm-pct-milk-list" class="space-y-1.5 text-xs"></div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-white border border-stone-300 space-y-2">
+              <div class="flex items-center justify-between text-xs font-black text-stone-800">
+                <span>💬 Order Channel Breakdown</span>
+                <span class="font-mono text-[11px] text-stone-500">WhatsApp / IG / FPS</span>
+              </div>
+              <div id="crm-pct-channel-list" class="space-y-1.5 text-xs"></div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-white border border-stone-300 space-y-2">
+              <div class="flex items-center justify-between text-xs font-black text-stone-800">
+                <span>🫘 Coffee Bean Breakdown</span>
+                <span class="font-mono text-[11px] text-stone-500">SOE / House / Decaf</span>
+              </div>
+              <div id="crm-pct-bean-list" class="space-y-1.5 text-xs"></div>
+            </div>
+          </div>
+
+          <!-- Sub-Tabs for Detailed CRM Tables -->
+          <div class="space-y-3">
+            <div class="flex flex-wrap items-center gap-2 border-b border-stone-200 pb-2">
+              <button
+                type="button"
+                onclick="switchCrmSubTab('daily')"
+                id="crm-subtab-daily"
+                class="px-3 py-1.5 rounded-lg bg-stone-900 text-amber-300 text-xs font-black"
+              >
+                📅 Daily Totals & Share Summary
+              </button>
+              <button
+                type="button"
+                onclick="switchCrmSubTab('customers')"
+                id="crm-subtab-customers"
+                class="px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200 text-xs font-bold"
+              >
+                👥 Customer CRM & Lifetime Spend
+              </button>
+              <button
+                type="button"
+                onclick="switchCrmSubTab('orders')"
+                id="crm-subtab-orders"
+                class="px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200 text-xs font-bold"
+              >
+                🕒 Order Time & Amount Details
+              </button>
+              <button
+                type="button"
+                onclick="switchCrmSubTab('accounts')"
+                id="crm-subtab-accounts"
+                class="px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200 text-xs font-bold"
+              >
+                🔑 Backend Email & Passkey Records
+              </button>
+            </div>
+
+            <!-- Sub-Tab 1: Daily Summary Table -->
+            <div id="crm-panel-daily" class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="bg-stone-100 border-b-2 border-stone-900 font-black text-stone-800">
+                    <th class="p-2.5">Date</th>
+                    <th class="p-2.5">Orders (Cups)</th>
+                    <th class="p-2.5">Valid Volume</th>
+                    <th class="p-2.5">Verified Paid</th>
+                    <th class="p-2.5">Pending Amount</th>
+                    <th class="p-2.5">Verification (%)</th>
+                    <th class="p-2.5">Cancellation (%)</th>
+                    <th class="p-2.5">Operating Hours</th>
+                  </tr>
+                </thead>
+                <tbody id="crm-daily-tbody" class="divide-y divide-stone-200 font-mono"></tbody>
+              </table>
+            </div>
+
+            <!-- Sub-Tab 2: Customer CRM Table -->
+            <div id="crm-panel-customers" class="hidden overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="bg-stone-100 border-b-2 border-stone-900 font-black text-stone-800">
+                    <th class="p-2.5">Customer Name</th>
+                    <th class="p-2.5">WhatsApp / IG</th>
+                    <th class="p-2.5">Orders (Valid / Total)</th>
+                    <th class="p-2.5">Total Spend (HKD)</th>
+                    <th class="p-2.5">Share of Volume (%)</th>
+                    <th class="p-2.5">Verified Amount</th>
+                    <th class="p-2.5">Last Order Time</th>
+                  </tr>
+                </thead>
+                <tbody id="crm-customers-tbody" class="divide-y divide-stone-200 font-mono"></tbody>
+              </table>
+            </div>
+
+            <!-- Sub-Tab 3: Order Time & Audit Log Table -->
+            <div id="crm-panel-orders" class="hidden overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="bg-stone-100 border-b-2 border-stone-900 font-black text-stone-800">
+                    <th class="p-2.5">Order ID</th>
+                    <th class="p-2.5">Date · Time</th>
+                    <th class="p-2.5">Customer (WA / IG)</th>
+                    <th class="p-2.5">Drink Items</th>
+                    <th class="p-2.5">Amount</th>
+                    <th class="p-2.5">Daily Share (%)</th>
+                    <th class="p-2.5">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="crm-orders-tbody" class="divide-y divide-stone-200 font-mono"></tbody>
+              </table>
+            </div>
+
+            <!-- Sub-Tab 4: Backend Email & Passkey Records + Login Audit -->
+            <div id="crm-panel-accounts" class="hidden space-y-4">
+              <div class="p-3.5 rounded-xl bg-stone-100 border border-stone-300 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div>
+                  <span class="font-black text-stone-900">🔐 Backend Email & Passkey Registry</span>
+                  <span class="text-stone-600 ml-2">(Tracks all registered emails, 4-digit Passkeys, login frequencies, and last activity)</span>
+                </div>
+                <button
+                  type="button"
+                  onclick="fetchAuthAuditFromServer()"
+                  class="px-2.5 py-1 rounded bg-stone-900 text-white font-bold text-xs"
+                >
+                  🔄 Refresh Records
+                </button>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr class="bg-stone-100 border-b-2 border-stone-900 font-black text-stone-800">
+                      <th class="p-2.5">Registered Email</th>
+                      <th class="p-2.5">4-Digit Passkey</th>
+                      <th class="p-2.5">Login Count</th>
+                      <th class="p-2.5">Registered At</th>
+                      <th class="p-2.5">Last Login</th>
+                      <th class="p-2.5">Last Logout</th>
+                    </tr>
+                  </thead>
+                  <tbody id="crm-accounts-tbody" class="divide-y divide-stone-200 font-mono"></tbody>
+                </table>
+              </div>
+
+              <div class="overflow-x-auto pt-2">
+                <div class="text-xs font-black text-stone-700 mb-1.5">🕒 Recent Login / Logout / Registration Logs</div>
+                <table class="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr class="bg-stone-50 border-b border-stone-300 font-bold text-stone-600">
+                      <th class="p-2">Timestamp</th>
+                      <th class="p-2">Action</th>
+                      <th class="p-2">Email</th>
+                      <th class="p-2">Passkey</th>
+                      <th class="p-2">Note</th>
+                    </tr>
+                  </thead>
+                  <tbody id="crm-auth-logs-tbody" class="divide-y divide-stone-200 font-mono text-[11px]"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-stone-900 text-white border-2 border-amber-400 px-4 py-3 rounded-xl shadow-lg text-xs sm:text-sm font-bold flex items-center gap-2">
+    <span id="toast-text">Copied</span>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- JAVASCRIPT ENGINE                                                     -->
+  <!-- ===================================================================== -->
+  <script>
+    // 1. Menu & Pricing
+    const MENU = {
+      'H01': { name: 'Hot Americano', type: 'black', prices: { S: 28, M: 32, L: 36 } },
+      'H02': { name: 'Hot Latte', type: 'milk', prices: { S: 36, M: 40, L: 44 } },
+      'H03': { name: 'Hot Cappuccino', type: 'milk', prices: { S: 36, M: 40, L: 44 } },
+      'H04': { name: 'Hot Flat White', type: 'milk', prices: { S: 36, M: 40, L: 44 } },
+      'H05': { name: 'Hot Mocha', type: 'milk', prices: { S: 40, M: 44, L: 48 } },
+      'C01': { name: 'Iced Americano', type: 'black', prices: { S: 32, M: 36, L: 40 } },
+      'C02': { name: 'Iced Latte', type: 'milk', prices: { S: 40, M: 44, L: 48 } },
+      'C03': { name: 'Iced Cappuccino', type: 'milk', prices: { S: 40, M: 44, L: 48 } },
+      'C04': { name: 'Iced Mocha', type: 'milk', prices: { S: 44, M: 48, L: 52 } },
+      'S01': { name: 'Dirty', type: 'milk', prices: { D: 40, M: 40, S: 40, L: 44 } },
+      'S02': { name: 'Espresso Tonic', type: 'black', prices: { M: 42, L: 46, S: 42 } }
+    };
+
+    const SIZE_NAMES = { S: 'Small', M: 'Medium', L: 'Large', D: 'Dirty Dedicated' };
+    const MILK_NAMES = {
+      FM: { label: 'Whole Milk', add: 0 },
+      SM: { label: 'Skim Milk', add: 0 },
+      OM: { label: 'Oat Milk', add: 4 },
+      D: { label: 'Whole Milk', add: 0 },
+      O: { label: 'Oat Milk', add: 4 },
+      '-': { label: 'No Milk', add: 0 }
+    };
+
+    function getTodayDateStr() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    // 2. State
+    let currentView = 'customer'; // 'customer' | 'brewer'
+    let kdsFilter = 'active';     // 'active' | 'all' | 'cancelled'
+    let crmSubTab = 'daily';      // 'daily' | 'customers' | 'orders' | 'accounts'
+    let selectedBean = 'SOE Single Origin';
+    let currentParsedOrder = {
+      valid: true,
+      code: 'H02',
+      size: 'M',
+      milk: 'OM',
+      qty: 1,
+      bean: 'SOE Single Origin',
+      customerName: 'Ms. Chan',
+      whatsapp: '9123 4567',
+      igHandle: '@chan_hk',
+      customerDesc: 'SOE Single Origin / Medium Hot Latte / Oat Milk / 1 Cup',
+      kdsDesc: 'Medium Hot Latte / Oat Milk / 1 Cup',
+      totalPrice: 43
+    };
+
+    // Brewer Auth & Persistent Session State (No re-login needed until Logout!)
+    const BREWER_AUTH_KEY = 'brew_brewer_auth_v2';
+    const BREWER_SESSION_KEY = 'brew_brewer_session_unlocked_v2';
+    const BREWER_ACCOUNTS_KEY = 'brew_brewer_accounts_log_v2';
+    const BREWER_AUTH_LOGS_KEY = 'brew_brewer_auth_events_v2';
+
+    let brewerUnlocked = false;
+    let brewerAccountsRegistry = [
+      {
+        email: 'brewer@brew.hk',
+        passkey: '0326',
+        registeredAt: '2026-10-09 09:00:00',
+        lastLoginAt: '2026-10-09 14:00:00',
+        loginCount: 1
+      }
+    ];
+    let brewerAuthEventLogs = [
+      {
+        id: 1,
+        action: 'register',
+        email: 'brewer@brew.hk',
+        passkey: '0326',
+        timestamp: '2026-10-09 09:00:00',
+        note: 'Default system barista account'
+      }
+    ];
+
+    // Orders State & Sync
+    const ORDERS_STORAGE_KEY = 'brew_orders_v3';
+    const syncChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('brew_sync_v3') : null;
+
+    let kdsOrders = [
+      {
+        id: 105,
+        bean: 'SOE Single Origin',
+        code: 'H02',
+        size: 'M',
+        milk: 'OM',
+        qty: 1,
+        raw: 'Medium Hot Latte / Oat Milk / 1 Cup',
+        customerDesc: 'SOE Single Origin / Medium Hot Latte / Oat Milk / 1 Cup',
+        kdsDesc: 'Medium Hot Latte / Oat Milk / 1 Cup',
+        amount: 43,
+        customerName: 'Ms. Chan',
+        whatsapp: '9123 4567',
+        igHandle: '@chan_hk',
+        paymentMethod: 'fps',
+        paymentVerified: false,
+        status: 'Pending Verification',
+        channel: 'IG DM',
+        date: getTodayDateStr(),
+        time: '14:35'
+      },
+      {
+        id: 104,
+        bean: 'SOE Single Origin',
+        code: 'H02',
+        size: 'M',
+        milk: 'SM',
+        qty: 1,
+        raw: 'Medium Hot Latte / Skim Milk / 1 Cup',
+        customerDesc: 'SOE Single Origin / Medium Hot Latte / Skim Milk / 1 Cup',
+        kdsDesc: 'Medium Hot Latte / Skim Milk / 1 Cup',
+        amount: 39,
+        customerName: 'Alex Wong',
+        whatsapp: '9888 1122',
+        igHandle: '@alexw_hk',
+        paymentMethod: 'fps',
+        paymentVerified: false,
+        status: 'Pending Verification',
+        channel: 'WhatsApp',
+        date: getTodayDateStr(),
+        time: '14:32'
+      },
+      {
+        id: 103,
+        bean: 'House Blend',
+        code: 'C01',
+        size: 'L',
+        milk: '-',
+        qty: 2,
+        raw: 'Large Iced Americano / 2 Cups',
+        customerDesc: 'House Blend / Large Iced Americano / 2 Cups',
+        kdsDesc: 'Large Iced Americano / 2 Cups',
+        amount: 80,
+        customerName: 'Mr. Lam',
+        whatsapp: '6111 2233',
+        igHandle: '@lam_coffee',
+        paymentMethod: 'fps',
+        paymentVerified: true,
+        status: 'Ready / Done',
+        channel: 'WhatsApp',
+        date: getTodayDateStr(),
+        time: '13:50'
+      }
+    ];
+
+    // 3. Toggle 'i' Hint Helper
+    function toggleHint(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('hidden');
+    }
+
+    // 4. Switch Between "Customer Order" and "Barista Brewer"
+    function switchMainView(view) {
+      currentView = view;
+      const custSec = document.getElementById('view-customer');
+      const brewSec = document.getElementById('view-brewer');
+      const btnCust = document.getElementById('tab-btn-customer');
+      const btnBrew = document.getElementById('tab-btn-brewer');
+
+      if (view === 'customer') {
+        custSec.classList.remove('hidden');
+        brewSec.classList.add('hidden');
+        btnCust.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition bg-amber-400 text-stone-950';
+        btnBrew.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-stone-300 hover:text-white flex items-center gap-1.5';
+      } else {
+        custSec.classList.add('hidden');
+        brewSec.classList.remove('hidden');
+        btnBrew.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition bg-amber-400 text-stone-950 flex items-center gap-1.5';
+        btnCust.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-stone-300 hover:text-white';
+        renderBrewerAuthGateOrWorkspace();
+      }
+      renderAllOrderViews();
+    }
+
+    // 5. Persistent Brewer Email Registration & 4-Digit Passkey Logic
+    function getSavedBrewerAuth() {
+      try {
+        const raw = localStorage.getItem(BREWER_AUTH_KEY) || localStorage.getItem('magabrew_brewer_auth_v1');
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function isBrewerSessionPersisted() {
+      try {
+        return localStorage.getItem(BREWER_SESSION_KEY) === 'true';
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function setBrewerSessionPersisted(unlocked) {
+      brewerUnlocked = Boolean(unlocked);
+      try {
+        localStorage.setItem(BREWER_SESSION_KEY, unlocked ? 'true' : 'false');
+      } catch (e) {}
+    }
+
+    function recordLocalAuthEvent(action, email, passkey, note) {
+      const ts = new Date().toISOString().replace('T', ' ').slice(0, 19);
+      try {
+        const savedAcc = localStorage.getItem(BREWER_ACCOUNTS_KEY);
+        if (savedAcc) brewerAccountsRegistry = JSON.parse(savedAcc);
+      } catch (e) {}
+      try {
+        const savedLogs = localStorage.getItem(BREWER_AUTH_LOGS_KEY);
+        if (savedLogs) brewerAuthEventLogs = JSON.parse(savedLogs);
+      } catch (e) {}
+
+      let acc = brewerAccountsRegistry.find(a => a.email === email);
+      if (!acc && email) {
+        acc = {
+          email,
+          passkey: passkey || '----',
+          registeredAt: ts,
+          lastLoginAt: ts,
+          loginCount: 1
+        };
+        brewerAccountsRegistry.unshift(acc);
+      } else if (acc) {
+        if (passkey) acc.passkey = passkey;
+        if (action === 'login' || action === 'register') {
+          acc.lastLoginAt = ts;
+          acc.loginCount = (acc.loginCount || 0) + (action === 'login' ? 1 : 0);
+        }
+        if (action === 'logout') {
+          acc.lastLogoutAt = ts;
+        }
+      }
+
+      brewerAuthEventLogs.unshift({
+        id: brewerAuthEventLogs.length + 1,
+        action,
+        email,
+        passkey: passkey || (acc ? acc.passkey : '----'),
+        timestamp: ts,
+        note
+      });
+
+      try {
+        localStorage.setItem(BREWER_ACCOUNTS_KEY, JSON.stringify(brewerAccountsRegistry));
+        localStorage.setItem(BREWER_AUTH_LOGS_KEY, JSON.stringify(brewerAuthEventLogs.slice(0, 200)));
+      } catch (e) {}
+    }
+
+    function saveBrewerAuth(email, pin) {
+      const data = { email: email.trim().toLowerCase(), pin: String(pin).trim(), updatedAt: new Date().toISOString() };
+      try {
+        localStorage.setItem(BREWER_AUTH_KEY, JSON.stringify(data));
+      } catch (e) {}
+      setBrewerSessionPersisted(true);
+      recordLocalAuthEvent('register', data.email, data.pin, 'Registered email & Passkey, active session maintained');
+
+      fetch('/api/brew/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'register', email: data.email, pin: data.pin })\
+      }).then(() => fetchAuthAuditFromServer()).catch(() => {});
+      return data;
+    }
+
+    function updateHeaderLockBadge() {
+      const lockIcon = document.getElementById('brewer-lock-icon');
+      const saved = getSavedBrewerAuth();
+      if (brewerUnlocked && saved) {
+        if (lockIcon) lockIcon.textContent = '🔓';
+      } else {
+        if (lockIcon) lockIcon.textContent = '🔒';
+      }
+    }
+
+    function renderBrewerAuthGateOrWorkspace() {
+      const gate = document.getElementById('brewer-auth-gate');
+      const workspace = document.getElementById('brewer-workspace');
+      const regBox = document.getElementById('brewer-register-box');
+      const pinBox = document.getElementById('brewer-pin-box');
+      const saved = getSavedBrewerAuth();
+
+      if (brewerUnlocked && saved && saved.email && saved.pin) {
+        gate.classList.add('hidden');
+        workspace.classList.remove('hidden');
+        updateHeaderLockBadge();
+        const activeEmailEl = document.getElementById('active-brewer-email');
+        if (activeEmailEl) activeEmailEl.textContent = saved.email;
+        const activePinEl = document.getElementById('active-brewer-pin-badge');
+        if (activePinEl) activePinEl.textContent = saved.pin;
+        renderCrmAuditDashboard();
+        return;
+      }
+
+      gate.classList.remove('hidden');
+      workspace.classList.add('hidden');
+      updateHeaderLockBadge();
+
+      if (!saved || !saved.email || !saved.pin) {
+        document.getElementById('auth-gate-title').textContent = 'Barista Brewer Email Registration';
+        regBox.classList.remove('hidden');
+        pinBox.classList.add('hidden');
+      } else {
+        document.getElementById('auth-gate-title').textContent = 'Enter 4-Digit Passkey PIN to Unlock';
+        regBox.classList.add('hidden');
+        pinBox.classList.remove('hidden');
+        document.getElementById('locked-brewer-email').textContent = saved.email;
+        const pinInput = document.getElementById('login-pin-input');
+        if (pinInput) {
+          pinInput.value = '';
+          setTimeout(() => pinInput.focus(), 50);
+        }
+      }
+    }
+
+    function handleBrewerRegister() {
+      const email = (document.getElementById('reg-email-input').value || '').trim();
+      const pin = (document.getElementById('reg-pin-input').value || '').trim();
+      const errEl = document.getElementById('reg-error-msg');
+
+      if (!email || !email.includes('@')) {
+        errEl.textContent = '⚠️ Please enter a valid email address (e.g. brewer@brew.hk)';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      if (!/^\d{4}$/.test(pin)) {
+        errEl.textContent = '⚠️ Passkey must be 4 digits (e.g. 0326)';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      errEl.classList.add('hidden');
+      saveBrewerAuth(email, pin);
+      renderBrewerAuthGateOrWorkspace();
+      showToast('✅ Email registered & logged in (no re-login required until logout)');
+    }
+
+    function pressPinKey(digit) {
+      const input = document.getElementById('login-pin-input');
+      if (!input) return;
+      if (input.value.length < 4) {
+        input.value += digit;
+        checkPinAutoSubmit(input.value);
+      }
+    }
+
+    function clearPinKey() {
+      const input = document.getElementById('login-pin-input');
+      if (input) input.value = '';
+      const errEl = document.getElementById('pin-error-msg');
+      if (errEl) errEl.classList.add('hidden');
+    }
+
+    function checkPinAutoSubmit(val) {
+      if (val && val.length === 4) {
+        handleBrewerPinVerify();
+      }
+    }
+
+    function handleBrewerPinVerify() {
+      const input = document.getElementById('login-pin-input');
+      const errEl = document.getElementById('pin-error-msg');
+      const saved = getSavedBrewerAuth();
+      const entered = (input ? input.value : '').trim();
+
+      if (!saved) {
+        renderBrewerAuthGateOrWorkspace();
+        return;
+      }
+
+      if (entered === saved.pin) {
+        errEl.classList.add('hidden');
+        setBrewerSessionPersisted(true);
+        recordLocalAuthEvent('login', saved.email, saved.pin, 'Passkey verified successfully');
+        fetch('/api/brew/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'verify', email: saved.email, pin: entered })
+        }).then(() => fetchAuthAuditFromServer()).catch(() => {});
+        renderBrewerAuthGateOrWorkspace();
+        showToast('🔓 Signed in! Session remains active until manual logout');
+      } else {
+        errEl.textContent = '❌ Incorrect 4-digit Passkey, please retry';
+        errEl.classList.remove('hidden');
+        if (input) input.value = '';
+      }
+    }
+
+    function logoutBrewerWorkspace() {
+      const saved = getSavedBrewerAuth();
+      setBrewerSessionPersisted(false);
+      if (saved) {
+        recordLocalAuthEvent('logout', saved.email, saved.pin, 'Barista clicked Logout');
+        fetch('/api/brew/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'logout', email: saved.email })
+        }).catch(() => {});
+      }
+      renderBrewerAuthGateOrWorkspace();
+      showToast('🚪 Logged out from Brewer workspace');
+    }
+
+    function resetBrewerAuth() {
+      try {
+        localStorage.removeItem(BREWER_AUTH_KEY);
+      } catch (e) {}
+      setBrewerSessionPersisted(false);
+      fetch('/api/brew/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reset' })
+      }).catch(() => {});
+      renderBrewerAuthGateOrWorkspace();
+      showToast('🔄 Reset complete, please re-register email and Passkey');
+    }
+
+    function scrollToCrmSection() {
+      const el = document.getElementById('brewer-crm-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 6. Ordering & Natural Language Parser
+    function selectBean(beanName) {
+      selectedBean = beanName;
+      document.querySelectorAll('.bean-btn').forEach((btn) => {
+        if (btn.textContent.trim() === beanName) {
+          btn.className = 'bean-btn px-2.5 py-2 rounded-lg border-2 border-stone-900 bg-amber-300 font-black text-xs text-stone-900';
+        } else {
+          btn.className = 'bean-btn px-2.5 py-2 rounded-lg border border-stone-300 bg-white font-bold text-xs text-stone-700 hover:bg-stone-100';
+        }
+      });
+      parseOrderInput();
+    }
+
+    function buildFromVisual() {
+      const code = document.getElementById('sel-drink').value;
+      const size = document.getElementById('sel-size').value;
+      let milk = document.getElementById('sel-milk').value;
+      const qty = document.getElementById('sel-qty').value;
+
+      const drinkObj = MENU[code];
+      if (drinkObj && drinkObj.type === 'black') {
+        milk = '-';
+        document.getElementById('sel-milk').value = '-';
+      } else if (milk === '-') {
+        milk = 'FM';
+        document.getElementById('sel-milk').value = 'FM';
+      }
+
+      const sizeText = SIZE_NAMES[size] || 'Medium';
+      const milkText = milk === '-' ? '' : ` / ${MILK_NAMES[milk]?.label || 'Whole Milk'}`;
+      const qtyText = `${qty} Cup${Number(qty) > 1 ? 's' : ''}`;
+      document.getElementById('order-input').value = `${sizeText} ${drinkObj.name}${milkText} / ${qtyText}`;
+      parseOrderInput();
+    }
+
+    function applyQuickPreset(text) {
+      document.getElementById('order-input').value = text;
+      parseOrderInput();
+    }
+
+    function parseNaturalLanguageOrCode(rawStr) {
+      const normalized = rawStr.trim();
+      const upper = normalized.toUpperCase();
+      const slashParts = upper.split('/').map(s => s.trim()).filter(Boolean);
+
+      if (slashParts.length === 4 && MENU[slashParts[0]]) {
+        const [code, sizeRaw, milkRaw, qtyRaw] = slashParts;
+        const drink = MENU[code];
+        const size = ['S', 'M', 'L', 'D'].includes(sizeRaw) ? sizeRaw : 'M';
+        let milk = milkRaw;
+        if (drink.type === 'black') milk = '-';
+        else if (!['FM', 'SM', 'OM', 'D', 'O'].includes(milk)) milk = 'FM';
+        const qty = Math.max(1, Math.min(20, parseInt(qtyRaw, 10) || 1));
+        return { code, size, milk, qty };
+      }
+
+      let code = 'H02';
+      const isCold = /COLD|ICED|ICE|凍|冰/i.test(normalized);
+      if (/DIRTY|S01/i.test(normalized)) code = 'S01';
+      else if (/TONIC|S02/i.test(normalized)) code = 'S02';
+      else if (/MOCHA|H05|C04/i.test(normalized)) code = isCold ? 'C04' : 'H05';
+      else if (/FLAT\s*WHITE|H04/i.test(normalized)) code = 'H04';
+      else if (/CAPPUCCINO|H03|C03/i.test(normalized)) code = isCold ? 'C03' : 'H03';
+      else if (/AMERICANO|BLACK|H01|C01/i.test(normalized)) code = isCold ? 'C01' : 'H01';
+      else if (/LATTE|H02|C02/i.test(normalized)) code = isCold ? 'C02' : 'H02';
+
+      let size = code === 'S01' ? 'D' : 'M';
+      if (/SMALL|\bS\b|細/i.test(normalized)) size = 'S';
+      else if (/LARGE|\bL\b|大/i.test(normalized)) size = 'L';
+      else if (/MEDIUM|\bM\b|中/i.test(normalized)) size = 'M';
+
+      let milk = MENU[code].type === 'black' ? '-' : 'FM';
+      if (MENU[code].type !== 'black') {
+        if (/SKIN\s*MILK|SKIM\s*MILK|SKIM|\bSM\b/i.test(normalized)) milk = 'SM';
+        else if (/OAT|OATMILK|\bOM\b/i.test(normalized)) milk = 'OM';
+        else if (/FULL|WHOLE|\bFM\b/i.test(normalized)) milk = 'FM';
+      }
+
+      let qty = 1;
+      const qtyMatch = normalized.match(/(\d+)\s*(?:cups?|杯)/i) || normalized.match(/[/／]\s*(\d+)\s*$/);
+      if (qtyMatch) qty = Math.max(1, Math.min(20, parseInt(qtyMatch[1], 10) || 1));
+
+      return { code, size, milk, qty };
+    }
+
+    function parseOrderInput() {
+      const raw = document.getElementById('order-input').value.trim();
+      const custName = (document.getElementById('cust-name-input')?.value || 'Guest').trim();
+      const custWhatsapp = (document.getElementById('cust-whatsapp-input')?.value || '').trim();
+      const custIg = (document.getElementById('cust-ig-input')?.value || '').trim();
+
+      const parsed = parseNaturalLanguageOrCode(raw || 'Medium Hot Latte / Oat Milk / 1 Cup');
+      const { code, size, milk, qty } = parsed;
+      const drink = MENU[code];
+
+      let basePrice = drink.prices[size] ?? drink.prices['M'] ?? 36;
+      const milkAdd = drink.type === 'milk' ? (MILK_NAMES[milk]?.add || 0) : 0;
+      let unitPrice = basePrice + milkAdd;
+
+      if (code === 'H02' && size === 'M' && (milk === 'OM' || milk === 'O')) {
+        unitPrice = 43;
+      } else if (code === 'H02' && size === 'M' && (milk === 'SM' || milk === 'FM')) {
+        unitPrice = 39;
+      }
+
+      const totalPrice = unitPrice * qty;
+      const sizeLabel = size === 'D' ? '' : SIZE_NAMES[size];
+      const milkPart = drink.type === 'black' ? '' : ` / ${MILK_NAMES[milk]?.label || 'Whole Milk'}`;
+      const qtyLabel = `${qty} Cup${qty > 1 ? 's' : ''}`;
+      const kdsDesc = `${sizeLabel} ${drink.name}${milkPart} / ${qtyLabel}`;
+      const customerDesc = `${selectedBean} / ${kdsDesc}`;
+
+      currentParsedOrder = {
+        valid: true,
+        raw,
+        code,
+        size,
+        milk,
+        qty,
+        bean: selectedBean,
+        customerName: custName,
+        whatsapp: custWhatsapp,
+        igHandle: custIg,
+        customerDesc,
+        kdsDesc,
+        totalPrice
+      };
+
+      document.getElementById('customer-order-desc').textContent = customerDesc;
+      document.getElementById('customer-contact-preview').textContent =
+        `Contact: ${custName || 'Unspecified'}${custWhatsapp ? ' · WhatsApp: ' + custWhatsapp : ''}${custIg ? ' · IG: ' + custIg : ''}`;
+      document.getElementById('customer-order-price').textContent = totalPrice;
+
+      // Sync top FPS card preview
+      document.getElementById('cust-fps-amount-display').textContent = `$${totalPrice}`;
+    }
+
+    // 7. Confirm / Modify / Cancel Order
+    function customerConfirmOrder() {
+      const nextId = kdsOrders.reduce((max, o) => Math.max(max, Number(o.id) || 100), 100) + 1;
+      const now = new Date();
+      const timeStr = now.toTimeString().slice(0, 5);
+      const dateStr = now.toISOString().slice(0, 10);
+
+      const newOrder = {
+        id: nextId,
+        bean: currentParsedOrder.bean,
+        code: currentParsedOrder.code,
+        size: currentParsedOrder.size,
+        milk: currentParsedOrder.milk,
+        qty: currentParsedOrder.qty || 1,
+        raw: currentParsedOrder.raw,
+        customerDesc: currentParsedOrder.customerDesc,
+        kdsDesc: currentParsedOrder.kdsDesc,
+        amount: currentParsedOrder.totalPrice,
+        customerName: currentParsedOrder.customerName || 'Guest',
+        whatsapp: currentParsedOrder.whatsapp || '',
+        igHandle: currentParsedOrder.igHandle || '',
+        paymentMethod: 'fps',
+        paymentVerified: false,
+        status: 'Pending Verification',
+        channel: currentParsedOrder.whatsapp ? 'WhatsApp' : 'IG DM',
+        date: dateStr,
+        time: timeStr
+      };
+
+      kdsOrders.unshift(newOrder);
+
+      document.getElementById('manual-order-id').value = nextId;
+      document.getElementById('manual-hkd-amount').value = currentParsedOrder.totalPrice;
+      document.getElementById('cust-top-order-id').textContent = `#${nextId}`;
+      document.getElementById('customer-action-feedback').textContent = `✅ Order placed #${nextId} (Please pay via FPS above)`;
+
+      syncOrdersEverywhere(newOrder);
+      updatePaymentTemplates();
+      renderAllOrderViews();
+      showToast(`✅ Order #${nextId} sent to barista!`);
+    }
+
+    function customerModifyOrder() {
+      const input = document.getElementById('order-input');
+      input.focus();
+      input.select();
+      document.getElementById('customer-action-feedback').textContent = '✏️ Editing order...';
+    }
+
+    function customerCancelActiveOrder() {
+      const activeOrder = kdsOrders.find(o => o.status !== 'Cancelled' && o.status !== 'Ready / Done' && o.status !== '已取消' && o.status !== '搞掂');
+      if (!activeOrder) {
+        showToast('⚠️ No active order to cancel');
+        return;
+      }
+      cancelOrderById(activeOrder.id, 'Customer');
+    }
+
+    function cancelOrderById(orderId, cancelledBy = 'Barista') {
+      const target = kdsOrders.find(o => Number(o.id) === Number(orderId));
+      if (!target) return;
+
+      target.status = 'Cancelled';
+      target.cancelledBy = cancelledBy;
+      target.cancelledAt = new Date().toTimeString().slice(0, 5);
+
+      const fb = document.getElementById('customer-action-feedback');
+      if (fb) fb.textContent = `❌ Order #${orderId} cancelled (${cancelledBy})`;
+
+      try {
+        localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(kdsOrders));
+        if (syncChannel) syncChannel.postMessage({ type: 'ORDERS_UPDATED', orders: kdsOrders });
+      } catch (e) {}
+
+      fetch('/api/brew/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'cancel', id: orderId, cancelledBy })
+      }).catch(() => {});
+
+      renderAllOrderViews();
+      showToast(`❌ Order #${orderId} cancelled and synced`);
+    }
+
+    function restoreOrderById(orderId) {
+      const target = kdsOrders.find(o => Number(o.id) === Number(orderId));
+      if (!target) return;
+      target.status = target.paymentVerified ? 'Brewing' : 'Pending Verification';
+      syncOrdersEverywhere(target);
+      renderAllOrderViews();
+      showToast(`↺ Order #${orderId} restored`);
+    }
+
+    // 8. Payment Templates & FPS Top Priority
+    function updatePaymentTemplates() {
+      const orderId = document.getElementById('manual-order-id').value || '105';
+      const amount = parseInt(document.getElementById('manual-hkd-amount').value, 10) || 0;
+      const fpsPhone = (document.getElementById('fps-phone-input').value || '9123 6789').trim();
+
+      document.getElementById('cust-top-order-id').textContent = `#${orderId}`;
+      document.getElementById('cust-fps-phone-display').textContent = fpsPhone;
+      document.getElementById('cust-fps-amount-display').textContent = `$${amount}`;
+
+      const cleanFps = fpsPhone.replace(/\s+/g, '');
+      const qrImg = document.getElementById('cust-fps-qr-img');
+      if (qrImg) {
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(`FPS:${cleanFps};HKD:${amount};ORDER:${orderId}`)}`;
+      }
+
+      const targetOrder = kdsOrders.find(o => String(o.id) === String(orderId));
+      if (targetOrder && targetOrder.amount !== amount) {
+        targetOrder.amount = amount;
+        syncOrdersEverywhere(targetOrder);
+        renderAllOrderViews();
+      }
+    }
+
+    function copyFpsPhone() {
+      const fpsPhone = (document.getElementById('fps-phone-input')?.value || '9123 6789').trim();
+      navigator.clipboard.writeText(fpsPhone.replace(/\s+/g, '')).then(() => {
+        showToast(`📋 Copied FPS Phone: ${fpsPhone}`);
+      });
+    }
+
+    function copyFpsReceiptPrompt() {
+      const orderId = document.getElementById('manual-order-id')?.value || '105';
+      const amount = document.getElementById('manual-hkd-amount')?.value || '43';
+      const fpsPhone = (document.getElementById('fps-phone-input')?.value || '9123 6789').trim();
+      const msg = `🇭🇰 BREW Faster Payment System (FPS) Prompt\nOrder ID: #${orderId}\nTotal Due: $${amount} HKD\nFPS Phone: ${fpsPhone}\n(Remarks: #${orderId}. Please send screenshot upon payment ☕)`;
+      navigator.clipboard.writeText(msg).then(() => {
+        showToast('📋 Copied FPS payment message');
+      });
+    }
+
+    // 9. Brewer Verification & Status Progression
+    function checkPaymentVerification() {
+      const c1 = document.getElementById('chk-amount').checked;
+      const c2 = document.getElementById('chk-time').checked;
+      const c3 = document.getElementById('chk-status').checked;
+      const btn = document.getElementById('unlock-brew-btn');
+      const orderId = document.getElementById('manual-order-id').value || '105';
+
+      if (c1 && c2 && c3) {
+        btn.disabled = false;
+        btn.textContent = `✅ Verified! Unlock #${orderId} to "🟠 Brewing"`;
+      } else {
+        btn.disabled = true;
+        btn.textContent = `🔒 Verify to Unlock "🟠 Brewing"`;
+      }
+    }
+
+    function simulateCustomerPaid() {
+      document.getElementById('chk-amount').checked = true;
+      document.getElementById('chk-time').checked = true;
+      document.getElementById('chk-status').checked = true;
+      checkPaymentVerification();
+      proceedToBrewing();
+    }
+
+    function proceedToBrewing() {
+      const orderId = document.getElementById('manual-order-id').value;
+      const target = kdsOrders.find(o => String(o.id) === String(orderId)) || kdsOrders[0];
+      if (target) {
+        target.paymentVerified = true;
+        target.status = 'Brewing';
+        target.verifiedAt = new Date().toTimeString().slice(0, 5);
+        syncOrdersEverywhere(target);
+        renderAllOrderViews();
+        showToast(`🟠 Order #${target.id} verified, brewing now!`);
+      }
+      document.getElementById('chk-amount').checked = false;
+      document.getElementById('chk-time').checked = false;
+      document.getElementById('chk-status').checked = false;
+      checkPaymentVerification();
+    }
+
+    function advanceOrderStatus(orderId, nextStatus) {
+      const order = kdsOrders.find(o => Number(o.id) === Number(orderId));
+      if (!order) return;
+
+      if (nextStatus === 'Brewing' && !order.paymentVerified) {
+        document.getElementById('manual-order-id').value = order.id;
+        document.getElementById('manual-hkd-amount').value = order.amount;
+        updatePaymentTemplates();
+        showToast(`⚠️ Please verify payment for #${order.id} first`);
+        return;
+      }
+
+      order.status = nextStatus;
+      if (nextStatus === 'Ready / Done' || nextStatus === '搞掂') {
+        order.completedAt = new Date().toTimeString().slice(0, 5);
+      }
+      syncOrdersEverywhere(order);
+      renderAllOrderViews();
+      showToast(`✅ Order #${order.id} status updated to: ${nextStatus}`);
+    }
+
+    function loadOrderIntoVerifier(orderId) {
+      const order = kdsOrders.find(o => Number(o.id) === Number(orderId));
+      if (!order) return;
+      document.getElementById('manual-order-id').value = order.id;
+      document.getElementById('manual-hkd-amount').value = order.amount;
+      updatePaymentTemplates();
+      showToast(`🎯 Selected Order #${order.id} ($${order.amount})`);
+    }
+
+    // 10. Render Views
+    function setKdsFilter(filter) {
+      kdsFilter = filter;
+      ['active', 'all', 'cancelled'].forEach(f => {
+        const btn = document.getElementById(`kds-filter-${f}`);
+        if (btn) {
+          btn.className = f === filter
+            ? 'px-2.5 py-1 rounded bg-stone-900 text-white'
+            : 'px-2.5 py-1 rounded text-stone-600 hover:text-stone-900';
+        }
+      });
+      renderAllOrderViews();
+    }
+
+    function renderAllOrderViews() {
+      const activeCount = kdsOrders.filter(o => o.status !== 'Ready / Done' && o.status !== '搞掂' && o.status !== 'Cancelled' && o.status !== '已取消').length;
+      const badge = document.getElementById('brewer-badge-count');
+      if (badge) badge.textContent = activeCount;
+
+      // 10A. Render Customer Live Orders Tracker
+      const custList = document.getElementById('customer-live-orders-list');
+      if (custList) {
+        const recent = kdsOrders.slice(0, 3);
+        custList.innerHTML = recent.map(o => {
+          const isCancelled = o.status === 'Cancelled' || o.status === '已取消';
+          const isDone = o.status === 'Ready / Done' || o.status === '搞掂';
+          const isBrewing = o.status === 'Brewing' || o.status === '沖緊';
+          const statusColor = isCancelled
+            ? 'text-rose-700 bg-rose-50 border-rose-300'
+            : isDone
+            ? 'text-emerald-800 bg-emerald-50 border-emerald-300'
+            : isBrewing
+            ? 'text-amber-900 bg-amber-100 border-amber-400'
+            : 'text-stone-800 bg-stone-100 border-stone-300';
+
+          const displayStatus = isCancelled ? 'Cancelled' : isDone ? 'Ready for Pickup' : isBrewing ? 'Brewing' : 'Pending Verification';
+
+          return `
+            <div class="p-3 rounded-xl border ${statusColor} flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div>
+                <div class="font-black text-stone-900">
+                  #${o.id} · ${o.kdsDesc} <span class="font-mono">($${o.amount})</span>
+                </div>
+                <div class="text-[11px] text-stone-600">
+                  Status: <strong>${displayStatus}</strong> ${o.cancelledBy ? `(Cancelled by ${o.cancelledBy})` : ''} · Time: ${o.time || '--:--'}
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                ${!isCancelled && !isDone ? `
+                  <button
+                    type="button"
+                    onclick="cancelOrderById(${o.id}, 'Customer')"
+                    class="px-2.5 py-1 rounded-lg bg-rose-200 hover:bg-rose-300 text-rose-950 font-black text-[11px] border border-stone-900"
+                  >
+                    ❌ Cancel Order
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 10B. Render Brewer KDS Board
+      const kdsContainer = document.getElementById('kds-orders-list');
+      if (kdsContainer) {
+        const filtered = kdsOrders.filter(o => {
+          const isCanc = o.status === 'Cancelled' || o.status === '已取消';
+          const isFin = o.status === 'Ready / Done' || o.status === '搞掂';
+          if (kdsFilter === 'active') return !isCanc && !isFin;
+          if (kdsFilter === 'cancelled') return isCanc;
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          kdsContainer.innerHTML = `
+            <div class="p-6 rounded-xl bg-stone-50 border border-dashed border-stone-300 text-center text-xs text-stone-500 font-bold">
+              No matching orders found
+            </div>
+          `;
+        } else {
+          kdsContainer.innerHTML = filtered.map(order => {
+            const isCancelled = order.status === 'Cancelled' || order.status === '已取消';
+            const isDone = order.status === 'Ready / Done' || order.status === '搞掂';
+            const isBrewing = order.status === 'Brewing' || order.status === '沖緊';
+
+            let cardBg = 'bg-white border-stone-900';
+            let statusTag = '⏳ Pending Verification';
+            if (isCancelled) {
+              cardBg = 'bg-rose-50/70 border-rose-400 opacity-85';
+              statusTag = `❌ Cancelled (${order.cancelledBy || 'System'})`;
+            } else if (isBrewing) {
+              cardBg = 'bg-amber-50 border-stone-900';
+              statusTag = '🟠 Brewing';
+            } else if (isDone) {
+              cardBg = 'bg-emerald-50/60 border-stone-400';
+              statusTag = '🟢 Ready / Done';
+            }
+
+            return `
+              <div class="p-4 rounded-xl border-2 ${cardBg} space-y-3 transition">
+                <div class="flex flex-wrap items-start justify-between gap-2">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="font-mono font-black text-base text-stone-900">#${order.id}</span>
+                      <span class="text-xs font-bold text-stone-600">· ${order.date || getTodayDateStr()} ${order.time} · ${order.customerName || 'Guest'}</span>
+                      <span class="text-xs font-black text-stone-900">${statusTag}</span>
+                    </div>
+                    <div class="text-sm font-black text-stone-900 mt-1">${order.kdsDesc}</div>
+                    <div class="text-xs text-stone-600">
+                      Beans: ${order.bean}
+                      ${order.whatsapp ? ` · WhatsApp: <span class="font-mono">${order.whatsapp}</span>` : ''}
+                      ${order.igHandle ? ` · IG: <span class="font-mono">${order.igHandle}</span>` : ''}
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-xl font-black font-mono text-emerald-800 tabular-nums">$${order.amount}</span>
+                    <span class="block text-[10px] font-mono text-stone-500">FPS HKD</span>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-stone-200">
+                  <div class="flex flex-wrap gap-1.5">
+                    ${!isCancelled && !order.paymentVerified ? `
+                      <button
+                        type="button"
+                        onclick="loadOrderIntoVerifier(${order.id}); simulateCustomerPaid();"
+                        class="px-2.5 py-1.5 rounded-lg bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs border border-stone-900"
+                      >
+                        🔍 Verify & Brew
+                      </button>
+                    ` : ''}
+                    ${!isCancelled && order.paymentVerified && !isDone ? `
+                      <button
+                        type="button"
+                        onclick="advanceOrderStatus(${order.id}, 'Ready / Done')"
+                        class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs border border-stone-900"
+                      >
+                        🟢 Mark Ready
+                      </button>
+                    ` : ''}
+                    ${isCancelled ? `
+                      <button
+                        type="button"
+                        onclick="restoreOrderById(${order.id})"
+                        class="px-2.5 py-1 rounded-lg bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold text-xs"
+                      >
+                        ↺ Restore Order
+                      </button>
+                    ` : `
+                      <button
+                        type="button"
+                        onclick="cancelOrderById(${order.id}, 'Barista')"
+                        class="px-2.5 py-1.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-900 font-black text-xs border border-rose-400"
+                      >
+                        ❌ Cancel Order
+                      </button>
+                    `}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // 10C. Render CRM Dashboard
+      renderCrmAuditDashboard();
+    }
+
+    // 11. CRM & Daily Reconciliation Engine
+    function switchCrmSubTab(tab) {
+      crmSubTab = tab;
+      ['daily', 'customers', 'orders', 'accounts'].forEach(t => {
+        const btn = document.getElementById(`crm-subtab-${t}`);
+        const panel = document.getElementById(`crm-panel-${t}`);
+        if (btn) {
+          btn.className = t === tab
+            ? 'px-3 py-1.5 rounded-lg bg-stone-900 text-amber-300 text-xs font-black'
+            : 'px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200 text-xs font-bold';
+        }
+        if (panel) {
+          if (t === tab) panel.classList.remove('hidden');
+          else panel.classList.add('hidden');
+        }
+      });
+      renderCrmAuditDashboard();
+    }
+
+    function pct(part, total) {
+      if (!total || total <= 0) return '0.0%';
+      return ((part / total) * 100).toFixed(1) + '%';
+    }
+
+    function extractOrderCups(o) {
+      if (o.qty && Number(o.qty) > 0) return Number(o.qty);
+      const m = String(o.kdsDesc || '').match(/(\d+)\s*(?:cups?|杯)/i);
+      return m ? Math.max(1, parseInt(m[1], 10)) : 1;
+    }
+
+    function renderPctBars(containerId, items, totalCount) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      el.innerHTML = items.map(item => {
+        const ratio = totalCount > 0 ? Math.round((item.count / totalCount) * 1000) / 10 : 0;
+        return `
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-bold text-stone-800">${item.label}</span>
+              <span class="font-mono font-black text-stone-900">${item.count} orders · $${item.amount} (${ratio.toFixed(1)}%)</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-stone-200 overflow-hidden">
+              <div class="${item.color || 'bg-amber-500'} h-full rounded-full" style="width: ${Math.min(100, ratio)}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderCrmAuditDashboard() {
+      const dateSelect = document.getElementById('crm-date-filter');
+      if (!dateSelect) return;
+
+      const uniqueDates = Array.from(new Set(kdsOrders.map(o => o.date || getTodayDateStr()))).sort().reverse();
+      const currentSelected = dateSelect.value || 'ALL';
+      const existingOptions = Array.from(dateSelect.options).map(o => o.value);
+      uniqueDates.forEach(d => {
+        if (!existingOptions.includes(d)) {
+          const opt = document.createElement('option');
+          opt.value = d;
+          opt.textContent = `${d} ${d === getTodayDateStr() ? '(Today)' : ''}`;
+          dateSelect.appendChild(opt);
+        }
+      });
+      if (existingOptions.includes(currentSelected)) {
+        dateSelect.value = currentSelected;
+      }
+
+      const selectedDate = dateSelect.value || 'ALL';
+      const scopedOrders = selectedDate === 'ALL'
+        ? kdsOrders
+        : kdsOrders.filter(o => (o.date || getTodayDateStr()) === selectedDate);
+
+      const totalCount = scopedOrders.length;
+      const cancelledOrders = scopedOrders.filter(o => o.status === 'Cancelled' || o.status === '已取消');
+      const activeOrders = scopedOrders.filter(o => o.status !== 'Cancelled' && o.status !== '已取消');
+      const verifiedOrders = activeOrders.filter(o => o.paymentVerified || o.status === 'Brewing' || o.status === 'Ready / Done' || o.status === '沖緊' || o.status === '搞掂');
+      const pendingOrders = activeOrders.filter(o => !o.paymentVerified && (o.status === 'Pending Verification' || o.status === '待對數'));
+
+      const totalCups = activeOrders.reduce((s, o) => s + extractOrderCups(o), 0);
+      const grossValidAmount = activeOrders.reduce((s, o) => s + (Number(o.amount) || 0), 0);
+      const verifiedAmount = verifiedOrders.reduce((s, o) => s + (Number(o.amount) || 0), 0);
+      const pendingAmount = pendingOrders.reduce((s, o) => s + (Number(o.amount) || 0), 0);
+      const cancelledAmount = cancelledOrders.reduce((s, o) => s + (Number(o.amount) || 0), 0);
+      const aov = activeOrders.length > 0 ? Math.round(grossValidAmount / activeOrders.length) : 0;
+
+      const times = scopedOrders.map(o => o.time || '').filter(Boolean).sort();
+      const timeSpanText = times.length > 0 ? `${times[0]} ~ ${times[times.length - 1]}` : '--:-- ~ --:--';
+      const hourCounts = {};
+      scopedOrders.forEach(o => {
+        const hr = String(o.time || '14:00').split(':')[0];
+        if (hr) hourCounts[hr] = (hourCounts[hr] || 0) + 1;
+      });
+      let peakHour = '--';
+      let maxHrCount = 0;
+      Object.entries(hourCounts).forEach(([hr, cnt]) => {
+        if (cnt > maxHrCount) {
+          maxHrCount = cnt;
+          peakHour = `${hr}:00 (${cnt} orders)`;
+        }
+      });
+
+      document.getElementById('crm-kpi-orders').textContent = totalCount;
+      document.getElementById('crm-kpi-cups').textContent = totalCups;
+      document.getElementById('crm-kpi-active-sub').textContent = `Active ${activeOrders.length} · Cancelled ${cancelledOrders.length}`;
+
+      document.getElementById('crm-kpi-verified-amt').textContent = `$${verifiedAmount}`;
+      document.getElementById('crm-kpi-gross-sub').textContent = `Gross $${grossValidAmount} (${pct(verifiedAmount, grossValidAmount)} collected)`;
+
+      document.getElementById('crm-kpi-pending-amt').textContent = `$${pendingAmount}`;
+      document.getElementById('crm-kpi-pending-pct').textContent = `${pendingOrders.length} orders (${pct(pendingAmount, grossValidAmount)} pending)`;
+
+      document.getElementById('crm-kpi-verify-pct').textContent = pct(verifiedOrders.length, activeOrders.length);
+      document.getElementById('crm-kpi-aov').textContent = `AOV $${aov}`;
+
+      document.getElementById('crm-kpi-cancel-pct').textContent = pct(cancelledOrders.length, totalCount);
+      document.getElementById('crm-kpi-cancel-amt').textContent = `Cancelled $${cancelledAmount}`;
+
+      document.getElementById('crm-kpi-time-span').textContent = timeSpanText;
+      document.getElementById('crm-kpi-peak-hour').textContent = `Peak: ${peakHour}`;
+
+      // Breakdown: Milk
+      const oatOrders = activeOrders.filter(o => o.milk === 'OM' || /Oat|燕麥/i.test(o.kdsDesc));
+      const skinOrders = activeOrders.filter(o => o.milk === 'SM' || /Skim|Skin|脫脂/i.test(o.kdsDesc));
+      const fullOrders = activeOrders.filter(o => o.milk === 'FM' || /Whole|Full|全脂/i.test(o.kdsDesc));
+      const blackOrders = activeOrders.filter(o => o.milk === '-' || (!/Oat|Skim|Skin|Whole|Full|燕麥|脫脂|全脂/i.test(o.kdsDesc)));
+
+      renderPctBars('crm-pct-milk-list', [
+        { label: 'OM Oat Milk', count: oatOrders.length, amount: oatOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-amber-500' },
+        { label: 'SM Skim Milk', count: skinOrders.length, amount: skinOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-sky-500' },
+        { label: 'FM Whole Milk', count: fullOrders.length, amount: fullOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-emerald-500' },
+        { label: 'Black / No Milk (-)', count: blackOrders.length, amount: blackOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-stone-600' }
+      ], activeOrders.length);
+
+      // Breakdown: Channel
+      const waOrders = activeOrders.filter(o => /whatsapp/i.test(o.channel || '') || Boolean(o.whatsapp));
+      const igOrders = activeOrders.filter(o => !(/whatsapp/i.test(o.channel || '') || Boolean(o.whatsapp)));
+      renderPctBars('crm-pct-channel-list', [
+        { label: 'WhatsApp Orders', count: waOrders.length, amount: waOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-emerald-600' },
+        { label: 'IG DM Orders', count: igOrders.length, amount: igOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-fuchsia-600' },
+        { label: '🇭🇰 FPS Payment', count: activeOrders.length, amount: grossValidAmount, color: 'bg-stone-900' }
+      ], activeOrders.length);
+
+      // Breakdown: Beans
+      const soeOrders = activeOrders.filter(o => /SOE/i.test(o.bean || ''));
+      const houseOrders = activeOrders.filter(o => /House/i.test(o.bean || ''));
+      const decafOrders = activeOrders.filter(o => /Decaf/i.test(o.bean || ''));
+      renderPctBars('crm-pct-bean-list', [
+        { label: 'SOE Single Origin', count: soeOrders.length, amount: soeOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-amber-600' },
+        { label: 'House Blend', count: houseOrders.length, amount: houseOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-stone-700' },
+        { label: 'Decaf Beans', count: decafOrders.length, amount: decafOrders.reduce((s, o) => s + Number(o.amount || 0), 0), color: 'bg-teal-600' }
+      ], activeOrders.length);
+
+      // Table 1: Daily Summary Table
+      const dailyTbody = document.getElementById('crm-daily-tbody');
+      if (dailyTbody) {
+        const byDate = {};
+        kdsOrders.forEach(o => {
+          const d = o.date || getTodayDateStr();
+          if (!byDate[d]) byDate[d] = [];
+          byDate[d].push(o);
+        });
+        const sortedDays = Object.keys(byDate).sort().reverse();
+        dailyTbody.innerHTML = sortedDays.map(d => {
+          const list = byDate[d];
+          const act = list.filter(o => o.status !== 'Cancelled' && o.status !== '已取消');
+          const canc = list.filter(o => o.status === 'Cancelled' || o.status === '已取消');
+          const ver = act.filter(o => o.paymentVerified || o.status === 'Brewing' || o.status === 'Ready / Done' || o.status === '沖緊' || o.status === '搞掂');
+          const pend = act.filter(o => !o.paymentVerified && (o.status === 'Pending Verification' || o.status === '待對數'));
+          const cups = act.reduce((s, o) => s + extractOrderCups(o), 0);
+          const validAmt = act.reduce((s, o) => s + Number(o.amount || 0), 0);
+          const verAmt = ver.reduce((s, o) => s + Number(o.amount || 0), 0);
+          const pendAmt = pend.reduce((s, o) => s + Number(o.amount || 0), 0);
+          const tList = list.map(o => o.time || '').filter(Boolean).sort();
+          const tSpan = tList.length ? `${tList[0]} ~ ${tList[tList.length - 1]}` : '--';
+
+          return `
+            <tr class="hover:bg-stone-50">
+              <td class="p-2.5 font-black text-stone-900">${d}</td>
+              <td class="p-2.5">${list.length} orders (${cups} cups)</td>
+              <td class="p-2.5 font-bold text-stone-900">$${validAmt}</td>
+              <td class="p-2.5 font-black text-emerald-700">$${verAmt}</td>
+              <td class="p-2.5 font-bold text-amber-700">$${pendAmt}</td>
+              <td class="p-2.5 font-bold text-emerald-800">${pct(ver.length, act.length)}</td>
+              <td class="p-2.5 font-bold text-rose-700">${pct(canc.length, list.length)}</td>
+              <td class="p-2.5 text-stone-600">${tSpan}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // Table 2: Customer CRM Audit Table
+      const custTbody = document.getElementById('crm-customers-tbody');
+      if (custTbody) {
+        const custMap = {};
+        scopedOrders.forEach(o => {
+          const key = (o.whatsapp || o.igHandle || o.customerName || 'Anonymous').trim();
+          if (!custMap[key]) {
+            custMap[key] = {
+              name: o.customerName || 'Guest',
+              whatsapp: o.whatsapp || '-',
+              ig: o.igHandle || '-',
+              totalOrders: 0,
+              validOrders: 0,
+              validSpend: 0,
+              verifiedSpend: 0,
+              lastTime: `${o.date || getTodayDateStr()} ${o.time || ''}`
+            };
+          }
+          const c = custMap[key];
+          c.totalOrders += 1;
+          if (o.status !== 'Cancelled' && o.status !== '已取消') {
+            c.validOrders += 1;
+            c.validSpend += Number(o.amount || 0);
+            if (o.paymentVerified || o.status === 'Brewing' || o.status === 'Ready / Done' || o.status === '沖緊' || o.status === '搞掂') {
+              c.verifiedSpend += Number(o.amount || 0);
+            }
+          }
+        });
+
+        const custRows = Object.values(custMap).sort((a, b) => b.validSpend - a.validSpend);
+        custTbody.innerHTML = custRows.map(c => `
+          <tr class="hover:bg-stone-50">
+            <td class="p-2.5 font-black text-stone-900">${c.name}</td>
+            <td class="p-2.5 text-stone-600">${c.whatsapp} / ${c.ig}</td>
+            <td class="p-2.5">${c.validOrders} valid / ${c.totalOrders} total</td>
+            <td class="p-2.5 font-black text-stone-900">$${c.validSpend}</td>
+            <td class="p-2.5 font-bold text-amber-800">${pct(c.validSpend, grossValidAmount)}</td>
+            <td class="p-2.5 font-bold text-emerald-700">$${c.verifiedSpend}</td>
+            <td class="p-2.5 text-stone-500">${c.lastTime}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Table 3: Detailed Orders Time & Percentage Table
+      const ordersTbody = document.getElementById('crm-orders-tbody');
+      if (ordersTbody) {
+        ordersTbody.innerHTML = scopedOrders.map(o => {
+          const isCanc = o.status === 'Cancelled' || o.status === '已取消';
+          const rowPct = isCanc ? '0.0% (Cancelled)' : pct(Number(o.amount || 0), grossValidAmount);
+          return `
+            <tr class="hover:bg-stone-50 ${isCanc ? 'text-rose-700 bg-rose-50/40' : ''}">
+              <td class="p-2.5 font-black">#${o.id}</td>
+              <td class="p-2.5">${o.date || getTodayDateStr()} ${o.time || '--:--'}</td>
+              <td class="p-2.5">${o.customerName || 'Guest'} (${o.whatsapp || o.igHandle || '-'})</td>
+              <td class="p-2.5 font-sans font-bold">${o.kdsDesc}</td>
+              <td class="p-2.5 font-black">$${o.amount}</td>
+              <td class="p-2.5">${rowPct}</td>
+              <td class="p-2.5 font-bold">${o.status}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      renderAuthAccountsTable();
+    }
+
+    function renderAuthAccountsTable() {
+      const accTbody = document.getElementById('crm-accounts-tbody');
+      const logsTbody = document.getElementById('crm-auth-logs-tbody');
+      if (accTbody) {
+        accTbody.innerHTML = brewerAccountsRegistry.map(acc => `
+          <tr class="hover:bg-stone-50">
+            <td class="p-2.5 font-black text-stone-900">${acc.email}</td>
+            <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-amber-100 border border-stone-800 font-black text-stone-900">${acc.passkey || acc.pin || '----'}</span></td>
+            <td class="p-2.5 font-bold text-emerald-800">${acc.loginCount || 1} logins</td>
+            <td class="p-2.5 text-stone-600">${String(acc.registeredAt || '').replace('T', ' ').slice(0, 19)}</td>
+            <td class="p-2.5 text-stone-900 font-bold">${String(acc.lastLoginAt || '').replace('T', ' ').slice(0, 19)}</td>
+            <td class="p-2.5 text-stone-500">${acc.lastLogoutAt ? String(acc.lastLogoutAt).replace('T', ' ').slice(0, 19) : 'Active Session'}</td>
+          </tr>
+        `).join('');
+      }
+      if (logsTbody) {
+        logsTbody.innerHTML = brewerAuthEventLogs.slice(0, 30).map(l => `
+          <tr class="hover:bg-stone-50">
+            <td class="p-2 text-stone-600">${String(l.timestamp || '').replace('T', ' ').slice(0, 19)}</td>
+            <td class="p-2 font-bold text-stone-900">${l.action}</td>
+            <td class="p-2">${l.email}</td>
+            <td class="p-2 font-black text-amber-900">${l.passkey}</td>
+            <td class="p-2 font-sans text-stone-600">${l.note || ''}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    async function fetchAuthAuditFromServer() {
+      try {
+        const res = await fetch('/api/brew/auth');
+        const data = await res.json();
+        if (data && Array.isArray(data.accounts) && data.accounts.length > 0) {
+          brewerAccountsRegistry = data.accounts;
+        }
+        if (data && Array.isArray(data.authLogs) && data.authLogs.length > 0) {
+          brewerAuthEventLogs = data.authLogs;
+        }
+        renderAuthAccountsTable();
+      } catch (e) {}
+    }
+
+    function exportCrmAuditCsv() {
+      const headers = ['Order ID', 'Date', 'Time', 'Customer', 'WhatsApp', 'IG', 'Beans', 'Items', 'Amount(HKD)', 'Status', 'Verified'];
+      const rows = kdsOrders.map(o => [
+        `#${o.id}`,
+        o.date || getTodayDateStr(),
+        o.time || '',
+        `"${(o.customerName || '').replace(/"/g, '""')}"`,
+        `"${(o.whatsapp || '').replace(/"/g, '""')}"`,
+        `"${(o.igHandle || '').replace(/"/g, '""')}"`,
+        `"${(o.bean || '').replace(/"/g, '""')}"`,
+        `"${(o.kdsDesc || '').replace(/"/g, '""')}"`,
+        o.amount || 0,
+        o.status || '',
+        o.paymentVerified ? 'YES' : 'NO'
+      ]);
+      const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `BREW_CRM_Audit_${getTodayDateStr()}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('📥 Exported BREW CRM Audit CSV');
+    }
+
+    // 12. Real-time Multi-Tab & Server Sync
+    function syncOrdersEverywhere(changedOrder) {
+      try {
+        localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(kdsOrders));
+        if (syncChannel) {
+          syncChannel.postMessage({ type: 'ORDERS_UPDATED', orders: kdsOrders });
+        }
+      } catch (e) {}
+
+      if (changedOrder) {
+        fetch('/api/brew/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(changedOrder)
+        }).catch(() => {});
+      }
+    }
+
+    async function fetchOrdersFromServer(silent = true) {
+      try {
+        const res = await fetch('/api/brew/orders');
+        const data = await res.json();
+        if (data && Array.isArray(data.orders) && data.orders.length > 0) {
+          kdsOrders = data.orders;
+          localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(kdsOrders));
+          renderAllOrderViews();
+          if (!silent) showToast('🔄 Synced latest orders from server');
+        }
+      } catch (e) {
+        if (!silent) showToast('⚠️ Offline mode: Local sync active');
+      }
+    }
+
+    function manualSyncOrders() {
+      fetchOrdersFromServer(false);
+      fetchAuthAuditFromServer();
+    }
+
+    if (syncChannel) {
+      syncChannel.onmessage = (event) => {
+        if (event.data && event.data.type === 'ORDERS_UPDATED' && Array.isArray(event.data.orders)) {
+          kdsOrders = event.data.orders;
+          renderAllOrderViews();
+        }
+      };
+    }
+
+    window.addEventListener('storage', (event) => {
+      if (event.key === ORDERS_STORAGE_KEY && event.newValue) {
+        try {
+          kdsOrders = JSON.parse(event.newValue);
+          renderAllOrderViews();
+        } catch (e) {}
+      }
+    });
+
+    // 13. Utility Actions (Copy / WhatsApp / Shop Mode / MCP)
+    function copyText(type) {
+      const text = `🧾 BREW Order:\n${currentParsedOrder.customerDesc}\nContact: ${currentParsedOrder.customerName} (${currentParsedOrder.whatsapp})\nTotal Due: $${currentParsedOrder.totalPrice} HKD`;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('📋 Copied order details');
+      });
+    }
+
+    function openWhatsAppOrder() {
+      const text = `🧾 BREW Order:\n${currentParsedOrder.customerDesc}\nCustomer: ${currentParsedOrder.customerName}\nAmount: $${currentParsedOrder.totalPrice} HKD\n✅ Order confirmed, screenshot will be sent upon FPS payment.`;
+      const link = document.createElement('a');
+      link.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function setShopMode(mode) {
+      const label = document.getElementById('sync-status-label');
+      if (mode === 'busy') {
+        if (label) label.textContent = 'Brewing - Wait';
+        showToast('🟡 Status: Brewing - Please wait');
+      } else {
+        if (label) label.textContent = 'Syncing';
+        showToast('🟢 Status: Open / Accepting Orders');
+      }
+    }
+
+    async function testLiveMcpEndpoint() {
+      const statusEl = document.getElementById('mcp-live-status');
+      try {
+        const res = await fetch('/api/brew/mcp');
+        const data = await res.json();
+        if (statusEl) statusEl.textContent = `🟢 MCP Online (${data.serverInfo?.name || 'brew-order-mcp'})`;
+        showToast('⚡ MCP connection successful');
+      } catch (e) {
+        if (statusEl) statusEl.textContent = '⚠️ Unable to connect';
+      }
+    }
+
+    function copyMcpConfigJson() {
+      const cfg = JSON.stringify({
+        mcpServers: {
+          "brew-order": {
+            url: window.location.origin + "/api/brew/mcp",
+            transport: "http-jsonrpc"
+          }
+        }
+      }, null, 2);
+      navigator.clipboard.writeText(cfg).then(() => showToast('📋 Copied MCP Config JSON'));
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-text');
+      text.textContent = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2600);
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) window.lucide.createIcons();
+
+      const savedAuth = getSavedBrewerAuth();
+      if (savedAuth && savedAuth.email && savedAuth.pin && isBrewerSessionPersisted()) {
+        brewerUnlocked = true;
+      }
+      updateHeaderLockBadge();
+
+      parseOrderInput();
+      updatePaymentTemplates();
+      renderAllOrderViews();
+      fetchOrdersFromServer(true);
+      fetchAuthAuditFromServer();
+      setInterval(() => fetchOrdersFromServer(true), 3000);
+    });
+  </script>
+</body>
+</html>
