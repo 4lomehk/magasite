@@ -435,6 +435,8 @@
                             src="/assets/aistudio/Duck-ai-image-2026-11-01-07-27_f4d32c86.jpeg" 
                             alt="小心你以為嘅健康食品其實係身體嘅慢性毒藥" 
                             class="w-full h-auto object-cover hover:scale-102 transition duration-200" 
+                            loading="eager"
+                            onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='/Duck-ai-image-2026-11-01-07-27_f4d32c86.jpeg';} else if(this.dataset.retry==='1'){this.dataset.retry='2'; this.src='./assets/aistudio/Duck-ai-image-2026-11-01-07-27_f4d32c86.jpeg';} else if(this.dataset.retry==='2'){this.dataset.retry='3'; this.src='./Duck-ai-image-2026-11-01-07-27_f4d32c86.jpeg';}"
                         />
                     </div>
                     <div class="font-sans text-xs space-y-1.5 text-slate-800">
@@ -688,7 +690,13 @@
                                     <!-- 神油 1: ÚLIVA 1111 Garda Trentino DOP -->
                                     <div class="bg-white border-2 border-slate-900 p-3.5 rounded shadow-xs flex flex-col sm:flex-row items-center gap-3">
                                         <div class="w-24 sm:w-28 shrink-0 flex items-center justify-center bg-stone-100 p-2 rounded border border-slate-300">
-                                            <img src="/assets/aistudio/artextractai_20260930_b1cd41_6cd786c9.svg" alt="ÚLIVA Garda Trentino DOP EVOO" class="h-44 w-auto object-contain filter drop-shadow hover:scale-105 transition" />
+                                            <img 
+                                                src="/assets/aistudio/artextractai_20260930_b1cd41_6cd786c9.svg" 
+                                                alt="ÚLIVA Garda Trentino DOP EVOO" 
+                                                class="h-44 w-auto object-contain filter drop-shadow hover:scale-105 transition" 
+                                                loading="eager"
+                                                onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='/artextractai_20260930_b1cd41_6cd786c9.svg';} else if(this.dataset.retry==='1'){this.dataset.retry='2'; this.src='./artextractai_20260930_b1cd41_6cd786c9.svg';} else if(this.dataset.retry==='2'){this.dataset.retry='3'; this.src='./assets/aistudio/artextractai_20260930_b1cd41_6cd786c9.svg';}"
+                                            />
                                         </div>
                                         <div class="text-xs leading-relaxed space-y-1 w-full font-sans">
                                             <div class="flex items-center justify-between">
@@ -705,7 +713,13 @@
                                     <!-- 神油 2: Kirkland Signature Terra di Bari Bitonto PDO -->
                                     <div class="bg-white border-2 border-slate-900 p-3.5 rounded shadow-xs flex flex-col sm:flex-row items-center gap-3">
                                         <div class="w-24 sm:w-28 shrink-0 flex items-center justify-center bg-stone-100 p-2 rounded border border-slate-300">
-                                            <img src="/assets/aistudio/artextractai_20260930_fbb51f_86e9fb15.svg" alt="Kirkland Terra di Bari Bitonto PDO EVOO" class="h-44 w-auto object-contain filter drop-shadow hover:scale-105 transition" />
+                                            <img 
+                                                src="/assets/aistudio/artextractai_20260930_fbb51f_86e9fb15.svg" 
+                                                alt="Kirkland Terra di Bari Bitonto PDO EVOO" 
+                                                class="h-44 w-auto object-contain filter drop-shadow hover:scale-105 transition" 
+                                                loading="eager"
+                                                onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='/artextractai_20260930_fbb51f_86e9fb15.svg';} else if(this.dataset.retry==='1'){this.dataset.retry='2'; this.src='./artextractai_20260930_fbb51f_86e9fb15.svg';} else if(this.dataset.retry==='2'){this.dataset.retry='3'; this.src='./assets/aistudio/artextractai_20260930_fbb51f_86e9fb15.svg';}"
+                                            />
                                         </div>
                                         <div class="text-xs leading-relaxed space-y-1 w-full font-sans">
                                             <div class="flex items-center justify-between">
@@ -776,7 +790,7 @@
                             </button>
                             <button onclick="showB1FeatureCard(3)" id="btn-b1-deck-3" class="px-3.5 py-1.5 rounded font-bold border transition bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200 flex items-center gap-1.5">
                                 <i data-lucide="file-text" class="w-4 h-4"></i>
-                                <span>3. 早前 A1 實彈歷史檔案 (Sub 1-8)</span>
+                                <span>3. 早前 A1 實彈歷史檔案 (Sub 1-9)</span>
                             </button>
                         </div>
     
@@ -965,20 +979,21 @@
                             </div>
 
 
-                            <!-- B1 TAB 3: 舊 A1 專題大調查 (最新排序 1 ➔ 8) -->
+                            <!-- B1 TAB 3: 舊 A1 專題大調查 (最新排序 1 ➔ 9) -->
                             <div id="b1-feature-card-3" class="border-2 border-[#121212] p-5 sm:p-6 bg-white shadow-sm hidden">
                                 <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
                                     <div class="flex items-center gap-2">
-                                        <span class="font-mono text-xs sm:text-sm font-black bg-slate-900 text-white px-2 py-0.5 rounded">舊 A1 實彈</span>
-                                        <span class="font-mono text-xs font-bold text-news-winered">最新排序 1 ➔ 8</span>
+                                        <span class="font-mono text-xs sm:text-sm font-black bg-slate-900 text-white px-2 py-0.5 rounded">舊 A1 實彈歷史檔案</span>
+                                        <span class="font-mono text-xs font-bold text-news-winered">最新排序 1 ➔ 9</span>
                                     </div>
                                     <span class="text-xs font-mono font-bold text-emerald-700 hidden sm:inline">實彈檔案存檔</span>
                                 </div>
 
 
-                                <!-- Sub-tabs for the 8 sub topics (最新排序 8 ➔ 1) -->
+                                <!-- Sub-tabs for the 9 sub topics (最新排序 9 ➔ 1) -->
                                 <div class="flex flex-wrap gap-1.5 mb-4 font-mono text-xs">
-                                    <button onclick="switchOldA1SubTopic(8)" id="sub-a1-btn-8" class="px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400">8. 切斷 6 大化學毒素 (最新)</button>
+                                    <button onclick="switchOldA1SubTopic(9)" id="sub-a1-btn-9" class="px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400">9. 補劑 Timing 吸收命門 (第11日實彈)</button>
+                                    <button onclick="switchOldA1SubTopic(8)" id="sub-a1-btn-8" class="px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition">8. 切斷 6 大化學毒素</button>
                                     <button onclick="switchOldA1SubTopic(7)" id="sub-a1-btn-7" class="px-2.5 py-1 font-bold rounded bg-cyan-50 text-cyan-950 border border-cyan-300 hover:bg-cyan-100 transition">7. Kefir 克菲爾 60秒大清淤</button>
                                     <button onclick="switchOldA1SubTopic(6)" id="sub-a1-btn-6" class="px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition">6. 水毒破局＋紅銅 Hack</button>
                                     <button onclick="switchOldA1SubTopic(5)" id="sub-a1-btn-5" class="px-2.5 py-1 font-bold rounded bg-sky-50 text-sky-950 border border-sky-300 hover:bg-sky-100 transition">5. 切斷基改與微塑膠</button>
@@ -989,8 +1004,135 @@
                                 </div>
 
 
+                                <!-- Sub 9: 補劑 Timing 四大命門與吸收阻斷陷阱 (第11日實彈) -->
+                                <div id="sub-a1-topic-9" class="space-y-4">
+                                    <div class="flex items-center gap-2 flex-wrap border-b border-slate-200 pb-2">
+                                        <span class="bg-[#8B0000] text-white font-mono text-xs font-black px-2.5 py-0.5 rounded">【#9 最新】</span>
+                                        <span class="bg-amber-200 text-slate-900 font-mono text-xs font-bold px-2 py-0.5 rounded border border-amber-400">第11日實彈存檔</span>
+                                        <span class="text-xs font-mono font-bold text-slate-500">Biological Timing &amp; Assimilation Efficiency</span>
+                                    </div>
+
+                                    <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline leading-tight">
+                                        補劑 Timing 四大命門與吸收阻斷陷阱 ‧ 咪再一粒過盲吞變貴價尿！
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
+                                        <strong>2次抗癌生存者實戰經驗：</strong>好多人買幾千蚊補劑，朝早空腹一粒過灌水吞落肚，結果吸收率得嗰 5%，其餘 95% 變咗貴價尿，仲搞到胃痛反酸、黏膜發炎！補劑嘅「Timing 排程」同「協同催化 / 阻斷因子」先至係決定性命門！缺乏時間排程嘅混吞，等同於將資源倒落鹹水海！
+                                    </p>
+
+                                    <!-- 4 大命門詳細網格 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 my-3">
+                                        <!-- 命門 1 -->
+                                        <div class="p-3.5 bg-amber-50/80 border-2 border-amber-300 rounded shadow-2xs font-sans text-xs">
+                                            <div class="flex items-center justify-between border-b border-amber-200 pb-1 mb-1.5">
+                                                <span class="font-mono font-bold text-amber-900">命門 01 · 脂溶性雙雄</span>
+                                                <strong class="text-amber-950 font-black">維他命 D3 ＆ 魚油 (Omega-3)</strong>
+                                            </div>
+                                            <div class="space-y-1 text-slate-800 leading-relaxed">
+                                                <p><strong class="text-red-900">🚨 空腹大忌：</strong>D3 同 Omega-3 係脂溶性！如果空腹配清水吞，腸道冇油脂載體，完全無法乳化同化！</p>
+                                                <p><strong class="text-emerald-800">⚡ 實戰 Hack 法：</strong>必須隨每日第一餐大餐（早餐或斷食後午餐），伴隨<strong>牛油果、放養雞蛋黃或冷壓特級初榨橄欖油 (EVOO)</strong>同服！油脂刺激膽汁分泌與脂質乳化，既能完整吸收，又徹底防止反胃同嘔出魚腥味 (Fish burps)！</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- 命門 2 -->
+                                        <div class="p-3.5 bg-blue-50/80 border-2 border-blue-300 rounded shadow-2xs font-sans text-xs">
+                                            <div class="flex items-center justify-between border-b border-blue-200 pb-1 mb-1.5">
+                                                <span class="font-mono font-bold text-blue-900">命門 02 · 空腹與植酸陷阱</span>
+                                                <strong class="text-blue-950 font-black">鋅 (Zinc)</strong>
+                                            </div>
+                                            <div class="space-y-1 text-slate-800 leading-relaxed">
+                                                <p><strong class="text-red-900">🚨 阻斷因子：</strong>全穀物、堅果同豆類含有強效「植酸 (Phytic acid)」，會直接鎖死鋅離子同化通道！</p>
+                                                <p><strong class="text-emerald-800">⚡ 實戰 Hack 法：</strong>最佳食用時機係兩餐之間（餐後約 2 小時）配溫水。如果空腹容易反胃，可改為伴餐食用，但<strong>必須嚴格避開全穀物、麥皮同豆類</strong>！</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- 命門 3 -->
+                                        <div class="p-3.5 bg-rose-50/80 border-2 border-rose-300 rounded shadow-2xs font-sans text-xs">
+                                            <div class="flex items-center justify-between border-b border-rose-200 pb-1 mb-1.5">
+                                                <span class="font-mono font-bold text-rose-900">命門 03 · 咖啡因大仇人</span>
+                                                <strong class="text-rose-950 font-black">鐵 (Iron)</strong>
+                                            </div>
+                                            <div class="space-y-1 text-slate-800 leading-relaxed">
+                                                <p><strong class="text-red-900">🚨 鎖死吸收：</strong>前後 2 小時內嚴禁飲黑咖啡或濃茶！咖啡因與單寧酸多酚會死死鎖住鐵質，吸收率即刻歸零！</p>
+                                                <p><strong class="text-emerald-800">⚡ 實戰 Hack 法：</strong>早午餐之間 (Mid-morning) 空腹食用。最佳協同夥伴為<strong>純鮮橙汁連小白肉等富含天然維他命 C 的柑橘類水果</strong>，同化率大幅飆升！</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- 命門 4 -->
+                                        <div class="p-3.5 bg-purple-50/80 border-2 border-purple-300 rounded shadow-2xs font-sans text-xs">
+                                            <div class="flex items-center justify-between border-b border-purple-200 pb-1 mb-1.5">
+                                                <span class="font-mono font-bold text-purple-900">命門 04 · 晚間修復與分拆</span>
+                                                <strong class="text-purple-950 font-black">鎂 (Magnesium)</strong>
+                                            </div>
+                                            <div class="space-y-1 text-slate-800 leading-relaxed">
+                                                <p><strong class="text-red-900">🚨 飽和浪費：</strong>鎂喺一次性大劑量時會造成腸道吸收飽和，引發腹瀉並浪費有效成分！</p>
+                                                <p><strong class="text-emerald-800">⚡ 實戰 Hack 法：</strong>適合於傍晚、晚餐後或睡前食用，啟動副交感神經放鬆機制並提升深度睡眠。嚴守<strong>「小劑量分拆法則」，每日兩次服用</strong>，生物利用率最高！</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 精準補劑 Timing 與 Mutex Lock 協同/阻斷綜合時程表 -->
+                                    <div class="overflow-x-auto border-2 border-slate-900 shadow-xs my-2">
+                                        <table class="w-full text-left border-collapse text-xs font-sans">
+                                            <thead>
+                                                <tr class="bg-slate-900 text-white font-mono font-bold">
+                                                    <th class="p-2.5 border-r border-slate-700 w-[18%]">補充劑名稱</th>
+                                                    <th class="p-2.5 border-r border-slate-700 w-[20%]">最佳食用時段</th>
+                                                    <th class="p-2.5 border-r border-slate-700 w-[22%]">協同催化夥伴</th>
+                                                    <th class="p-2.5 border-r border-slate-700 w-[20%]">嚴禁阻斷因子</th>
+                                                    <th class="p-2.5 w-[20%]">吸收與生理機制</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-300 bg-white leading-relaxed">
+                                                <tr class="hover:bg-amber-50/50">
+                                                    <td class="p-2.5 font-bold border-r border-slate-200 bg-amber-50/40">維他命 D3</td>
+                                                    <td class="p-2.5 border-r border-slate-200 font-mono text-slate-800">第一餐大餐 (早/午)</td>
+                                                    <td class="p-2.5 border-r border-slate-200 text-emerald-900 font-bold">牛油果、雞蛋、EVOO</td>
+                                                    <td class="p-2.5 border-r border-slate-200 text-red-900 font-bold">空腹清水（無法同化）</td>
+                                                    <td class="p-2.5 text-slate-700">脂溶性營養素，需要油脂介質進行腸道吸收同化。</td>
+                                                </tr>
+                                                <tr class="hover:bg-blue-50/50">
+                                                    <td class="p-2.5 font-bold border-r border-slate-200 bg-blue-50/40">魚油 (Fish Oil)</td>
+                                                    <td class="p-2.5 border-r border-slate-200 font-mono text-slate-800">第一餐大餐 (早/午)</td>
+                                                    <td class="p-2.5 border-r border-slate-200 text-emerald-900 font-bold">隨餐優質油脂與食物</td>
+                                                    <td class="p-2.5 border-r border-slate-200 text-red-900 font-bold">空腹服用</td>
+                                                    <td class="p-2.5 text-slate-700">促使膽汁分泌與脂質乳化，防反胃與魚腥回流 (Fish burps)。</td>
+                                                </tr>
+                                                <tr class="hover:bg-purple-50/50">
+                                                    <td class="p-2.5 font-bold border-r border-slate-200 bg-purple-50/40">鋅 (Zinc)</td>
+                                                    <td class="p-2.5 border-r border-slate-200 font-mono text-slate-800">兩餐之間 (餐後2小時)</td>
+                                                    <td class="p-2.5 border-r border-slate-200 text-emerald-900 font-bold">清水 (若反胃伴非植酸餐)</td>
+                                                    <td class="p-2.5 border-r border-slate-200 text-red-900 font-bold">全穀物、堅果、豆類 (植酸)</td>
+                                                    <td class="p-2.5 text-slate-700">空腹同化率最高；若反胃可伴餐，但須避開植酸阻斷因子。</td>
+                                                </tr>
+                                                <tr class="hover:bg-rose-50/50">
+                                                    <td class="p-2.5 font-bold border-r border-slate-200 bg-rose-50/40">鐵 (Iron)</td>
+                                                    <td class="p-2.5 border-r border-slate-200 font-mono text-slate-800">早午餐間 (Mid-morning)</td>
+                                                    <td class="p-2.5 border-r border-slate-200 text-emerald-900 font-bold">天然維他命 C (鮮橙汁)</td>
+                                                    <td class="p-2.5 border-r border-slate-200 text-red-900 font-bold">黑咖啡、濃茶 (前後2小時)</td>
+                                                    <td class="p-2.5 text-slate-700">咖啡因單寧酸鎖死鐵吸收；天然維他命 C 為強效協同催化劑。</td>
+                                                </tr>
+                                                <tr class="hover:bg-indigo-50/50">
+                                                    <td class="p-2.5 font-bold border-r border-slate-200 bg-indigo-50/40">鎂 (Magnesium)</td>
+                                                    <td class="p-2.5 border-r border-slate-200 font-mono text-slate-800">傍晚 / 晚餐後 / 睡前</td>
+                                                    <td class="p-2.5 border-r border-slate-200 text-emerald-900 font-bold">小劑量分拆 (每日二次)</td>
+                                                    <td class="p-2.5 border-r border-slate-200 text-red-900 font-bold">一次性大劑量吞服</td>
+                                                    <td class="p-2.5 text-slate-700">具備神經放鬆與提升睡眠品質機制，分拆小劑量生物利用率最高。</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="p-3 bg-slate-900 text-white rounded font-mono text-xs flex flex-col sm:flex-row items-center justify-between gap-2">
+                                        <div>
+                                            <span class="text-amber-300 font-bold">🔒 生物駭客 Cron Job 任務調度法則：</span>
+                                            <span class="text-slate-300">互斥程序（鐵質與咖啡因）必須設定 Mutex Lock 隔離 2 小時，需要油脂介質的任務（D3 與 Omega-3）必須帶有 Token 才能執行！</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <!-- Sub 8: 切斷 6 大化學毒素垃圾入口 (最新移動一點) -->
-                                <div id="sub-a1-topic-8" class="space-y-3">
+                                <div id="sub-a1-topic-8" class="space-y-3 hidden">
                                     <div class="flex items-center gap-2 flex-wrap">
                                         <span class="bg-red-900 text-white font-mono text-xs font-black px-2 py-0.5 rounded">【#8 最新】</span>
                                         <span class="bg-amber-200 text-slate-900 font-mono text-xs font-bold px-2 py-0.5 rounded">舊 A1 新存檔</span>
@@ -1864,7 +2006,7 @@
         window.showB1FeatureCard = showB1FeatureCard;
 
 
-        // Sub topic switcher for Card 02 (舊 A1 8➔1 專題) - 獨立深淺色彩系統
+        // Sub topic switcher for Card 02 (舊 A1 9➔1 專題) - 獨立深淺色彩系統
         const subTopicStyles = {
             1: { active: "px-2.5 py-1 font-bold rounded bg-amber-700 text-white border border-amber-800 shadow-sm ring-2 ring-amber-400", inactive: "px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition" },
             2: { active: "px-2.5 py-1 font-bold rounded bg-emerald-700 text-white border border-emerald-800 shadow-sm ring-2 ring-emerald-400", inactive: "px-2.5 py-1 font-bold rounded bg-emerald-50 text-emerald-950 border border-emerald-300 hover:bg-emerald-100 transition" },
@@ -1873,12 +2015,13 @@
             5: { active: "px-2.5 py-1 font-bold rounded bg-sky-800 text-white border border-sky-900 shadow-sm ring-2 ring-sky-400", inactive: "px-2.5 py-1 font-bold rounded bg-sky-50 text-sky-950 border border-sky-300 hover:bg-sky-100 transition" },
             6: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" },
             7: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-cyan-400", inactive: "px-2.5 py-1 font-bold rounded bg-cyan-50 text-cyan-950 border border-cyan-300 hover:bg-cyan-100 transition" },
-            8: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" }
+            8: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition" },
+            9: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition" }
         };
 
 
         function switchOldA1SubTopic(topicNum) {
-            for (let i = 1; i <= 8; i++) {
+            for (let i = 1; i <= 9; i++) {
                 const topic = document.getElementById(`sub-a1-topic-${i}`);
                 const btn = document.getElementById(`sub-a1-btn-${i}`);
                 if (topic) {
