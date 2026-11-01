@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stop Assuming "Milk" Is Safe Nutrition: Why Tumors Made Me Stop Drinking Milk & Market Truth | MAGASite</title>
+  <meta name="description" content="Stop assuming milk is safe nutrition! Exposing the canola oil & gellan gum trap in commercial oat milk, and revealing 100% grass-fed whole milk & clean plant-based milk buy lists.">
+  
+  <!-- Safe WebSocket & HMR Sandbox Guard -->
+  <script>
+    (function () {
+      var OriginalWebSocket = window.WebSocket;
+      if (OriginalWebSocket) {
+        function SafeWebSocket(url, protocols) {
+          var isViteHmr =
+            (typeof protocols === 'string' && protocols.indexOf('vite-hmr') !== -1) ||
+            (Array.isArray(protocols) && protocols.indexOf('vite-hmr') !== -1) ||
+            (typeof url === 'string' && (url.indexOf('vite-hmr') !== -1 || url.indexOf(':3000') !== -1));
+          if (isViteHmr) {
+            var listeners = {};
+            var mockSocket = {
+              binaryType: 'blob',
+              bufferedAmount: 0,
+              extensions: '',
+              protocol: 'vite-hmr',
+              readyState: 1,
+              url: String(url),
+              CONNECTING: 0,
+              OPEN: 1,
+              CLOSING: 2,
+              CLOSED: 3,
+              send: function () {},
+              close: function () { mockSocket.readyState = 3; },
+              addEventListener: function (type, fn) {
+                listeners[type] = listeners[type] || [];
+                listeners[type].push(fn);
+              },
+              removeEventListener: function () {},
+              dispatchEvent: function () { return true; },
+            };
+            return mockSocket;
+          }
+          return new OriginalWebSocket(url, protocols);
+        }
+        SafeWebSocket.prototype = OriginalWebSocket.prototype;
+        SafeWebSocket.CONNECTING = OriginalWebSocket.CONNECTING;
+        SafeWebSocket.OPEN = OriginalWebSocket.OPEN;
+        SafeWebSocket.CLOSING = OriginalWebSocket.CLOSING;
+        SafeWebSocket.CLOSED = OriginalWebSocket.CLOSED;
+        window.WebSocket = SafeWebSocket;
+      }
+    })();
+  </script>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome 6 Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;700;800;900&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              orange: '#ff5a36',
+              light: '#fff5f3',
+              dark: '#111827',
+              red: '#B91C1C',
+              winered: '#8B0000',
+              emerald: '#10B981',
+              amber: '#D97706',
+              gray: '#f9f9fa',
+              text: '#111827',
+              muted: '#6b7280'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAFAFA;
+      color: #111827;
+      overflow-x: hidden;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .card-hover {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px -8px rgba(0, 0, 0, 0.08), 0 8px 12px -6px rgba(0, 0, 0, 0.03);
+    }
+    .hero-gradient {
+      background: radial-gradient(circle at top, #FFF0EC 0%, #FAFAFA 70%);
+    }
+    .winered-underline {
+      text-decoration: underline;
+      text-decoration-color: #8B0000;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 4px;
+    }
+  </style>
+</head>
+<body class="h-screen flex overflow-hidden">
+
+  <!-- Left Sidebar Navigation -->
+  <aside class="w-16 flex-shrink-0 bg-white border-r border-gray-100 flex flex-col items-center py-5 gap-5 z-30 hidden md:flex">
+    <a href="https://sites.google.com/view/magamap/magasite" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-brand-orange text-white flex items-center justify-center transition-transform hover:scale-105 shadow-sm" title="magasite Home">
+      <i class="fa-solid fa-bolt text-lg"></i>
+    </a>
+    
+    <div class="w-8 h-px bg-gray-200"></div>
+
+    <a href="#script" class="w-10 h-10 rounded-xl text-gray-500 hover:bg-orange-50 hover:text-brand-orange flex items-center justify-center transition-colors" title="Learn Milk in 30 Seconds">
+      <i class="fa-solid fa-film text-base"></i>
+    </a>
+
+    <a href="#tiers" class="w-10 h-10 rounded-xl text-gray-500 hover:bg-orange-50 hover:text-brand-orange flex items-center justify-center transition-colors" title="Three Supermarket Tiers">
+      <i class="fa-solid fa-layer-group text-base"></i>
+    </a>
+
+    <a href="#rawmilk-block" class="w-10 h-10 rounded-xl text-gray-500 hover:bg-orange-50 hover:text-brand-orange flex items-center justify-center transition-colors" title="Raw Milk Living Nutrition">
+      <i class="fa-solid fa-cow text-base"></i>
+    </a>
+
+    <a href="#brands" class="w-10 h-10 rounded-xl text-gray-500 hover:bg-orange-50 hover:text-brand-orange flex items-center justify-center transition-colors" title="Brand References">
+      <i class="fa-solid fa-bottle-water text-base"></i>
+    </a>
+
+    <a href="#checklist" class="w-10 h-10 rounded-xl text-gray-500 hover:bg-orange-50 hover:text-brand-orange flex items-center justify-center transition-colors" title="1-Page Supermarket Checklist">
+      <i class="fa-solid fa-list-check text-base"></i>
+    </a>
+
+    <a href="#roadmap" class="w-10 h-10 rounded-xl text-gray-500 hover:bg-orange-50 hover:text-brand-orange flex items-center justify-center transition-colors" title="21 Days Advantage">
+      <i class="fa-solid fa-shield-halved text-base"></i>
+    </a>
+
+    <div class="mt-auto flex flex-col gap-3">
+      <a href="https://magasite.pages.dev/df.html" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-red-50 text-brand-winered hover:bg-red-100 flex items-center justify-center transition-colors" title="DAILY FLOW Bulletin (ENG)">
+        <i class="fa-solid fa-newspaper"></i>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Scrolling Workspace -->
+  <main class="flex-1 flex flex-col h-full overflow-y-auto relative hide-scrollbar">
+
+    <!-- Top Sticky Header -->
+    <header class="flex justify-between items-center px-4 sm:px-6 py-3.5 bg-white/90 backdrop-blur-md sticky top-0 z-20 border-b border-gray-100">
+      <div class="flex items-center gap-3">
+        <div class="w-7 h-7 rounded-lg bg-brand-orange flex items-center justify-center text-white text-xs font-black shadow-sm">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-extrabold text-base sm:text-lg tracking-tight text-gray-950">MAGASite</span>
+            <span class="text-[11px] font-mono font-black uppercase px-2 py-0.5 rounded bg-brand-light text-brand-orange border border-orange-200">PREM 20</span>
+          </div>
+          <p class="text-[11px] sm:text-xs text-gray-600 font-bold block">Prem 20 The Truth Behind "Milk" & Plant-Based Milks</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- magasite Home Link -->
+        <a href="https://sites.google.com/view/magamap/magasite" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 text-xs font-mono font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-full transition flex items-center gap-1 border border-amber-300" title="Visit magasite Home">
+          <i class="fa-solid fa-house text-[11px]"></i>
+          <span>magasite Home ↗</span>
+        </a>
+
+        <!-- Switch to Cantonese -->
+        <a href="/prem-20-milk-truth.html" class="px-3 py-1.5 text-xs font-mono font-bold bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full transition flex items-center gap-1.5 border border-gray-200" title="Switch to Cantonese version">
+          <i class="fa-solid fa-language text-sm text-brand-orange"></i>
+          <span>廣東話 (Cantonese)</span>
+        </a>
+
+        <a href="https://magasite.pages.dev/df.html" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 text-xs font-bold bg-red-50 hover:bg-red-100 text-brand-winered border border-red-200 rounded-full transition-colors flex items-center gap-1">
+          <i class="fa-solid fa-newspaper text-xs"></i>
+          <span class="hidden sm:inline">DAILY FLOW 抗炎日報</span> ↗
+        </a>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="hero-gradient px-4 pt-10 sm:pt-14 pb-10 flex flex-col items-center w-full border-b border-orange-100/60">
+      
+      <!-- Meta Badges -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-4 font-mono text-xs">
+        <span class="px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 font-bold border border-red-200 flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+          Solo Cancer Survivor Battle-Tested · 6 Years, 2 Tumors Fought
+        </span>
+        <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold border border-emerald-200">
+          Make Anti-inflammatory Great Again (MAGA)
+        </span>
+      </div>
+
+      <!-- Main Headline (Big and Small Hierarchy) -->
+      <div class="text-center max-w-4xl mb-4">
+        <h1 class="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-gray-950 leading-tight mb-2 sm:mb-3">
+          STOP ASSUMING "MILK" IS SAFE NUTRITION
+        </h1>
+        <p class="text-base sm:text-xl md:text-2xl font-extrabold text-brand-orange leading-snug">
+          <span class="winered-underline">Why Tumors Made Me Stop Drinking Milk</span> & Which Milks in the Market Are Actually Drinkable.
+        </p>
+      </div>
+
+      <!-- Disclaimer Banner -->
+      <div class="max-w-3xl w-full mx-auto mb-6 px-4 py-3 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-950 text-xs sm:text-sm font-medium text-center shadow-xs">
+        ⚠️ <strong>Disclaimer:</strong> The following content is for personal reference only and does not constitute medical diagnosis. If in doubt, please consult your doctor or registered medical practitioner.
+      </div>
+
+      <p class="text-sm sm:text-base text-gray-600 max-w-2xl text-center mb-8 font-medium leading-relaxed">
+        Drinking oat milk daily thinking it's pristine, organic health fuel? Don't let corporate marketing treat you like an NPC! Exposing industrial seed oils and chemical gums that rupture gut junctions, locking onto 100% grass-fed whole milk to reclaim biological sovereignty!
+      </p>
+
+      <!-- Instant Search & Filter Bar -->
+      <div class="w-full max-w-3xl relative mb-6">
+        <div class="absolute inset-0 bg-brand-orange opacity-15 blur-xl rounded-full"></div>
+        <div class="relative bg-white border-2 border-gray-200 hover:border-brand-orange/60 focus-within:border-brand-orange transition-colors rounded-full shadow-md flex items-center px-3 py-2">
+          <div class="w-9 h-9 rounded-full bg-orange-50 text-brand-orange flex items-center justify-center text-sm font-bold flex-shrink-0">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+          <input type="text" id="liveSearchInput" onkeyup="filterLiveContent()" placeholder="Search grass-fed whole milk, oat milk, canola oil, gellan gum, Kalxxa, Daxxni..." 
+                 class="flex-1 bg-transparent border-none outline-none px-3 text-sm sm:text-base text-gray-800 placeholder-gray-400">
+          <button onclick="clearSearch()" class="w-8 h-8 rounded-full text-gray-400 hover:text-gray-700 flex items-center justify-center text-xs">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills (Milk-Related Only) -->
+      <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1 max-w-4xl w-full justify-start sm:justify-center px-2">
+        <button onclick="switchCategory('all')" class="category-btn active px-3.5 py-1.5 rounded-full bg-brand-orange text-white text-xs font-bold whitespace-nowrap shadow-sm transition" data-cat="all">
+          🔥 All Content
+        </button>
+        <button onclick="switchCategory('script')" class="category-btn px-3.5 py-1.5 rounded-full bg-white border border-gray-200 text-gray-700 hover:bg-orange-50 text-xs font-semibold whitespace-nowrap transition" data-cat="script">
+          🎬 Learn Milk in 30s
+        </button>
+        <button onclick="switchCategory('godtier')" class="category-btn px-3.5 py-1.5 rounded-full bg-white border border-emerald-300 text-emerald-800 hover:bg-emerald-50 text-xs font-semibold whitespace-nowrap transition" data-cat="godtier">
+          🟢 Minimal Buy List (Snack Only)
+        </button>
+        <button onclick="switchCategory('rawmilk')" class="category-btn px-3.5 py-1.5 rounded-full bg-white border border-amber-300 text-amber-800 hover:bg-amber-50 text-xs font-semibold whitespace-nowrap transition" data-cat="rawmilk">
+          ⭐️ Raw Milk Living Nutrition
+        </button>
+        <button onclick="switchCategory('avoidtier')" class="category-btn px-3.5 py-1.5 rounded-full bg-white border border-red-300 text-red-800 hover:bg-red-50 text-xs font-semibold whitespace-nowrap transition" data-cat="avoidtier">
+          🔴 Toxic Avoidance List
+        </button>
+        <button onclick="switchCategory('brands')" class="category-btn px-3.5 py-1.5 rounded-full bg-white border border-gray-200 text-gray-700 hover:bg-orange-50 text-xs font-semibold whitespace-nowrap transition" data-cat="brands">
+          🥛 Reference Brands (No Choice)
+        </button>
+        <button onclick="switchCategory('checklist')" class="category-btn px-3.5 py-1.5 rounded-full bg-white border border-gray-200 text-gray-700 hover:bg-orange-50 text-xs font-semibold whitespace-nowrap transition" data-cat="checklist">
+          📋 Supermarket Checklist
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="max-w-5xl mx-auto w-full px-4 sm:px-6 py-8 space-y-10">
+
+      <!-- ========================================== -->
+      <!-- SECTION 1: 30 SECONDS SCRIPT               -->
+      <!-- ========================================== -->
+      <section id="script" class="content-section bg-white rounded-3xl p-5 sm:p-8 border border-gray-200 shadow-sm space-y-5">
+        
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="px-2.5 py-0.5 rounded bg-brand-dark text-white font-mono text-xs font-black">MODULE 01</span>
+              <span class="text-xs font-mono font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-200">00:00 - 00:30</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-gray-900">
+              Learn How to Buy Milk in 30 Seconds
+            </h2>
+          </div>
+          <span class="text-xs font-mono text-gray-500 hidden sm:block">Fast-Paced · Core Truth</span>
+        </div>
+
+        <div class="space-y-3.5">
+          <!-- 00:00 - 00:04 -->
+          <div class="p-4 rounded-2xl bg-red-50/70 border-l-4 border-red-600 space-y-2">
+            <div class="flex items-center justify-between text-xs font-mono font-bold text-red-800 flex-wrap gap-1">
+              <span>⏱️ 00:00 - 00:04 // [Hook]</span>
+              <span class="bg-red-800 text-white px-2 py-0.5 rounded text-[11px]">🚨 Stop Being an Oat Milk NPC!</span>
+            </div>
+            <!-- Critical Pasteurization Truth -->
+            <div class="p-2.5 bg-red-100/90 border border-red-300 rounded-xl text-xs text-red-950 font-bold leading-relaxed">
+              🔥 <strong>[CRITICAL PREREQUISITE]</strong> You must realize: "Low-temp pasteurization" (Pasteurization) using 70-80°C is actually <strong>HIGH HEAT</strong>! It wipes out beneficial bacteria and yeasts. Between 40°C and 60°C+, most yeasts are killed; vegetative cells (bacteria) are 80-90% destroyed at 60°C!
+            </div>
+            <p class="text-xs sm:text-sm text-gray-800 leading-relaxed font-medium">
+              <strong>[Visual]</strong> In a modern cafe, the protagonist is handed an oat milk latte, violently smacks it off the table, and glares intensely at the camera.<br>
+              <strong>[Dialogue]</strong> You drink oat milk every single day thinking it's healthy? Corporate marketing has brainwashed you into acting like an NPC!
+            </p>
+          </div>
+
+          <!-- 00:04 - 00:09 -->
+          <div class="p-4 rounded-2xl bg-amber-50/70 border-l-4 border-amber-600 space-y-1.5">
+            <div class="flex items-center justify-between text-xs font-mono font-bold text-amber-800">
+              <span>⏱️ 00:04 - 00:09 // [The Trap Exposed]</span>
+              <span class="bg-amber-800 text-white px-2 py-0.5 rounded text-[11px]">❌ Canola/Rapeseed Oil + Gellan Gum + Artificial Flavoring</span>
+            </div>
+            <p class="text-xs sm:text-sm text-gray-800 leading-relaxed font-medium">
+              <strong>[Visual]</strong> Macro extreme close-up of a popular oat milk carton, highlighting "Rapeseed Oil / Canola Oil" and "Gellan Gum" inside bold red target circles.<br>
+              <strong>[Dialogue]</strong> Look at the ingredients! Most commercial oat milks use industrial rapeseed oil as an emulsifier, loaded with gellan gum and synthetic flavorings!
+            </p>
+          </div>
+
+          <!-- 00:09 - 00:15 -->
+          <div class="p-4 rounded-2xl bg-orange-50/70 border-l-4 border-orange-600 space-y-1.5">
+            <div class="flex items-center justify-between text-xs font-mono font-bold text-orange-900">
+              <span>⏱️ 00:09 - 00:15 // [Intestinal Damage]</span>
+              <span class="bg-orange-800 text-white px-2 py-0.5 rounded text-[11px]">⚠️ Breaching Gut Barrier! Driving Chronic Inflammation!</span>
+            </div>
+            <p class="text-xs sm:text-sm text-gray-800 leading-relaxed font-medium">
+              <strong>[Visual]</strong> Protagonist dumps a jug of industrial vegetable oil into a trash bin; background displays an animation of leaky mucosal tight junctions.<br>
+              <strong>[Dialogue]</strong> Once these heated seed oils and industrial gums hit your gut, they tear down tight junctions, letting toxins leak and triggering systemic chronic inflammation!
+            </p>
+          </div>
+
+          <!-- 00:15 - 00:22 -->
+          <div class="p-4 rounded-2xl bg-emerald-50/70 border-l-4 border-emerald-600 space-y-1.5">
+            <div class="flex items-center justify-between text-xs font-mono font-bold text-emerald-900">
+              <span>⏱️ 00:15 - 00:22 // [The Clean Swap]</span>
+              <span class="bg-emerald-800 text-white px-2 py-0.5 rounded text-[11px]">⭕ Nuts + Water + Sea Salt | 100% Grass-Fed Whole Milk</span>
+            </div>
+            <p class="text-xs sm:text-sm text-gray-800 leading-relaxed font-medium">
+              <strong>[Visual]</strong> Quick cut: Replacing with a pure bottle containing only "Nuts + Water + Sea Salt", or pristine 100% grass-fed whole milk.<br>
+              <strong>[Dialogue]</strong> If you drink plant milk, it can ONLY have nuts, water, and sea salt! Otherwise, drink 100% grass-fed whole milk packed with anti-inflammatory CLA & Omega-3!
+            </p>
+          </div>
+
+          <!-- 00:22 - 00:30 -->
+          <div class="p-4 rounded-2xl bg-gray-900 text-white border-l-4 border-amber-400 space-y-1.5">
+            <div class="flex items-center justify-between text-xs font-mono font-bold text-amber-300">
+              <span>⏱️ 00:22 - 00:30 // [Call To Action]</span>
+              <span class="bg-amber-400 text-black px-2 py-0.5 rounded text-[11px]">🔥 Take Control of Your Biology!</span>
+            </div>
+            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed font-medium">
+              <strong>[Visual]</strong> Protagonist stands determined with arms crossed; the "1-Page Supermarket Checklist" flashes on screen.<br>
+              <strong>[Dialogue]</strong> Control the controllables! Stop spending hard-earned money on industrial chemical sludge. Comment "MILK" right now to download the free 1-page supermarket checklist! 🔥
+            </p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION 2: 3-TIER BUYING MATRIX            -->
+      <!-- ========================================== -->
+      <section id="tiers" class="content-section space-y-8">
+        
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2.5 py-0.5 rounded bg-brand-dark text-white font-mono text-xs font-black">MODULE 02</span>
+            <span class="text-xs font-mono font-bold text-gray-500">SUPERMARKET FIELD TIERS</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-950 tracking-tight">
+            Three Tactical Dairy & Plant Milk Tiers (Minimal / Secondary / Toxic Avoidance)
+          </h2>
+          <p class="text-xs sm:text-sm text-gray-600 font-medium">
+            Directly calibrated for supermarket shelves: weed out toxic industrial fillers and secure genuine anti-inflammatory nutrition.
+          </p>
+        </div>
+
+        <!-- TIER 1: 🟢 Minimal Buy List -->
+        <div id="godtier-block" class="bg-white rounded-3xl p-5 sm:p-7 border-2 border-emerald-500 shadow-sm relative">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-5 border-b border-emerald-100 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+              <h3 class="text-xl sm:text-2xl font-black text-emerald-950">
+                🟢 1. Minimal Buy List (Decided as Rare Snack for My Tumors — Not 100% Safe, No Raw Milk in HK)
+              </h3>
+            </div>
+            <span class="font-mono text-xs font-black px-2.5 py-1 rounded bg-amber-100 text-amber-900 border border-amber-300">
+              ⚠️ Survivor Reality: Minimal Intake Only for Tumor-Prone Bodies · Not Risk-Free
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- 100% Grass-Fed Whole Milk -->
+            <div class="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-200 card-hover flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-2xl">🥛</span>
+                  <span class="text-[10px] font-mono font-black bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded">1st Finished / 2nd Grass-Fed</span>
+                </div>
+                <h4 class="font-bold text-base text-emerald-950 mb-1.5">
+                  100% Grass-Fed Whole Milk <span class="text-xs font-normal text-emerald-800">(Preferably 1st Grass-Finished, 2nd Grass-Fed Whole Milk)</span>
+                </h4>
+                <p class="text-xs text-gray-700 leading-relaxed mb-3">
+                  <strong>Why Acceptable:</strong> Cows graze outdoors eating pasture. Dramatic increase in conjugated linoleic acid (CLA) and Omega-3 fatty acids with minimal Omega-6, significantly reducing systemic inflammatory biomarkers.
+                </p>
+                <div class="p-2.5 bg-white/80 rounded-xl border border-emerald-200 text-xs text-slate-700 mb-2">
+                  <strong class="text-emerald-950 block mb-0.5">⚠️ Minimum Required Labels:</strong>
+                  <code>100% Grass-Fed</code>, <code>Pasture-Raised</code>, <code>Organic</code>.
+                  <span class="text-red-700 font-bold block mt-1">
+                    Never buy skim milk, high-calcium milk, or "high-protein" fortified milk — those are corporate marketing scams exploiting naive consumers!
+                  </span>
+                </div>
+              </div>
+              <div class="pt-2 border-t border-emerald-200/60 font-mono text-[11px] text-emerald-900 font-bold">
+                Hierarchy: 1st Choice 100% Grass-Finished ＞ 2nd Choice 100% Grass-Fed
+              </div>
+            </div>
+
+            <!-- Organic Ultra-Filtered Whole Milk -->
+            <div class="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-200 card-hover flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-2xl">⚡</span>
+                  <span class="text-[10px] font-mono font-black bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded">High Protein / Some Micronutrient Loss</span>
+                </div>
+                <h4 class="font-bold text-base text-emerald-950 mb-1.5">Organic Ultra-Filtered Milk</h4>
+                <p class="text-xs text-gray-700 leading-relaxed mb-3">
+                  <strong>Why Acceptable:</strong> Passes through microscopic filtration membranes, boosting natural protein by 50% (from 8g to 13g+ per serving) while reducing natural lactose sugar by 50% (from 11g to 6g). Helps glucose stability and muscle synthesis.
+                </p>
+                <div class="p-2.5 bg-amber-50/90 rounded-xl border border-amber-200 text-xs text-amber-900 mb-2">
+                  <strong>⚠️ Survivor Reality Check:</strong>
+                  Physical filtration filters out sugars, but it also strips away a substantial amount of natural trace minerals and micronutrients. Do not treat as complete whole nutrition!
+                </div>
+              </div>
+              <div class="pt-2 border-t border-emerald-200/60 font-mono text-[11px] text-emerald-800 font-bold">
+                Look for: <code>Organic Ultra-Filtered Whole</code>
+              </div>
+            </div>
+
+            <!-- A2 100% Grass-Fed Whole Milk -->
+            <div class="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-200 card-hover flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-2xl">🧬</span>
+                  <span class="text-[10px] font-mono font-black bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded">Easier on Digestion</span>
+                </div>
+                <h4 class="font-bold text-base text-emerald-950 mb-1.5">
+                  A2 100% Grass-Fed Organic Whole Milk
+                </h4>
+                <p class="text-xs text-gray-700 leading-relaxed mb-3">
+                  <strong>Why Acceptable:</strong> Contains only the ancestral A2 beta-casein protein (avoiding the inflammatory BCM-7 peptide produced during A1 casein digestion), significantly gentler on the digestive tract.
+                </p>
+                <div class="p-2.5 bg-red-50/80 rounded-xl border border-red-200 text-xs text-red-900 mb-2">
+                  <strong>💥 Industry Reality:</strong>
+                  Many commercial brands "start cows on grass, then switch to grain finishing" — consumers have no way to verify! Organic is merely a baseline, not a silver bullet. Always scrutinize for added gums or emulsifiers!
+                </div>
+              </div>
+              <div class="pt-2 border-t border-emerald-200/60 font-mono text-[11px] text-emerald-800 font-bold">
+                Look for: <code>A2 100% Grass-Fed Organic</code> (Inspect label for zero additives)
+              </div>
+            </div>
+
+            <!-- Clean Plant-Based Milks -->
+            <div class="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-200 card-hover flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-2xl">🥥</span>
+                  <span class="text-[10px] font-mono font-black bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded">Strict 3 Clean Ingredients</span>
+                </div>
+                <h4 class="font-bold text-base text-emerald-950 mb-1.5">Clean Plant-Based Milks</h4>
+                <p class="text-xs text-gray-700 leading-relaxed mb-3">
+                  <strong>Why Acceptable:</strong> Ingredient list strictly limited to 2-3 whole-food ingredients (Nuts / Oats + Filtered Water + Sea Salt). Absolutely zero seed oils, zero emulsifiers, and zero artificial flavorings.
+                </p>
+                <div class="p-2.5 bg-emerald-100/60 rounded-xl border border-emerald-300 text-xs text-emerald-950 mb-2">
+                  <strong>✅ Passing Standard:</strong>
+                  Flip to the back: if there are more than 3 ingredients, put it back immediately! Never compromise on canola/rapeseed oil or gellan gum!
+                </div>
+              </div>
+              <div class="pt-2 border-t border-emerald-200/60 font-mono text-[11px] text-emerald-800 font-bold">
+                Rule: <code>Only Nuts + Water + Sea Salt</code>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- RAW MILK DEEP DIVE -->
+        <div id="rawmilk-block" class="bg-gradient-to-br from-amber-50 to-orange-50/70 rounded-3xl p-5 sm:p-7 border-2 border-amber-400 shadow-sm">
+          <div class="flex items-center gap-2 mb-3 border-b border-amber-200 pb-3">
+            <span class="text-2xl">⭐️⭐️⭐️</span>
+            <div>
+              <h3 class="text-lg sm:text-xl font-black text-amber-950">
+                Preserving Pristine Living Nutrition · The Raw Milk Mechanism
+              </h3>
+              <p class="text-xs text-amber-800 font-medium">Why does modern factory-processed milk pale in comparison to unpasteurized living milk?</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm text-gray-800">
+            <div class="p-4 bg-white/90 rounded-2xl border border-amber-200">
+              <strong class="text-amber-950 font-bold text-sm block mb-1">1. Zero Heat Denaturation</strong>
+              Raw milk refers to unpasteurized, unhomogenized milk. Without thermal shock, it fully retains active immunoglobulins, digestive lactase enzymes, fat-soluble vitamins (A, D3, K2), and beneficial probiotic cultures.
+            </div>
+            <div class="p-4 bg-white/90 rounded-2xl border border-amber-200">
+              <strong class="text-amber-950 font-bold text-sm block mb-1">2. Easily Digestible & Anti-Inflammatory</strong>
+              High-heat industrial pasteurization denatures whey proteins and caramelizes lactose, creating advanced glycation end-products. Raw milk lactose remains in its natural state, making assimilation smooth and bloating-free.
+            </div>
+            <div class="p-4 bg-white/90 rounded-2xl border border-amber-200">
+              <strong class="text-amber-950 font-bold text-sm block mb-1">3. Hygiene Reality & HK Availability</strong>
+              Raw milk requires flawless pasturing standards (zero tolerance for Listeria/E. coli). Hong Kong law does not permit commercial sale of unpasteurized milk; thus, 100% grass-fed low-temp whole milk is the best local fallback.
+            </div>
+          </div>
+        </div>
+
+        <!-- TIER 2: 🟡 Secondary / Acceptable List -->
+        <div id="secondarytier-block" class="bg-white rounded-3xl p-5 sm:p-7 border border-amber-300 shadow-sm">
+          <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+              <h3 class="text-lg sm:text-xl font-black text-gray-900">
+                🟡 2. Secondary / Acceptable List (Acceptable Secondary Tier)
+              </h3>
+            </div>
+            <span class="text-xs font-mono font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+              Feasible Options When Grass-Finished Is Unavailable
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm text-gray-700">
+            <div class="p-4 bg-amber-50/40 rounded-2xl border border-amber-200 card-hover">
+              <strong class="text-amber-950 font-bold text-sm block mb-1">🥛 Low-Temp Pasteurised Whole Milk</strong>
+              <div class="text-[11px] font-mono text-red-700 font-bold mb-1.5 bg-red-50 p-1.5 rounded border border-red-200">
+                ⚠️ Near 80°C is ~HIGH HEAT~ wiping out beneficial bacteria & yeasts (cannot survive past 50-60°C)
+              </div>
+              <p class="leading-relaxed">
+                <strong>Why Acceptable:</strong> Uses lower-temp pasteurization so it won't scorch or caramelize lactose, but <strong>still cannot preserve most of milk's native living enzymes and bio-nutrients</strong>.
+              </p>
+            </div>
+            <div class="p-4 bg-amber-50/40 rounded-2xl border border-amber-200 card-hover">
+              <strong class="text-amber-950 font-bold text-sm block mb-1">🥛 Certified Organic Whole Milk</strong>
+              <p class="leading-relaxed">
+                <strong>Pros & Hidden Catch:</strong> Cows are fed USDA organic (grains — an inflammatory source disguised as a benefit), though strictly free from Glyphosate / Roundup herbicides.
+              </p>
+            </div>
+            <div class="p-4 bg-amber-50/40 rounded-2xl border border-amber-200 card-hover">
+              <strong class="text-amber-950 font-bold text-sm block mb-1">🥛 Organic Lactose-Free Whole Milk</strong>
+              <p class="leading-relaxed">
+                <strong>Pros:</strong> Natural enzymes pre-cleave lactose for lactose intolerance; tastes slightly sweet and prevents immediate gut distress. <strong>(Real fermented milk has zero sweetness — beneficial yeasts & probiotics consume the sugars so no sweet taste remains.)</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TIER 3: 🔴 Toxic Avoidance List -->
+        <div id="avoidtier-block" class="bg-red-50/70 rounded-3xl p-5 sm:p-7 border-2 border-red-500 shadow-sm">
+          <div class="flex items-center justify-between mb-4 border-b border-red-200 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-red-600 animate-pulse"></span>
+              <h3 class="text-xl sm:text-2xl font-black text-red-950">
+                🔴 3. Toxic Avoidance List (Ban From Fridge Immediately)
+              </h3>
+            </div>
+            <span class="font-mono text-xs font-black bg-red-600 text-white px-2.5 py-1 rounded">
+              TOXIC AVOIDANCE · High-Inflammation Zone
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm text-gray-900">
+            
+            <div class="p-4 bg-white rounded-2xl border border-red-300 card-hover">
+              <h4 class="font-black text-red-950 text-base mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-triangle-exclamation text-red-600"></i>
+                ❌ Low-Fat / Skim Milk
+              </h4>
+              <p class="text-gray-700 leading-relaxed">
+                <strong>Why Avoid:</strong> An 1980s corporate marketing scam born from fat-phobia! Stripping fat robs milk of conjugated linoleic acid (CLA), Omega-3, and fat-soluble vitamins (A, D3, K2). What remains is watery, fast-spiking sugar water.
+              </p>
+            </div>
+
+            <div class="p-4 bg-white rounded-2xl border border-red-300 card-hover">
+              <h4 class="font-black text-red-950 text-base mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-triangle-exclamation text-red-600"></i>
+                ❌ Conventional Grain-Fed GMO Milk
+              </h4>
+              <p class="text-gray-700 leading-relaxed">
+                <strong>Why Avoid:</strong> Confined feedlot operations where cattle never see pasture, fed glyphosate-sprayed GMO corn and soy. The resulting lipid profile is saturated with pro-inflammatory Omega-6 fatty acids.
+              </p>
+            </div>
+
+            <div class="p-4 bg-white rounded-2xl border border-red-300 card-hover">
+              <h4 class="font-black text-red-950 text-base mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-triangle-exclamation text-red-600"></i>
+                ❌ Shelf-Stable UHT Box Milk
+              </h4>
+              <p class="text-gray-700 leading-relaxed">
+                <strong>Why Avoid:</strong> Heated to 135°C-150°C for instantaneous sterilization. This extreme heat denatures fragile whey proteins and generates advanced glycation end-products (AGEs), making it difficult to digest.
+              </p>
+            </div>
+
+            <div class="p-4 bg-white rounded-2xl border border-red-300 card-hover">
+              <h4 class="font-black text-red-950 text-base mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-triangle-exclamation text-red-600"></i>
+                ❌ Plant Milks with Seed Oils & Chemical Gums
+              </h4>
+              <p class="text-gray-700 leading-relaxed">
+                <strong>Why Avoid:</strong> Commercial oat milks add <strong>canola / rapeseed oil</strong> as cheap emulsifiers, plus <strong>gellan gum, dipotassium phosphate, and artificial flavorings</strong>. These industrial oils and gums degrade gut mucosal lining!
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION 3: 4 BRAND REFERENCES (NO LINKS)   -->
+      <!-- ========================================== -->
+      <section id="brands" class="content-section space-y-6">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2.5 py-0.5 rounded bg-brand-orange text-white font-mono text-xs font-black">MODULE 03</span>
+            <span class="text-xs font-mono font-bold text-gray-500">VERIFIED BRAND SOURCES</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-950 tracking-tight">
+            Reference Brands Under Hong Kong Realities (No Perfect Options)
+          </h2>
+          <p class="text-xs sm:text-sm text-gray-600 font-medium">
+            With no raw milk and an abundance of industrial seed oils, these brands represent the cleanest relative baselines based strictly on biochemistry and ingredient simplicity. Zero external commercial links.
+          </p>
+        </div>
+
+        <!-- 4 Verified Product Cards with Direct Links -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <!-- Brand 1: Kalona SuperNatural -->
+          <div class="bg-white rounded-2xl p-5 border border-gray-200 card-hover flex flex-col justify-between shadow-xs">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-lg">
+                  🥛
+                </div>
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-900 border border-amber-200">USA · Low-Temp Vat</span>
+              </div>
+              <h3 class="font-extrabold text-base text-gray-900 mb-1">
+                Kalona SuperNatural
+              </h3>
+              <p class="text-xs text-gray-600 leading-relaxed mb-3">
+                Non-homogenized, low-temperature vat pasteurized, retaining the rich natural cream top layer and active enzymatic profile.
+              </p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 flex flex-col gap-2">
+              <div class="flex items-center justify-between text-xs font-bold text-amber-800 font-mono">
+                <span>100% Pasture-Raised</span>
+                <span>Organic Whole</span>
+              </div>
+              <a href="https://kalonasupernatural.com/our-products/" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 px-3 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-mono font-bold text-xs text-center transition flex items-center justify-center gap-1">
+                <span>View Products ↗</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Brand 2: Pureharvest Almond Coconut Quench -->
+          <div class="bg-white rounded-2xl p-5 border border-gray-200 card-hover flex flex-col justify-between shadow-xs">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-lg">
+                  🥥
+                </div>
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-900 border border-emerald-200">HKTVmall · Clean 4</span>
+              </div>
+              <h3 class="font-extrabold text-base text-gray-900 mb-1">
+                Pureharvest Organic Almond Coconut Milk
+              </h3>
+              <p class="text-xs text-gray-600 leading-relaxed mb-3">
+                Truly clean formulation: Filtered water, activated organic almonds, organic coconut, sea salt. Zero canola oil, zero gellan gum, zero flavorings!
+              </p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 flex flex-col gap-2">
+              <div class="flex items-center justify-between text-xs font-bold text-emerald-800 font-mono">
+                <span>Clean 4 Ingredients</span>
+                <span>Unsweetened</span>
+              </div>
+              <a href="https://www.hktvmall.com/hktv/en/main/Janus-Gourmet/s/H7002001/Supermarket/Supermarket/Beverages/Milk-%26-Soy-Milk/Almond-Quench-Organic-Almond-Coconut-Milk-Unsweetened-1-Litre-Expiry-date-07-Apr-2027/p/H7002001_S_Purehrvest231CQAL" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 px-3 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-mono font-bold text-xs text-center transition flex items-center justify-center gap-1">
+                <span>HKTVmall Reference ↗</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Brand 3: Kiki Milk -->
+          <div class="bg-white rounded-2xl p-5 border border-gray-200 card-hover flex flex-col justify-between shadow-xs">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-lg">
+                  🌱
+                </div>
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-900 border border-blue-200">iHerb · Clean Label</span>
+              </div>
+              <h3 class="font-extrabold text-base text-gray-900 mb-1">
+                Kiki Milk Pure Plant Formulation
+              </h3>
+              <p class="text-xs text-gray-600 leading-relaxed mb-3">
+                Third-party Clean Label Project verified. Milled exclusively from whole oats, coconut sugar, hemp seeds, and pumpkin seeds. Zero industrial gums or oils.
+              </p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 flex flex-col gap-2">
+              <div class="flex items-center justify-between text-xs font-bold text-blue-800 font-mono">
+                <span>Clean Label Project</span>
+                <span>Zero Gums/Oils</span>
+              </div>
+              <a href="https://au.iherb.com/c/kiki-milk" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-mono font-bold text-xs text-center transition flex items-center justify-center gap-1">
+                <span>iHerb Reference ↗</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Brand 4: Daioni Organic -->
+          <div class="bg-white rounded-2xl p-5 border border-gray-200 card-hover flex flex-col justify-between shadow-xs">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center font-bold text-lg">
+                  🇬🇧
+                </div>
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-900 border border-purple-200">HKTVmall · Pasture-Fed</span>
+              </div>
+              <h3 class="font-extrabold text-base text-gray-900 mb-1">
+                Daioni Organic British Whole Milk
+              </h3>
+              <p class="text-xs text-gray-600 leading-relaxed mb-3">
+                Pasture-grazed in Wales, non-GMO fed, full-fat cream layer intact to preserve natural anti-inflammatory fatty acids.
+              </p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 flex flex-col gap-2">
+              <div class="flex items-center justify-between text-xs font-bold text-purple-800 font-mono">
+                <span>Whole Milk 3.5% Fat</span>
+                <span>Soil Association</span>
+              </div>
+              <a href="https://www.hktvmall.com/hktv/en/main/SUPRMART/s/H8032002/Supermarket/Supermarket/Beverages/Milk-%26-Soy-Milk/%E7%89%9B%E5%A5%B6-Daioni-Organic-%E7%B6%A0%E7%89%9B%E7%89%9B%E6%9C%89%E6%A9%9F%E5%85%A8%E8%84%82%E7%89%9B%E5%A5%B62-x-1000ml-0722-%E8%97%8D%E8%89%B2%E7%9B%92-Milk-Whole-35-Fat%E6%96%B0%E8%88%8A%E5%8C%85%E8%A3%9D%E9%9A%A8%E6%A9%9F%E7%99%BC%E8%B2%A8/p/H8032002_S_MI-00002" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 px-3 rounded-lg bg-purple-700 hover:bg-purple-800 text-white font-mono font-bold text-xs text-center transition flex items-center justify-center gap-1">
+                <span>HKTVmall Reference ↗</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION 4: 1-PAGE SUPERMARKET CHECKLIST    -->
+      <!-- ========================================== -->
+      <section id="checklist" class="content-section bg-white rounded-3xl p-5 sm:p-8 border-2 border-gray-900 shadow-lg">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b-2 border-gray-900 pb-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="px-2 py-0.5 rounded bg-red-600 text-white font-mono text-xs font-black">CHECKLIST</span>
+              <span class="text-xs font-mono font-bold text-gray-600">Supermarket Shopping Field Guide</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-black text-gray-950">
+              🛒 1-Page Supermarket Shopping Field Checklist (Interactive)
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-600">
+              Push your cart down the aisle and verify item by item!
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="text-right">
+              <div class="text-xs font-mono text-gray-500">Progress</div>
+              <div id="checkProgressText" class="text-lg font-black text-brand-orange font-mono">0 / 6 Completed</div>
+            </div>
+            <button onclick="printChecklist()" class="px-4 py-2 text-xs font-bold bg-yellow-400 hover:bg-yellow-300 text-gray-950 rounded-xl border border-black shadow transition flex items-center gap-1.5">
+              <i class="fa-solid fa-print"></i>
+              <span>Print / Export Checklist</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Checklist Grid -->
+        <div class="space-y-3 font-mono text-xs sm:text-sm">
+          
+          <label class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-gray-50/60 hover:bg-gray-100 cursor-pointer transition">
+            <input type="checkbox" onchange="updateCheckProgress()" class="chk-item mt-1 w-5 h-5 accent-brand-orange rounded cursor-pointer">
+            <div>
+              <span class="font-bold text-gray-900 block text-sm">[1] Inspect Plant Milk: Ingredients Must Be Fewer Than 4 (Water, Nuts, Sea Salt)</span>
+              <span class="text-xs text-red-600 font-sans block mt-0.5">⚠️ If you spot Rapeseed oil, Canola oil, Gellan gum, or flavorings, put it back immediately!</span>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-gray-50/60 hover:bg-gray-100 cursor-pointer transition">
+            <input type="checkbox" onchange="updateCheckProgress()" class="chk-item mt-1 w-5 h-5 accent-brand-orange rounded cursor-pointer">
+            <div>
+              <span class="font-bold text-gray-900 block text-sm">[2] Whole Dairy Hierarchy: 1st Grass-Finished ＞ 2nd 100% Grass-Fed</span>
+              <span class="text-xs text-emerald-800 font-sans block mt-0.5">✅ Look for 100% Grass-Fed, Pasture-Raised, Organic. Discard skim, high-calcium, and fake high-protein marketing traps!</span>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-gray-50/60 hover:bg-gray-100 cursor-pointer transition">
+            <input type="checkbox" onchange="updateCheckProgress()" class="chk-item mt-1 w-5 h-5 accent-brand-orange rounded cursor-pointer">
+            <div>
+              <span class="font-bold text-gray-900 block text-sm">[3] Strictly Ban Low-Fat / Skim Milk (Non-Fat / Low-Fat)</span>
+              <span class="text-xs text-red-600 font-sans block mt-0.5">⚠️ Stripping fat robs milk of CLA and fat-soluble vitamins, leaving behind fast glucose-spiking watery liquid.</span>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-gray-50/60 hover:bg-gray-100 cursor-pointer transition">
+            <input type="checkbox" onchange="updateCheckProgress()" class="chk-item mt-1 w-5 h-5 accent-brand-orange rounded cursor-pointer">
+            <div>
+              <span class="font-bold text-gray-900 block text-sm">[4] A2 Casein Milk: Easier on Digestion, But Watch Out for Hidden Gums</span>
+              <span class="text-xs text-amber-900 font-sans block mt-0.5">💡 "Grain-finished after grass" cannot be verified easily. Organic is just a baseline, not a magic cure.</span>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-gray-50/60 hover:bg-gray-100 cursor-pointer transition">
+            <input type="checkbox" onchange="updateCheckProgress()" class="chk-item mt-1 w-5 h-5 accent-brand-orange rounded cursor-pointer">
+            <div>
+              <span class="font-bold text-gray-900 block text-sm">[5] Avoid Shelf-Stable Box Milk (UHT High-Temp Sterilized)</span>
+              <span class="text-xs text-gray-600 font-sans block mt-0.5">💡 Ultra-high heat scorches lactose and creates AGEs. Always choose refrigerated low-temp pasteurized (HTST/LTLT) milk.</span>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-gray-50/60 hover:bg-gray-100 cursor-pointer transition">
+            <input type="checkbox" onchange="updateCheckProgress()" class="chk-item mt-1 w-5 h-5 accent-brand-orange rounded cursor-pointer">
+            <div>
+              <span class="font-bold text-gray-900 block text-sm">[6] Organic Ultra-Filtered Milk: Micronutrients Are Filtered Down, Consume in Moderation</span>
+              <span class="text-xs text-emerald-800 font-sans block mt-0.5">✅ Protein 13g+, lactose 6g stabilizes glucose, but natural micronutrients are partially reduced.</span>
+            </div>
+          </label>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION 5: 21 DAYS ADVANTAGE               -->
+      <!-- ========================================== -->
+      <section id="roadmap" class="content-section bg-gradient-to-br from-gray-900 via-gray-950 to-black text-white rounded-3xl p-6 sm:p-9 border border-gray-800 shadow-2xl space-y-6">
+        
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="px-2.5 py-0.5 rounded bg-brand-orange text-white font-mono text-xs font-black">21 DAYS ADVANTAGE</span>
+            <span class="text-xs font-mono text-amber-300">Solo Cancer Survivor Created · Biological Defense Line</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl md:text-3xl font-black tracking-tight leading-snug">
+            21 days advantage Created by a Solo Cancer Survivor · 6-Year 2nd Cancer Defense Line. Zero Surgery, Zero Chemotherapy, Zero Radiation.
+          </h2>
+          <p class="text-xs sm:text-sm text-gray-400 mt-2 font-medium">
+            Rooted in 6 years and 2 real-life battles against cancer and tumors, starting from Make Anti-inflammatory Great Again (MAGA).
+          </p>
+        </div>
+
+        <div class="pt-5 border-t border-gray-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="text-xs sm:text-sm text-gray-300">
+            Learn more about the 21 Days Advantage daily anti-inflammatory protocols and real-world guidelines:
+          </div>
+          <a href="https://sites.google.com/view/magamap/magasite" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-xl bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg flex-shrink-0">
+            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+            <span>Explore 21 Days Advantage on magasite ↗</span>
+          </a>
+        </div>
+
+      </section>
+
+      <!-- Footer -->
+      <footer class="pt-6 pb-14 text-center text-xs text-gray-500 font-mono space-y-4 border-t border-gray-200">
+        
+        <!-- Disclaimer -->
+        <div class="max-w-2xl mx-auto p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 font-sans text-xs sm:text-sm text-left sm:text-center leading-relaxed shadow-sm">
+          <strong>Disclaimer:</strong> ⚠️ The following content is for personal reference only and does not constitute medical diagnosis or treatment advice. If in doubt, please consult your doctor or registered medical practitioner.
+        </div>
+
+        <div class="flex items-center justify-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-brand-orange"></span>
+          <span class="font-bold text-gray-900">MAGASite · Prem 20 The Truth Behind "Milk" & Plant-Based Milks</span>
+        </div>
+        <p class="text-gray-400 max-w-xl mx-auto font-sans">
+          Created through hard-fought personal survival · Breaking through corporate pseudo-health deceptions · Safeguarding cellular metabolic sovereignty.
+        </p>
+        <div class="flex justify-center items-center gap-4 pt-2">
+          <a href="https://sites.google.com/view/magamap/magasite" target="_blank" rel="noopener noreferrer" class="text-brand-orange hover:text-orange-700 font-bold underline flex items-center gap-1">
+            <i class="fa-solid fa-house text-xs"></i>
+            <span>magasite Home ↗</span>
+          </a>
+          <span>·</span>
+          <a href="/dailyflow-en.html" class="hover:text-red-700 underline">DAILY FLOW Bulletin (ENG) ↗</a>
+        </div>
+      </footer>
+
+    </div>
+
+  </main>
+
+  <!-- Interactive Logic Script -->
+  <script>
+    if (window.lucide) { lucide.createIcons(); }
+
+    // Checklist Progress
+    function updateCheckProgress() {
+      const items = document.querySelectorAll('.chk-item');
+      let checked = 0;
+      items.forEach(chk => { if (chk.checked) checked++; });
+      const display = document.getElementById('checkProgressText');
+      if (display) {
+        display.textContent = `${checked} / ${items.length} Completed`;
+      }
+      if (checked === items.length) {
+        try {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        } catch(e) {}
+      }
+    }
+
+    function printChecklist() {
+      try {
+        window.print();
+      } catch (e) {
+        showToast("Supermarket Checklist ready for export", true);
+      }
+    }
+
+    // Live Search & Filtering
+    function filterLiveContent() {
+      const query = document.getElementById('liveSearchInput').value.toLowerCase().trim();
+      const sections = document.querySelectorAll('.content-section');
+
+      sections.forEach(sec => {
+        if (!query) {
+          sec.classList.remove('hidden');
+          return;
+        }
+        const text = sec.innerText.toLowerCase();
+        if (text.includes(query)) {
+          sec.classList.remove('hidden');
+        } else {
+          sec.classList.add('hidden');
+        }
+      });
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('liveSearchInput');
+      if (input) {
+        input.value = '';
+        filterLiveContent();
+      }
+    }
+
+    function switchCategory(cat) {
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        if (btn.dataset.cat === cat) {
+          btn.classList.add('bg-brand-orange', 'text-white');
+          btn.classList.remove('bg-white', 'text-gray-700');
+        } else {
+          btn.classList.remove('bg-brand-orange', 'text-white');
+          btn.classList.add('bg-white', 'text-gray-700');
+        }
+      });
+
+      if (cat === 'all') {
+        document.querySelectorAll('.content-section').forEach(el => el.classList.remove('hidden'));
+        return;
+      }
+
+      if (cat === 'script') {
+        jumpToSection('script');
+      } else if (cat === 'godtier') {
+        jumpToSection('tiers');
+      } else if (cat === 'rawmilk') {
+        jumpToSection('rawmilk-block');
+      } else if (cat === 'avoidtier') {
+        jumpToSection('avoidtier-block');
+      } else if (cat === 'brands') {
+        jumpToSection('brands');
+      } else if (cat === 'checklist') {
+        jumpToSection('checklist');
+      }
+    }
+
+    function jumpToSection(id) {
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // Toast Notification
+    function showToast(msg, isSuccess = true) {
+      const toast = document.getElementById('toastNotification');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
+      if (!toast || !toastMsg) return;
+      toastMsg.textContent = msg;
+      if (toastIcon) {
+        toastIcon.className = isSuccess 
+          ? "w-6 h-6 rounded-full bg-emerald-500 text-black flex items-center justify-center font-bold text-xs shrink-0"
+          : "w-6 h-6 rounded-full bg-amber-500 text-black flex items-center justify-center font-bold text-xs shrink-0";
+        toastIcon.textContent = isSuccess ? "✓" : "!";
+      }
+      toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3500);
+    }
+  </script>
+
+  <!-- In-page Toast Notification Container -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 bg-gray-950 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-gray-800 font-mono text-xs sm:text-sm">
+    <div id="toastIcon" class="w-6 h-6 rounded-full bg-emerald-500 text-black flex items-center justify-center font-bold text-xs shrink-0">✓</div>
+    <span id="toastMsg" class="font-medium text-gray-200">Success</span>
+  </div>
+</body>
+</html>
