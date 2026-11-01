@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>舌頭儀表板2 · Tongue Dashboard 2</title>
+<title>舌診通 2.0 — 身體儀表板</title>
 <style>
   :root {
     --bg:        #f3f5f9;
@@ -25,11 +25,43 @@
     --green-lt:  #dcfce7;
     --shadow:    0 2px 8px rgba(23,26,33,.06), 0 8px 24px rgba(23,26,33,.04);
     --shadow-lg: 0 8px 24px rgba(23,26,33,.1), 0 24px 48px rgba(23,26,33,.08);
-    color-scheme: light;
     box-sizing: border-box;
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:        #0f1115;
+      --surface:   #1a1d24;
+      --ink:       #f0f2f5;
+      --sub:       #9199a8;
+      --line:      #2a2e38;
+      --teal-lt:   #0d3733;
+      --coral-lt:  #3a1620;
+      --violet-lt: #2a1f45;
+      --amber-lt:  #3a2c0d;
+      --blue-lt:   #122a4a;
+      --green-lt:  #0f3320;
+      --shadow:    0 2px 8px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.2);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:        #0f1115;
+    --surface:   #1a1d24;
+    --ink:       #f0f2f5;
+    --sub:       #9199a8;
+    --line:      #2a2e38;
+    --teal-lt:   #0d3733;
+    --coral-lt:  #3a1620;
+    --violet-lt: #2a1f45;
+    --amber-lt:  #3a2c0d;
+    --blue-lt:   #122a4a;
+    --green-lt:  #0f3320;
+    color-scheme: dark;
+  }
+
   * { box-sizing: inherit; margin: 0; padding: 0; }
   html, body { height: 100%; background: var(--bg); }
   body {
@@ -398,9 +430,9 @@
 <header class="topbar">
   <div class="brand">
     <div class="brand-icon">👅</div>
-    <div class="brand-text">舌頭儀表板2<small>身體儀表板 · 中醫 × 阿育吠陀</small></div>
+    <div class="brand-text">舌密<small>身體儀表板</small></div>
   </div>
-  <div style="display:flex;gap:8px"><button class="theme-toggle" onclick="toggleLang()" id="langBtn" style="width:auto;padding:0 12px;font-weight:700;font-size:12px">ENG</button></div>
+  <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 </header>
 
 <div class="hero">
@@ -465,7 +497,7 @@
 <div class="footer-note">
   ⚠️ 本資料僅供參考，幫助了解基本身體訊號及食療調理方向，並非醫療診斷。<br>
   如症狀持續或嚴重，請立即尋求專業醫護人員協助。<br>
-  食療原則：唔用奶類、米飯、麵粉同穀物；奶改用「水＋鹽＋植物」三成份植物奶或椰子乳酪。<br>中醫 · 阿育吠陀 · 現代醫學資料整合製作
+  食療原則：唔用奶類、米飯、糖、種子油、麵粉同穀物；奶改用「水＋鹽＋植物」只容許三類成份產生植物奶或椰子乳酪。<br>中醫 · 阿育吠陀 · 現代醫學資料整合製作
 </div>
 
 <!-- SHEET MODAL -->
@@ -988,172 +1020,12 @@ function closeSheet() {
 function closeSheetBg(e) { if (e.target.id === 'overlay') closeSheet(); }
 document.addEventListener('keydown', e => { if (e.key==='Escape') closeSheet(); });
 
-
-// ===== ENG / 廣 =====
-let lang='zh', curFilter='all';
-const UI_EN={
- brand:'Tongue Dashboard 2<small>Body dashboard · TCM × Ayurveda</small>',
- eyebrow:'DAILY CHECK · SELF-HEALTH RADAR',
- h1:'Your tongue is a live dashboard of your body',
- p:'Traditional Chinese Medicine and Indian Ayurveda side by side, to help you read what your body is signalling, with food suggestions you can act on.',
- stats:'<div class="hero-stat"><b>14</b>Tongue types</div><div class="hero-stat"><b>2</b>Medical systems</div><div class="hero-stat"><b>70+</b>Food ideas</div>',
- steps:['Look first thing, before brushing','Natural daylight is most accurate','Relax, stick it out, check within 10 seconds','Dark foods can stain, so factor that in'],
- titles:['Tongue-to-organ map','14 tongue types'],
- legend:['Heart · mind','Lung · breathing','Spleen-stomach · digestion','Liver-gallbladder · mood & metabolism','Kidney · core vitality'],
- pills:['All','Coating','Colour','Shape','Needs attention'],
- tags:{tcm:'TCM',ayur:'Ayurveda',food:'Food',warn:'Caution'},
- tabs:['Overview','TCM vs Ayurveda','Food','See a doctor'],
- lab:{sev:'Severity',sym:'What you may notice',tcm:'TCM',ayu:'Ayurveda',eat:'Good to eat',avoid:'Go easy on',unit:' types'},
- foot:'⚠️ For reference only, not a medical diagnosis. If symptoms persist or are severe, seek professional care immediately.<br>Food principle: no dairy, rice, flour or grains. For milk use homemade 3-ingredient plant milk (water + salt + one plant) or coconut yogurt.<br>TCM · Ayurveda · modern medicine, combined.'
-};
-const UI_ZH={tags:{tcm:'中醫',ayur:'阿育吠陀',food:'食療',warn:'需注意'},unit:' 款'};
-const EN={
-cracked:{n:'Cracked Tongue',e:'Fissured tongue',q:'Low B vitamins and irritated mucosa. Your body is asking for better food.',
- sym:['Fissures across the surface, like dry earth','Dry mouth or a burning feeling','Food debris can collect in deep cracks'],
- tcm:'Yin deficiency with internal heat: not enough fluid to moisten the tongue (kidney or stomach yin).',
- ayu:'Vata imbalance brings dryness and nervous tension; excess Agni burns up body fluids.',
- f:'🥚 Eggs|🐟 Sardines|🌿 Spinach|🥑 Avocado|🫘 Beans|🫐 Blueberries',a:'Alcohol|Too much coffee|Spicy food',
- w:'Deep, painful or bleeding cracks: see a dentist or TCM doctor.<br>Trouble swallowing or hoarse voice: seek care now.<br>No change after 4 weeks of better nutrition: ask for a blood test.'},
-smooth_red:{n:'Smooth Red Tongue',e:'Beefy red tongue',q:'Low stomach acid, folate or B12. Papillae thinning, weak digestion.',
- sym:['Glossy surface with no coating or papillae','Bright red, may feel sore or burning','Tiredness and poor digestion'],
- tcm:'Stomach yin deficiency with heat. A bare tongue means stomach yin is badly depleted.',
- ayu:'Severe Pitta excess drying the tissues; a smooth surface signals Ama and depleted tissue.',
- f:'🥩 Red meat|🐚 Clams|🥚 Eggs|🐟 Sardines|🌿 Spinach|🥦 Broccoli',a:'Alcohol|Spicy food',
- note:'Vegans: B12 only comes from animal foods or supplements. Get your levels tested.',
- w:'Smooth tongue + fatigue or dizziness: possible pernicious anaemia.<br>Swollen, painful tongue + fever: possible infection.<br>Numb hands or feet: B12 nerve damage, do not wait.'},
-root_coat:{n:'Thick Coating at the Back',e:'Root coating',q:'Sluggish gut, possible SIBO. Your digestion wants attention.',
- sym:['Thick white or yellow coat at the very back','Tip stays normal pink','Bad breath, bloating, irregular stools'],
- tcm:'The back maps to kidney and lower burner. A thick coat means damp-heat stagnation or a weak spleen-stomach.',
- ayu:'Ama builds up in the colon; weak Agni leaves food half-digested.',
- f:'🫚 Ginger|🥒 Winter melon|🍵 Pu-erh tea|🦠 Probiotics',a:'Sweets|Late-night snacks|Too much red meat',
- w:'Persistent bloating and gas: ask about a SIBO test.<br>Alternating loose and hard stools: possible IBS.<br>Thick yellow coat + fever: possible infection, see a doctor.'},
-side_yellow:{n:'Red Sides + Yellow Coat',e:'Liver-gallbladder pattern',q:'Overloaded liver and sluggish bile. A double liver-gallbladder alarm.',
- sym:['Both edges clearly red','Thick yellow coat in the middle or back','Bitter taste, right-side discomfort, irritability'],
- tcm:'Tongue sides map to liver-gallbladder. Red sides = liver fire, yellow coat = damp-heat.',
- ayu:'Pitta imbalance in Ranjaka Pitta (liver and bile); yellow coat reflects Ama and heat.',
- f:'🥬 Dark leafy greens|🌼 Chrysanthemum tea|🟡 Turmeric|🍋 Lemon',a:'Alcohol|Fried food|Added sugar',
- w:'Yellow eyes or skin: emergency.<br>Ongoing upper-right abdominal pain: gallstones or hepatitis possible.<br>Dark urine: liver check.<br>Yellow coat that will not clear: liver function test (ALT, AST, GGT).'},
-tip_red:{n:'Red Tongue Tip',e:'Heart fire pattern',q:'Stress overload and "heart fire". Your body says take a break.',
- sym:['Only the tip is red','Poor sleep','Racing heart, restlessness'],
- tcm:'The tip maps to the heart. A red tip means heart fire flaring up, causing insomnia and mouth sores.',
- ayu:'Sadhaka Pitta and Prana Vata are disturbed, giving anxiety and light sleep.',
- f:'🍵 Lotus plumule tea|🌹 Rose tea|🍒 Cherries|🥥 Coconut water',a:'Late-night caffeine|Spicy food',
- w:'Red tip + palpitations or chest pain: see a cardiologist.<br>Insomnia for over 3 months: consider mental-health support.'},
-geographic:{n:'Geographic Tongue',e:'Mapped tongue',q:'Gut flora out of balance, low zinc. The immune system is fluctuating.',
- sym:['Smooth red patches with pale borders','Pattern changes day to day','Usually painless but sensitive to spicy food'],
- tcm:'Weak spleen-stomach and thin qi-blood; overthinking is a common trigger.',
- ayu:'All three doshas shifting. The body is adapting.',
- f:'🦪 Oysters|🎃 Pumpkin seeds|🦠 Probiotics|🥥 Coconut yogurt',a:'Spicy food|Very hot food|Acidic food',
- w:'With skin rash: check for psoriasis.<br>With joint pain: autoimmune check.<br>With diarrhoea or abdominal pain: gut inflammation work-up.'},
-black_coat:{n:'Black Hairy Tongue',e:'Dark hairy coating',q:'Bacteria and fungus out of balance, often an antibiotic side effect.',
- sym:['Black or brown hairy coating','Metallic taste','Bad breath'],
- tcm:'The most serious coat colour: extreme cold turning to heat, or depleted kidney yang. See a TCM practitioner soon.',
- ayu:'Heavy Ama in the tissues with Agni nearly out; needs deep cleansing guidance.',
- f:'🥥 Unsweetened coconut yogurt|🍵 Ginger tea|🫙 Kimchi or sauerkraut',a:'Coffee|Tea|Alcohol|Smoking',
- note:'Dark foods can stain the tongue for a while. Rule that out first.',
- w:'Lasting over 48 hours: see a doctor.<br>After antibiotics: tell your doctor.<br>Weak immunity + black coat: urgent.<br>Trouble swallowing or fever: emergency.'},
-centre_coat:{n:'Central Coating',e:'Centre coat',q:'Irritated spleen-stomach. A digestive red flag.',
- sym:['Visible white or yellow patch in the centre','Clean edges','Bloating, slow digestion'],
- tcm:'The centre maps to spleen-stomach. Thick white = cold-damp; thick yellow = stomach heat.',
- ayu:'Uneven Agni; Ama gathers in the main digestive tract.',
- f:'🫚 Ginger|🍵 Tangerine-peel tea|🥕 Carrot',a:'Skipping meals|Greasy food',
- w:'Stomach pain + black stools: emergency (possible bleeding).<br>Yellow coat + weight loss: endoscopy.<br>Thick coat + total loss of appetite: full check-up.'},
-teeth_marks:{n:'Scalloped Tongue',e:'Tooth-marked tongue',q:'Weak spleen qi and water retention. Time to look after your gut.',
- sym:['Tooth imprints along both edges','Swollen tongue','Puffy face or limbs, tiredness, soft sticky stools'],
- tcm:'Spleen qi deficiency with damp-phlegm; common in desk workers and iced-drink fans.',
- ayu:'Heavy Kapha imbalance with blocked Apana Vata.',
- f:'🥒 Winter melon|🫘 Red beans|🫚 Ginger|🟡 Turmeric',a:'Iced drinks|Ice cream|Lots of raw salad',
- w:'With heavy swelling: kidney check.<br>With thyroid swelling: thyroid test.<br>With extreme fatigue: check for anaemia or low thyroid.'},
-pale:{n:'Pale Tongue',e:'Low qi and blood',q:'Low qi and blood, an anaemia warning. You feel drained.',
- sym:['Noticeably pale tongue','Pale face, cold hands and feet','Dizziness, breathlessness'],
- tcm:'Qi-blood or yang deficiency: blood does not fill the tongue. Overwork, late nights, heavy periods.',
- ayu:'Excess Vata, weak Agni and low Ojas (vital essence).',
- f:'🥩 Red meat|🍇 Red dates|🐓 Black chicken|🥬 Spinach|🫘 Black beans|🍯 Honey',a:'Tea or coffee with meals',
- note:'Pair iron-rich foods with vitamin C (orange, kiwi) to absorb more.',
- w:'Persistent dizziness + palpitations: check haemoglobin and ferritin.<br>Very heavy periods: gynae check.<br>Long-lasting fatigue: thyroid check.'},
-purple:{n:'Purple Tongue',e:'Dusky tongue',q:'Blood stasis and poor circulation. Time to move more.',
- sym:['Dusky purple or bluish colour','Prominent veins under the tongue','Cold hands, easy bruising, painful periods with clots'],
- tcm:'Qi stagnation leading to blood stasis, from sitting, stress and cold.',
- ayu:'Vata-Pitta blocking the srotas (channels), slowing Rakta dhatu.',
- f:'🌹 Rose tea|🍎 Hawthorn|🍄 Black fungus|🧄 Garlic|🐟 Sardines|🫚 Ginger',a:'Sitting for hours|Cold drinks',
- w:'Sudden purple tongue + blue lips: emergency (low oxygen).<br>Chest pain + breathlessness: call an ambulance.<br>Severe period pain: gynae check.'},
-greasy_white:{n:'Greasy White Coat',e:'Phlegm-damp pattern',q:'Phlegm-damp constitution. Your body feels waterlogged.',
- sym:['Thick sticky coat that is hard to scrape','Heavy body and head, sluggish','Sticky stools'],
- tcm:'The spleen cannot transform fluids, so damp turns to phlegm. Greasy food, cold drinks and little exercise.',
- ayu:'Kapha excess with Ama, a sticky build-up of toxins.',
- f:'🍵 Lotus leaf tea|🍊 Tangerine peel|🫚 Ginger|🥒 Winter melon|🌿 Adzuki beans|🍋 Lemon water',a:'Sugary drinks|Fried food|Desserts|Iced drinks',
- w:'Thick white coat + fever: possible early cold.<br>Greasy coat that never clears + steady weight gain: check metabolic markers.'},
-mirror:{n:'Mirror Tongue',e:'Bald, glossy tongue',q:'Severely low stomach yin. Stress has drained your reserves.',
- sym:['Shiny, smooth and coat-free, red or dusky and dry','Dry mouth, poor appetite','Common with chronic illness or long late nights'],
- tcm:'Severe stomach-yin loss (stripped coat) means vital qi is damaged; needs careful care.',
- ayu:'Agni extremely weak, tissues over-consumed, Ojas depleted.',
- f:'🍐 Pear|🥥 Coconut water|🍯 Honey|🥛 Homemade plant milk|🍄 White fungus|🥔 Chinese yam',a:'Spicy food|Late nights',
- note:'Plant milk rule: only 3 ingredients, water, salt and one plant (soy, almond or coconut). No sugar, thickeners or flavouring. For yogurt, choose coconut yogurt.',
- w:'No coating for 2+ weeks: see a TCM practitioner.<br>With sudden weight loss or swallowing trouble: medical work-up.<br>Child with a mirror tongue: paediatric check (zinc, nutrition).'},
-dry:{n:'Dry Tongue',e:'Dehydration or yin deficiency',q:'Dehydration or yin deficiency. Not drinking enough water is no excuse.',
- sym:['Lacks moisture, feels rough','Cracked lips, dry throat','Worse in the morning'],
- tcm:'Yin deficiency or heat injuring fluids, so the tongue lacks moisture.',
- ayu:'Vata dries the tissues; excess Pitta evaporates fluids faster.',
- f:'🍐 Pear|🥒 Cucumber|🍅 Tomato|🥥 Coconut water|🍯 Honey water|🥛 Homemade almond milk',a:'Too much caffeine|Air-con blowing on your face',
- note:'Aim for 1.5 to 2 litres of water a day in small sips. Start the day with a glass of warm water.',
- w:'Dry mouth + dry eyes: check for Sjögren\'s.<br>With frequent urination or weight loss: check blood sugar.<br>Started after new medication: ask about side effects.'}
-};
-function T(){return lang==='en'?UI_EN.tags:UI_ZH.tags}
-function enTab(d,i){
- const x=EN[d.id], L=UI_EN.lab;
- if(i===0){const w=d.severity>=3?70:d.severity===2?48:35, c=d.severity>=3?'var(--coral)':d.severity===2?'var(--amber)':'var(--green)';
-  return `<div class="sev-meter"><div class="lab" style="width:64px">${L.sev}</div><div class="sev-track"><div class="sev-fill" style="width:${w}%;background:${c}"></div></div></div><div class="block"><div class="block-title"><div class="ico ico-info">i</div>${L.sym}</div><ul class="ul">${x.sym.map(t=>'<li>'+t+'</li>').join('')}</ul></div>`;}
- if(i===1) return `<div class="dual-box"><div class="box tcm"><div class="box-title">${L.tcm}</div>${x.tcm}</div><div class="box ayur"><div class="box-title">${L.ayu}</div>${x.ayu}</div></div>`;
- if(i===2){const fc=x.f.split('|').map(s=>{const k=s.indexOf(' ');return `<div class="food-chip"><span class="e">${s.slice(0,k)}</span>${s.slice(k+1)}</div>`}).join('');
-  return `<div class="block-title"><div class="ico ico-food">+</div>${L.eat}</div><div class="food-row">${fc}</div><div style="height:14px"></div><div class="block-title"><div class="ico ico-warn">-</div>${L.avoid}</div><div class="food-row">${x.a.split('|').map(s=>'<div class="avoid-chip">'+s+'</div>').join('')}</div>${x.note?'<div class="warn-card" style="margin-top:14px;background:var(--green-lt);color:#0a3321">'+x.note+'</div>':''}`;}
- return `<div class="warn-card"><strong>${UI_EN.tabs[3]}</strong>${x.w}</div>`;
+function toggleTheme() {
+  const root = document.documentElement;
+  const cur = root.getAttribute('data-theme');
+  if (cur === 'dark') { root.setAttribute('data-theme','light'); document.getElementById('themeBtn').textContent='🌙'; }
+  else { root.setAttribute('data-theme','dark'); document.getElementById('themeBtn').textContent='☀️'; }
 }
-function renderCards(filter){
- curFilter=filter||curFilter;
- const grid=document.getElementById('cardsGrid'); grid.innerHTML=''; let count=0;
- DATA.forEach(d=>{
-  if(curFilter!=='all'){ if(curFilter==='urgent'&&!d.tags.includes('warn'))return; if(curFilter!=='urgent'&&!d.category.includes(curFilter))return; }
-  count++;
-  const x=lang==='en'?EN[d.id]:null, nm=x?x.n:d.name, eg=x?x.e:d.eng, qk=x?x.q:d.quick;
-  const sc=d.severity>=3?'var(--coral)':d.severity===2?'var(--amber)':'var(--green)';
-  const card=document.createElement('div'); card.className='card'; card.tabIndex=0; card.setAttribute('role','button');
-  card.innerHTML=`<div class="card-top"><div class="card-viz">${getTongueSVG(d.tongue,52,64)}</div><div class="card-head-text"><div class="card-name">${nm}</div><div class="card-eng">${eg}</div></div><div class="sev-dot" style="background:${sc}"></div></div><div class="card-mid"><div class="card-quick">${qk}</div></div><div class="card-bottom">${d.tags.map(t=>`<span class="chip chip-${t}">${T()[t]}</span>`).join('')}</div>`;
-  card.addEventListener('click',()=>openSheet(d)); card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openSheet(d)});
-  grid.appendChild(card);
- });
- document.getElementById('countBadge').textContent=count+(lang==='en'?UI_EN.lab.unit:UI_ZH.unit);
-}
-function openSheet(d){
- const en=lang==='en', x=en?EN[d.id]:null, tabs=en?UI_EN.tabs:d.tabs;
- document.getElementById('sheetTitle').textContent=en?x.n:d.name;
- document.getElementById('sheetEng').textContent=en?x.e:d.eng;
- document.getElementById('sheetViz').innerHTML=getTongueSVG(d.tongue,62,78);
- document.getElementById('sheetChips').innerHTML=d.tags.map(t=>`<span class="chip chip-${t}">${T()[t]}</span>`).join('');
- const show=i=>{document.querySelectorAll('.seg-tab').forEach((b,j)=>b.classList.toggle('active',j===i)); document.getElementById('sheetBody').innerHTML=en?enTab(d,i):(d.content[d.tabs[i]]||'');};
- const te=document.getElementById('segTabs'); te.innerHTML='';
- tabs.forEach((t,i)=>{const b=document.createElement('button'); b.className='seg-tab'+(i===0?' active':''); b.textContent=t; b.onclick=()=>show(i); te.appendChild(b);});
- show(0);
- document.getElementById('overlay').classList.add('open'); document.body.style.overflow='hidden';
-}
-const ZH_CACHE={};
-function setHTML(key,el,en,on){ if(!el)return; if(!(key in ZH_CACHE))ZH_CACHE[key]=el.innerHTML; el.innerHTML=on?en:ZH_CACHE[key]; }
-function applyLang(){
- const on=lang==='en', q=s=>document.querySelector(s), qa=s=>document.querySelectorAll(s);
- document.documentElement.lang=on?'en':'zh-HK';
- document.getElementById('langBtn').textContent=on?'廣':'ENG';
- setHTML('brand',q('.brand-text'),UI_EN.brand,on);
- setHTML('eyebrow',q('.hero-eyebrow'),UI_EN.eyebrow,on);
- setHTML('h1',q('.hero h1'),UI_EN.h1,on);
- setHTML('p',q('.hero p'),UI_EN.p,on);
- setHTML('stats',q('.hero-stats'),UI_EN.stats,on);
- qa('.step-chip p').forEach((el,i)=>setHTML('st'+i,el,UI_EN.steps[i],on));
- qa('.section-head h2').forEach((el,i)=>setHTML('ti'+i,el,UI_EN.titles[i],on));
- qa('.map-legend-row').forEach((el,i)=>{ if(!(('lg'+i) in ZH_CACHE))ZH_CACHE['lg'+i]=el.lastChild.textContent; el.lastChild.textContent=on?UI_EN.legend[i]:ZH_CACHE['lg'+i]; });
- qa('.pill').forEach((el,i)=>setHTML('pi'+i,el,UI_EN.pills[i],on));
- setHTML('foot',q('.footer-note'),UI_EN.foot,on);
- closeSheet(); renderCards();
-}
-function toggleLang(){ lang=lang==='zh'?'en':'zh'; applyLang(); }
 
 renderCards('all');
 </script>
