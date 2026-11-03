@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGI Skill OS & High-Ticket Blueprint</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX LaTeX Render -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <!-- GSAP Animation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Three.js (for threeui 3D interactive WebGL Canvas integration) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    /* Custom Styles & Light Mode Palette */
+    :root {
+      --bg-light: #f8fafc;
+      --card-bg: #ffffff;
+      --gold-bg: #fef9c3;
+      --gold-border: #eab308;
+      --gold-text: #854d0e;
+    }
+    body {
+      background-color: var(--bg-light);
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow-x: hidden;
+    }
+    #three-ui-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.35;
+    }
+    .pyramid-shape {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .pyr-top { width: 50%; background: #ef4444; color: white; }
+    .pyr-mid { width: 75%; background: #f59e0b; color: white; }
+    .pyr-base { width: 100%; background: #10b981; color: white; }
+  </style>
+</head>
+<body class="antialiased selection:bg-blue-500 selection:text-white">
+
+  <!-- ThreeUI 3D Canvas Background -->
+  <canvas id="three-ui-canvas"></canvas>
+
+  <!-- Sticky Navigation Bar -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 py-3 shadow-sm">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <div class="font-black text-lg text-slate-900 tracking-tight flex items-center gap-2">
+        <span class="inline-block w-3 h-3 bg-blue-600 rounded-full animate-ping"></span>
+        <span>AGI OS Blueprint</span>
+      </div>
+      <nav class="hidden md:flex gap-6 text-sm font-semibold text-slate-600">
+        <a href="#ch1" class="hover:text-blue-600 transition" data-i18n="nav1">Ch1 商業變現</a>
+        <a href="#ch2" class="hover:text-blue-600 transition" data-i18n="nav2">Ch2 Grok Bot & Agent</a>
+        <a href="#ch3" class="hover:text-blue-600 transition" data-i18n="nav3">Ch3 倒轉金字塔</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <button onclick="skipNext()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-full text-xs font-bold transition" data-i18n="btnSkip">
+          略過 / Skip ➔
+        </button>
+        <button onclick="toggleLanguage()" id="langBtn" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-xs font-bold transition">
+          繁體字 / English
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- Hero Section -->
+    <section class="bg-white rounded-2xl p-6 md:p-10 shadow-lg border border-slate-200 relative overflow-hidden hero-card">
+      <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-black mb-3" data-i18n="badgeHero">
+        主權奪回級 AGI 兵工廠
+      </span>
+      <h1 class="text-3xl md:text-4xl font-black tracking-tight text-slate-900 mb-4" data-i18n="titleHero">
+        死衝幾十萬 Views 根本係流量水魚！內容只係引流媒介，背後有硬核專家技能
+      </h1>
+      <p class="text-slate-600 leading-relaxed font-medium" data-i18n="descHero">
+       買唔買 supplement 好？你寧願用幾百蚊買 supplement，定係買之前換取一份抗炎經歷？ 配合 Grok Bot 同 Zo Computer AI Agent，每條片得 2.5 萬 Views，就足夠爆標提款！
+      </p>
+    </section>
+
+    <!-- 支持唔離地支持 (Support Block) -->
+    <div id="supportBlock" class="bg-blue-50 border-2 border-dashed border-blue-400 rounded-2xl p-6 transition-all duration-300">
+      <h3 class="text-base font-extrabold text-blue-900 mb-2" data-i18n="suppTitle">💡 支持唔離地支持</h3>
+      <p class="text-sm text-slate-700 mb-4" data-i18n="suppText">
+        想知你個身體依家係咪慢性發炎緊？如果你仲揀錢，咁你可以直接熄咗個 Page，因為你根本未準備好麻煩原來身體求救。
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="https://lihi3.me/ysqAu" target="_blank" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl transition shadow-md" data-i18n="btnSuppLink">
+          了解身體發炎狀態 ➔
+        </a>
+        <button onclick="hideSupportBlock()" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm rounded-xl transition" data-i18n="btnSuppHide">
+          隱藏此提示
+        </button>
+      </div>
+    </div>
+
+    <!-- Chapter 1: Business Monetization -->
+    <section id="ch1" class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-slate-200 space-y-4">
+      <span class="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-extrabold" data-i18n="ch1Badge">
+        Ch1 專家技能提款
+      </span>
+      <h2 class="text-2xl font-black text-slate-900" data-i18n="ch1Title">30 分鐘 Live 現場拆解，擊殺傳統舊模式</h2>
+      <p class="text-slate-600" data-i18n="ch1Text1">
+        每日拍片拍到腦霧斷片，連租都交唔起？因為你根本冇 Build 出專家級技能，淨係識塞垃圾內容落觀眾口入面，搞到個商業系統急性發炎！
+      </p>
+      <p class="text-slate-600" data-i18n="ch1Text2">
+        舊式模式開會開幾星期出幾十頁廢簡報收 $10,000 美金。我哋直接共享螢幕 30 分鐘現場由零 Build 爆款策略，當場完成擊殺！
+      </p>
+
+      <!-- LaTeX Math Formula -->
+      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 my-4">
+        <p class="text-xs font-black text-slate-500 uppercase tracking-wider mb-2" data-i18n="mathTitle">商業同化效率算式 (Conversion Formula)</p>
+        <div id="latex-eq" class="text-center py-2 text-lg"></div>
+      </div>
+    </section>
+
+    <!-- Chapter 2: AI Agent & Integration -->
+    <section id="ch2" class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-slate-200 space-y-4">
+      <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-extrabold" data-i18n="ch2Badge">
+        Ch2 AGI Agent OS
+      </span>
+      <h2 class="text-2xl font-black text-slate-900" data-i18n="ch2Title">Grok Bot ✕ Zo Computer AI Agent 自動化矩陣</h2>
+      <p class="text-slate-600" data-i18n="ch2Text">
+        唔使再做手動 Google 嘅 NPC！直接啟動 **Grok Bot** 同 **Zo Computer AI Agent**，透過 SAC (Search as Code) 自動過濾 100% Legit 物資與商業線索。
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <h4 class="font-extrabold text-slate-900 mb-1">🤖 Grok Bot Command</h4>
+          <p class="text-xs text-slate-600" data-i18n="agentGrok">極速掃描高淨值客戶商業意圖，完成無縫 API 意圖捕捉。</p>
+        </div>
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <h4 class="font-extrabold text-slate-900 mb-1">⚡ Zo Computer Agent</h4>
+          <p class="text-xs text-slate-600" data-i18n="agentZo">自動執行背景腳本，清淤資訊發炎，實現全自動化訂閱進化。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chapter 3: Inverted Pyramid & Gold CTA -->
+    <section id="ch3" class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-slate-200 space-y-6">
+      <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-extrabold" data-i18n="ch3Badge">
+        Ch3 倒轉商業金字塔
+      </span>
+      <h2 class="text-2xl font-black text-slate-900" data-i18n="ch3Title">倒轉金字塔：剔除發炎水份流量</h2>
+
+      <!-- Visual Inverted Pyramid -->
+      <div class="pyramid-shape my-6">
+        <div class="pyr-top py-3 px-4 text-center text-xs font-extrabold rounded-lg shadow" data-i18n="pyrTop">
+          ▲ [頂層剔除] 剔除水份流量 / 避開開會發炎陷阱
+        </div>
+        <div class="pyr-mid py-3 px-4 text-center text-xs font-extrabold rounded-lg shadow" data-i18n="pyrMid">
+          [中層槓桿] 內容載體 + 30 分鐘 Live 實測變現
+        </div>
+        <div class="pyr-base py-3 px-4 text-center text-xs font-extrabold rounded-lg shadow" data-i18n="pyrBase">
+          [塔基載體] 硬核「專家級技能」 (Real Whole Foods 實體營養)
+        </div>
+      </div>
+
+      <!-- Must CTA Gold Box (必進 CTA) -->
+      <div class="bg-yellow-50 border-2 border-yellow-400 rounded-2xl p-6 text-center shadow-lg space-y-3">
+        <h3 class="text-xl font-black text-yellow-900" data-i18n="ctaTitle">🔥 必進高客單價抗炎武器庫</h3>
+        <p class="text-sm font-bold text-yellow-800" data-i18n="ctaDesc">
+          唔好再將條命交畀洗腦鏈！想攞返你商業副偈同身體嘅主權？即刻啟動！
+        </p>
+        <a href="https://lihi3.me/ysqAu" target="_blank" class="inline-block px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-black text-sm rounded-xl transition transform hover:scale-105 shadow-md" data-i18n="ctaBtn">
+          將抗炎再次偉大 Make Anti-inflammatory Great Again ➔
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mandatory Ending Footer -->
+  <footer class="text-center py-10 font-black text-slate-900 border-t border-slate-200 mt-12 text-lg tracking-wider">
+    Don't Regard , Do the Best。MAGA
+  </footer>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl text-xs font-bold shadow-2xl hidden z-50"></div>
+
+  <!-- Vanilla JavaScript -->
+  <script>
+    // State & i18n Data
+    let currentLang = 'zh';
+
+    const translations = {
+      zh: {
+        nav1: "Ch1 商業變現",
+        nav2: "Ch2 Grok Bot & Agent",
+        nav3: "Ch3 倒轉金字塔",
+        btnSkip: "略過 / Skip ➔",
+        badgeHero: "主權奪回級 AGI 兵工廠",
+        titleHero: "買唔買 supplement 好？你寧願用幾百蚊買 supplement，定係買之前換取一份抗炎經歷？",
+        descHero: "死衝幾十萬 Views 根本係流量水魚！內容只係引流媒介，背後有硬核專家技能，配合 Grok Bot 同 Zo Computer AI Agent，每條片得 2.5 萬 Views，就足夠爆標提款！",
+        suppTitle: "💡 支持唔離地支持",
+        suppText: "想知你個身體依家係咪慢性發炎緊？如果你仲揀錢，咁你可以直接熄咗個 Page，因為你根本未準備好麻煩原來身體求救。",
+        btnSuppLink: "了解身體發炎狀態 ➔",
+        btnSuppHide: "隱藏此提示",
+        ch1Badge: "Ch1 專家技能提款",
+        ch1Title: "30 分鐘 Live 現場拆解，擊殺傳統舊模式",
+        ch1Text1: "每日拍片拍到腦霧斷片，連租都交唔起？因為你根本冇 Build 出專家級技能，淨係識塞垃圾內容落觀眾口入面，搞到個商業系統急性發炎！",
+        ch1Text2: "舊式模式開會開幾星期出幾十頁廢簡報收 $10,000 美金。我哋直接共享螢幕 30 分鐘現場由零 Build 爆款策略，當場完成擊殺！",
+        mathTitle: "商業同化效率算式 (Conversion Formula)",
+        ch2Badge: "Ch2 AGI Agent OS",
+        ch2Title: "Grok Bot ✕ Zo Computer AI Agent 自動化矩陣",
+        ch2Text: "唔使再做手動 Google 嘅 NPC！直接啟動 Grok Bot 同 Zo Computer AI Agent，透過 SAC (Search as Code) 自動過濾 100% Legit 物資與商業線索。",
+        agentGrok: "極速掃描高淨值客戶商業意圖，完成無縫 API 意圖捕捉。",
+        agentZo: "自動執行背景腳本，清淤資訊發炎，實現全自動化訂閱進化。",
+        ch3Badge: "Ch3 倒轉商業金字塔",
+        ch3Title: "倒轉金字塔：剔除發炎水份流量",
+        pyrTop: "▲ [頂層剔除] 剔除水份流量 / 避開開會發炎陷阱",
+        pyrMid: "[中層槓桿] 內容載體 + 30 分鐘 Live 實測變現",
+        pyrBase: "[塔基載體] 硬核「專家級技能」 (Real Whole Foods 實體營養)",
+        ctaTitle: "🔥 必進高客單價抗炎武器庫",
+        ctaDesc: "唔好再將條命交畀洗腦鏈！想攞返你商業副偈同身體嘅主權？即刻啟動！",
+        ctaBtn: "將抗炎再次偉大 Make Anti-inflammatory Great Again ➔"
+      },
+      en: {
+        nav1: "Ch1 Monetization",
+        nav2: "Ch2 Grok Bot & Agent",
+        nav3: "Ch3 Inverted Pyramid",
+        btnSkip: "Skip / Next ➔",
+        badgeHero: "AGI Sovereign OS",
+        titleHero: "Should you buy supplements? Choose between spending money on pills or reclaiming your health sovereignty.",
+        descHero: "Chasing millions of vanity views is a trap. Pair expert-level skills with Grok Bot and Zo Computer AI Agent—25k views per video is all you need for $1M ARR.",
+        suppTitle: "💡 Support Grounded Action",
+        suppText: "Want to check if your body is currently experiencing chronic inflammation? Reclaim your sovereignty now.",
+        btnSuppLink: "Check Inflammation Status ➔",
+        btnSuppHide: "Hide Notice",
+        ch1Badge: "Ch1 High-Ticket Monetization",
+        ch1Title: "30-Minute Live Teardown Replacing Old Models",
+        ch1Text1: "Stop slaving for algorithms with low-value UPF content. Build hardcore expert skills to monetize high-ticket offers directly.",
+        ch1Text2: "Ditch traditional agencies charging $10,000 for weeks of useless slide decks. Perform a 30-minute live screen share teardown to close deals instantly.",
+        mathTitle: "Conversion Efficiency Formula",
+        ch2Badge: "Ch2 AGI Agent OS",
+        ch2Title: "Grok Bot ✕ Zo Computer AI Agent Automation",
+        ch2Text: "Stop manual Google searches like an NPC. Deploy Grok Bot and Zo Computer AI Agent with Search-as-Code (SAC) for 100% verified lead data.",
+        agentGrok: "Instant intent scanning for high-net-worth commercial clients.",
+        agentZo: "Automated background script execution eliminating systemic friction.",
+        ch3Badge: "Ch3 Inverted Pyramid",
+        ch3Title: "Inverted Pyramid: Eliminating Vanity Metric Bloat",
+        pyrTop: "▲ [Top Elimination] Eliminate vanity traffic & meeting bloat",
+        pyrMid: "[Mid Leverage] Content Vehicle + 30-Min Live Monetization",
+        pyrBase: "[Base Foundation] Hardcore Expert-Level Skills (Real Whole Foods)",
+        ctaTitle: "🔥 High-Ticket Anti-Inflammatory Arsenal",
+        ctaDesc: "Reclaim full control over your business engine and body today.",
+        ctaBtn: "Make Anti-inflammatory Great Again ➔"
+      }
+    };
+
+    // Toggle Language Function
+    function toggleLanguage() {
+      currentLang = currentLang === 'zh' ? 'en' : 'zh';
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[currentLang][key]) {
+          el.innerText = translations[currentLang][key];
+        }
+      });
+      localStorage.setItem('pref_lang', currentLang);
+    }
+
+    // Hide Support Block
+    function hideSupportBlock() {
+      const block = document.getElementById('supportBlock');
+      gsap.to(block, { duration: 0.3, opacity: 0, height: 0, padding: 0, margin: 0, onComplete: () => {
+        block.style.display = 'none';
+      }});
+      localStorage.setItem('hide_support_block', 'true');
+    }
+
+    // Skip Button
+    function skipNext() {
+      window.scrollBy({ top: 400, behavior: 'smooth' });
+    }
+
+    // 3D WebGL Canvas Rendering (ThreeUI Engine Integration)
+    function initThreeJS() {
+      const canvas = document.getElementById('three-ui-canvas');
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+
+      // Create Particle Nodes Geometry
+      const geometry = new THREE.BufferGeometry();
+      const count = 120;
+      const positions = new Float32Array(count * 3);
+
+      for (let i = 0; i < count * 3; i++) {
+        positions[i] = (Math.random() - 0.5) * 10;
+      }
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      const material = new THREE.PointsMaterial({
+        size: 0.05,
+        color: 0x2563eb,
+        transparent: true,
+        opacity: 0.6
+      });
+
+      const points = new THREE.Points(geometry, material);
+      scene.add(points);
+      camera.position.z = 3;
+
+      function animate() {
+        requestAnimationFrame(animate);
+        points.rotation.x += 0.001;
+        points.rotation.y += 0.0015;
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }
+
+    // Init & State Recovery
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Render LaTeX
+      if (window.katex) {
+        katex.render("Revenue = \\text{Views} \\times \\text{Conversion Rate} \\times \\text{High-Ticket Offer}", document.getElementById('latex-eq'), {
+          throwOnError: false,
+          displayMode: true
+        });
+      }
+
+      // 2. Init Three.js Canvas
+      initThreeJS();
+
+      // 3. Track Cookie & LocalStorage Memory
+      const lastVisit = localStorage.getItem('last_visit_time');
+      const nowStr = new Date().toLocaleString();
+      const toast = document.getElementById('toast');
+
+      if (lastVisit) {
+        toast.innerText = `歡迎歸位！上次記錄離開時間：${lastVisit}`;
+        toast.classList.remove('hidden');
+        setTimeout(() => { toast.classList.add('hidden'); }, 4000);
+      }
+      localStorage.setItem('last_visit_time', nowStr);
+      document.cookie = "last_stage=visited; path=/; max-age=604800";
+
+      // 4. Restore Hide State
+      if (localStorage.getItem('hide_support_block') === 'true') {
+        const block = document.getElementById('supportBlock');
+        if (block) block.style.display = 'none';
+      }
+
+      // 5. GSAP Entrance Animations
+      gsap.from(".hero-card", { duration: 0.8, y: 20, opacity: 0, ease: "power2.out" });
+    });
+  </script>
+</body>
+</html>
