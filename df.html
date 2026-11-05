@@ -1,25 +1,26 @@
 <!DOCTYPE html>    
 <html lang="zh-HK">    
 <head>    
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>抗炎日報 DAILY FLOW - Make Anti-inflammatory Great Again</title>    
+    <meta name="description" content="抗炎日報 DAILY FLOW：每日抗炎生活指南。" />
 
 <!-- thumbnail -->
+  <head>
   <meta property="og:title" content="抗炎日報 DAILY FLOW - Make Anti-inflammatory Great Again">
   <meta property="og:description" content="抗炎日報 DAILY FLOW：每日抗炎生活指南。">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://magasite.pages.dev/df12">
-  <meta property="og:image" content="https://magasite.pages.dev/images/df12d.jpeg">
+  <meta property="og:url" content="https://magasite.pages.dev/df">
+  <meta property="og:image" content="https://magasite.pages.dev/images/df.jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="抗炎日報 DAILY FLOW 封面圖">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://magasite.pages.dev/images/df12d.jpeg">
+  <meta name="twitter:image" content="https://magasite.pages.dev/images/df.jpeg">
+  </head>    
     
-<meta charset="UTF-8">    
-<meta name="viewport" content="width=device-width, initial-scale=1.0">    
-<title>抗炎日報 DAILY FLOW - Make Anti-inflammatory Great Again</title>    
-<meta name="description" content="抗炎日報 DAILY FLOW：每日抗炎生活指南。" />
-    
-  <!-- Safe WebSocket & HMR Sandbox Guard -->
+    <!-- Safe WebSocket & HMR Sandbox Guard -->
     <script>
       (function () {
         var OriginalWebSocket = window.WebSocket;
@@ -29,7 +30,6 @@
               (typeof protocols === 'string' && protocols.indexOf('vite-hmr') !== -1) ||
               (Array.isArray(protocols) && protocols.indexOf('vite-hmr') !== -1) ||
               (typeof url === 'string' && (url.indexOf('vite-hmr') !== -1 || url.indexOf(':3000') !== -1));
-
 
             if (isViteHmr) {
               var listeners = {};
@@ -66,21 +66,17 @@
                 onmessage: null
               };
 
-
               setTimeout(function () {
                 if (typeof mockSocket.onopen === 'function') {
                   try { mockSocket.onopen({ type: 'open', target: mockSocket }); } catch (e) {}
                 }
               }, 0);
 
-
               return mockSocket;
             }
 
-
             return new OriginalWebSocket(url, protocols);
           }
-
 
           SafeWebSocket.prototype = OriginalWebSocket.prototype;
           SafeWebSocket.CONNECTING = 0;
@@ -89,7 +85,6 @@
           SafeWebSocket.CLOSED = 3;
           window.WebSocket = SafeWebSocket;
         }
-
 
         window.addEventListener('unhandledrejection', function (event) {
           if (!event) return;
@@ -110,7 +105,6 @@
             event.stopImmediatePropagation();
           }
         }, true);
-
 
         window.addEventListener('error', function (event) {
           if (!event) return;
@@ -265,7 +259,6 @@
             text-underline-offset: 5px;    
         }
 
-
         /* AI Text & Background Effects for Remotion / GSAP */
         @keyframes aiPulsateBg {
             0%, 100% { background-position: 0% 50%; }
@@ -314,20 +307,25 @@
         </div>    
         <div class="flex items-center flex-wrap gap-2">    
             <button onclick="triggerPrintWithNotice()" class="bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded font-bold flex items-center gap-1 transition">    
-                <i data-lucide="printer" class="w-4 h-4"></i>存檔    
+                <i data-lucide="printer" class="w-4 h-4"></i>存檔
             </button>    
-            <a href="#sec-a1" class="bg-red-600 hover:bg-red-500 text-white font-black px-3 py-1.5 rounded flex items-center gap-1 transition">    
-                <i data-lucide="flame" class="w-4 h-4"></i> 第12日 ↗    
-            </a>    
             <a href="https://magasite.pages.dev/df-en" target="_blank" class="bg-amber-600 hover:bg-amber-500 text-black font-black px-3 py-1.5 rounded flex items-center gap-1 transition">    
-                <i data-lucide="languages" class="w-4 h-4"></i> MAGAsite ENG ↗    
+                <i data-lucide="home" class="w-4 h-4"></i> MAGAsite ENG    
             </a>    
-            <a href="https://magasite.pages.dev/" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-white font-black px-3 py-1.5 rounded flex items-center gap-1 transition">    
-                <i data-lucide="home" class="w-4 h-4"></i> magasite 首頁 ↗   
-            </a>    
-        </div>
-    </div>
-
+        </div>    
+    </div>    
+    <head>
+  <meta property="og:title" content="抗炎日報 DAILY FLOW - Make Anti-inflammatory Great Again">
+  <meta property="og:description" content="抗炎日報 DAILY FLOW：每日抗炎生活指南。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://magasite.pages.dev/df">
+  <meta property="og:image" content="https://magasite.pages.dev/images/df.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="抗炎日報 DAILY FLOW 封面圖">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://magasite.pages.dev/images/df.jpg">
+</head>
 
     <!-- MAIN NEWSPAPER CONTAINER -->    
     <div class="newspaper-container max-w-6xl mx-auto p-4 sm:p-8 md:p-10 my-2">    
@@ -339,7 +337,7 @@
                 <div class="flex items-center gap-3">    
                     <span class="font-bold text-news-ink">2026 年</span>    
                     <span class="font-bold text-news-winered bg-red-50 border border-red-200 px-1.5 py-0.5 rounded">第12日</span>    
-                    <span class="hidden sm:inline">天氣：多系統微生態警報 / 假健康陷阱清淤</span>    
+                    <span class="hidden sm:inline">天氣：多系統微生態警報 / 黏膜清淤</span>    
                 </div>    
                 <div class="font-bold text-news-winered flex items-center gap-1">    
                     <i data-lucide="flame" class="w-3.5 h-3.5"></i>    
@@ -366,208 +364,72 @@
             <!-- TOP SLOGANS STRIP (核心標語條文) + Medical Disclaimer Strip -->    
             <div class="border-y-2 border-news-ink bg-[#FFFDF8] py-2.5 px-2 my-1 text-center">    
                 <div class="font-serif text-base sm:text-sm font-black text-news-winered mb-1">    
-                    「抗炎日報」以 2 次抗癌生存者視角，提醒抗炎嘅人點樣圓夢 · 徹底 Slay 咗發炎地圖 ⚠️ 個人參考，請諮詢講人話醫生或中醫師 ↗ 拒絕被建制掠水          
+                    「抗炎日報」以抗癌 2 次生存者視角，提醒抗炎嘅人點樣圓夢 · 徹底 Slay 咗發炎地圖 ⚠️ 個人參考，請諮詢講人話醫生或中醫師 ↗ 拒絕被建制掠水          
                 </h1>    
             </div>      
     
         <!-- NEWSPAPER SECTION TABS / NAVIGATION (對齊截圖樣式) -->    
         <nav class="no-print my-4 border-b border-news-ink pb-2">    
             <div class="flex flex-wrap items-center gap-2 font-mono text-xs sm:text-sm font-bold">    
-                <button onclick="scrollToSection('sec-a1')" class="bg-news-winered text-white px-3 py-1.5 hover:bg-black transition">A1: 踢爆偽健康陷阱 (第12日)</button>    
+                <button onclick="scrollToSection('sec-a1')" class="bg-news-winered text-white px-3 py-1.5 hover:bg-black transition">A1: 點解而家嘅人更易病？「健康嘢」營銷陷阱</button>    
                 <button onclick="scrollToSection('sec-tongue-game')" class="bg-[#9A3412] text-white px-3 py-1.5 hover:bg-amber-900 transition">👅 舌診「漏電」儀（2款檢測）</button>    
-                <button onclick="scrollToSection('sec-b1')" class="bg-black text-white px-3 py-1.5 hover:bg-news-red transition">B1: 舊 A1 實彈 &amp; EVOO 雙神油</button>    
+                <button onclick="scrollToSection('sec-b1')" class="bg-black text-white px-3 py-1.5 hover:bg-news-red transition">B1: 舊 A1 實彈檔案 (1-10) & 12大戰術</button>    
                 <button onclick="scrollToSection('sec-b2')" class="bg-black text-white px-3 py-1.5 hover:bg-news-red transition">B2: 逆轉食物金字塔</button>    
                 <button onclick="scrollToSection('sec-c1')" class="bg-slate-600 text-white px-3 py-1.5 hover:bg-slate-700 transition">C1: 戰術資源庫 (🚧 MAGASite 首頁)</button>    
                 <span class="text-slate-400 hidden sm:inline">|</span>
             </div>    
         </nav>    
     
-        <!-- SECTION A1: 【A1 今日頭條 · 第12日 踢爆假健康營銷陷阱】點解而家的人比以前更容易病？答案就喺以為食緊『健康嘢』 -->    
-        <section id="sec-a1" class="my-6 border-2 border-news-ink p-4 sm:p-5 bg-white shadow-sm font-serif">    
-            <!-- A1 Header / Headline -->
-            <div class="border-b-2 border-news-ink pb-3 mb-4">    
-                <div class="flex items-center justify-between gap-2 flex-wrap mb-1.5">
-                    <div class="flex items-center gap-2">
-                        <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">A1 今日頭條 · 假健康營銷大踢爆</span>    
-                        <span class="bg-amber-300 text-slate-950 font-mono text-xs font-black px-2 py-0.5 rounded border border-slate-900">第 12 日</span>
+                        <!-- SECTION A1 (第12日)：點解而家嘅人比以前更容易病？「健康嘢」營銷陷阱 -->
+        <section id="sec-a1" class="my-6 border-2 border-news-ink p-4 sm:p-5 bg-white shadow-sm font-serif">
+            <div class="border-b-2 border-news-ink pb-2.5 mb-3">
+                <div class="flex items-center gap-2 flex-wrap mb-2 pb-2 border-b border-slate-200">
+                    <span class="text-xs font-mono font-bold text-slate-600">本期快速直達</span>
+                    <a href="#a1-video" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-red-100 border border-red-300 text-red-950 font-mono text-xs font-bold hover:bg-red-200 transition">▶ 睇影片 ↓</a>
+                    <a href="#a1-xref" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-slate-100 border border-slate-300 text-slate-900 font-mono text-xs font-bold hover:bg-slate-200 transition">📁 本站對照實彈檔案 ↓</a>
+                </div>
+                <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">A1 今日頭條 · 第12日</span>
+                        <span class="bg-amber-300 text-slate-950 font-mono text-xs font-black px-2 py-0.5 rounded border border-slate-900">最新 A1</span>
                     </div>
-                    <span class="text-xs font-mono font-bold text-slate-500">Cancer-Free Protocol &amp; Biological Sovereignty</span>
+                    <span class="text-xs font-mono font-bold text-slate-500">2026年11月1日 (第12日) ‧ “Healthy” Marketing Scams</span>
                 </div>
-                <h2 class="text-xl sm:text-2xl md:text-3xl font-black font-lemon text-[#1F2937] leading-tight winered-underline mt-1">    
-                    A1: 點解而家的人比以前更容易病？答案就喺以為食緊『健康嘢』
-                </h2>    
-                <div class="text-sm sm:text-base font-mono font-bold text-news-winered mt-1">
-                    Cancer-free before 40? Stop eating these 'healthy' marketing scams embedded
-                </div>
-                <p class="text-xs sm:text-sm text-[#1F2937] mt-2.5 leading-relaxed font-sans">    
-                    <strong>2次抗癌幸存者血淚直擊：</strong>咪再俾商業廣告洗腦！你以為自己食緊養生嘢，其實日日將超加工毒藥塞落副偈！點解幾十年前老一輩食肥豬肉、白飯反而冇咁多 30 歲生癌？點解而家班後生仔女日日做 Gym、隊燕麥、飲蛋白奶昔、食沙律，但體檢報告滿江紅、脂肪肝、甚至 30 幾歲就癌前病變？<strong>答案好簡單——你食緊嘅所謂『健康嘢』，全部都係商業集團精心包裝嘅慢性毒藥！</strong>
-                </p>    
-            </div>    
+                <h2 class="text-xl sm:text-2xl md:text-3xl font-black font-lemon text-[#1F2937] leading-tight winered-underline mt-1">
+                    A1: 點解而家嘅人比以前更容易病？答案就喺你以為食緊嘅「健康嘢」
+                </h2>
+                <p class="font-mono text-xs sm:text-sm font-bold text-news-winered mt-1.5">Cancer-free before 40? Stop eating these “healthy” marketing scams.</p>
+                <p class="text-xs sm:text-sm text-[#1F2937] mt-2 leading-relaxed">
+                    <strong>第12日提問：</strong>包裝寫「天然」、「Organic」、「低脂」、「植物奶」就等於健康？咪再當被商業 Marketing 洗腦嘅 NPC！成分表入面可能係種子油、膠類同添加劑。睇完下面條片，再對照本站已經拆解過嘅實彈檔案，自己睇成分表，<strong>Control the controllables</strong>！
+                </p>
+            </div>
 
-            <!-- 影音專區：YouTube 嵌入播放器 + 上載封面雙聯面板 -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-5 items-stretch">
-                <!-- 左側：YouTube 嵌入播放器 (7 cols) -->
-                <div class="lg:col-span-7 bg-slate-950 p-2 sm:p-2.5 rounded-sm border-2 border-slate-900 flex flex-col justify-between shadow-md">
-                    <div class="relative w-full aspect-video rounded overflow-hidden bg-black">
-                        <iframe 
-                            class="w-full h-full" 
-                            src="https://www.youtube.com/embed/jysZFc35daE" 
-                            title="Cancer-free before 40? Stop eating these 'healthy' marketing scams" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="pt-2 px-1 flex items-center justify-between text-xs font-mono text-slate-300">
-                        <span class="flex items-center gap-1.5 text-amber-400 font-bold">
-                            <i data-lucide="play-circle" class="w-4 h-4 text-red-500"></i>
-                            <span>原片深度解密 · 24HR 必修課</span>
-                        </span>
-                        <a href="https://youtu.be/jysZFc35daE" target="_blank" class="text-xs bg-red-700 hover:bg-red-600 text-white font-bold px-2.5 py-1 rounded transition flex items-center gap-1">
-                            <span>YouTube 直達 ↗</span>
-                        </a>
-                    </div>
+            <div id="a1-video" class="border-2 border-slate-900 bg-[#070B14] mb-3">
+                <div class="flex items-center justify-between gap-2 flex-wrap px-3 py-2 border-b border-slate-800 font-mono text-xs">
+                    <span class="font-black text-white">▶ 今日影片 · Cancer-free before 40? Stop eating these ‘healthy’ marketing scams</span>
+                    <a href="https://youtu.be/jysZFc35daE" target="_blank" rel="noopener noreferrer" class="bg-red-700 hover:bg-red-600 text-white font-black px-2.5 py-1 rounded transition no-print">喺 YouTube 睇 ↗</a>
                 </div>
-
-                <!-- 右側：上載原創封面大圖 + 核心警示卡 (5 cols) -->
-                <div class="lg:col-span-5 bg-[#FFFDF8] border-2 border-slate-900 p-3 rounded-sm flex flex-col justify-between shadow-sm">
-                    <div class="overflow-hidden rounded border border-slate-300 mb-2.5">
-                        <img 
-                            src="https://magasite.pages.dev/images/maga.jpeg" 
-                            alt="小心你以為嘅健康食品其實係身體嘅慢性毒藥" 
-                            class="w-full h-auto object-cover hover:scale-102 transition duration-200" 
-                            loading="eager"
-                            onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='/Duck-ai-image-2026-11-01-07-27_f4d32c86.jpeg';} else if(this.dataset.retry==='1'){this.dataset.retry='2'; this.src='./assets/aistudio/Duck-ai-image-2026-11-01-07-27_f4d32c86.jpeg';} else if(this.dataset.retry==='2'){this.dataset.retry='3'; this.src='./Duck-ai-image-2026-11-01-07-27_f4d32c86.jpeg';}"
-                        />
-                    </div>
-                    <div class="font-sans text-xs space-y-1.5 text-slate-800">
-                        <div class="flex items-center justify-between border-b border-slate-200 pb-1">
-                            <span class="font-mono font-black text-news-winered text-[11px] uppercase">⚠️ 商業行銷陷阱</span>
-                            <span class="font-mono text-slate-500 text-[10px]">#MAGA_SURVIVOR</span>
-                        </div>
-                        <p class="font-bold text-slate-900 leading-snug">
-                            「小心你以為嘅『健康食品』，其實係身體嘅『慢性毒藥』？」
-                        </p>
-                        <p class="text-slate-600 text-[11px] leading-relaxed">
-                            大公司喺包裝貼張綠色標籤、寫個 "Organic"、"High Protein"，你就信到足？望下背後成分表，滿載工業種子油、乳化劑同高果糖漿！
-                        </p>
-                    </div>
+                <div class="aspect-video w-full">
+                    <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/jysZFc35daE" title="Cancer-free before 40? Stop eating these ‘healthy’ marketing scams" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
             </div>
 
-            <!-- 4 大偽健康致命毒藥拆解 (市井廣東話狂抽痛點) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-                <!-- 01 蛋白棒 Protein Bars -->
-                <div class="p-4 bg-[#FFFDF8] border-2 border-slate-900 rounded-sm shadow-xs font-sans">
-                    <div class="flex items-center justify-between border-b border-slate-300 pb-2 mb-2">
-                        <span class="font-mono text-xs font-black bg-rose-700 text-white px-2 py-0.5 rounded">陷阱 01 · 健身偽術</span>
-                        <strong class="text-sm font-black text-rose-950">蛋白棒 (Protein Bars) ＆ 代餐條</strong>
-                    </div>
-                    <div class="text-xs leading-relaxed space-y-1.5 text-slate-800">
-                        <p><strong class="text-news-winered font-bold">🚨 市井踢爆：</strong>去 Gym 房做完運動咬條蛋白棒？一條嘅總糖量隨時高過一罐可樂！</p>
-                        <p><strong class="text-emerald-800 font-bold">⚡ 實戰 Hack 法：</strong>即刻剔除！要補優質蛋白質，直接食<strong>！真食物唔需要化學黏著劑同防腐乳化劑！</p>
-                    </div>
+            <div id="a1-xref" class="border-2 border-slate-900 bg-[#FFFDF8] p-3.5 sm:p-4 mb-3">
+                <div class="flex items-center gap-2 mb-2.5 pb-1.5 border-b border-slate-300 font-mono text-xs font-black text-slate-900 flex-wrap">
+                    <span class="bg-slate-900 text-white px-2 py-0.5">本站對照</span>
+                    <span>你以為健康、其實係營銷包裝嘅 5 個常見位 · 撳入去睇實彈檔案</span>
                 </div>
-
-                <!-- 02 脆谷燕麥 Granola & 脫脂乳酪 -->
-                <div class="p-4 bg-[#FFFDF8] border-2 border-slate-900 rounded-sm shadow-xs font-sans">
-                    <div class="flex items-center justify-between border-b border-slate-300 pb-2 mb-2">
-                        <span class="font-mono text-xs font-black bg-amber-500 text-slate-950 px-2 py-0.5 rounded border border-slate-900">陷阱 02 · 早餐致炎地雷</span>
-                        <strong class="text-sm font-black text-amber-950">脆谷燕麥 (Granola) ＆ 脫脂乳酪</strong>
-                    </div>
-                    <div class="text-xs leading-relaxed space-y-1.5 text-slate-800">
-                        <p><strong class="text-news-winered font-bold">🚨 市井踢爆：</strong>以為食燕麥脆片配低脂乳酪好健康？<strong>胰島素即刻爆標！</p>
-                        <p><strong class="text-emerald-800 font-bold">⚡ 實戰 Hack 法：</strong>轉食<strong>純無糖全脂發酵乳酪 (Kefir)</strong>，或者天然 Sourdough 酸種麵包</p>
-                    </div>
-                </div>
-
-                <!-- 03 素食 Omega-3 / 植物肉 & 市售沙律醬 -->
-                <div class="p-4 bg-[#FFFDF8] border-2 border-slate-900 rounded-sm shadow-xs font-sans">
-                    <div class="flex items-center justify-between border-b border-slate-300 pb-2 mb-2">
-                        <span class="font-mono text-xs font-black bg-emerald-800 text-white px-2 py-0.5 rounded">陷阱 03 · 植物神話破滅</span>
-                        <strong class="text-sm font-black text-emerald-950">素食肉、假 Omega-3 ＆ 沙律醬</strong>
-                    </div>
-                    <div class="text-xs leading-relaxed space-y-1.5 text-slate-800">
-                        <p><strong class="text-news-winered font-bold">🚨 市井踢爆：</strong>標榜「植物心臟健康」人造肉同沙律醬，用石化溶劑己烷 (Hexane) 劣質高 Omega-6 工業大豆油，食沙律淋呢啲醬等於飲毒藥！</p>
-                        <p><strong class="text-emerald-800 font-bold">⚡ 實戰 Hack 法：</strong>沙律只用<strong>(EVOO @ericwongkhk) </strong>，徹底封殺工業油！</p>
-                    </div>
-                </div>
-
-                <!-- 04 鮮打果汁 Smoothies -->
-                <div class="p-4 bg-[#FFFDF8] border-2 border-slate-900 rounded-sm shadow-xs font-sans">
-                    <div class="flex items-center justify-between border-b border-slate-300 pb-2 mb-2">
-                        <span class="font-mono text-xs font-black bg-purple-900 text-white px-2 py-0.5 rounded">陷阱 04 · 果糖暴擊</span>
-                        <strong class="text-sm font-black text-purple-950">鮮打果汁 ＆ 果昔 (Smoothies)</strong>
-                    </div>
-                    <div class="text-xs leading-relaxed space-y-1.5 text-slate-800">
-                        <p><strong class="text-news-winered font-bold">🚨 市井踢爆：</strong>一杯 Smoothie 打入幾隻香蕉、蘋果、橙，天然膳食纖維網全部被打爛！引發非酒精性脂肪肝、尿酸爆標同胰島素阻抗！</p>
-                        <p><strong class="text-emerald-800 font-bold">⚡ 實戰 Hack 法：</strong>戒絕液體糖分！想食水果只食<strong>原粒低糖生果</strong>，慢慢咬先吸收到天然抗氧化！</p>
-                    </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 font-sans text-xs leading-relaxed text-slate-800">
+                    <button type="button" onclick="openB1Topic(4)" class="text-left p-2.5 bg-rose-50 border-l-4 border-rose-700 hover:bg-rose-100 transition cursor-pointer"><strong class="font-mono text-rose-900">① 燕麥奶 / 植物奶</strong><br>菜籽油做乳化劑 ＋ 結冷膠 ＋ 香精。成分表只應該係「堅果＋水＋海鹽」。<span class="font-mono font-black text-rose-800"> #4 ↗</span></button>
+                    <button type="button" onclick="openB1Topic(3)" class="text-left p-2.5 bg-orange-50 border-l-4 border-orange-600 hover:bg-orange-100 transition cursor-pointer"><strong class="font-mono text-orange-900">② 咖啡「提神」</strong><br>阻斷腺苷、推高皮質醇，唔係真能量。<span class="font-mono font-black text-orange-800"> #3 ↗</span></button>
+                    <button type="button" onclick="openB1Topic(8)" class="text-left p-2.5 bg-red-50 border-l-4 border-red-700 hover:bg-red-100 transition cursor-pointer"><strong class="font-mono text-red-900">③ 爆谷 / 意粉 / 包裝麵包 / 冷切肉 / 薯片 / 甜品</strong><br>24 小時切斷 6 大化學毒素入口，換返原型食物。<span class="font-mono font-black text-red-800"> #8 ↗</span></button>
+                    <button type="button" onclick="openB1Topic(5)" class="text-left p-2.5 bg-sky-50 border-l-4 border-sky-700 hover:bg-sky-100 transition cursor-pointer"><strong class="font-mono text-sky-900">④ 基因改造 / 微塑膠位</strong><br>無核青檸、養殖魚、不黏鑊…全生活 Swap 大綱。<span class="font-mono font-black text-sky-800"> #5 ↗</span></button>
+                    <button type="button" onclick="openB1Topic(9)" class="text-left p-2.5 bg-emerald-50 border-l-4 border-emerald-700 hover:bg-emerald-100 transition cursor-pointer sm:col-span-2"><strong class="font-mono text-emerald-900">⑤ 皮膚 / 口腔 / 腸道「小毛病」</strong><br>多系統病徵與腸道黏膜、SCFA、LPS 漏電嘅臨床對照表。<span class="font-mono font-black text-emerald-800"> #9 ↗</span></button>
                 </div>
             </div>
 
-            <!-- RFK Jr. 倒轉金字塔與 40 歲前徹底抗炎法則 -->
-            <div class="border-2 border-slate-900 bg-[#FFFDF8] p-3.5 sm:p-4 mb-4 font-sans text-xs">
-                <div class="flex items-center gap-2 mb-2 pb-1.5 border-b border-slate-300 font-mono text-xs font-black text-slate-900">
-                    <span class="bg-news-winered text-white px-2 py-0.5">RFK Jr. 倒轉金字塔實戰</span>
-                    <span>40歲前遠離癌症 · 奪回生物自癒主權</span>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 leading-relaxed text-slate-800">
-                    <div class="p-2.5 bg-amber-50 border-l-4 border-amber-600">
-                        <strong class="font-mono text-amber-950 block mb-1">🥩 塔底最寬廣基石：Real / Raw / Whole Foods</strong>
-                        徹底丟棄超加工食品 (UPF)！人體副偈運作咗幾百萬年，粒線體只需要<strong>純淨大自然食物：草飼牛牛油、特級初榨橄欖油 (EVOO)、放養雞蛋黃、野生海產</strong>平息發炎火頭！
-                    </div>
-                    <div class="p-2.5 bg-slate-100 border-l-4 border-slate-800">
-                        <strong class="font-mono text-slate-950 block mb-1">🧹 腸道黏膜防禦清淤：封鎖 LPS 內毒素</strong>
-                        所有慢性病同癌症嘅起點都係「腸漏」！透過<strong>純天然無糖發酵乳酪 (Kefir)、發酵生椰菜 (Sauerkraut)、生大蒜蒜素</strong>，修補細胞緊密連接 (Tight Junctions)，阻止內毒素入血！
-                    </div>
-                </div>
-            </div>
-
-            <!-- 可展開折疊面板：保留第11日實彈精華供隨時查閱 -->
-            <details class="border-2 border-slate-900 bg-amber-50/60 p-3 rounded-sm mb-4 font-sans text-xs group">
-                <summary class="cursor-pointer font-mono font-bold text-slate-900 flex items-center justify-between">
-                    <span class="flex items-center gap-2 text-news-winered">
-                        <i data-lucide="archive" class="w-4 h-4"></i>
-                        <span>【歷史實彈存檔】第11日：生物駭客補充 Timing 四大命門與吸收阻斷陷阱 ▾</span>
-                    </span>
-                    <span class="text-slate-500 text-[11px] font-normal group-open:hidden">點擊展開查閱</span>
-                </summary>
-                <div class="pt-3 mt-2 border-t border-amber-200 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[11px] leading-relaxed text-slate-800">
-                    <div class="p-2 bg-white rounded border border-slate-200">
-                        <strong class="text-amber-900 block mb-0.5">① 脂溶性雙雄 (D3 + 魚油)：</strong>
-                        跟餐優質脂肪（牛油果、蛋黃）一齊吞，膽汁乳化先吸收到，嚴禁空腹吞！
-                    </div>
-                    <div class="p-2 bg-white rounded border border-slate-200">
-                        <strong class="text-slate-900 block mb-0.5">② 鋅 (Zinc) 吸收通道：</strong>
-                        兩餐之間空腹食，嚴禁與穀物豆類（植酸）同食，防植酸鎖死！
-                    </div>
-                    <div class="p-2 bg-white rounded border border-slate-200">
-                        <strong class="text-rose-950 block mb-0.5">③ 鐵質 (Iron) 隔離守則：</strong>
-                        前後 2 小時嚴禁黑咖啡與濃茶，配搭天然鮮橙天然維他命 C 直線拉升！
-                    </div>
-                    <div class="p-2 bg-white rounded border border-slate-200">
-                        <strong class="text-indigo-950 block mb-0.5">④ 鎂 (Magnesium) 分拆法則：</strong>
-                        傍晚一次、睡前一次小劑量，避免腸道過載腹瀉，深層放鬆修復！
-                    </div>
-                </div>
-            </details>
-
-            <!-- 結尾引導條：直通 24 小時清淤行動與 MAGASite -->
-            <div class="p-3 bg-gradient-to-r from-amber-100 via-rose-50 to-amber-100 border-2 border-red-900 rounded-sm flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-sans">
-                <div>
-                    <span class="bg-red-800 text-white font-mono font-bold px-2 py-0.5 rounded mr-2 text-[11px]">第12日實彈</span>
-                    <strong class="text-red-950 text-sm">24小時清淤執行令：即刻開雪櫃清走加工假健康垃圾！</strong>
-                </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <a href="https://youtu.be/jysZFc35daE" target="_blank" class="bg-red-800 hover:bg-black text-white font-mono font-bold px-3.5 py-1.5 rounded transition shadow-sm text-xs flex items-center gap-1.5">
-                        <i data-lucide="video" class="w-3.5 h-3.5"></i>
-                        <span>觀看完整踢爆短片 ↗</span>
-                    </a>
-                    <a href="https://magasite.pages.dev/" target="_blank" class="bg-slate-900 hover:bg-red-700 text-white font-mono font-bold px-3 py-1.5 rounded transition text-xs">
-                        magasite 首頁 ↗
-                    </a>
-                </div>
+            <div class="p-2.5 bg-[#FFFDF8] border border-slate-900 text-xs font-mono text-slate-800">
+                <strong class="text-red-900">⚡ 24HR 行動：</strong>今日去超市／雪櫃，逐樣包裝食物睇成分表：多過 4 種成分、有種子油、膠類或「天然香精」，就當係警報，換返原型食物。
             </div>
         </section>    
     
@@ -575,7 +437,7 @@
         <section id="sec-tongue-game" class="my-8 border-2 border-amber-800 p-6 bg-[#FFFDF8] shadow-sm">    
             <div class="border-b-2 border-amber-800 pb-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">    
                 <div class="flex items-center gap-2 flex-wrap">    
-                    <span class="bg-amber-800 text-white font-mono text-xs sm:text-sm font-black px-2 py-0.5">Free Resource 6 · 互動</span>    
+                    <span class="bg-amber-800 text-white font-mono text-xs sm:text-sm font-black px-2 py-0.5">Free Resource 5 · 互動小遊戲</span>    
                     <h2 class="text-2xl sm:text-3xl font-black font-lemon text-news-ink inline-block">    
                         👅 舌診「漏電」自我檢測儀 (Tongue Dashboard + Tongue 2 in Prem 21)    
                     </h2>    
@@ -598,7 +460,7 @@
     
             <!-- Interactive Game Instruction -->    
             <p class="text-sm font-serif text-news-subtle mb-4 font-bold">    
-                【規則】鉤選以下符合你今朝狀況嘅項目，即時為你計算「副偈漏電指數」及解鎖專屬抗炎防護等級：    
+                【小遊戲規則】鉤選以下符合你今朝狀況嘅項目，即時為你計算「副偈漏電指數」及解鎖專屬抗炎防護等級：    
             </p>    
     
             <!-- 2 Checkboxes -->    
@@ -650,84 +512,53 @@
                 <div class="lg:w-2/3 flex flex-col justify-between">    
                     <div>    
                         <div class="flex items-center gap-2 mb-2">    
-                            <span class="bg-news-red text-white text-xs sm:text-sm font-black font-mono px-2 py-0.5 uppercase">B1</span>    
-                            <span class="text-xs sm:text-sm font-mono font-bold text-news-winered">今日焦點</span>    
+                            <span class="bg-news-red text-white text-xs sm:text-sm font-black font-mono px-2 py-0.5 uppercase">B1 今日焦點</span>    
+                            <span class="text-xs sm:text-sm font-mono font-bold text-news-winered">舊 A1 實彈檔案 (最新排序 1 ➔ 10) ‧ 12大抗炎戰術輪播</span>    
                         </div>    
+                            
+                        <h2 class="text-2xl sm:text-4xl font-black text-news-ink font-lemon leading-tight mb-2">    
+                            B1: 舊 A1 實彈檔案 (最新排序 1 ➔ 10)    
+                        </h2>    
+                            
+                        <p class="text-base font-serif italic border-l-4 border-news-red pl-3 py-1 text-news-subtle mb-4 font-bold">    
+                            每日輪換執行，徹底阻斷細胞「漏電」，重塑個人生物主權。    
+                        </p>    
 
-                        <!-- 最新排序 1 ➔ 8 實彈總覽列表 -->
-                        <ul class="space-y-3 mb-5 font-serif">
-                            <!-- B1 新增項目：更新 EVOO ericwongkhk (含 2 款上載原廠 SVG 瓶身) -->
-                            <li class="p-4 bg-amber-50/90 border-2 border-amber-800 rounded-sm shadow-sm transition hover:bg-amber-100/90">
-                                <div class="flex items-center justify-between gap-2 flex-wrap border-b border-amber-300 pb-2 mb-3">
+                        <!-- 最新排序 1 ➔ 10 實彈總覽列表 -->
+                        <ul class="space-y-2.5 mb-5 font-serif">
+                            <!-- B1 新增項目：更新 EVOO ericwongkhk -->
+                            <li class="p-3.5 bg-amber-50/80 border-2 border-amber-800 rounded-sm shadow-xs transition hover:bg-amber-100/90">
+                                <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
                                     <div class="flex items-center gap-2">
-                                        <span class="font-mono text-xs font-black bg-amber-800 text-white px-2.5 py-1 rounded">【B1 特別焦點】</span>
-                                        <h3 class="text-base sm:text-lg font-black text-news-ink">更新 EVOO ericwongkhk · 2大抗炎神油實戰存檔</h3>
+                                        <span class="font-mono text-xs font-black bg-amber-800 text-white px-2 py-0.5 rounded">【B1 特別焦點】</span>
+                                        <h3 class="text-base sm:text-lg font-black text-news-ink">更新 EVOO ericwongkhk</h3>
                                     </div>
-                                    <div class="flex items-center gap-2">
-                                        <a href="https://threads.com/ericwongkhk" target="_blank" class="font-mono text-xs font-black bg-news-winered hover:bg-black text-white px-2.5 py-1 rounded transition flex items-center gap-1">
-                                            <span>@ericwongkhk ↗</span>
-                                        </a>
-                                        <a href="/evoo-guide.html" target="_blank" class="font-mono text-xs font-bold text-news-winered hover:underline border border-amber-800 px-2 py-0.5 rounded bg-white">
-                                            EVOO 1-7 款指南 ↗
-                                        </a>
-                                    </div>
+                                    <a href="https://threads.com/ericwongkhk" target="_blank" class="font-mono text-xs font-black bg-news-winered hover:bg-black text-white px-2.5 py-1 rounded transition flex items-center gap-1">
+                                        <span>@ericwongkhk ↗</span>
+                                    </a>
                                 </div>
-
-                                <p class="text-xs sm:text-sm text-slate-800 leading-relaxed mb-3">
-                                    <strong>品油專家直擊：</strong>消滅體內慢性發炎與阻斷種子油毒性，最霸道嘅武器就係<strong>高多酚特級初榨橄欖油 (EVOO)</strong>！喉嚨有辛辣感（Oleocanthal 刺激感受體引發咳嗽）先至係真貨！以下為最新上線嘅兩大代表款瓶身與品油檔案：
+                                <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed">
+                                    <strong>實彈內容：</strong>特級初榨橄欖油王最新實戰品油筆記（1 ➔ 7 款最新排序存檔）！涵蓋意大利特倫托 Casaliva（10小時萃取奇蹟）、普利亞 PDO、日本小豆島及阿根廷門多薩 Arauco 稀有品種深度分析，消滅體內發炎地圖！
+                                    <a href="/evoo-guide.html" target="_blank" class="text-news-winered font-black underline ml-1">閱讀《EVOO 1-7 款品油指南全文》↗</a>
                                 </p>
-
-                                <!-- 2 大 EVOO 原廠 SVG 實戰雙雄網格 -->
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 my-3">
-                                    <!-- 神油 1: ÚLIVA 1111 Garda Trentino DOP -->
-                                    <div class="bg-white border-2 border-slate-900 p-3.5 rounded shadow-xs flex flex-col sm:flex-row items-center gap-3">
-                                        <div class="w-24 sm:w-28 shrink-0 flex items-center justify-center bg-stone-100 p-2 rounded border border-slate-300">
-                                            <img 
-                                                src="https://magasite.pages.dev/images/IMG_1196.JPG" 
-                                                alt="ÚLIVA Garda Trentino DOP EVOO" 
-                                                class="h-32 w-auto object-contain filter drop-shadow hover:scale-105 transition" 
-                                                loading="eager"
-                                                onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='/artextractai_20260930_b1cd41_6cd786c9.svg';} else if(this.dataset.retry==='1'){this.dataset.retry='2'; this.src='./artextractai_20260930_b1cd41_6cd786c9.svg';} else if(this.dataset.retry==='2'){this.dataset.retry='3'; this.src='./assets/aistudio/artextractai_20260930_b1cd41_6cd786c9.svg';}"
-                                            />
-                                        </div>
-                                        <div class="text-xs leading-relaxed space-y-1 w-full font-sans">
-                                            <div class="flex items-center justify-between">
-                                                <span class="font-mono text-[10px] font-black bg-emerald-800 text-white px-1.5 py-0.2 rounded">極限冷萃神油</span>
-                                                <span class="font-mono font-bold text-amber-900 text-[11px]">酸價 ≤ 0.15%</span>
-                                            </div>
-                                            <h4 class="font-black text-sm text-slate-950 font-serif">ÚLIVA 1111 Garda Trentino DOP</h4>
-                                            <p class="text-slate-700 text-[11px]"><strong>品種：</strong>Casaliva 單一品種（意大利阿爾卑斯山湖畔北緯極限）</p>
-                                            <p class="text-slate-700 text-[11px]"><strong>工藝：</strong>採摘 10 小時內急速極低溫離心冷萃，保留極高多酚</p>
-                                            <p class="text-emerald-900 font-bold text-[11px]">⚡ 風味：鮮割青草、雅枝竹、喉嚨劇烈辛辣抓喉感（強效抗炎活性）</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- 神油 2: Kirkland Signature Terra di Bari Bitonto PDO -->
-                                    <div class="bg-white border-2 border-slate-900 p-3.5 rounded shadow-xs flex flex-col sm:flex-row items-center gap-3">
-                                        <div class="w-24 sm:w-28 shrink-0 flex items-center justify-center bg-stone-100 p-2 rounded border border-slate-300">
-                                            <img 
-                                                src="https://magasite.pages.dev/images/artextractai_20260930_fbb51f.svg" 
-                                                alt="Kirkland Terra di Bari Bitonto PDO EVOO" 
-                                                class="h-32 w-auto object-contain filter drop-shadow hover:scale-105 transition" 
-                                                loading="eager"
-                                                onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='/artextractai_20260930_fbb51f_86e9fb15.svg';} else if(this.dataset.retry==='1'){this.dataset.retry='2'; this.src='./artextractai_20260930_fbb51f_86e9fb15.svg';} else if(this.dataset.retry==='2'){this.dataset.retry='3'; this.src='./assets/aistudio/artextractai_20260930_fbb51f_86e9fb15.svg';}"
-                                            />
-                                        </div>
-                                        <div class="text-xs leading-relaxed space-y-1 w-full font-sans">
-                                            <div class="flex items-center justify-between">
-                                                <span class="font-mono text-[10px] font-black bg-amber-600 text-white px-1.5 py-0.2 rounded">性價比重砲</span>
-                                                <span class="font-mono font-bold text-amber-900 text-[11px]">PDO 原產地保護</span>
-                                            </div>
-                                            <h4 class="font-black text-sm text-slate-950 font-serif">Kirkland Terra di Bari Bitonto PDO</h4>
-                                            <p class="text-slate-700 text-[11px]"><strong>產區：</strong>意大利普利亞 Bari（Coratina &amp; Cima di Bitonto 壓榨）</p>
-                                            <p class="text-slate-700 text-[11px]"><strong>定位：</strong>平民價位的高多酚重砲，每日大羹生飲、拌沙律清淤必備</p>
-                                            <p class="text-amber-900 font-bold text-[11px]">⚡ 風味：成熟蕃茄葉、杏仁苦底、餘韻帶持久微辛辣感</p>
-                                        </div>
-                                    </div>
+                            </li>
+                            <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(9);" class="p-3.5 bg-red-50/70 border-2 border-red-800 rounded-sm cursor-pointer hover:bg-red-100/80 transition shadow-xs">
+                                <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
+                                    <span class="font-mono text-xs font-black bg-red-900 text-white px-2 py-0.5 rounded">【#9】</span>
+                                    <span class="font-mono text-xs font-black bg-amber-300 text-slate-950 border border-slate-900 px-2 py-0.5 rounded">原 A1 存檔 · 第10日</span>
                                 </div>
+                                <h3 class="text-base sm:text-lg font-black text-news-ink">A1: 3-8 大多系統病徵病理學與臨床實證對照表</h3>
+                                <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>皮膚出疹、生痱滋、頭油生瘡唔係「熱氣」，而係腸道與黏膜菌群崩潰、SCFA 匱乏與 LPS 漏電入血。臨床對照表剖析核心病理機制、文獻數據同微生態自癒三步階。</p>
+                            </li>
+                            <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(10);" class="p-3.5 bg-red-50/70 border-2 border-red-800 rounded-sm cursor-pointer hover:bg-red-100/80 transition shadow-xs">
+                                <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
+                                    <span class="font-mono text-xs font-black bg-red-900 text-white px-2 py-0.5 rounded">【#10 剛移入】</span>
+                                    <span class="font-mono text-xs font-black bg-amber-300 text-slate-950 border border-slate-900 px-2 py-0.5 rounded">原 A1 存檔 · 第22日</span>
+                                </div>
+                                <h3 class="text-base sm:text-lg font-black text-news-ink">每條片 2.5 萬 Views 賺百萬美金？你根本唔需要幾十萬 Follower！</h3>
+                                <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>專家級技能先係提款機，內容只係放大注意力嘅載體；30 分鐘取代 1 萬美金舊顧問模式。</p>
                             </li>
                         </ul>
-
 
                         <!-- GSAP 物理動效即時 HUD (附件圖 1：渲染時間線與代謝比率) -->
                         <div id="gsapHudContainer" class="mb-5 bg-[#070B14] text-white border-2 border-[#1E293B] rounded-xl p-4 sm:p-5 shadow-xl font-mono relative overflow-hidden select-none cursor-pointer group" onclick="triggerGsapHudBounce()" title="點擊觸發 GSAP 物理彈跳動效">
@@ -769,170 +600,23 @@
                             </div>
                         </div>
 
-
                         <!-- B1 Switcher Tabs (不同深淺色區分) -->
                         <div class="flex flex-wrap gap-2 mb-4 no-print border-b border-slate-300 pb-2.5 font-mono text-xs sm:text-sm">
-                            <button onclick="showB1FeatureCard(2)" id="btn-b1-deck-2" class="px-3.5 py-1.5 rounded font-bold border transition bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100 flex items-center gap-1.5">
+                            <button onclick="showB1FeatureCard(1)" id="btn-b1-deck-1" class="px-3.5 py-1.5 rounded font-bold border transition bg-[#8B0000] text-white border-[#8B0000] shadow-sm flex items-center gap-1.5">
                                 <i data-lucide="shield-check" class="w-4 h-4"></i>
                                 <span>1. 12 大戰術輪播 (保留戰術 01)</span>
                             </button>
-                            <button onclick="showB1FeatureCard(3)" id="btn-b1-deck-3" class="px-3.5 py-1.5 rounded font-bold border transition bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200 flex items-center gap-1.5">
+                            <button onclick="showB1FeatureCard(2)" id="btn-b1-deck-2" class="px-3.5 py-1.5 rounded font-bold border transition bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200 flex items-center gap-1.5">
                                 <i data-lucide="file-text" class="w-4 h-4"></i>
-                                <span>2. 早前 A1 實彈歷史檔案 (Sub 1-9)</span>
+                                <span>2. 早前 A1 實彈完整檔案</span>
                             </button>
                         </div>
     
                         <!-- B1 CARDS DECK CONTAINER -->
                         <div class="space-y-4">
 
-                            <!-- B1 TAB 1: 舊 A1 專題：8 大多系統病徵與臨床實證對照表 (從 A1 移駐此處) (Default Visible) -->
-                            <div id="b1-feature-card-1" class="border-2 border-slate-900 p-4 sm:p-5 bg-white shadow-sm space-y-4 font-serif">
-                                <div class="border-b-2 border-slate-900 pb-2.5 mb-2">
-                                    <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
-                                        <div class="flex items-center gap-2">
-                                            <span class="bg-[#8B0000] text-white font-mono text-xs font-black px-2 py-0.5 rounded">舊 A1 實彈移駐</span>
-                                            <span class="bg-amber-100 text-amber-900 font-mono text-xs font-bold px-2 py-0.5 rounded border border-amber-300">多系統微生態與臨床實證</span>
-                                        </div>
-                                        <span class="text-xs font-mono font-bold text-slate-500">Multi-System Pathology &amp; Microbiome Radar</span>
-                                    </div>
-                                    <h3 class="text-xl sm:text-2xl font-black font-lemon text-[#1F2937] leading-tight winered-underline mt-1">
-                                        舊 A1: 3-8 大多系統病徵病理學與臨床實證對照表
-                                    </h3>
-                                    <p class="text-xs sm:text-sm text-[#1F2937] mt-1.5 leading-relaxed font-sans">
-                                        <strong>抗癌 2 次血淚告白：</strong>你以為皮膚出疹、生痱滋、頭油生瘡只係「熱氣」？咪再當被商業藥膏洗腦嘅病態 NPC！呢啲全部係<strong>腸道與黏膜菌群崩潰、短鏈脂肪酸 (SCFA) 匱乏與內毒素 (LPS) 漏電入血</strong>引發嘅全身發炎警報！以下臨床對照表剖析核心病理機制與最新文獻數據，由根源切斷發炎連鎖，奪回生物主權！
-                                    </p>
-                                </div>
-
-                                <!-- 8 大多系統病徵病理學與臨床實證對照表 (桌面表格 View) -->
-                                <div class="hidden md:block overflow-x-auto border-2 border-slate-900 shadow-xs">
-                                    <table class="w-full text-left border-collapse text-xs font-sans">
-                                        <thead>
-                                            <tr class="bg-slate-900 text-white font-mono font-bold border-b border-slate-900">
-                                                <th class="p-3 w-[18%] border-r border-slate-700">病徵／疾病類別</th>
-                                                <th class="p-3 w-[22%] border-r border-slate-700">主要臨床表現</th>
-                                                <th class="p-3 w-[30%] border-r border-slate-700">核心病理學與微生態失衡機制</th>
-                                                <th class="p-3 w-[30%]">臨床實證與文獻數據摘要</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="divide-y divide-slate-300 bg-white leading-relaxed">
-                                            <!-- 01 濕疹 -->
-                                            <tr class="hover:bg-red-50/50 transition">
-                                                <td class="p-3 font-bold border-r border-slate-200 bg-red-50/70 align-top">
-                                                    <span class="font-mono text-red-900 block text-[11px]">【01 · 皮膚屏障】</span>
-                                                    <strong class="text-sm text-red-950 font-black">濕疹<br>（特應性皮炎）</strong>
-                                                </td>
-                                                <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
-                                                    紅斑、劇烈瘙癢、皮膚滲出、苔蘚化。
-                                                </td>
-                                                <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
-                                                    腸道產丁酸菌缺失；皮膚金黃色葡萄球菌定殖率 60–100%；Th2 免疫偏向。
-                                                </td>
-                                                <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
-                                                    <span class="bg-emerald-100 text-emerald-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-emerald-300 font-bold inline-block mb-1">RCT 臨床驗證</span><br>
-                                                    熱滅活乳桿菌降低 4–30 個月大患兒 SCORAD 嚴重度評分；SCFA 修復 Filaggrin 屏障。
-                                                </td>
-                                            </tr>
-
-                                            <!-- 02 麻疹與急性風癩 -->
-                                            <tr class="hover:bg-amber-50/50 transition">
-                                                <td class="p-3 font-bold border-r border-slate-200 bg-amber-50/70 align-top">
-                                                    <span class="font-mono text-amber-900 block text-[11px]">【02 · 肥大細胞】</span>
-                                                    <strong class="text-sm text-amber-950 font-black">麻疹與急性風癩<br>（蕁麻疹）</strong>
-                                                </td>
-                                                <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
-                                                    風團、蕁麻樣紅斑、水腫、陣發性劇癢。
-                                                </td>
-                                                <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
-                                                    腸道 α-多樣性降低；Prevotella 減少；腸漏致 LPS 入血觸發肥大細胞脫顆粒。
-                                                </td>
-                                                <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
-                                                    <span class="bg-cyan-100 text-cyan-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-cyan-300 font-bold inline-block mb-1">雙盲 RCT 數據</span><br>
-                                                    RCT 顯示 L. rhamnosus + FOS 使 UAS7 評分降低 60%，IL-10 上升 45%；熱滅活菌降風團 40%。
-                                                </td>
-                                            </tr>
-
-                                            <!-- 03 生痱滋 -->
-                                            <tr class="hover:bg-rose-50/50 transition">
-                                                <td class="p-3 font-bold border-r border-slate-200 bg-rose-50/70 align-top">
-                                                    <span class="font-mono text-rose-900 block text-[11px]">【03 · 口腔黏膜】</span>
-                                                    <strong class="text-sm text-rose-950 font-black">生痱滋<br>（復發性口瘡）</strong>
-                                                </td>
-                                                <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
-                                                    口腔黏膜凹陷性潰瘍、黃白假膜、紅暈、刺痛。
-                                                </td>
-                                                <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
-                                                    口腔/腸道菌群失衡；局部 T 細胞毒性及 TNF-α 高表達；黏膜屏障破壞。
-                                                </td>
-                                                <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
-                                                    <span class="bg-purple-100 text-purple-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-purple-300 font-bold inline-block mb-1">後生元突破</span><br>
-                                                    羅伊氏乳桿菌後生元奈米製劑連續使用 7 天，潰瘍面積與疼痛指數顯著低於止痛漱口水。
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <!-- 手機卡片式 View (Mobile Responsive Cards) -->
-                                <div class="block md:hidden space-y-3 font-sans text-xs">
-                                    <!-- 01 濕疹 -->
-                                    <div class="p-3.5 bg-red-50/80 border-2 border-red-300 rounded shadow-2xs">
-                                        <div class="flex items-center justify-between mb-1.5">
-                                            <span class="font-mono text-xs font-black bg-red-900 text-white px-2 py-0.5 rounded">01 · 皮膚屏障</span>
-                                            <strong class="text-sm font-black text-red-950">濕疹（特應性皮炎）</strong>
-                                        </div>
-                                        <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-red-200">
-                                            <div><strong class="text-red-900 font-bold">主要表現：</strong>紅斑、劇烈瘙癢、皮膚滲出、苔蘚化。</div>
-                                            <div><strong class="text-red-900 font-bold">微生態失衡機制：</strong>腸道入面產丁酸嘅菌少咗..</div>
-                                            <div class="p-2 bg-white rounded border border-red-200 text-slate-900">
-                                                <strong class="text-emerald-800 font-mono font-bold">📊 臨床實證：</strong>短鏈脂肪酸就可以幫手修復 Filaggrin 屏障。
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- 02 麻疹與急性風癩 -->
-                                    <div class="p-3.5 bg-amber-50/80 border-2 border-amber-300 rounded shadow-2xs">
-                                        <div class="flex items-center justify-between mb-1.5">
-                                            <span class="font-mono text-xs font-black bg-amber-900 text-white px-2 py-0.5 rounded">02 · 肥大細胞</span>
-                                            <strong class="text-sm font-black text-amber-950">麻疹與急性風癩（蕁麻疹）</strong>
-                                        </div>
-                                        <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-amber-200">
-                                            <div><strong class="text-amber-900 font-bold">主要表現：</strong>風團、蕁麻樣紅斑、水腫、陣發性劇癢。</div>
-                                            <div><strong class="text-amber-900 font-bold">微生態失衡機制：</strong>腸漏致 LPS 入血觸發肥大細胞脫顆粒。</div>
-                                            <div class="p-2 bg-white rounded border border-amber-200 text-slate-900">
-                                                <strong class="text-cyan-800 font-mono font-bold">📊 臨床實證：</strong>熱死咗嘅菌都可以令風團少咗 40%。
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- 03 生痱滋 -->
-                                    <div class="p-3.5 bg-rose-50/80 border-2 border-rose-300 rounded shadow-2xs">
-                                        <div class="flex items-center justify-between mb-1.5">
-                                            <span class="font-mono text-xs font-black bg-rose-900 text-white px-2 py-0.5 rounded">03 · 口腔黏膜</span>
-                                            <strong class="text-sm font-black text-rose-950">生痱滋（復發性口瘡）</strong>
-                                        </div>
-                                        <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-rose-200">
-                                            <div><strong class="text-rose-900 font-bold">主要表現：</strong>口腔黏膜凹陷性潰瘍、黃白假膜、紅暈、刺痛。</div>
-                                            <div><strong class="text-rose-900 font-bold">微生態失衡機制：</strong>口腔/腸道菌群失衡</div>
-                                            <div class="p-2 bg-white rounded border border-rose-200 text-slate-900">
-                                                <strong class="text-purple-800 font-mono font-bold">📊 臨床實證：</strong>羅伊氏乳桿菌後生元奈米製劑連續使用。
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 24HR 行動條 (超精簡一體化) -->
-                                <div class="p-2.5 bg-[#FFFDF8] border border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
-                                    <div class="font-mono text-slate-800">
-                                        <strong class="text-red-900">⚡ 24HR 自癒行動：</strong>對照 3-8 大多系統（製作中）病徵微生態機制，即刻以活性益生元、後生元及原型食物修復黏膜屏障，奪回身體生物主權！
-                                    </div>
-                                    <a href="https://lihi.vip/soHJv" target="_blank" class="shrink-0 bg-red-700 hover:bg-black text-white font-mono font-bold px-3 py-1 rounded transition text-[11px]">
-                                        IG Channel ↗
-                                    </a>
-                                </div>
-                            </div>
-
-                            <!-- B1 TAB 2: 12大抗炎戰術輪播 (保留戰術 01) (Hidden by Default) -->
-                            <div id="b1-feature-card-2" class="space-y-4 hidden">
+                            <!-- B1 TAB 1: 12大抗炎戰術輪播 (保留戰術 01) (Default Visible) -->
+                            <div id="b1-feature-card-1" class="space-y-4">
                                 <!-- CAROUSEL BOX -->    
                                 <div class="border-2 border-news-ink bg-white p-5 shadow-sm relative overflow-hidden">    
                                     <!-- Prev / Next Controls & 戰術 01 Highlight -->    
@@ -947,7 +631,6 @@
                                                 <span>⭐ 鎖定檢視：戰術 06 舊傷瘢痕</span>
                                             </button>
                                         </div>
-
 
                                         <button onclick="nextSlide()" class="bg-news-ink hover:bg-news-red text-white px-3 py-1 rounded text-xs sm:text-sm font-mono font-bold flex items-center gap-1 transition">    
                                             下一項 <i data-lucide="chevron-right" class="w-4 h-4"></i>    
@@ -966,22 +649,21 @@
                                 </div>    
                             </div>
 
-
-                            <!-- B1 TAB 3: 舊 A1 專題大調查 (最新排序 1 ➔ 9) -->
-                            <div id="b1-feature-card-3" class="border-2 border-[#121212] p-5 sm:p-6 bg-white shadow-sm hidden">
+                            <!-- B1 TAB 2: 舊 A1 專題大調查 (最新排序 1 ➔ 10) -->
+                            <div id="b1-feature-card-2" class="border-2 border-[#121212] p-5 sm:p-6 bg-white shadow-sm hidden">
                                 <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
                                     <div class="flex items-center gap-2">
-                                        <span class="font-mono text-xs sm:text-sm font-black bg-slate-900 text-white px-2 py-0.5 rounded">舊 A1 實彈歷史檔案</span>
-                                        <span class="font-mono text-xs font-bold text-news-winered">最新排序 1 ➔ 9</span>
+                                        <span class="font-mono text-xs sm:text-sm font-black bg-slate-900 text-white px-2 py-0.5 rounded">舊 A1 實彈</span>
+                                        <span class="font-mono text-xs font-bold text-news-winered">最新排序 1 ➔ 10</span>
                                     </div>
                                     <span class="text-xs font-mono font-bold text-emerald-700 hidden sm:inline">實彈檔案存檔</span>
                                 </div>
 
-
-                                <!-- Sub-tabs for the 9 sub topics (最新排序 9 ➔ 1) -->
+                                <!-- Sub-tabs for the 8 sub topics (最新排序 8 ➔ 1) -->
                                 <div class="flex flex-wrap gap-1.5 mb-4 font-mono text-xs">
-                                    <button onclick="switchOldA1SubTopic(9)" id="sub-a1-btn-9" class="px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400">9. 補劑 Timing 吸收命門 (第11日實彈)</button>
-                                    <button onclick="switchOldA1SubTopic(8)" id="sub-a1-btn-8" class="px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition">8. 切斷 6 大化學毒素</button>
+                                    <button onclick="switchOldA1SubTopic(10)" id="sub-a1-btn-10" class="px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400">10. 創作者變現 × 補劑 Timing (原 A1)</button>
+                                    <button onclick="switchOldA1SubTopic(9)" id="sub-a1-btn-9" class="px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition">9. 多系統病徵對照表 (原 A1)</button>
+                                    <button onclick="switchOldA1SubTopic(8)" id="sub-a1-btn-8" class="px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition">8. 切斷 6 大化學毒素 (最新)</button>
                                     <button onclick="switchOldA1SubTopic(7)" id="sub-a1-btn-7" class="px-2.5 py-1 font-bold rounded bg-cyan-50 text-cyan-950 border border-cyan-300 hover:bg-cyan-100 transition">7. Kefir 克菲爾 60秒大清淤</button>
                                     <button onclick="switchOldA1SubTopic(6)" id="sub-a1-btn-6" class="px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition">6. 水毒破局＋紅銅 Hack</button>
                                     <button onclick="switchOldA1SubTopic(5)" id="sub-a1-btn-5" class="px-2.5 py-1 font-bold rounded bg-sky-50 text-sky-950 border border-sky-300 hover:bg-sky-100 transition">5. 切斷基改與微塑膠</button>
@@ -991,138 +673,211 @@
                                     <button onclick="switchOldA1SubTopic(1)" id="sub-a1-btn-1" class="px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition">1. 古法發酵轉化</button>
                                 </div>
 
-
-                                <!-- Sub 9: 補劑 Timing 四大命門與吸收阻斷陷阱 (第11日實彈) -->
-                                <div id="sub-a1-topic-9" class="space-y-4">
-                                    <div class="flex items-center gap-2 flex-wrap border-b border-slate-200 pb-2">
-                                        <span class="bg-[#8B0000] text-white font-mono text-xs font-black px-2.5 py-0.5 rounded">【#9 最新】</span>
-                                        <span class="bg-amber-200 text-slate-900 font-mono text-xs font-bold px-2 py-0.5 rounded border border-amber-400">第11日實彈存檔</span>
-                                        <span class="text-xs font-mono font-bold text-slate-500">Biological Timing &amp; Assimilation Efficiency</span>
+                                <!-- Sub 10: 原 A1（第22日）創作者變現 × 補劑 Timing -->
+                                <div id="sub-a1-topic-10" class="space-y-3">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <span class="bg-red-900 text-white font-mono text-xs font-black px-2 py-0.5 rounded">【#10 剛移入】</span>
                                     </div>
+                                    <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">原 A1 · 第22日 創作者變現 × 補劑 Timing</span>
+                        <span class="bg-amber-300 text-slate-950 font-mono text-xs font-black px-2 py-0.5 rounded border border-slate-900">舊 A1 存檔</span>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-slate-500">2026年10月22日 (第22日) ‧ Creator Economy &amp; Supplement Timing</span>
+                </div>
+                <h3 class="text-xl sm:text-2xl md:text-3xl font-black font-lemon text-[#1F2937] leading-tight winered-underline mt-1">
+                    A1: 每條片 2.5 萬 Views 賺百萬美金？你根本唔需要幾十萬 Follower！
+                </h3>
+                <p class="text-xs sm:text-sm text-[#1F2937] mt-1.5 leading-relaxed">
+                    <strong>🔥 TLDR 核心摘要：</strong>做自媒體唔使盲目追幾百萬 Viral 流量或者幾十萬 Followers，每條片只要有 <strong>2.5 萬 Views</strong>，配合「<strong>專家級技能 (Expert-level skills)</strong>」，內容只係放大注意力嘅載體 (Vehicle)。30 分鐘搞掂人哋收 1 萬美金嘅策略，一樣可以年入 100 萬美金。
+                </p>
+                                    <!-- 第一階段 [00:00] 影片 1 第一節 -->
+            <div class="border-2 border-slate-900 bg-[#FFFDF8] p-3.5 sm:p-4 mb-3">
+                <div class="flex items-center gap-2 mb-2 pb-1.5 border-b border-slate-300 font-mono text-xs font-black text-slate-900 flex-wrap">
+                    <span class="bg-slate-900 text-white px-2 py-0.5">📅 第一階段 · [00:00]</span>
+                    <span>影片 1 第一節：打破流量迷思 —— 2.5萬 Views 點樣靠「專家技能」變現百萬美金？</span>
+                </div>
+                <div class="space-y-2.5 font-sans text-xs leading-relaxed text-slate-800">
+                    <div class="p-2.5 bg-emerald-50 border-l-4 border-emerald-700"><strong class="font-mono text-emerald-900">核心邏輯：</strong>唔使幾十萬 Views，Callaway 示範點樣將內容當作放大器，靠專家技能實體變現百萬美金。</div>
+                    <div class="p-2.5 bg-amber-50 border-l-4 border-amber-600"><strong class="font-mono text-amber-900">高客單價策略：</strong>30 分鐘實戰直播拆解，直接取代傳統顧問收 1 萬美金做幾星期嘅舊模式。</div>
+                </div>
+            </div>
 
-                                    <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline leading-tight">
-                                        補劑 Timing 四大命門與吸收阻斷陷阱 ‧ 咪再一粒過盲吞變貴價尿！
-                                    </h3>
-                                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
-                                        <strong>2次抗癌生存者實戰經驗：</strong>好多人買幾千蚊補劑，朝早空腹一粒過灌水吞落肚，結果吸收率得嗰 5%，其餘 95% 變咗貴價尿，仲搞到胃痛反酸、黏膜發炎！補劑嘅「Timing 排程」同「協同催化 / 阻斷因子」先至係決定性命門！缺乏時間排程嘅混吞，等同於將資源倒落鹹水海！
-                                    </p>
-
-                                    <!-- 4 大命門詳細網格 -->
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 my-3">
-                                        <!-- 命門 1 -->
-                                        <div class="p-3.5 bg-amber-50/80 border-2 border-amber-300 rounded shadow-2xs font-sans text-xs">
-                                            <div class="flex items-center justify-between border-b border-amber-200 pb-1 mb-1.5">
-                                                <span class="font-mono font-bold text-amber-900">命門 01 · 脂溶性雙雄</span>
-                                                <strong class="text-amber-950 font-black">維他命 D3 ＆ 魚油 (Omega-3)</strong>
-                                            </div>
-                                            <div class="space-y-1 text-slate-800 leading-relaxed">
-                                                <p><strong class="text-red-900">🚨 空腹大忌：</strong>D3 同 Omega-3 係脂溶性！如果空腹配清水吞，腸道冇油脂載體，完全無法乳化同化！</p>
-                                                <p><strong class="text-emerald-800">⚡ 實戰 Hack 法：</strong>必須隨每日第一餐大餐（早餐或斷食後午餐），伴隨<strong>牛油果、放養雞蛋黃或冷壓特級初榨橄欖油 (EVOO)</strong>同服！油脂刺激膽汁分泌與脂質乳化，既能完整吸收，又徹底防止反胃同嘔出魚腥味 (Fish burps)！</p>
-                                            </div>
-                                        </div>
-
-                                        <!-- 命門 2 -->
-                                        <div class="p-3.5 bg-blue-50/80 border-2 border-blue-300 rounded shadow-2xs font-sans text-xs">
-                                            <div class="flex items-center justify-between border-b border-blue-200 pb-1 mb-1.5">
-                                                <span class="font-mono font-bold text-blue-900">命門 02 · 空腹與植酸陷阱</span>
-                                                <strong class="text-blue-950 font-black">鋅 (Zinc)</strong>
-                                            </div>
-                                            <div class="space-y-1 text-slate-800 leading-relaxed">
-                                                <p><strong class="text-red-900">🚨 阻斷因子：</strong>全穀物、堅果同豆類含有強效「植酸 (Phytic acid)」，會直接鎖死鋅離子同化通道！</p>
-                                                <p><strong class="text-emerald-800">⚡ 實戰 Hack 法：</strong>最佳食用時機係兩餐之間（餐後約 2 小時）配溫水。如果空腹容易反胃，可改為伴餐食用，但<strong>必須嚴格避開全穀物、麥皮同豆類</strong>！</p>
-                                            </div>
-                                        </div>
-
-                                        <!-- 命門 3 -->
-                                        <div class="p-3.5 bg-rose-50/80 border-2 border-rose-300 rounded shadow-2xs font-sans text-xs">
-                                            <div class="flex items-center justify-between border-b border-rose-200 pb-1 mb-1.5">
-                                                <span class="font-mono font-bold text-rose-900">命門 03 · 咖啡因大仇人</span>
-                                                <strong class="text-rose-950 font-black">鐵 (Iron)</strong>
-                                            </div>
-                                            <div class="space-y-1 text-slate-800 leading-relaxed">
-                                                <p><strong class="text-red-900">🚨 鎖死吸收：</strong>前後 2 小時內嚴禁飲黑咖啡或濃茶！咖啡因與單寧酸多酚會死死鎖住鐵質，吸收率即刻歸零！</p>
-                                                <p><strong class="text-emerald-800">⚡ 實戰 Hack 法：</strong>早午餐之間 (Mid-morning) 空腹食用。最佳協同夥伴為<strong>純鮮橙汁連小白肉等富含天然維他命 C 的柑橘類水果</strong>，同化率大幅飆升！</p>
-                                            </div>
-                                        </div>
-
-                                        <!-- 命門 4 -->
-                                        <div class="p-3.5 bg-purple-50/80 border-2 border-purple-300 rounded shadow-2xs font-sans text-xs">
-                                            <div class="flex items-center justify-between border-b border-purple-200 pb-1 mb-1.5">
-                                                <span class="font-mono font-bold text-purple-900">命門 04 · 晚間修復與分拆</span>
-                                                <strong class="text-purple-950 font-black">鎂 (Magnesium)</strong>
-                                            </div>
-                                            <div class="space-y-1 text-slate-800 leading-relaxed">
-                                                <p><strong class="text-red-900">🚨 飽和浪費：</strong>鎂喺一次性大劑量時會造成腸道吸收飽和，引發腹瀉並浪費有效成分！</p>
-                                                <p><strong class="text-emerald-800">⚡ 實戰 Hack 法：</strong>適合於傍晚、晚餐後或睡前食用，啟動副交感神經放鬆機制並提升深度睡眠。嚴守<strong>「小劑量分拆法則」，每日兩次服用</strong>，生物利用率最高！</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- 精準補劑 Timing 與 Mutex Lock 協同/阻斷綜合時程表 -->
-                                    <div class="overflow-x-auto border-2 border-slate-900 shadow-xs my-2">
-                                        <table class="w-full text-left border-collapse text-xs font-sans">
-                                            <thead>
-                                                <tr class="bg-slate-900 text-white font-mono font-bold">
-                                                    <th class="p-2.5 border-r border-slate-700 w-[18%]">補充劑名稱</th>
-                                                    <th class="p-2.5 border-r border-slate-700 w-[20%]">最佳食用時段</th>
-                                                    <th class="p-2.5 border-r border-slate-700 w-[22%]">協同催化夥伴</th>
-                                                    <th class="p-2.5 border-r border-slate-700 w-[20%]">嚴禁阻斷因子</th>
-                                                    <th class="p-2.5 w-[20%]">吸收與生理機制</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="divide-y divide-slate-300 bg-white leading-relaxed">
-                                                <tr class="hover:bg-amber-50/50">
-                                                    <td class="p-2.5 font-bold border-r border-slate-200 bg-amber-50/40">維他命 D3</td>
-                                                    <td class="p-2.5 border-r border-slate-200 font-mono text-slate-800">第一餐大餐 (早/午)</td>
-                                                    <td class="p-2.5 border-r border-slate-200 text-emerald-900 font-bold">牛油果、雞蛋、EVOO</td>
-                                                    <td class="p-2.5 border-r border-slate-200 text-red-900 font-bold">空腹清水（無法同化）</td>
-                                                    <td class="p-2.5 text-slate-700">脂溶性營養素，需要油脂介質進行腸道吸收同化。</td>
-                                                </tr>
-                                                <tr class="hover:bg-blue-50/50">
-                                                    <td class="p-2.5 font-bold border-r border-slate-200 bg-blue-50/40">魚油 (Fish Oil)</td>
-                                                    <td class="p-2.5 border-r border-slate-200 font-mono text-slate-800">第一餐大餐 (早/午)</td>
-                                                    <td class="p-2.5 border-r border-slate-200 text-emerald-900 font-bold">隨餐優質油脂與食物</td>
-                                                    <td class="p-2.5 border-r border-slate-200 text-red-900 font-bold">空腹服用</td>
-                                                    <td class="p-2.5 text-slate-700">促使膽汁分泌與脂質乳化，防反胃與魚腥回流 (Fish burps)。</td>
-                                                </tr>
-                                                <tr class="hover:bg-purple-50/50">
-                                                    <td class="p-2.5 font-bold border-r border-slate-200 bg-purple-50/40">鋅 (Zinc)</td>
-                                                    <td class="p-2.5 border-r border-slate-200 font-mono text-slate-800">兩餐之間 (餐後2小時)</td>
-                                                    <td class="p-2.5 border-r border-slate-200 text-emerald-900 font-bold">清水 (若反胃伴非植酸餐)</td>
-                                                    <td class="p-2.5 border-r border-slate-200 text-red-900 font-bold">全穀物、堅果、豆類 (植酸)</td>
-                                                    <td class="p-2.5 text-slate-700">空腹同化率最高；若反胃可伴餐，但須避開植酸阻斷因子。</td>
-                                                </tr>
-                                                <tr class="hover:bg-rose-50/50">
-                                                    <td class="p-2.5 font-bold border-r border-slate-200 bg-rose-50/40">鐵 (Iron)</td>
-                                                    <td class="p-2.5 border-r border-slate-200 font-mono text-slate-800">早午餐間 (Mid-morning)</td>
-                                                    <td class="p-2.5 border-r border-slate-200 text-emerald-900 font-bold">天然維他命 C (鮮橙汁)</td>
-                                                    <td class="p-2.5 border-r border-slate-200 text-red-900 font-bold">黑咖啡、濃茶 (前後2小時)</td>
-                                                    <td class="p-2.5 text-slate-700">咖啡因單寧酸鎖死鐵吸收；天然維他命 C 為強效協同催化劑。</td>
-                                                </tr>
-                                                <tr class="hover:bg-indigo-50/50">
-                                                    <td class="p-2.5 font-bold border-r border-slate-200 bg-indigo-50/40">鎂 (Magnesium)</td>
-                                                    <td class="p-2.5 border-r border-slate-200 font-mono text-slate-800">傍晚 / 晚餐後 / 睡前</td>
-                                                    <td class="p-2.5 border-r border-slate-200 text-emerald-900 font-bold">小劑量分拆 (每日二次)</td>
-                                                    <td class="p-2.5 border-r border-slate-200 text-red-900 font-bold">一次性大劑量吞服</td>
-                                                    <td class="p-2.5 text-slate-700">具備神經放鬆與提升睡眠品質機制，分拆小劑量生物利用率最高。</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div class="p-3 bg-slate-900 text-white rounded font-mono text-xs flex flex-col sm:flex-row items-center justify-between gap-2">
-                                        <div>
-                                            <span class="text-amber-300 font-bold">🔒 生物駭客 Cron Job 任務調度法則：</span>
-                                            <span class="text-slate-300">互斥程序（鐵質與咖啡因）必須設定 Mutex Lock 隔離 2 小時，需要油脂介質的任務（D3 與 Omega-3）必須帶有 Token 才能執行！</span>
-                                        </div>
-                                    </div>
+            <!-- 影片一 Hook -->
+            <div class="border-2 border-news-ink bg-white p-3.5 sm:p-4 mb-3">
+                <div class="flex items-center gap-2 mb-2 pb-1.5 border-b border-slate-300 flex-wrap">
+                    <span class="bg-red-900 text-white font-mono text-xs font-black px-2 py-0.5 rounded">🎥 影片一</span>
+                    <span class="font-mono text-xs font-black text-slate-900">【市井商業學】「每條片 2.5 萬 Views 賺百萬美金？你根本唔需要幾十萬 Follower！」</span>
+                </div>
+                <div class="flex items-center gap-2 mb-1.5"><span class="bg-slate-900 text-white font-mono text-[11px] font-black px-2 py-0.5">00:00 - 00:15</span><span class="font-mono text-xs font-black text-red-900">Hook（開首引爆點）</span></div>
+                <div class="space-y-2 font-sans text-xs sm:text-sm leading-relaxed text-slate-800">
+                    <div>🎬 <strong>視覺線索：</strong>手持電話展示 25,000 Views 嘅數據畫面 📱，螢幕大字出爆發特效：<span class="font-mono font-black text-red-800">「得 2.5 萬 Views 就想年入 100 萬美金？！」</span></div>
+                    <div class="p-2.5 bg-amber-50 border-l-4 border-news-winered">🎙️ <strong>對白：</strong>「各位做自媒體同埋開公司嘅老友，聽我講！你哋唔好再盲目去衝幾百萬 Views 嘅垃圾水份流量！真真正正靠內容賺大錢嘅高手，每條片根本唔需要超過 2.5 萬 Views！」</div>
+                </div>
+            </div>
+                                    <div class="text-xs font-mono"><a href="https://magasite.pages.dev/" target="_blank" rel="noopener noreferrer" class="text-news-winered font-black underline">完整版（影片一全文 ＋ 影片二補劑 Timing）→ MAGASite PREM_22 ↗</a></div>
                                 </div>
 
+                                <!-- Sub 9: 原 A1（第10日）多系統病徵病理學與臨床實證對照表 -->
+                                <div id="sub-a1-topic-9" class="space-y-3 hidden">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <span class="bg-red-900 text-white font-mono text-xs font-black px-2 py-0.5 rounded">【#9】</span>
+                                        <span class="bg-amber-200 text-slate-900 font-mono text-xs font-bold px-2 py-0.5 rounded">原 A1 · 第10日</span>
+                                    </div>
+                                    <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">A1: 3-8 大多系統病徵病理學與臨床實證對照表</h3>
+                                    <p class="text-xs sm:text-sm text-[#1F2937] leading-relaxed"><strong>抗癌 2 次血淚告白：</strong>你以為皮膚出疹、生痱滋、頭油生瘡只係「熱氣」？咪再當被商業藥膏洗腦嘅病態 NPC！呢啲全部係<strong>腸道與黏膜菌群崩潰、短鏈脂肪酸 (SCFA) 匱乏與內毒素 (LPS) 漏電入血</strong>引發嘅全身發炎警報！以下臨床對照表剖析核心病理機制與最新文獻數據，由根源切斷發炎連鎖，奪回生物主權！</p>
+                                    <!-- 8 大多系統病徵病理學與臨床實證對照表 (桌面表格 View) -->
+            <div class="hidden md:block overflow-x-auto mb-4 border-2 border-slate-900 shadow-xs">
+                <table class="w-full text-left border-collapse text-xs font-sans">
+                    <thead>
+                        <tr class="bg-slate-900 text-white font-mono font-bold border-b border-slate-900">
+                            <th class="p-3 w-[18%] border-r border-slate-700">病徵／疾病類別</th>
+                            <th class="p-3 w-[22%] border-r border-slate-700">主要臨床表現</th>
+                            <th class="p-3 w-[30%] border-r border-slate-700">核心病理學與微生態失衡機制</th>
+                            <th class="p-3 w-[30%]">臨床實證與文獻數據摘要</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-300 bg-white leading-relaxed">
+                        <!-- 01 濕疹 -->
+                        <tr class="hover:bg-red-50/50 transition">
+                            <td class="p-3 font-bold border-r border-slate-200 bg-red-50/70 align-top">
+                                <span class="font-mono text-red-900 block text-[11px]">【01 · 皮膚屏障】</span>
+                                <strong class="text-sm text-red-950 font-black">濕疹<br>（特應性皮炎）</strong>
+                            </td>
+                            <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
+                                紅斑、劇烈瘙癢、皮膚滲出、苔蘚化。
+                            </td>
+                            <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
+                                腸道產丁酸菌缺失；皮膚金黃色葡萄球菌定殖率 60–100%；Th2 免疫偏向。
+                            </td>
+                            <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
+                                <span class="bg-emerald-100 text-emerald-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-emerald-300 font-bold inline-block mb-1">RCT 臨床驗證</span><br>
+                                熱滅活乳桿菌降低 4–30 個月大患兒 SCORAD 嚴重度評分；SCFA 修復 Filaggrin 屏障。
+                            </td>
+                        </tr>
+
+                        <!-- 02 麻疹與急性風癩 -->
+                        <tr class="hover:bg-amber-50/50 transition">
+                            <td class="p-3 font-bold border-r border-slate-200 bg-amber-50/70 align-top">
+                                <span class="font-mono text-amber-900 block text-[11px]">【02 · 肥大細胞】</span>
+                                <strong class="text-sm text-amber-950 font-black">麻疹與急性風癩<br>（蕁麻疹）</strong>
+                            </td>
+                            <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
+                                風團、蕁麻樣紅斑、水腫、陣發性劇癢。
+                            </td>
+                            <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
+                                腸道 α-多樣性降低；Prevotella 減少；腸漏致 LPS 入血觸發肥大細胞脫顆粒。
+                            </td>
+                            <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
+                                <span class="bg-cyan-100 text-cyan-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-cyan-300 font-bold inline-block mb-1">雙盲 RCT 數據</span><br>
+                                RCT 顯示 L. rhamnosus + FOS 使 UAS7 評分降低 60%，IL-10 上升 45%；熱滅活菌降風團 40%。
+                            </td>
+                        </tr>
+
+                        <!-- 03 生痱滋 -->
+                        <tr class="hover:bg-rose-50/50 transition">
+                            <td class="p-3 font-bold border-r border-slate-200 bg-rose-50/70 align-top">
+                                <span class="font-mono text-rose-900 block text-[11px]">【03 · 口腔黏膜】</span>
+                                <strong class="text-sm text-rose-950 font-black">生痱滋<br>（復發性口瘡）</strong>
+                            </td>
+                            <td class="p-3 text-slate-800 border-r border-slate-200 align-top font-medium">
+                                口腔黏膜凹陷性潰瘍、黃白假膜、紅暈、刺痛。
+                            </td>
+                            <td class="p-3 text-slate-700 border-r border-slate-200 align-top">
+                                口腔/腸道菌群失衡；局部 T 細胞毒性及 TNF-α 高表達；黏膜屏障破壞。
+                            </td>
+                            <td class="p-3 text-slate-900 bg-amber-50/40 align-top font-medium">
+                                <span class="bg-purple-100 text-purple-900 text-[10px] font-mono px-1.5 py-0.2 rounded border border-purple-300 font-bold inline-block mb-1">後生元突破</span><br>
+                                羅伊氏乳桿菌後生元奈米製劑連續使用 7 天，潰瘍面積與疼痛指數顯著低於止痛漱口水。
+                            </td>
+                        </tr>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 手機卡片式 View (Mobile Responsive Cards) -->
+            <div class="block md:hidden space-y-3 font-sans text-xs mb-3">
+                <!-- 01 濕疹 -->
+                <div class="p-3.5 bg-red-50/80 border-2 border-red-300 rounded shadow-2xs">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="font-mono text-xs font-black bg-red-900 text-white px-2 py-0.5 rounded">01 · 皮膚屏障</span>
+                        <strong class="text-sm font-black text-red-950">濕疹（特應性皮炎）</strong>
+                    </div>
+                    <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-red-200">
+                        <div><strong class="text-red-900 font-bold">主要表現：</strong>紅斑、劇烈瘙癢、皮膚滲出、苔蘚化。</div>
+                        <div><strong class="text-red-900 font-bold">微生態失衡機制：</strong>腸道產丁酸菌缺失；皮膚金黃色葡萄球菌定殖率 60–100%；Th2 免疫偏向。</div>
+                        <div class="p-2 bg-white rounded border border-red-200 text-slate-900">
+                            <strong class="text-emerald-800 font-mono font-bold">📊 臨床實證：</strong>熱滅活乳桿菌降低 4–30 個月大患兒 SCORAD 嚴重度評分；SCFA 修復 Filaggrin 屏障。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 02 麻疹與急性風癩 -->
+                <div class="p-3.5 bg-amber-50/80 border-2 border-amber-300 rounded shadow-2xs">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="font-mono text-xs font-black bg-amber-900 text-white px-2 py-0.5 rounded">02 · 肥大細胞</span>
+                        <strong class="text-sm font-black text-amber-950">麻疹與急性風癩（蕁麻疹）</strong>
+                    </div>
+                    <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-amber-200">
+                        <div><strong class="text-amber-900 font-bold">主要表現：</strong>風團、蕁麻樣紅斑、水腫、陣發性劇癢。</div>
+                        <div><strong class="text-amber-900 font-bold">微生態失衡機制：</strong>腸道 α-多樣性降低；Prevotella 減少；腸漏致 LPS 入血觸發肥大細胞脫顆粒。</div>
+                        <div class="p-2 bg-white rounded border border-amber-200 text-slate-900">
+                            <strong class="text-cyan-800 font-mono font-bold">📊 臨床實證：</strong>RCT 顯示 L. rhamnosus + FOS 使 UAS7 評分降低 60%，IL-10 上升 45%；熱滅活菌降風團 40%。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 03 生痱滋 -->
+                <div class="p-3.5 bg-rose-50/80 border-2 border-rose-300 rounded shadow-2xs">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="font-mono text-xs font-black bg-rose-900 text-white px-2 py-0.5 rounded">03 · 口腔黏膜</span>
+                        <strong class="text-sm font-black text-rose-950">生痱滋（復發性口瘡）</strong>
+                    </div>
+                    <div class="space-y-1.5 text-slate-800 leading-relaxed mt-2 pt-2 border-t border-rose-200">
+                        <div><strong class="text-rose-900 font-bold">主要表現：</strong>口腔黏膜凹陷性潰瘍、黃白假膜、紅暈、刺痛。</div>
+                        <div><strong class="text-rose-900 font-bold">微生態失衡機制：</strong>口腔/腸道菌群失衡；局部 T 細胞毒性及 TNF-α 高表達；黏膜屏障破壞。</div>
+                        <div class="p-2 bg-white rounded border border-rose-200 text-slate-900">
+                            <strong class="text-purple-800 font-mono font-bold">📊 臨床實證：</strong>羅伊氏乳桿菌後生元奈米製劑連續使用 7 天，潰瘍面積與疼痛指數顯著低於止痛漱口水。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 微生態自癒三步階 (STEP 1, STEP 2, STEP 3) -->
+            <div class="border-2 border-slate-900 bg-[#FFFDF8] p-3.5 sm:p-4 mb-3">
+                <div class="flex items-center gap-2 mb-2 pb-1.5 border-b border-slate-300 font-mono text-xs font-black text-slate-900">
+                    <span class="bg-slate-900 text-white px-2 py-0.5">微生態重塑實戰</span>
+                    <span>3 大對沖發炎步階 · Gut-Skin-Mucosa Axis</span>
+                </div>
+                <div class="space-y-2.5 font-sans text-xs leading-relaxed text-slate-800">
+                    <div class="p-2.5 bg-emerald-50 border-l-4 border-emerald-700">
+                        <strong class="font-mono text-emerald-900">STEP 1 (丁酸菌與 SCFA 補足)：</strong>多攝取發酵纖維、抗性澱粉與天然發酵菜，重建腸道產丁酸微生態，修復皮膚角質 Filaggrin 屏障！
+                    </div>
+                    <div class="p-2.5 bg-amber-50 border-l-4 border-amber-600">
+                        <strong class="font-mono text-amber-900">STEP 2 (源頭切斷 LPS 漏電)：</strong>徹底戒絕精製種子油與化學乳化劑，封堵腸道 Tight Junctions，阻斷內毒素入血激發肥大細胞脫顆粒與風癩！
+                    </div>
+                    <div class="p-2.5 bg-cyan-50 border-l-4 border-cyan-700">
+                        <strong class="font-mono text-cyan-900">STEP 3 (靶向後生元與生物活性肽)：</strong>善用活性發酵乳桿菌、後生元及天然多酚，抑制金黃葡萄球菌與 C. acnes，加速黏膜潰瘍與唇紅緣水合癒合！
+                    </div>
+                </div>
+            </div>
+
+            <!-- 24HR 行動條 (超精簡一體化) -->
+            <div class="p-2.5 bg-[#FFFDF8] border border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+                <div class="font-mono text-slate-800">
+                    <strong class="text-red-900">⚡ 24HR 自癒行動：</strong>對照 10 大多系統病徵微生態機制，即刻以活性益生元、後生元及原型食物修復黏膜屏障，奪回身體生物主權！
+                </div>
+                <a href="https://lihi.vip/soHJv" target="_blank" class="shrink-0 bg-red-700 hover:bg-black text-white font-mono font-bold px-3 py-1 rounded transition text-[11px]">
+                    IG Channel ↗
+                </a>
+            </div>
+                                </div>
 
                                 <!-- Sub 8: 切斷 6 大化學毒素垃圾入口 (最新移動一點) -->
                                 <div id="sub-a1-topic-8" class="space-y-3 hidden">
                                     <div class="flex items-center gap-2 flex-wrap">
-                                        <span class="bg-red-900 text-white font-mono text-xs font-black px-2 py-0.5 rounded">【#8 最新】</span>
+                                        <span class="bg-red-900 text-white font-mono text-xs font-black px-2 py-0.5 rounded">【#8】</span>
                                         <span class="bg-amber-200 text-slate-900 font-mono text-xs font-bold px-2 py-0.5 rounded">舊 A1 新存檔</span>
                                     </div>
                                     <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">
@@ -1136,7 +891,6 @@
                                         <div>🥩 <strong>真食物替換：</strong>冷壓特級初榨橄欖油 ＋ 100% 草飼肉 ＋ 古法發酵食物。</div>
                                     </div>
                                 </div>
-
 
                                 <!-- Sub 7: Kefir 克菲爾 60秒 腸道大清淤 -->
                                 <div id="sub-a1-topic-7" class="space-y-3 hidden">
@@ -1156,7 +910,6 @@
                                     </div>
                                 </div>
 
-
                                 <!-- Sub 6: 水毒破局？自家過濾＋紅銅黑客 Hack -->
                                 <div id="sub-a1-topic-6" class="space-y-3 hidden">
                                     <div class="flex items-center gap-2 flex-wrap">
@@ -1174,7 +927,6 @@
                                     </div>
                                 </div>
 
-
                                 <!-- Sub 1: 古法發酵 -->
                                 <div id="sub-a1-topic-1" class="space-y-3 hidden">
                                     <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">
@@ -1188,7 +940,6 @@
                                         <span class="text-[#4B5563]">發酵食物（如發酵泡菜 Sauerkraut、發酵乳酪 Kombucha）唔單止好食，更係修補腸道 Tight Junctions、壓制 LPS 內毒素嘅核心武器！直接填補「副偈」腸道漏電漏洞！</span>
                                     </div>
                                 </div>
-
 
                                 <!-- Sub 2: 6大抗癌解毒分子 -->
                                 <div id="sub-a1-topic-2" class="space-y-3 hidden">
@@ -1226,7 +977,6 @@
                                     </div>
                                 </div>
 
-
                                 <!-- Sub 3: 踢爆咖啡假能量 -->
                                 <div id="sub-a1-topic-3" class="space-y-3 hidden">
                                     <h3 class="text-xl sm:text-2xl font-black text-[#111827] winered-underline">
@@ -1250,7 +1000,6 @@
                                         </ol>
                                     </div>
                                 </div>
-
 
                                 <!-- Sub 4: 揭開我腫瘤唔飲奶真相 · 別再當燕麥奶 NPC -->
                                 <div id="sub-a1-topic-4" class="space-y-4 hidden">
@@ -1276,7 +1025,6 @@
                                             商業行銷洗腦大拆解 · 種子油與化學膠類破壞腸道屏障 · 超市採購 List
                                         </p>
                                     </div>
-
 
                                     <!-- Main 2-Columns Grid -->
                                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -1308,7 +1056,6 @@
                                                 </div>
                                             </div>
 
-
                                             <!-- Box 2: 正確 SWAP 替換 -->
                                             <div class="border-2 border-emerald-700 p-4 bg-white shadow-xs">
                                                 <div class="flex items-center justify-between border-b border-emerald-200 pb-2 mb-2.5 flex-wrap gap-1">
@@ -1327,7 +1074,6 @@
                                                 </p>
                                             </div>
                                         </div>
-
 
                                         <!-- Right Column (5 cols): 超市鮮奶 / 植物奶 Check-list -->
                                         <div class="lg:col-span-5 border-2 border-slate-900 p-4 bg-[#FFFDF8] flex flex-col justify-between shadow-xs">
@@ -1369,7 +1115,6 @@
                                                 </div>
                                             </div>
 
-
                                             <div class="mt-4 pt-3 border-t border-slate-300 text-center font-mono">
                                                 <div class="text-xs font-black text-red-800 tracking-wider uppercase mb-0.5">
                                                     CONTROL THE CONTROLLABLES
@@ -1380,7 +1125,6 @@
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <!-- PREM 20 Dedicated Callout & Hyperlink Bar (INSIDE Subtopic 4) -->
                                     <div class="mt-4 p-3.5 bg-red-900 text-white flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm font-mono rounded">
@@ -1396,7 +1140,6 @@
                                     </div>
                                 </div>
 
-
                                 <!-- Sub 5: 切斷基因改造與微塑膠毒素 (附件圖 1 全生活 Swap 自癒實戰大綱) -->
                                 <div id="sub-a1-topic-5" class="space-y-4 hidden font-serif">
                                     <div class="border-b-2 border-news-ink pb-3 mb-2">
@@ -1411,7 +1154,6 @@
                                             一人 6 年抗癌 2 次生存者血淚告白：重建細胞活力唔係靠食藥，而係要喺日常生活中毫不留情噉切斷所有人工雜交種、荷爾蒙干擾物同微塑膠！
                                         </p>
                                     </div>
-
 
                                     <!-- 3 大核心戰術卡 (Compact Grid) -->
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-3">
@@ -1433,7 +1175,6 @@
                                             </div>
                                         </div>
 
-
                                         <!-- Tactic 2 -->
                                         <div class="border-2 border-slate-900 p-3 bg-white flex flex-col justify-between shadow-xs">
                                             <div>
@@ -1448,7 +1189,6 @@
                                                 </ul>
                                             </div>
                                         </div>
-
 
                                         <!-- Tactic 3 -->
                                         <div class="border-2 border-slate-900 p-3 bg-white flex flex-col justify-between shadow-xs">
@@ -1468,7 +1208,6 @@
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <!-- 4 大核心日常 Swap 網格 -->
                                     <div class="border-2 border-slate-900 p-3.5 bg-[#FFFDF8] font-mono text-xs">
@@ -1496,7 +1235,6 @@
                                         </div>
                                     </div>
 
-
                                     <!-- 終極自癒黑客：24HR 行動大綱 -->
                                     <div class="p-3.5 bg-emerald-50 border-2 border-emerald-700 text-xs sm:text-sm font-serif text-emerald-950 flex flex-col sm:flex-row items-center justify-between gap-3">
                                         <div>
@@ -1510,9 +1248,7 @@
                                 </div>
                             </div> <!-- Closing b1-feature-card-2 -->
 
-
                         </div> <!-- Closing B1 CARDS DECK CONTAINER -->
-
 
                         <!-- Core Formula Highlight Banner -->    
                         <div class="my-6 p-4 bg-amber-50 border-2 border-news-ink rounded-none">    
@@ -1537,8 +1273,8 @@
                             </h4>    
                             <ul class="space-y-3 font-serif">    
                                 <li>    
-                                    <div class="shop-tag">📍 Kefir+fermentation</div>    
-                                    <div class="shop-title"><a href="https://greenfermentationlab.com/" target="_blank">Green Fermentation Lab 發酵乳酪 ↗</a></div>    
+                                    <div class="shop-tag">📍 Kefir</div>    
+                                    <div class="shop-title"><a href="https://greenfermentationlab.com/" target="_blank" rel="noopener noreferrer">Green Fermentation Lab 發酵乳酪 ↗</a></div>    
                                     <div class="shop-desc">2 茶匙用於 Sourdough 抹醬，補充活性腸道好菌。</div>    
                                 </li>    
                                 <li>    
@@ -1614,7 +1350,7 @@
                     <span class="bg-news-ink text-white font-mono text-xs sm:text-sm font-black px-2 py-0.5">B2 戰術指南</span>    
                     <h2 class="text-2xl sm:text-3xl font-black font-lemon text-[#1F2937] inline-block ml-2">RFK Jr. 逆轉食物金字塔 (The Inverted Pyramid)</h2>    
                 </div>    
-                <span class="font-mono text-xs sm:text-sm font-bold text-news-winered">LAYER 01/02/03 清淤過濾 ‧ 腸道黏膜屏障基石</span>    
+                <span class="font-mono text-xs sm:text-sm font-bold text-news-winered">LAYER 02 清淤過濾 ‧ 腸道黏膜屏障基石</span>    
             </div>    
     
             <!-- Layer 02 Active Focus Banner -->    
@@ -1626,11 +1362,46 @@
                 <div id="b2DailySummary" class="text-[#4B5563]">    
                     今日焦點：腸道黏膜修復！發酵蔬菜與十字花科，壓制 LPS 內毒素，修補緊密連接 (Tight Junctions)，阻斷全身慢性發炎！    
                 </div>    
-            </div>    
+            </div>
+    
+            <!-- Pyramid Card: Layer 02 Only -->    
+            <div class="max-w-3xl mx-auto">    
+                <div id="b2-tier-2-card" class="border-2 border-news-ink p-6 bg-white relative transition-all duration-300 ring-4 ring-[#8B0000] bg-amber-50/40">    
+                    <div class="absolute -top-3 left-4 bg-news-ink text-white font-mono text-xs font-black px-2.5 py-0.5 flex items-center gap-1.5">    
+                        <span>LAYER 02 // 腸道屏障修復</span>    
+                        <span id="b2-badge-tier-2" class="text-amber-300 font-bold">★ 今日焦點核心</span>    
+                    </div>    
+                    <h3 class="font-serif font-black text-2xl sm:text-3xl text-[#1F2937] mb-1.5 mt-2">Barrier Tier (清淤過濾 ‧ 腸道屏障修復隊)</h3>    
+                    <p class="text-sm sm:text-base font-mono font-bold text-news-winered mb-3">腸道微生態與 Tight Junctions 修補核心 · 阻斷 LPS 內毒素入血</p>    
+                    <p class="text-base sm:text-lg font-serif text-[#374151] mb-4 leading-relaxed">    
+                        專注於重建腸道黏膜屏障。透過有機天然發酵泡菜 (Sauerkraut)、富含蘿蔔硫素 (Sulforaphane) 的十字花科蔬菜與熟蕃茄茄紅素，全面封鎖發炎因子，修補細胞緊密連接，切斷病變惡性循環。
+                    </p>    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#F9FAFB] p-4 border border-slate-300 text-sm font-serif text-[#1F2937] rounded-sm">    
+                        <div>
+                            <strong class="text-emerald-900 block mb-0.5">🥬 發酵生椰菜 (Sauerkraut) / 德式酸菜：</strong>
+                            <span class="text-slate-600 text-xs sm:text-sm">提供天然活性乳酸菌與乙酸，強效修補腸道 Tight Junctions，降解 LPS 內毒素。</span>
+                        </div>
+                        <div>
+                            <strong class="text-amber-900 block mb-0.5">🥦 椰菜花蓉 / 西蘭花苗 (Cauliflower/Broccoli Sprouts)：</strong>
+                            <span class="text-slate-600 text-xs sm:text-sm">高濃度蘿蔔硫素，啟動 Nrf2 基因抗氧化途徑，阻斷致癌毒素吸收。</span>
+                        </div>
+                        <div>
+                            <strong class="text-red-900 block mb-0.5">🍅 熟蕃茄 (Cooked Tomatoes in EVOO)：</strong>
+                            <span class="text-slate-600 text-xs sm:text-sm">配合特級初榨橄欖油加熱釋放高活性脂溶性茄紅素 (Lycopene)，保護細胞膜。</span>
+                        </div>
+                        <div>
+                            <strong class="text-indigo-900 block mb-0.5">🧄 生大蒜 / 蔥類 (Raw Garlic & Onions)：</strong>
+                            <span class="text-slate-600 text-xs sm:text-sm">豐富蒜素 (Allicin) 與益生元果寡糖，精準壓抑腸道壞菌，鞏固免疫前線。</span>
+                        </div>
+                    </div>    
+                </div>    
+            </div>     
         </section>    
     
-        <!-- SPECIAL LINK BOX: 幫助下一位計劃 (B2 之下) -->
-        <div class="max-w-3xl mx-auto my-8 overflow-hidden border-2 border-[#121212]" id="help-next-box">
+        <!-- SPECIAL LINK BOX: 幫助下一位計劃 (B2 之下) -->    
+        
+        <!-- ══ 幫助下一位計劃 v2 — Buy 1 Give 1 ══ -->
+        <div class="my-8 overflow-hidden border-2 border-[#121212]" id="help-next-box">
  
           <!-- Eyebrow -->
           <div class="bg-[#121212] text-white px-4 py-2 flex items-center justify-between gap-2 flex-wrap">
@@ -1695,13 +1466,12 @@
  
         </div><!-- /help-next-box -->   
 
-
             <!-- Featured PREM_22 Spotlight Banner -->
             <div class="mb-3 p-3 bg-amber-50 border-2 border-amber-600 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                 <div>
                     <span class="bg-[#8B0000] text-white font-mono font-black px-1.5 py-0.5 rounded text-[10px] mr-1.5">首頁免費及解鎖專區</span>
-                    <strong class="text-slate-900 font-serif">咪撚再當「奶」就係安全營養：揭開我因為腫瘤唔再飲奶真相 ＆ 市場上鮮奶植物奶真係飲得。</strong>
-                    <span class="text-slate-600 hidden sm:inline">（踢爆菜籽油與結冷膠腸道破壞陷阱，鎖定 100% 草飼全脂鮮奶與純淨植物奶）</span>
+                    <strong class="text-slate-900 font-serif">PREM_22 完整版：每條片 2.5 萬 Views 賺百萬美金 ＆ 5 大維他命／礦物質精準食法。</strong>
+                    <span class="text-slate-600 hidden sm:inline">（專家技能變現策略 ＋ D3／魚油／鋅／鐵／鎂 Timing ＋ RFK Jr. 倒轉金字塔對照）</span>
                 </div>
                 <a href="https://magasite.pages.dev/" target="_blank" class="self-start sm:self-auto bg-[#8B0000] hover:bg-red-800 text-white font-mono font-black px-3 py-1 rounded border border-black whitespace-nowrap">
                     首頁免費及解鎖專區 ↗
@@ -1762,7 +1532,7 @@
         const now = new Date();    
         const displayDateStrip = document.getElementById('displayDateStrip');    
         if (displayDateStrip) {    
-            displayDateStrip.textContent = `【今日頭條】 2026年11月1日 (第12日) ‧ 點解而家的人比以前更容易病？答案就喺以為食緊『健康嘢』`;    
+            displayDateStrip.textContent = `【今日頭條】 2026年11月1日 (第12日) ‧ 點解而家嘅人比以前更容易病？「健康嘢」營銷陷阱`;    
         }    
     
         // Scroll to section    
@@ -1929,9 +1699,9 @@
             renderCarousel();    
         }    
     
-        // B1 Feature Cards Switcher (Card 1: 舊 A1 專題, Card 2: 12 大戰術輪播, Card 3: 歷史 A1 實彈檔案)
+        // B1 Feature Cards Switcher (Card 1: 12 大戰術輪播, Card 2: 舊 A1 實彈檔案) - 不同深淺色系統區分 1, 2 點
         function showB1FeatureCard(cardNum) {
-            for (let i = 1; i <= 3; i++) {
+            for (let i = 1; i <= 2; i++) {
                 const card = document.getElementById(`b1-feature-card-${i}`);
                 const btn = document.getElementById(`btn-b1-deck-${i}`);
                 if (card) {
@@ -1948,10 +1718,6 @@
                             : "px-3.5 py-1.5 rounded font-bold border transition bg-rose-50 text-rose-900 border-rose-300 hover:bg-rose-100 flex items-center gap-1.5";
                     } else if (i === 2) {
                         btn.className = (cardNum === 2)
-                            ? "px-3.5 py-1.5 rounded font-bold border transition bg-amber-800 text-white border-amber-800 shadow-sm flex items-center gap-1.5"
-                            : "px-3.5 py-1.5 rounded font-bold border transition bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100 flex items-center gap-1.5";
-                    } else if (i === 3) {
-                        btn.className = (cardNum === 3)
                             ? "px-3.5 py-1.5 rounded font-bold border transition bg-[#0F172A] text-white border-[#0F172A] shadow-sm flex items-center gap-1.5"
                             : "px-3.5 py-1.5 rounded font-bold border transition bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200 flex items-center gap-1.5";
                     }
@@ -1960,8 +1726,7 @@
         }
         window.showB1FeatureCard = showB1FeatureCard;
 
-
-        // Sub topic switcher for Card 02 (舊 A1 9➔1 專題) - 獨立深淺色彩系統
+        // Sub topic switcher for Card 02 (舊 A1 8➔1 專題) - 獨立深淺色彩系統
         const subTopicStyles = {
             1: { active: "px-2.5 py-1 font-bold rounded bg-amber-700 text-white border border-amber-800 shadow-sm ring-2 ring-amber-400", inactive: "px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition" },
             2: { active: "px-2.5 py-1 font-bold rounded bg-emerald-700 text-white border border-emerald-800 shadow-sm ring-2 ring-emerald-400", inactive: "px-2.5 py-1 font-bold rounded bg-emerald-50 text-emerald-950 border border-emerald-300 hover:bg-emerald-100 transition" },
@@ -1970,13 +1735,13 @@
             5: { active: "px-2.5 py-1 font-bold rounded bg-sky-800 text-white border border-sky-900 shadow-sm ring-2 ring-sky-400", inactive: "px-2.5 py-1 font-bold rounded bg-sky-50 text-sky-950 border border-sky-300 hover:bg-sky-100 transition" },
             6: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" },
             7: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-cyan-400", inactive: "px-2.5 py-1 font-bold rounded bg-cyan-50 text-cyan-950 border border-cyan-300 hover:bg-cyan-100 transition" },
-            8: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition" },
-            9: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition" }
+            10: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" },
+            9: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" },
+            8: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" }
         };
 
-
         function switchOldA1SubTopic(topicNum) {
-            for (let i = 1; i <= 9; i++) {
+            for (let i = 1; i <= 10; i++) {
                 const topic = document.getElementById(`sub-a1-topic-${i}`);
                 const btn = document.getElementById(`sub-a1-btn-${i}`);
                 if (topic) {
@@ -1996,6 +1761,13 @@
             }
         }
         window.switchOldA1SubTopic = switchOldA1SubTopic;
+        function openB1Topic(n) {
+            showB1FeatureCard(2);
+            switchOldA1SubTopic(n);
+            const el = document.getElementById('sec-b1');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+        window.openB1Topic = openB1Topic;
 
 
         // GSAP Physical Animation for HUD (附件圖 1: 渲染時間線與代謝進度條)
@@ -2047,7 +1819,6 @@
             }
         }
 
-
         // Interactive GSAP Bounce for HUD
         function triggerGsapHudBounce() {
             if (typeof gsap !== 'undefined') {
@@ -2058,7 +1829,6 @@
             }
         }
         window.triggerGsapHudBounce = triggerGsapHudBounce;
-
 
         // HUD Timeline Clock running smoothly
         let hudSeconds = 252; // 00:04:12
@@ -2071,7 +1841,6 @@
                 timerEl.textContent = `00:${m}:${s} / 60 FPS`;
             }
         }, 1000);
-
 
         // Clipboard Copy Helper
         function copyToClipboard(elementId, toastId) {
@@ -2091,7 +1860,6 @@
             });
         }
         window.copyToClipboard = copyToClipboard;
-
 
         // B2 Food Pyramid Update (Layer 02 Focus - 腸道黏膜屏障修復)
         function initB2DailyUpdate() {    
