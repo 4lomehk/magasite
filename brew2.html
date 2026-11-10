@@ -18,7 +18,7 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <script>
+  <script> 
     tailwind.config = {
       theme: {
         extend: {
@@ -134,7 +134,25 @@
             <span id="brewer-badge-count" class="px-1.5 py-0.2 rounded bg-stone-700 text-amber-300 font-mono text-xs">2</span>
             <span id="brewer-lock-icon" class="text-[11px]">🔒</span>
           </button>
+          <button
+            type="button"
+            onclick="switchMainView('scroll-world')"
+            id="tab-btn-scroll-world"
+            class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-amber-300 hover:text-white flex items-center gap-1.5"
+          >
+            <span>✨ 3D 飛入世界</span>
+            <span class="px-1.5 py-0.2 rounded bg-amber-500/30 text-amber-300 font-mono text-[10px] border border-amber-500/40">Skill</span>
+          </button>
         </div>
+
+        <button
+          type="button"
+          onclick="toggleScrollWorldDocModal()"
+          class="px-2.5 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs font-black flex items-center gap-1 transition shadow-sm"
+          title="@scroll-world 使用說明與安裝指南"
+        >
+          <span>📖 @scroll-world 說明</span>
+        </button>
 
         <button
           type="button"
@@ -180,12 +198,48 @@
     <!-- =================================================================== -->
     <section id="view-customer" class="space-y-6">
 
-      <!-- Top Row: 轉數快 FPS 置頂過數區 (Moved to Very Top as Requested!) -->
+      <!-- @scroll-world 3D 飛入世界宣傳條 (Spotlight Banner) -->
+      <div class="tactile-card p-4 bg-gradient-to-r from-stone-900 via-[#22150D] to-stone-900 text-white border-2 border-stone-900 shadow-md">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-400 text-stone-950 font-black text-xl flex items-center justify-center shrink-0 border border-white/20">
+              ☕
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-black text-amber-400 tracking-wider">@SCROLL-WORLD 3D 沉浸式技術</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">零 Cut 鏡頭連續穿透</span>
+              </div>
+              <p class="text-xs text-stone-300 mt-0.5 leading-relaxed">
+                由高山等角微縮咖啡莊園，一路俯衝穿透進入磨豆機鈦合金刀盤與黃金 Crema 雙層杯！
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onclick="switchMainView('scroll-world')"
+              class="tactile-btn py-1.5 px-3 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs flex items-center gap-1 shadow-sm transition"
+            >
+              <span>▶ 體驗 3D 飛入</span>
+            </button>
+            <button
+              type="button"
+              onclick="toggleScrollWorldDocModal()"
+              class="tactile-btn py-1.5 px-3 rounded-lg bg-stone-800 hover:bg-stone-700 text-amber-300 border border-stone-700 font-bold text-xs transition"
+            >
+              <span>📖 使用說明</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Row: 轉數快 FPS 置頂過數區 (無 QR Code ‧ 銀行/電話/銀碼 ‧ WhatsApp 核對流程) -->
       <div class="tactile-card p-5 bg-[#FFFBEB]">
         <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-stone-200">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded bg-emerald-700 text-white font-mono text-xs font-black">置頂收數</span>
-            <h2 class="font-black text-base sm:text-lg text-stone-900">🇭🇰 轉數快 FPS 過數</h2>
+            <h2 class="font-black text-base sm:text-lg text-stone-900">🇭🇰 轉數快 FPS 過數（無須 QR Code）</h2>
             <button type="button" onclick="toggleHint('hint-customer-fps')" class="info-badge" title="過數提示">i</button>
           </div>
           <div class="flex items-center gap-2 text-xs font-bold text-stone-500">
@@ -194,135 +248,151 @@
             <span>單號 <strong id="cust-top-order-id" class="font-mono text-stone-900">#00</strong></span>
             <button
               type="button"
-              onclick="resetToZeroAndReload('customer')"
-              class="tactile-btn ml-1 py-2 px-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] flex items-center gap-1.5 cursor-pointer transition active:translate-y-0.5"
-              title="單號及金額重設歸零 (#00 / HK$0) 並重新載入"
+              onclick="resetToZeroSafe('customer')"
+              class="tactile-btn ml-1 px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 font-black text-xs flex items-center gap-1 shadow-sm"
+              title="單號及金額重設歸零 (#00 / HK$0)（付款後不能改）"
             >
-              <span class="text-sm">🔄</span>
-              <span>重設 0 / 重新載入</span>
+              🔄 重設 0 (Reset 0)
             </button>
           </div>
         </div>
 
         <!-- Collapsible 'i' Hint for FPS -->
         <div id="hint-customer-fps" class="hidden mt-3 p-3 rounded-xl bg-amber-100/70 border border-stone-300 text-xs text-stone-800 space-y-1">
-          <p class="font-bold">📌 轉數快過數步驟：</p>
-          <p>1. 撳下面「複製電話」或掃描轉數快 QR Code 過數。</p>
-          <p>2. 過數備註請填寫單號（例如 <span class="font-mono font-bold">#01</span>），過數後直接撳「💬 WhatsApp 傳送」即時通知咖啡師開沖。</p>
+          <p class="font-bold">📌 轉數快過數流程：</p>
+          <p>1. 選擇你所屬銀行，打開手機銀行 App 轉數快。</p>
+          <p>2. 輸入轉數快電話 <span class="font-mono font-bold text-stone-900">9123 6789</span> 及應付銀碼，備註填寫單號（例如 <span class="font-mono font-bold">#01</span>）。</p>
+          <p>3. 完成過數後，直接撳「📲 WhatsApp 傳送過數截圖及單號」發送畀咖啡師。</p>
+          <p>4. 咖啡師核對銀碼與時間後一鍵解鎖，系統雙向同步，即時為你開沖！</p>
         </div>
 
-        <!-- Main FPS Active Card -->
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-          <!-- Left: FPS Number & Amount -->
-          <div class="md:col-span-7 p-4 rounded-xl bg-white border-2 border-stone-900 space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-stone-500">轉數快 FPS 電話號碼</span>
-              <span class="text-xs font-bold text-emerald-700">🟢 即時對數</span>
-            </div>
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div id="cust-fps-phone-display" class="text-2xl sm:text-3xl font-black font-mono tracking-tight text-stone-900 tabular-nums">
-                9123 6789
+        <!-- Main FPS Prompt Grid (No QR Code!) -->
+        <div class="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+          <!-- Left 6 Cols: 用戶所屬銀行、電話、銀碼提示 -->
+          <div class="lg:col-span-6 p-4 rounded-xl bg-white border-2 border-stone-900 space-y-3.5 flex flex-col justify-between">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-black text-stone-700 flex items-center gap-1">
+                  <span>🏦 用戶所屬銀行</span>
+                </span>
+                <span class="text-xs font-bold text-emerald-700">🟢 即時對數</span>
               </div>
-              <button
-                type="button"
-                onclick="copyFpsPhone()"
-                class="tactile-btn px-3 py-1.5 rounded-lg bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs"
+              <select
+                id="cust-bank-select"
+                onchange="updateBankFpsPrompt()"
+                class="w-full rounded-lg border-2 border-stone-900 px-3 py-2 text-xs sm:text-sm font-bold bg-amber-50 text-stone-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
               >
-                📋 複製電話
-              </button>
-            </div>
-            <div class="pt-2 border-t border-stone-200 flex items-center justify-between">
-              <div>
-                <span class="text-xs font-bold text-stone-500 block">應付銀碼 (HKD)</span>
-                <span id="cust-fps-amount-display" class="text-2xl font-black font-mono text-emerald-700 tabular-nums">HK$0</span>
+                <option value="匯豐銀行 (HSBC)">匯豐銀行 HSBC (004)</option>
+                <option value="恒生銀行 (Hang Seng)">恒生銀行 Hang Seng (024)</option>
+                <option value="中銀香港 (BOC HK)">中銀香港 BOC HK (012)</option>
+                <option value="渣打銀行 (Standard Chartered)">渣打銀行 Standard Chartered (003)</option>
+                <option value="Mox Bank">Mox Bank (388)</option>
+                <option value="眾安銀行 (ZA Bank)">眾安銀行 ZA Bank (387)</option>
+                <option value="東亞銀行 (BEA)">東亞銀行 BEA (015)</option>
+                <option value="花旗銀行 (Citibank)">花旗銀行 Citibank (250)</option>
+                <option value="大新銀行 (Dah Sing)">大新銀行 Dah Sing (040)</option>
+                <option value="其他香港銀行">其他香港銀行 (Other Bank)</option>
+              </select>
+              <div id="cust-bank-hint-text" class="text-[11px] font-bold text-stone-600 bg-stone-50 p-2 rounded-lg border border-stone-200">
+                💡 請打開 <strong id="cust-active-bank-name" class="text-stone-900">匯豐銀行 HSBC</strong> App，進入「轉數快 (FPS)」功能。
               </div>
-              <div class="flex flex-wrap gap-2">
+            </div>
+
+            <!-- Phone Number & Amount Row -->
+            <div class="pt-2 border-t border-stone-200 grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+              <div>
+                <span class="text-xs font-bold text-stone-500 block mb-0.5">轉數快 FPS 收款電話</span>
+                <div id="cust-fps-phone-display" class="text-2xl font-black font-mono tracking-tight text-stone-900 tabular-nums">
+                  9123 6789
+                </div>
                 <button
                   type="button"
-                  onclick="copyFpsReceiptPrompt()"
-                  class="tactile-btn px-3 py-2 rounded-lg bg-stone-900 text-white font-black text-xs"
+                  onclick="copyFpsPhone()"
+                  class="tactile-btn mt-1 px-3 py-1.5 rounded-lg bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs inline-flex items-center gap-1 shadow-sm"
                 >
-                  📲 複製過數訊息
+                  📋 複製電話
                 </button>
+              </div>
+              <div class="sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-stone-100">
+                <span class="text-xs font-bold text-stone-500 block mb-0.5">應付銀碼 (HKD)</span>
+                <span id="cust-fps-amount-display" class="text-3xl font-black font-mono text-emerald-700 tabular-nums">HK$0</span>
+                <div class="text-[11px] font-mono text-stone-500 mt-0.5">
+                  備註請填單號：<strong id="cust-fps-memo-order-id" class="text-stone-900">#00</strong>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Right: Dual QR Code Switcher (FPS vs WhatsApp) + Paused Methods -->
-          <div class="md:col-span-5 p-3.5 rounded-xl bg-white border-2 border-stone-900 space-y-2.5">
-            <!-- QR Tabs Switcher -->
-            <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-lg border border-stone-300 text-xs font-black">
-              <button
-                type="button"
-                id="qr-tab-fps"
-                onclick="switchCustQrTab('fps')"
-                class="flex-1 py-1 rounded bg-stone-900 text-amber-300 shadow-sm text-center"
-              >
-                🇭🇰 轉數快 FPS
-              </button>
-              <button
-                type="button"
-                id="qr-tab-wa"
-                onclick="switchCustQrTab('wa')"
-                class="flex-1 py-1 rounded text-stone-600 hover:text-stone-900 text-center"
-              >
-                💬 咖啡師 WhatsApp
-              </button>
-            </div>
+          <!-- Right 6 Cols: 過數後 WhatsApp 咖啡師步驟 & 咖啡師確認開沖 (無須 QR Code) -->
+          <div class="lg:col-span-6 p-4 rounded-xl bg-white border-2 border-stone-900 space-y-3 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-2 border-b border-stone-200">
+                <span class="text-xs font-black text-stone-900 flex items-center gap-1.5">
+                  <span class="w-5 h-5 rounded-full bg-emerald-600 text-white text-[11px] font-mono font-black flex items-center justify-center">✓</span>
+                  <span>過數後 WhatsApp 步驟 · 咖啡師確認流程</span>
+                </span>
+                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-300">免掃 QR Code</span>
+              </div>
 
-            <!-- Content Area with clear labels -->
-            <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row items-center gap-3">
-              <img
-                id="cust-fps-qr-img"
-                src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=FPS%3A91236789%3BHKD%3A43%3BORDER%3A01"
-                alt="轉數快 FPS 付款 QR Code"
-                class="w-24 h-24 rounded-lg border border-stone-300 p-1 bg-white shrink-0 shadow-sm"
-              />
-              <div class="space-y-1 text-center sm:text-left">
-                <!-- Dynamic QR Label & Description -->
-                <div id="cust-qr-badge" class="inline-block px-2 py-0.5 rounded bg-emerald-100 border border-emerald-300 text-emerald-900 text-[11px] font-black">
-                  💳 轉數快 FPS 付款專用（不是 WhatsApp）
+              <!-- 4 Steps Flow -->
+              <div class="mt-2.5 space-y-2 text-xs">
+                <div class="flex items-start gap-2 bg-stone-50 p-2 rounded-lg border border-stone-200">
+                  <span class="w-5 h-5 rounded bg-stone-900 text-amber-300 font-mono text-[11px] font-black shrink-0 flex items-center justify-center">1</span>
+                  <p class="font-bold text-stone-800">
+                    打開所屬銀行 App 選擇轉數快，輸入電話 <span class="font-mono font-black text-stone-950">9123 6789</span> 及應付銀碼。
+                  </p>
                 </div>
-                <div id="cust-qr-title" class="text-xs font-black text-stone-900">
-                  轉數快付款 QR Code
+                <div class="flex items-start gap-2 bg-stone-50 p-2 rounded-lg border border-stone-200">
+                  <span class="w-5 h-5 rounded bg-stone-900 text-amber-300 font-mono text-[11px] font-black shrink-0 flex items-center justify-center">2</span>
+                  <p class="font-bold text-stone-800">
+                    備註填寫單號（例如 <span class="font-mono font-black text-stone-950" id="cust-step2-order-id">#00</span>），過數完成後儲存截圖。
+                  </p>
                 </div>
-                <p id="cust-qr-desc" class="text-[11px] text-stone-600 leading-snug">
-                  用銀行 App 掃碼即可自動填妥金額及備註 #01
-                </p>
-                <div id="cust-qr-link-wrap" class="pt-0.5">
-                  <a
-                    id="cust-qr-direct-link"
-                    href="javascript:void(0)"
-                    onclick="openActiveQrAction()"
-                    class="text-[11px] font-black text-emerald-700 hover:underline inline-flex items-center gap-1"
-                  >
-                    <span>📲 複製轉數快過數文字</span>
-                  </a>
+                <div class="flex items-start gap-2 bg-emerald-50 p-2 rounded-lg border border-emerald-300">
+                  <span class="w-5 h-5 rounded bg-emerald-700 text-white font-mono text-[11px] font-black shrink-0 flex items-center justify-center">3</span>
+                  <p class="font-bold text-emerald-950">
+                    撳下面綠色大按鈕，直接將過數截圖及單號傳送至咖啡師 WhatsApp。
+                  </p>
+                </div>
+                <div class="flex items-start gap-2 bg-amber-50 p-2 rounded-lg border border-amber-300">
+                  <span class="w-5 h-5 rounded bg-amber-600 text-white font-mono text-[11px] font-black shrink-0 flex items-center justify-center">4</span>
+                  <p class="font-bold text-amber-950">
+                    咖啡師於系統核對銀碼與時間，一鍵對數解鎖，即時為你開沖！
+                  </p>
                 </div>
               </div>
             </div>
 
-            <!-- Collapsible Paused Methods (Visa / PayMe / Octopus) -->
-            <details class="pt-1 border-t border-stone-200">
-              <summary class="cursor-pointer text-[11px] font-bold text-stone-500 hover:text-stone-800 flex items-center justify-between">
-                <span>▾ 其他收款 (PayMe / Visa 暫停)</span>
-                <span class="text-[10px]">⏸️ 暫停中</span>
-              </summary>
-              <div class="mt-1.5 p-2 rounded-lg bg-stone-100 border border-stone-300 space-y-1 text-[11px] text-stone-500">
-                <div class="flex items-center justify-between">
-                  <span>PayMe</span>
-                  <span class="font-mono font-bold text-rose-600">⏸️ 暫停</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span>Visa / 信用卡</span>
-                  <span class="font-mono font-bold text-rose-600">⏸️ 暫停</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span>八達通 Octopus</span>
-                  <span class="font-mono font-bold text-rose-600">⏸️ 暫停</span>
-                </div>
+            <!-- Direct Action Buttons (No QR Code required!) -->
+            <div class="space-y-2 pt-2 border-t border-stone-200">
+              <a
+                id="cust-direct-wa-link"
+                href="javascript:void(0)"
+                onclick="openCustomerWhatsApp()"
+                class="tactile-btn w-full py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-sm sm:text-base flex items-center justify-center gap-2 shadow-[2px_2px_0px_#111827] border-2 border-stone-900 transition"
+              >
+                <span>💬 WhatsApp 傳送過數截圖及單號</span>
+              </a>
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  onclick="copyFpsReceiptPrompt()"
+                  class="tactile-btn flex-1 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white font-black text-xs text-center"
+                >
+                  📋 複製過數確認訊息
+                </button>
+                <details class="shrink-0">
+                  <summary class="cursor-pointer px-2.5 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-600 font-bold text-xs list-none">
+                    ⏸️ 其他收款
+                  </summary>
+                  <div class="absolute z-20 mt-1 p-2.5 rounded-xl bg-white border-2 border-stone-900 shadow-lg text-xs space-y-1 w-44">
+                    <div class="flex justify-between font-bold text-stone-500"><span>PayMe</span><span class="text-rose-600">⏸️ 暫停</span></div>
+                    <div class="flex justify-between font-bold text-stone-500"><span>Visa</span><span class="text-rose-600">⏸️ 暫停</span></div>
+                    <div class="flex justify-between font-bold text-stone-500"><span>八達通</span><span class="text-rose-600">⏸️ 暫停</span></div>
+                  </div>
+                </details>
               </div>
-            </details>
+            </div>
           </div>
         </div>
       </div>
@@ -454,48 +524,54 @@
             </div>
           </div>
 
-          <!-- Customer Contact Details (Collapsible or Compact) -->
-          <details class="p-3.5 rounded-xl bg-stone-50 border border-stone-300" open>
-            <summary class="cursor-pointer flex items-center justify-between text-xs font-black text-stone-800">
-              <span>2. 客人聯絡資料（WhatsApp / IG 對數用）</span>
-              <span class="text-stone-500 font-mono">▾ 收起 / 展開</span>
-            </summary>
-            <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <!-- Customer Contact Details (WhatsApp + IG 雙向核對防錯) -->
+          <div class="p-4 rounded-xl bg-stone-50 border-2 border-stone-900 space-y-3">
+            <div class="flex items-center justify-between border-b border-stone-200 pb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-md bg-stone-900 text-amber-300 font-mono text-xs font-black flex items-center justify-center">2</span>
+                <h3 class="text-sm font-black text-stone-900">客人聯絡資料（WhatsApp / IG 雙向核對）</h3>
+              </div>
+              <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold text-[11px] border border-rose-300">核對相方錯誤</span>
+            </div>
+            <p class="text-[11px] font-bold text-stone-600 leading-relaxed">
+              ⚠️ 請同時填寫 <strong>WhatsApp 電話</strong> 及 <strong>IG 帳號</strong>，咖啡師會與轉數快截圖及單號雙向核對，杜絕入錯數、拎錯單或相方資料不吻合！
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               <div>
-                <label for="cust-name-input" class="text-[11px] font-bold text-stone-600 block mb-1">稱呼</label>
+                <label for="cust-name-input" class="text-[11px] font-black text-stone-700 block mb-1">客人稱呼</label>
                 <input
                   id="cust-name-input"
                   type="text"
                   value="陳小姐"
                   oninput="parseOrderInput()"
                   placeholder="例如：陳小姐"
-                  class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-bold bg-white"
+                  class="w-full rounded-lg border-2 border-stone-900 px-2.5 py-1.5 text-xs font-bold bg-white"
                 />
               </div>
               <div>
-                <label for="cust-whatsapp-input" class="text-[11px] font-bold text-stone-600 block mb-1">WhatsApp 電話</label>
+                <label for="cust-whatsapp-input" class="text-[11px] font-black text-stone-700 block mb-1">WhatsApp 電話（核對雙方電話）</label>
                 <input
                   id="cust-whatsapp-input"
                   type="tel"
                   value="9123 4567"
                   oninput="parseOrderInput()"
                   placeholder="9123 4567"
-                  class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
+                  class="w-full rounded-lg border-2 border-stone-900 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
                 />
               </div>
               <div>
-                <label for="cust-ig-input" class="text-[11px] font-bold text-stone-600 block mb-1">IG 帳號</label>
+                <label for="cust-ig-input" class="text-[11px] font-black text-stone-700 block mb-1">IG 帳號（核對雙方 IG 防止錯誤）</label>
                 <input
                   id="cust-ig-input"
                   type="text"
                   value="@chan_hk"
                   oninput="parseOrderInput()"
                   placeholder="@帳號"
-                  class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
+                  class="w-full rounded-lg border-2 border-stone-900 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
                 />
               </div>
             </div>
-          </details>
+          </div>
         </div>
 
         <!-- Right 5 Cols: 3. 確認張單 & 取消 order -->
@@ -554,11 +630,10 @@
               <button
                 type="button"
                 onclick="resetToZeroAndReload('customer')"
-                class="tactile-btn py-3 px-3 rounded-xl bg-amber-300 hover:bg-amber-400 text-stone-950 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2.5px_2.5px_0px_#1C1917] flex items-center justify-center gap-1.5 transition active:translate-y-0.5 cursor-pointer"
+                class="tactile-btn py-2.5 px-2 rounded-xl bg-stone-200 hover:bg-stone-300 text-stone-900 font-black text-xs sm:text-sm flex items-center justify-center gap-1"
                 title="單號及金額重設為 0 並重新載入"
               >
-                <span class="text-sm">🔄</span>
-                <span>重設 0 / 重新載入</span>
+                <span>🔄 重設 0 / 重新載入</span>
               </button>
             </div>
 
@@ -765,23 +840,13 @@
               </span>
             </div>
           </div>
-          <div class="flex items-center flex-wrap gap-2.5 pt-1">
-            <!-- 大按鍵：🔄 重設 0 / 重新載入 (Reset 0 / Reload) -->
-            <button
-              type="button"
-              onclick="resetToZeroAndReload('brewer')"
-              class="tactile-btn py-3 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[3px_3px_0px_#1C1917] flex items-center gap-2 cursor-pointer transition active:translate-y-0.5"
-              title="單號及訂單歸零重設並重新載入"
-            >
-              <span class="text-base">🔄</span>
-              <span>重設 0 / 重新載入 (Reset 0 / Reload)</span>
-            </button>
-
+          <div class="flex items-center flex-wrap gap-2.5 pt-1 sm:pt-0">
             <!-- 大按鍵：🟢 正常接單 -->
             <button
               type="button"
               onclick="setShopMode('normal')"
-              class="tactile-btn py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-stone-950 text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[3px_3px_0px_#1C1917] flex items-center gap-2 cursor-pointer transition active:translate-y-0.5"
+              id="btn-mode-normal"
+              class="tactile-btn py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[2px_2px_0px_#111827] flex items-center gap-1.5"
             >
               <span class="text-base">🟢</span>
               <span>正常接單</span>
@@ -791,15 +856,50 @@
             <button
               type="button"
               onclick="setShopMode('busy')"
-              class="tactile-btn py-3 px-4 rounded-xl bg-amber-300 hover:bg-amber-200 text-stone-950 text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[3px_3px_0px_#1C1917] flex items-center gap-2 cursor-pointer transition active:translate-y-0.5"
+              id="btn-mode-busy"
+              class="tactile-btn py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[2px_2px_0px_#111827] flex items-center gap-1.5"
             >
               <span class="text-base">🟡</span>
               <span>沖緊稍等</span>
             </button>
 
+            <!-- 大按鍵：🔄 Reset 0 (1次過 reset，付款後不能改) -->
+            <button
+              type="button"
+              onclick="resetToZeroSafe('brewer')"
+              class="tactile-btn py-2.5 px-4 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 text-xs sm:text-sm font-black border-2 border-amber-400 shadow-[2px_2px_0px_#FACC15] flex items-center gap-1.5"
+              title="1次過 reset 單號及金額歸零（付款後不能改）"
+            >
+              <span>🔄 Reset 0</span>
+              <span class="text-[10px] text-stone-400 font-normal hidden sm:inline">(1次過重設/付款後鎖定)</span>
+            </button>
+
+            <!-- 大按鍵：⏱️ Reload (可更新製作時間) -->
+            <button
+              type="button"
+              onclick="reloadBrewTimeAndQueue('brewer')"
+              class="tactile-btn py-2.5 px-4 rounded-xl bg-sky-700 hover:bg-sky-600 text-white text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[2px_2px_0px_#111827] flex items-center gap-1.5"
+              title="刷新訂單並即時更新製作時間戳"
+            >
+              <span>⏱️ Reload</span>
+              <span class="text-[10px] text-sky-200 font-normal hidden sm:inline">(更新製作時間)</span>
+            </button>
+
             <!-- 後台 CRM 核數 & 登出 -->
-            <button type="button" onclick="scrollToCrmSection()" class="tactile-btn py-3 px-3.5 rounded-xl bg-sky-700 hover:bg-sky-600 text-white text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917]">📊 後台 CRM 核數</button>
-            <button type="button" onclick="logoutBrewerWorkspace()" class="tactile-btn py-3 px-3.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs sm:text-sm font-black border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917]">🚪 登出</button>
+            <button
+              type="button"
+              onclick="scrollToCrmSection()"
+              class="px-3 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-black border border-stone-600"
+            >
+              📊 後台 CRM 核數
+            </button>
+            <button
+              type="button"
+              onclick="logoutBrewerWorkspace()"
+              class="px-3 py-2 rounded-xl bg-rose-700 hover:bg-rose-600 text-white text-xs font-black border border-rose-400"
+            >
+              🚪 登出
+            </button>
           </div>
         </div>
 
@@ -892,74 +992,70 @@
                 </div>
               </details>
 
-              <!-- Big Tactile Verify & Unlock Panel -->
-              <div class="p-4 rounded-2xl bg-stone-100 border-2 border-stone-900 shadow-[3px_3px_0px_#1C1917] space-y-3">
+              <!-- Quick Verify Checkboxes (改用超清晰大按鍵) -->
+              <div class="p-4 rounded-xl bg-stone-50 border-2 border-stone-900 space-y-3">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs sm:text-sm font-black text-stone-900">📸 對數解鎖（核對轉數快截圖）</span>
-                  <span class="text-[11px] font-mono text-stone-500 font-bold">FPS Audit Lock</span>
+                  <span class="text-xs font-black text-stone-900">📸 對數解鎖（核對轉數快）</span>
+                  <span class="text-[11px] font-bold text-stone-500">大按鍵觸控操作</span>
                 </div>
 
                 <!-- 大按鍵：⚡ 一鍵對數解鎖 -->
                 <button
                   type="button"
-                  id="btn-quick-verify-all"
                   onclick="simulateCustomerPaid()"
-                  class="tactile-btn w-full py-3.5 px-4 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-stone-950 font-black text-sm sm:text-base border-2 border-stone-900 shadow-[3.5px_3.5px_0px_#1C1917] flex items-center justify-center gap-2 cursor-pointer transition active:translate-y-0.5"
+                  class="tactile-btn w-full py-3.5 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-sm sm:text-base border-2 border-stone-900 shadow-[3px_3px_0px_#111827] flex items-center justify-center gap-2 transition active:scale-95"
                 >
                   <span class="text-lg">⚡</span>
                   <span>一鍵對數解鎖</span>
                 </button>
 
-                <!-- 大按鍵：銀碼啱, 時間啱, 已過數 (3 個大按鍵) -->
+                <!-- 大按鍵：銀碼啱, 時間啱, 已過數 (3 個大觸控鍵) -->
                 <div class="grid grid-cols-3 gap-2">
-                  <!-- 大按鍵 1: 銀碼啱 -->
                   <button
                     type="button"
                     id="btn-chk-amount"
-                    onclick="toggleAuditBigBtn('amount')"
-                    class="tactile-btn py-3.5 px-2 rounded-xl bg-white text-stone-800 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] flex flex-col items-center justify-center gap-1 transition active:translate-y-0.5 cursor-pointer"
+                    onclick="toggleVerificationStep('amount')"
+                    class="py-3 px-2 rounded-xl border-2 border-stone-900 bg-white text-stone-800 font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-sm transition active:scale-95"
                   >
-                    <span id="icon-chk-amount" class="text-base font-mono">⬜</span>
+                    <span id="icon-chk-amount" class="text-base sm:text-lg">◻️</span>
                     <span>銀碼啱</span>
                   </button>
 
-                  <!-- 大按鍵 2: 時間啱 -->
                   <button
                     type="button"
                     id="btn-chk-time"
-                    onclick="toggleAuditBigBtn('time')"
-                    class="tactile-btn py-3.5 px-2 rounded-xl bg-white text-stone-800 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] flex flex-col items-center justify-center gap-1 transition active:translate-y-0.5 cursor-pointer"
+                    onclick="toggleVerificationStep('time')"
+                    class="py-3 px-2 rounded-xl border-2 border-stone-900 bg-white text-stone-800 font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-sm transition active:scale-95"
                   >
-                    <span id="icon-chk-time" class="text-base font-mono">⬜</span>
+                    <span id="icon-chk-time" class="text-base sm:text-lg">◻️</span>
                     <span>時間啱</span>
                   </button>
 
-                  <!-- 大按鍵 3: 已過數 -->
                   <button
                     type="button"
                     id="btn-chk-status"
-                    onclick="toggleAuditBigBtn('status')"
-                    class="tactile-btn py-3.5 px-2 rounded-xl bg-white text-stone-800 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] flex flex-col items-center justify-center gap-1 transition active:translate-y-0.5 cursor-pointer"
+                    onclick="toggleVerificationStep('status')"
+                    class="py-3 px-2 rounded-xl border-2 border-stone-900 bg-white text-stone-800 font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-sm transition active:scale-95"
                   >
-                    <span id="icon-chk-status" class="text-base font-mono">⬜</span>
+                    <span id="icon-chk-status" class="text-base sm:text-lg">◻️</span>
                     <span>已過數</span>
                   </button>
                 </div>
 
-                <!-- Hidden inputs for backward-compatibility -->
-                <input type="checkbox" id="chk-amount" class="hidden" onchange="syncAuditBtnStates()" />
-                <input type="checkbox" id="chk-time" class="hidden" onchange="syncAuditBtnStates()" />
-                <input type="checkbox" id="chk-status" class="hidden" onchange="syncAuditBtnStates()" />
+                <!-- Hidden inputs to preserve logic compatibility -->
+                <input type="checkbox" id="chk-amount" class="hidden" onchange="checkPaymentVerification()" />
+                <input type="checkbox" id="chk-time" class="hidden" onchange="checkPaymentVerification()" />
+                <input type="checkbox" id="chk-status" class="hidden" onchange="checkPaymentVerification()" />
 
-                <!-- 解鎖沖啡按鍵 -->
+                <!-- 大按鍵：🔒 對數後解鎖「🟠 沖緊」 -->
                 <button
                   type="button"
                   id="unlock-brew-btn"
                   disabled
                   onclick="proceedToBrewing()"
-                  class="tactile-btn w-full py-3.5 px-4 rounded-xl bg-emerald-500 text-stone-950 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2.5px_2.5px_0px_#1C1917] transition"
+                  class="tactile-btn w-full py-3.5 px-4 rounded-xl bg-emerald-500 text-stone-950 font-black text-sm sm:text-base border-2 border-stone-900 shadow-[3px_3px_0px_#111827] flex items-center justify-center gap-2 transition"
                 >
-                  🔒 對數完成後解鎖「🟠 沖緊」
+                  🔒 對數後解鎖「🟠 沖緊」
                 </button>
               </div>
             </div>
@@ -1211,173 +1307,114 @@
               </table>
             </div>
 
-            <!-- Sub-Tab 4: Backend Email & Passkey Records + Login Audit -->
-            <!-- Sub-Tab 4: Backend Email & Passkey Records + Login Audit -->
+            <!-- Sub-Tab 4: Backend Email & Passkey Records + 2-Tier Passkey Control -->
             <div id="crm-panel-accounts" class="hidden space-y-4">
-              <!-- 頂部權限與金鑰驗證條 (2組密碼: imowner 專屬全盤 / brewer 4位個人) -->
-              <div class="p-3.5 rounded-xl bg-amber-50 border-2 border-stone-900 shadow-sm flex flex-wrap items-center justify-between gap-3 text-xs">
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="font-black text-stone-900">🔐 權限驗證：</span>
+              <!-- Top Banner & Passkey Mode Indicator -->
+              <div class="p-4 rounded-xl bg-stone-100 border-2 border-stone-900 flex flex-wrap items-center justify-between gap-3 text-xs">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span id="crm-auth-mode-badge" class="px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-mono text-xs font-black">咖啡師專屬 (Brewer Mode)</span>
+                    <strong class="text-sm font-black text-stone-900">後台帳號及核數日期管理</strong>
+                  </div>
+                  <p id="crm-auth-mode-desc" class="text-stone-600 mt-1">
+                    每位登記咖啡師只能檢視及修改自己專屬的 Email、Passkey 及核數日期，其他人不能進入。
+                  </p>
+                </div>
+
+                <!-- Owner Passkey Unlock Box (No "admin" word shown!) -->
+                <div class="flex items-center gap-2 bg-white p-1.5 rounded-xl border border-stone-400">
                   <input
                     type="password"
-                    id="crm-access-key-input"
-                    onkeydown="if(event.key==='Enter') verifyCrmAccountAccess()"
-                    placeholder="輸入 4 位 Passkey 或專屬金鑰 (如 imowner)"
-                    class="rounded-lg border-2 border-stone-900 px-3 py-1.5 text-xs font-mono font-bold bg-white w-64 shadow-inner"
+                    id="owner-passkey-input"
+                    placeholder="輸入擁有人密碼"
+                    class="px-2.5 py-1 text-xs font-mono rounded-lg border border-stone-300 bg-stone-50 w-36"
                   />
                   <button
                     type="button"
-                    onclick="verifyCrmAccountAccess()"
-                    class="tactile-btn py-1.5 px-3.5 rounded-lg bg-stone-900 text-amber-300 font-black text-xs cursor-pointer"
+                    onclick="unlockOwnerMode()"
+                    class="px-3 py-1 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs"
                   >
-                    🔑 驗證進入
+                    解鎖全域管理
                   </button>
-                  <button
-                    type="button"
-                    onclick="lockCrmAccountAccess()"
-                    class="tactile-btn py-1.5 px-3 rounded-lg bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold text-xs cursor-pointer"
-                  >
-                    🔄 恢復咖啡師
-                  </button>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span id="crm-access-badge" class="px-2.5 py-1 rounded-lg bg-stone-900 text-amber-300 font-mono font-black text-xs">
-                    未驗證
-                  </span>
                   <button
                     type="button"
                     onclick="fetchAuthAuditFromServer()"
-                    class="tactile-btn px-2.5 py-1 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-900 font-bold text-xs border border-stone-400 cursor-pointer"
+                    class="px-2.5 py-1 rounded-lg bg-stone-800 text-white font-bold text-xs"
+                    title="刷新資料"
                   >
-                    🔄 刷新
+                    🔄
                   </button>
                 </div>
               </div>
 
-              <!-- 說明及狀態橫額 -->
-              <div id="crm-access-banner" class="p-3 rounded-xl border-2 text-xs font-bold space-y-1"></div>
-
-              <!-- 核數日期篩選 & 匯出 CSV 按鍵列 -->
-              <div class="p-3.5 rounded-xl bg-white border-2 border-stone-900 flex flex-wrap items-center justify-between gap-3 text-xs">
-                <div class="flex items-center gap-2 flex-wrap">
-                  <label for="crm-accounts-audit-date" class="font-black text-stone-900">📅 核數日期：</label>
-                  <input
-                    type="date"
-                    id="crm-accounts-audit-date"
-                    onchange="applyAccountDateFilter()"
-                    class="border-2 border-stone-900 rounded-lg px-2.5 py-1 font-mono text-xs font-bold bg-white"
-                  />
-                  <button
-                    type="button"
-                    onclick="applyAccountDateFilter()"
-                    class="tactile-btn px-2.5 py-1 rounded-lg bg-stone-900 text-amber-300 font-black text-xs cursor-pointer"
-                  >
-                    篩選此日
-                  </button>
-                  <button
-                    type="button"
-                    onclick="resetAccountDateFilter()"
-                    class="tactile-btn px-2 py-1 rounded-lg bg-stone-100 text-stone-800 font-bold text-xs border border-stone-400 cursor-pointer"
-                  >
-                    全部日期
-                  </button>
-                  <span id="crm-accounts-filter-label" class="text-stone-500 font-mono text-[11px] ml-1">顯示全部訂單</span>
+              <!-- Owner Add New Brewer Card (Hidden until "imowner" entered) -->
+              <div id="owner-add-brewer-card" class="hidden p-4 rounded-xl bg-amber-50 border-2 border-stone-900 space-y-3">
+                <div class="flex items-center justify-between border-b border-stone-300 pb-2">
+                  <span class="font-black text-xs sm:text-sm text-stone-900">➕ 手動增加咖啡師 (Brewer)</span>
+                  <span class="text-[11px] font-mono text-amber-900 font-bold">全域管理模式已啟用</span>
                 </div>
-                <button
-                  type="button"
-                  id="btn-export-crm-accounts-csv"
-                  onclick="exportCrmAuditCsv()"
-                  class="tactile-btn py-2 px-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs border-2 border-stone-900 shadow-[2.5px_2.5px_0px_#1C1917] flex items-center gap-1.5 cursor-pointer"
-                >
-                  <span>📥 匯出 CSV 核數表</span>
-                </button>
-              </div>
-
-              <!-- 專屬管理區：手動增加帳號 (imowner 模式專用) -->
-              <div id="crm-owner-add-panel" class="hidden p-3.5 rounded-xl bg-amber-50 border-2 border-stone-900 space-y-2 text-xs">
-                <div class="font-black text-stone-900 flex items-center gap-2">
-                  <span>➕ 手動增加登入帳號</span>
-                  <span class="text-stone-600 font-normal">（可增加新咖啡師電郵及 4 位 Passkey）</span>
-                </div>
-                <div class="flex flex-wrap items-center gap-2">
-                  <input
-                    type="email"
-                    id="manual-add-email"
-                    placeholder="咖啡師電郵 (例如 barista.zita@brew.hk)"
-                    class="border-2 border-stone-900 rounded-lg px-3 py-1.5 text-xs font-mono font-bold bg-white w-64"
-                  />
-                  <input
-                    type="text"
-                    id="manual-add-pin"
-                    maxlength="4"
-                    placeholder="4 位 Passkey (如 8828)"
-                    class="border-2 border-stone-900 rounded-lg px-3 py-1.5 text-xs font-mono font-black bg-white w-40 text-center"
-                  />
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5 items-end">
+                  <div>
+                    <label class="text-[11px] font-black text-stone-700 block mb-1">登記 Email</label>
+                    <input
+                      type="email"
+                      id="new-brewer-email"
+                      placeholder="brewer@cafe.hk"
+                      class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label class="text-[11px] font-black text-stone-700 block mb-1">4 位 Passkey</label>
+                    <input
+                      type="text"
+                      id="new-brewer-pin"
+                      placeholder="例如 0326"
+                      maxlength="4"
+                      class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label class="text-[11px] font-black text-stone-700 block mb-1">核數日期</label>
+                    <input
+                      type="date"
+                      id="new-brewer-audit-date"
+                      class="w-full rounded-lg border border-stone-400 px-2.5 py-1.5 text-xs font-mono font-bold bg-white"
+                    />
+                  </div>
                   <button
                     type="button"
-                    onclick="submitManualAddAccount()"
-                    class="tactile-btn py-1.5 px-3.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] cursor-pointer"
+                    onclick="ownerAddBrewerAccount()"
+                    class="tactile-btn py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs"
                   >
-                    ➕ 增加帳號
+                    確認增加 Brewer
                   </button>
                 </div>
               </div>
 
-              <!-- 咖啡師自營修改區：修改個人資料 (Brewer 模式專用) -->
-              <div id="crm-brewer-self-edit-panel" class="hidden p-3.5 rounded-xl bg-stone-100 border-2 border-stone-900 space-y-2.5 text-xs">
-                <div class="font-black text-stone-900 flex items-center justify-between">
-                  <span>✏️ 修改個人登入資料（Email 及 4 位 Passkey）</span>
-                  <span class="text-[11px] text-stone-600 font-mono" id="self-edit-status-hint">僅限修改本人帳號</span>
-                </div>
-                <div class="flex flex-wrap items-center gap-2">
-                  <input
-                    type="email"
-                    id="self-edit-email"
-                    placeholder="修改後之新電郵"
-                    class="border-2 border-stone-900 rounded-lg px-3 py-1.5 text-xs font-mono font-bold bg-white w-64"
-                  />
-                  <input
-                    type="text"
-                    id="self-edit-pin"
-                    maxlength="4"
-                    placeholder="新 4 位 Passkey"
-                    class="border-2 border-stone-900 rounded-lg px-3 py-1.5 text-xs font-mono font-black bg-white w-36 text-center"
-                  />
-                  <button
-                    type="button"
-                    onclick="submitSelfAccountUpdate()"
-                    class="tactile-btn py-1.5 px-3.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] cursor-pointer"
-                  >
-                    💾 儲存修改
-                  </button>
-                </div>
-              </div>
-
-              <!-- 帳號記錄表 -->
-              <div class="overflow-x-auto">
+              <!-- Accounts Table -->
+              <div class="overflow-x-auto rounded-xl border-2 border-stone-900 bg-white">
                 <table class="w-full text-left border-collapse text-xs">
                   <thead>
                     <tr class="bg-stone-100 border-b-2 border-stone-900 font-black text-stone-800">
                       <th class="p-2.5">登記 Email</th>
-                      <th class="p-2.5">4 位 Passkey</th>
+                      <th class="p-2.5">Passkey</th>
+                      <th class="p-2.5">核數日期</th>
                       <th class="p-2.5">登入次數</th>
-                      <th class="p-2.5">首次登記時間</th>
                       <th class="p-2.5">最後登入時間</th>
-                      <th class="p-2.5">最後登出時間</th>
-                      <th class="p-2.5" id="crm-accounts-action-th">操作</th>
+                      <th class="p-2.5">操作管理</th>
                     </tr>
                   </thead>
                   <tbody id="crm-accounts-tbody" class="divide-y divide-stone-200 font-mono"></tbody>
                 </table>
               </div>
 
-              <!-- 最近登入/登出/登記時間紀錄 -->
+              <!-- Recent Auth Logs (Only visible in Owner mode or for current brewer) -->
               <div class="overflow-x-auto pt-2">
                 <div class="text-xs font-black text-stone-700 mb-1.5 flex items-center justify-between">
-                  <span>🕒 最近登入 / 登出 / 登記 時間紀錄</span>
-                  <span id="crm-auth-logs-scope-label" class="text-[11px] font-mono text-stone-500"></span>
+                  <span>🕒 登入 / 登出 / 登記 活動紀錄</span>
+                  <span id="auth-log-scope-hint" class="text-[11px] text-stone-500 font-normal">（僅顯示所屬活動）</span>
                 </div>
-                <table class="w-full text-left border-collapse text-xs">
+                <table class="w-full text-left border-collapse text-xs bg-white rounded-xl border border-stone-300">
                   <thead>
                     <tr class="bg-stone-50 border-b border-stone-300 font-bold text-stone-600">
                       <th class="p-2">時間</th>
@@ -1393,11 +1430,417 @@
             </div>
           </div>
         </div>
-
       </div>
     </section>
 
+    <!-- =================================================================== -->
+    <!-- VIEW 3: ✨ 3D 飛入世界 (SCROLL-WORLD VIEW & USAGE MANUAL)           -->
+    <!-- =================================================================== -->
+    <section id="view-scroll-world" class="hidden space-y-6">
+
+      <!-- Header Banner & Action Bar -->
+      <div class="tactile-card p-5 bg-[#1C1917] text-white border-2 border-stone-900 shadow-md">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-stone-950 font-mono text-xs font-black">@SCROLL-WORLD SKILL</span>
+              <span class="text-xs font-mono font-bold text-emerald-400">● 60 FPS 物理滾動引擎已掛載</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-white mt-1">
+              ✨ 3D 飛入微觀咖啡世界 · 零 Cut 鏡頭穿透
+            </h2>
+            <p class="text-xs sm:text-sm text-stone-300 mt-1 leading-relaxed">
+              由海拔 2,200 米等角微縮咖啡莊園，一路俯衝穿透進入磨豆機鈦合金刀盤與黃金 Crema 雙層杯！滾動滑鼠控制時間軸。
+            </p>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="flex items-center flex-wrap gap-2 shrink-0">
+            <a
+              href="/scroll-world/index.html"
+              target="_blank"
+              class="tactile-btn px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs flex items-center gap-1.5 shadow-sm transition"
+            >
+              <span>🚀 全螢幕獨立體驗 ↗</span>
+            </a>
+            <button
+              type="button"
+              onclick="toggleScrollWorldAudio()"
+              id="brewSoundBtn"
+              class="tactile-btn px-3 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-white font-bold text-xs flex items-center gap-1.5 transition"
+            >
+              <span id="brewSoundIcon">🔇</span> <span id="brewSoundLabel">開啟環境音效</span>
+            </button>
+            <button
+              type="button"
+              onclick="switchMainView('customer')"
+              class="tactile-btn px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs flex items-center gap-1 transition"
+            >
+              <span>📱 返去落單</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 3D Scrubber Canvas Box -->
+      <div class="tactile-card p-4 sm:p-6 bg-[#080B11] text-white border-2 border-stone-900 shadow-xl relative overflow-hidden">
+        
+        <!-- Top Telemetry Row -->
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3 mb-4 font-mono text-xs">
+          <div class="flex items-center gap-3">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-600 -ml-5.5"></span>
+            <span class="font-black text-amber-400 tracking-wider">LIVE FPV CAMERA</span>
+            <span class="text-stone-500">|</span>
+            <span id="brewFpsBadge" class="text-emerald-400 font-bold">60 FPS</span>
+          </div>
+
+          <div class="flex items-center gap-4 text-[11px]">
+            <div>
+              <span class="text-stone-400">DEPTH:</span>
+              <strong id="brewDepthText" class="text-amber-400 font-mono ml-1">0.00 m</strong>
+            </div>
+            <div>
+              <span class="text-stone-400">ZOOM:</span>
+              <strong id="brewZoomText" class="text-cyan-400 font-mono ml-1">1.00x</strong>
+            </div>
+            <div>
+              <span class="text-stone-400">STAGE:</span>
+              <strong id="brewStageText" class="text-white font-mono ml-1">01 / 04</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D World Canvas Display Frame -->
+        <div class="relative w-full aspect-video sm:aspect-[21/9] rounded-xl overflow-hidden border-2 border-stone-800 bg-black shadow-inner flex items-center justify-center">
+          <canvas id="brewWorldCanvas" class="w-full h-full object-cover block"></canvas>
+
+          <!-- Floating Stage Badge on Canvas -->
+          <div class="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 font-mono text-xs text-amber-400 font-bold pointer-events-none">
+            <span id="brewCanvasStageTitle">01. 雲霧等角咖啡微縮莊園 (Isometric Diorama)</span>
+          </div>
+
+          <!-- Drag / Scroll Hint Overlay -->
+          <div class="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10 font-mono text-[11px] text-stone-300 pointer-events-none flex items-center gap-1.5">
+            <span class="animate-bounce">↕</span>
+            <span>滑鼠滾輪 / 拖動滑塊搓動時間軸</span>
+          </div>
+        </div>
+
+        <!-- Timeline Scrub Slider & Checkpoints -->
+        <div class="mt-5 space-y-3 font-mono">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-stone-400">TIME SCRUBBER (進度: <strong id="brewProgressLabel" class="text-amber-400 font-mono">0%</strong>)</span>
+            <span class="text-[11px] text-stone-400 font-normal">GOP=1 All-Intra 零卡頓補間</span>
+          </div>
+
+          <!-- Interactive Range Input -->
+          <input
+            type="range"
+            id="brewTimeSlider"
+            min="0"
+            max="1000"
+            value="0"
+            oninput="handleBrewSliderInput(this.value)"
+            class="w-full h-2.5 bg-stone-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+          />
+
+          <!-- 4 Checkpoints Quick Jumps -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs">
+            <button
+              type="button"
+              onclick="jumpBrewScene(0)"
+              class="px-2.5 py-2 rounded-lg bg-stone-800/80 hover:bg-stone-700 border border-stone-700 text-left transition text-stone-200"
+            >
+              <div class="text-[10px] text-amber-400 font-bold">SCENE 01 (0%)</div>
+              <div class="font-bold truncate">雲霧等角莊園</div>
+            </button>
+            <button
+              type="button"
+              onclick="jumpBrewScene(0.28)"
+              class="px-2.5 py-2 rounded-lg bg-stone-800/80 hover:bg-stone-700 border border-stone-700 text-left transition text-stone-200"
+            >
+              <div class="text-[10px] text-cyan-400 font-bold">SCENE 02 (28%)</div>
+              <div class="font-bold truncate">飛入工坊木門</div>
+            </button>
+            <button
+              type="button"
+              onclick="jumpBrewScene(0.55)"
+              class="px-2.5 py-2 rounded-lg bg-stone-800/80 hover:bg-stone-700 border border-stone-700 text-left transition text-stone-200"
+            >
+              <div class="text-[10px] text-rose-400 font-bold">SCENE 03 (55%)</div>
+              <div class="font-bold truncate">磨豆鋼刀高壓</div>
+            </button>
+            <button
+              type="button"
+              onclick="jumpBrewScene(0.85)"
+              class="px-2.5 py-2 rounded-lg bg-stone-800/80 hover:bg-stone-700 border border-stone-700 text-left transition text-stone-200"
+            >
+              <div class="text-[10px] text-amber-300 font-bold">SCENE 04 (85%)</div>
+              <div class="font-bold truncate">雙層玻璃杯</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- =============================================================== -->
+      <!-- @SCROLL-WORLD 使用說明與安裝指南手冊 (USAGE & INSTALL MANUAL)      -->
+      <!-- =============================================================== -->
+      <div class="tactile-card p-6 bg-white space-y-6 border-2 border-stone-900 shadow-sm">
+        
+        <div class="border-b-2 border-stone-900 pb-3 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-mono text-xs font-black">DOCS</span>
+              <h3 class="text-lg sm:text-xl font-black text-stone-900">📖 @scroll-world 實戰安裝＋使用說明</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-stone-600 mt-0.5">
+              點解唔用 Three.js 笨重 3D？怎樣用 AI 影片生成 + GOP=1 轉碼打造零 Cut 鏡頭穿透？
+            </p>
+          </div>
+          <a
+            href="/scroll-world/README.md"
+            target="_blank"
+            class="px-3 py-1.5 rounded-lg border border-stone-300 bg-stone-50 hover:bg-stone-100 text-stone-700 font-mono text-xs font-bold transition flex items-center gap-1"
+          >
+            <span>📄 查閱原始 README ↗</span>
+          </a>
+        </div>
+
+        <!-- 3 大核心優勢對比 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs leading-relaxed">
+          <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-300 space-y-1">
+            <div class="font-black text-amber-900 text-sm flex items-center gap-1">
+              <span>⚡</span> <span>極速載入 · 零 3D 負擔</span>
+            </div>
+            <p class="text-stone-700">
+              傳統 3D 需載入 30-50MB 模型與紋理，低配手機極易斷片崩潰。本方案採用輕量影片流，首幀秒開。
+            </p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 space-y-1">
+            <div class="font-black text-emerald-900 text-sm flex items-center gap-1">
+              <span>🎬</span> <span>電影級丁達爾光效</span>
+            </div>
+            <p class="text-stone-700">
+              AI 預渲染原生具備微距景深、真實流體與霧氣光影，無需編寫複雜 WebGL Shader。
+            </p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-sky-50 border border-sky-300 space-y-1">
+            <div class="font-black text-sky-900 text-sm flex items-center gap-1">
+              <span>🎯</span> <span>商業轉化翻倍</span>
+            </div>
+            <p class="text-stone-700">
+              訪客由外到內沉浸穿透，故事感十足；旅程終點無縫對接「轉數快 FPS 置頂過數」，極大催谷落單率。
+            </p>
+          </div>
+        </div>
+
+        <!-- 5 步全鏈路製作流水線 (Pipeline SOP) -->
+        <div class="space-y-3 pt-2">
+          <h4 class="font-black text-sm text-stone-900 flex items-center gap-2">
+            <span class="w-5 h-5 rounded bg-stone-900 text-white font-mono text-xs flex items-center justify-center font-bold">1</span>
+            <span>5 步流水線 SOP（由 AI 生成到 Web 上線）</span>
+          </h4>
+          
+          <div class="space-y-2 text-xs font-sans">
+            <div class="p-3 rounded-xl bg-stone-50 border border-stone-200">
+              <strong class="text-stone-900 font-mono">Step 1: AI Isometric Diorama 生成</strong>
+              <p class="text-stone-600 mt-0.5">使用 Midjourney / Flux，鎖定關鍵字 <code class="bg-stone-200 px-1 py-0.5 rounded font-mono">isometric diorama, cross-section cutaway, tilt-shift miniature</code> 生成等角微縮建築原圖。</p>
+            </div>
+            <div class="p-3 rounded-xl bg-stone-50 border border-stone-200">
+              <strong class="text-stone-900 font-mono">Step 2: Camera Dive 鏡頭穿透片</strong>
+              <p class="text-stone-600 mt-0.5">將原圖餵入 Runway Gen-3 / Kling / Luma，Prompt 加上 <code class="bg-stone-200 px-1 py-0.5 rounded font-mono">FPV continuous extreme camera dive, zoom into window, passing through without cut</code> 生成 4-6 秒飛入片。</p>
+            </div>
+            <div class="p-3 rounded-xl bg-stone-50 border border-stone-200">
+              <strong class="text-stone-900 font-mono">Step 3: 提取尾幀作為下一段首幀 (Seamless Connectors)</strong>
+              <p class="text-stone-600 mt-0.5">用 FFmpeg 提取上一段影片最後一幀，作為下一段（例如磨豆機刀盤）起始幀，確保兩段片段首尾 100% 咬合零跳動。</p>
+            </div>
+            <div class="p-3 rounded-xl bg-stone-50 border border-stone-200">
+              <strong class="text-stone-900 font-mono">Step 4: FFmpeg GOP=1 All-Intra 轉碼（關鍵必做）</strong>
+              <p class="text-stone-600 mt-0.5">強制每幀皆為關鍵幀，消除常規長 GOP 影片在 JavaScript 搓動時間軸時的掉幀與反白卡頓。</p>
+            </div>
+            <div class="p-3 rounded-xl bg-stone-50 border border-stone-200">
+              <strong class="text-stone-900 font-mono">Step 5: 掛載 Vanilla JS 滾動引擎</strong>
+              <p class="text-stone-600 mt-0.5">將影片掛入 <code class="bg-stone-200 px-1 py-0.5 rounded font-mono">ScrollWorldScrubber</code>，由虛擬滾動軌道驅動，即時映射進度。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 常用代碼與轉碼指令複製器 -->
+        <div class="space-y-3 pt-2">
+          <h4 class="font-black text-sm text-stone-900 flex items-center gap-2">
+            <span class="w-5 h-5 rounded bg-stone-900 text-white font-mono text-xs flex items-center justify-center font-bold">2</span>
+            <span>快速代碼複製器 (Code Snippets)</span>
+          </h4>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 text-xs font-mono">
+            <!-- Snippet A: FFmpeg 指令 -->
+            <div class="p-3.5 rounded-xl bg-stone-900 text-stone-100 border border-stone-800 space-y-2 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-stone-400 mb-1">
+                  <span class="font-bold text-amber-400">FFmpeg GOP=1 轉碼指令</span>
+                  <span>Terminal</span>
+                </div>
+                <pre class="overflow-x-auto text-[11px] text-emerald-400 leading-relaxed bg-black/50 p-2.5 rounded-lg border border-white/10">ffmpeg -i input_dive.mp4 \
+  -c:v libx264 -g 1 -keyint_min 1 \
+  -crf 22 -preset slow -an \
+  -movflags +faststart output_gop1.mp4</pre>
+              </div>
+              <button
+                type="button"
+                onclick="copyCodeText('ffmpeg')"
+                class="tactile-btn mt-2 py-1.5 px-3 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-[11px] text-center"
+              >
+                📋 複製 FFmpeg 指令
+              </button>
+            </div>
+
+            <!-- Snippet B: Vanilla JS 調用 -->
+            <div class="p-3.5 rounded-xl bg-stone-900 text-stone-100 border border-stone-800 space-y-2 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-stone-400 mb-1">
+                  <span class="font-bold text-cyan-400">Vanilla JS 引擎初始化</span>
+                  <span>ES Module</span>
+                </div>
+                <pre class="overflow-x-auto text-[11px] text-slate-200 leading-relaxed bg-black/50 p-2.5 rounded-lg border border-white/10">import { ScrollWorldScrubber } from './src/scrubber.js';
+
+const engine = new ScrollWorldScrubber({
+  canvas: document.getElementById('worldCanvas'),
+  lerpFactor: 0.08,
+  onProgress: (p) => console.log('進度:', p)
+});</pre>
+              </div>
+              <button
+                type="button"
+                onclick="copyCodeText('js')"
+                class="tactile-btn mt-2 py-1.5 px-3 rounded-lg bg-cyan-400 hover:bg-cyan-300 text-stone-950 font-black text-[11px] text-center"
+              >
+                📋 複製 JS 調用代碼
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 檔案與資源路徑一覽 -->
+        <div class="p-4 rounded-xl bg-stone-100 border border-stone-300 space-y-2 text-xs font-mono">
+          <div class="font-bold text-stone-800">📂 本項目中已安裝的相關檔案：</div>
+          <ul class="space-y-1 text-stone-600 list-disc list-inside">
+            <li><strong>Skill 規格與 5 份 References：</strong> <code class="text-stone-900 font-bold">skills/scroll-world/</code> 及 <code class="text-stone-900 font-bold">Skillis/scroll-world/</code></li>
+            <li><strong>獨立運行示範專案：</strong> <code class="text-stone-900 font-bold">projects/scroll-world/</code> (含 index.html, scrubber.js, main.css)</li>
+            <li><strong>瀏覽器線上預覽入口：</strong> <a href="/scroll-world/index.html" target="_blank" class="text-amber-800 font-bold underline">/scroll-world/index.html ↗</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </section>
+
   </main>
+
+  <!-- ===================================================================== -->
+  <!-- @SCROLL-WORLD 專屬使用說明與安裝指南彈窗 (MODAL)                       -->
+  <!-- ===================================================================== -->
+  <div id="scrollWorldDocModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="tactile-card max-w-3xl w-full max-h-[90vh] bg-white rounded-2xl overflow-hidden flex flex-col border-2 border-stone-900 shadow-2xl my-auto">
+      <!-- Modal Header -->
+      <div class="p-4 sm:p-5 bg-stone-900 text-white flex items-center justify-between border-b-2 border-stone-900 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-lg bg-amber-400 text-stone-950 font-black flex items-center justify-center text-base">📖</span>
+          <div>
+            <h3 class="font-black text-sm sm:text-base text-white tracking-wide">
+              @scroll-world 實戰安裝＋使用手冊
+            </h3>
+            <p class="text-[11px] text-stone-400 font-mono">Scroll-Driven 3D Dive-in World Landing Page Architecture</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onclick="toggleScrollWorldDocModal()"
+          class="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white font-mono text-sm font-black flex items-center justify-center transition cursor-pointer"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-5 text-xs text-stone-700 leading-relaxed font-sans">
+        
+        <!-- Summary Box -->
+        <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-300">
+          <h4 class="font-black text-amber-950 text-sm mb-1">💡 一分鐘睇明 @scroll-world 核心</h4>
+          <p class="text-stone-700 leading-relaxed">
+            訪客一 Scroll，鏡頭由等角微縮建築一路飛入咖啡豆磨豆機、再穿透至高壓蒸汽萃取與雙層玻璃杯，<strong>全程零剪接（Zero-Cut）</strong>。
+            鏡頭真係向前郁，Scroll 只係控制時間軸！背後唔使載入幾十 MB 笨重 Three.js 模型，而是用 <strong>AI 預渲染影片 + GOP=1 全關鍵幀 + 原生 Vanilla JS 物理阻尼引擎</strong>。
+          </p>
+        </div>
+
+        <!-- 5 Steps Pipeline -->
+        <div class="space-y-2">
+          <h4 class="font-black text-stone-900 text-sm">🛠️ 5 步流水線製作 SOP</h4>
+          <div class="space-y-1.5 font-mono text-[11px]">
+            <div class="p-2.5 bg-stone-50 rounded-lg border border-stone-200">
+              <span class="font-black text-amber-800">1. Isometric Diorama:</span>
+              <span class="text-stone-700"> 用 Midjourney/Flux 生成帶微縮截面（cross-section cutaway）嘅等角場景圖。</span>
+            </div>
+            <div class="p-2.5 bg-stone-50 rounded-lg border border-stone-200">
+              <span class="font-black text-cyan-800">2. Camera Dive 片段:</span>
+              <span class="text-stone-700"> Runway Gen-3/Kling 加 Prompt <code class="bg-stone-200 px-1 py-0.5 rounded font-bold">continuous camera dive, zoom into window</code> 生成 4-6 秒飛入片。</span>
+            </div>
+            <div class="p-2.5 bg-stone-50 rounded-lg border border-stone-200">
+              <span class="font-black text-emerald-800">3. 首尾無縫銜接:</span>
+              <span class="text-stone-700"> 截取上一段 End Frame 作為下一段 Start Frame，兩段影片首尾 100% 咬合。</span>
+            </div>
+            <div class="p-2.5 bg-stone-50 rounded-lg border border-stone-200">
+              <span class="font-black text-rose-800">4. FFmpeg GOP=1 轉碼:</span>
+              <span class="text-stone-700"> 強制每幀都是關鍵幀（All-Intra），徹底解決 JS <code class="bg-stone-200 px-1 py-0.5 rounded font-bold">currentTime</code> 搓動掉幀問題。</span>
+            </div>
+            <div class="p-2.5 bg-stone-50 rounded-lg border border-stone-200">
+              <span class="font-black text-purple-800">5. Vanilla JS 引擎驅動:</span>
+              <span class="text-stone-700"> 透過 <code class="bg-stone-200 px-1 py-0.5 rounded font-bold">ScrollWorldScrubber</code> 平滑補間插值，輸出至 Canvas 或 Video 雙緩衝。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Code Setup -->
+        <div class="space-y-2">
+          <h4 class="font-black text-stone-900 text-sm">💻 如何在其他頁面 / Next.js / Vue 中安裝</h4>
+          <pre class="bg-stone-900 text-emerald-400 p-3.5 rounded-xl font-mono text-[11px] overflow-x-auto leading-relaxed border border-stone-800">// 1. 引入引擎
+import { ScrollWorldScrubber } from './src/scrubber.js';
+
+// 2. 初始化並綁定畫布
+const scrubber = new ScrollWorldScrubber({
+  canvas: document.getElementById('worldCanvas'),
+  lerpFactor: 0.08, // 物理慣性平滑因子
+  onProgress: (progress, velocity) => {
+    console.log(`即時進度: ${(progress * 100).toFixed(1)}%`);
+  }
+});</pre>
+        </div>
+
+        <!-- FFmpeg Command -->
+        <div class="space-y-2">
+          <h4 class="font-black text-stone-900 text-sm">🎞️ FFmpeg GOP=1 極速轉碼指令</h4>
+          <pre class="bg-stone-900 text-amber-300 p-3.5 rounded-xl font-mono text-[11px] overflow-x-auto leading-relaxed border border-stone-800">ffmpeg -i input_dive.mp4 -c:v libx264 -g 1 -keyint_min 1 -crf 22 -preset slow -an -movflags +faststart output_gop1.mp4</pre>
+        </div>
+
+        <!-- Links to Full Project -->
+        <div class="pt-2 border-t border-stone-200 flex flex-wrap items-center justify-between gap-3">
+          <div class="text-[11px] text-stone-500 font-mono">
+            已安裝專案：<strong class="text-stone-800">projects/scroll-world/</strong> · Skill：<strong class="text-stone-800">skills/scroll-world/</strong>
+          </div>
+          <div class="flex items-center gap-2">
+            <a
+              href="/scroll-world/index.html"
+              target="_blank"
+              class="tactile-btn px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs flex items-center gap-1 shadow-sm transition"
+            >
+              <span>🚀 打開獨立全螢幕體驗 ↗</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- Toast Notification -->
   <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-stone-900 text-white border-2 border-amber-400 px-4 py-3 rounded-xl shadow-lg text-xs sm:text-sm font-bold flex items-center gap-2">
@@ -1574,27 +2017,546 @@
       if (el) el.classList.toggle('hidden');
     }
 
-    // 4. Switch Between "客人 order" and "咖啡師 Brewer"
+    // 4. Switch Between "客人 order", "咖啡師 Brewer", and "✨ 3D 飛入世界"
     function switchMainView(view) {
       currentView = view;
       const custSec = document.getElementById('view-customer');
       const brewSec = document.getElementById('view-brewer');
+      const scrollSec = document.getElementById('view-scroll-world');
       const btnCust = document.getElementById('tab-btn-customer');
       const btnBrew = document.getElementById('tab-btn-brewer');
+      const btnScroll = document.getElementById('tab-btn-scroll-world');
 
       if (view === 'customer') {
         custSec.classList.remove('hidden');
         brewSec.classList.add('hidden');
+        if (scrollSec) scrollSec.classList.add('hidden');
         btnCust.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition bg-amber-400 text-stone-950';
         btnBrew.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-stone-300 hover:text-white flex items-center gap-1.5';
-      } else {
+        if (btnScroll) btnScroll.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-stone-300 hover:text-white flex items-center gap-1.5';
+      } else if (view === 'brewer') {
         custSec.classList.add('hidden');
         brewSec.classList.remove('hidden');
+        if (scrollSec) scrollSec.classList.add('hidden');
         btnBrew.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition bg-amber-400 text-stone-950 flex items-center gap-1.5';
         btnCust.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-stone-300 hover:text-white';
+        if (btnScroll) btnScroll.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-stone-300 hover:text-white flex items-center gap-1.5';
         renderBrewerAuthGateOrWorkspace();
+      } else if (view === 'scroll-world') {
+        custSec.classList.add('hidden');
+        brewSec.classList.add('hidden');
+        if (scrollSec) scrollSec.classList.remove('hidden');
+        if (btnScroll) btnScroll.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition bg-amber-400 text-stone-950 flex items-center gap-1.5';
+        btnCust.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-stone-300 hover:text-white';
+        btnBrew.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black transition text-stone-300 hover:text-white flex items-center gap-1.5';
+        initScrollWorldInBrew();
       }
       renderAllOrderViews();
+    }
+
+    // Modal Helper for @scroll-world Documentation
+    function toggleScrollWorldDocModal() {
+      const modal = document.getElementById('scrollWorldDocModal');
+      if (modal) {
+        modal.classList.toggle('hidden');
+        modal.classList.toggle('flex');
+      }
+    }
+
+    function copyCodeText(type) {
+      let code = '';
+      if (type === 'ffmpeg') {
+        code = `ffmpeg -i input_dive.mp4 -c:v libx264 -g 1 -keyint_min 1 -crf 22 -preset slow -an -movflags +faststart output_gop1.mp4`;
+      } else if (type === 'js') {
+        code = `import { ScrollWorldScrubber } from './src/scrubber.js';\n\nconst engine = new ScrollWorldScrubber({\n  canvas: document.getElementById('worldCanvas'),\n  lerpFactor: 0.08,\n  onProgress: (p) => console.log('進度:', p)\n});`;
+      }
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('📋 已複製代碼至剪貼簿！');
+      });
+    }
+
+    // =========================================================================
+    // @SCROLL-WORLD EMBEDDED ENGINE FOR BREW.HTML (60FPS SCRUBBER & AUDIO)
+    // =========================================================================
+    let brewScrollProgress = 0;
+    let targetBrewScrollProgress = 0;
+    let brewScrubVelocity = 0;
+    let brewCanvasInitialized = false;
+    let brewAudioCtx = null;
+    let isBrewAudioOn = false;
+    let brewWindOsc = null;
+    let brewWindGain = null;
+    let brewGrinderOsc = null;
+    let brewGrinderGain = null;
+
+    const brewParticles = [];
+    for (let i = 0; i < 90; i++) {
+      brewParticles.push({
+        x: Math.random() * 1200,
+        y: Math.random() * 600,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        size: Math.random() * 2.5 + 1,
+        color: Math.random() > 0.4 ? 'rgba(245, 158, 11, ' : 'rgba(255, 255, 255, '
+      });
+    }
+
+    function initScrollWorldInBrew() {
+      const canvas = document.getElementById('brewWorldCanvas');
+      if (!canvas) return;
+
+      const resize = () => {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = (rect.width || 800) * dpr;
+        canvas.height = (rect.height || 450) * dpr;
+      };
+      resize();
+      window.addEventListener('resize', resize, { passive: true });
+
+      // Canvas 滾輪與拖曳搓動監聽
+      canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY * 0.0006;
+        targetBrewScrollProgress = Math.min(Math.max(targetBrewScrollProgress + delta, 0), 1);
+        const slider = document.getElementById('brewTimeSlider');
+        if (slider) slider.value = Math.round(targetBrewScrollProgress * 1000);
+      }, { passive: false });
+
+      let isDragging = false;
+      let startX = 0;
+      canvas.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = (e.clientX - startX) * 0.0015;
+        startX = e.clientX;
+        targetBrewScrollProgress = Math.min(Math.max(targetBrewScrollProgress + dx, 0), 1);
+        const slider = document.getElementById('brewTimeSlider');
+        if (slider) slider.value = Math.round(targetBrewScrollProgress * 1000);
+      });
+      window.addEventListener('mouseup', () => { isDragging = false; });
+
+      // 觸控支援
+      let touchStartX = 0;
+      canvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 0) touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      canvas.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 0) {
+          const dx = (e.touches[0].clientX - touchStartX) * 0.002;
+          touchStartX = e.touches[0].clientX;
+          targetBrewScrollProgress = Math.min(Math.max(targetBrewScrollProgress - dx, 0), 1);
+          const slider = document.getElementById('brewTimeSlider');
+          if (slider) slider.value = Math.round(targetBrewScrollProgress * 1000);
+        }
+      }, { passive: true });
+
+      if (!brewCanvasInitialized) {
+        brewCanvasInitialized = true;
+        startBrewLoop();
+      }
+    }
+
+    function handleBrewSliderInput(val) {
+      targetBrewScrollProgress = Number(val) / 1000;
+    }
+
+    function jumpBrewScene(target) {
+      targetBrewScrollProgress = target;
+      const slider = document.getElementById('brewTimeSlider');
+      if (slider) slider.value = Math.round(target * 1000);
+    }
+
+    function startBrewLoop() {
+      const canvas = document.getElementById('brewWorldCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const render = () => {
+        const prevP = brewScrollProgress;
+        brewScrollProgress += (targetBrewScrollProgress - brewScrollProgress) * 0.09;
+        brewScrubVelocity = Math.abs(brewScrollProgress - prevP);
+
+        // 更新遙測標籤
+        updateBrewTelemetry(brewScrollProgress, brewScrubVelocity);
+
+        // 根據進度繪製 4 幕微觀世界
+        drawBrewWorldScenes(ctx, canvas, brewScrollProgress, brewScrubVelocity);
+
+        requestAnimationFrame(render);
+      };
+      requestAnimationFrame(render);
+    }
+
+    function updateBrewTelemetry(p, vel) {
+      const depthEl = document.getElementById('brewDepthText');
+      const zoomEl = document.getElementById('brewZoomText');
+      const stageEl = document.getElementById('brewStageText');
+      const progressLabel = document.getElementById('brewProgressLabel');
+      const titleEl = document.getElementById('brewCanvasStageTitle');
+
+      if (progressLabel) progressLabel.textContent = `${Math.round(p * 100)}%`;
+      if (depthEl) depthEl.textContent = `${(p * 420).toFixed(2)} m`;
+      if (zoomEl) zoomEl.textContent = `${(1.0 + Math.pow(p, 2.2) * 99).toFixed(2)}x`;
+
+      let stageName = '';
+      if (p < 0.25) {
+        if (stageEl) stageEl.textContent = '01 / 04';
+        stageName = '01. 雲霧等角咖啡微縮莊園 (Isometric Diorama)';
+      } else if (p < 0.50) {
+        if (stageEl) stageEl.textContent = '02 / 04';
+        stageName = '02. 穿透工坊木門 · 直逼磨豆機 (Camera Dive)';
+      } else if (p < 0.75) {
+        if (stageEl) stageEl.textContent = '03 / 04';
+        stageName = '03. 微米鈦合金刀盤 ＆ 9 Bar 蒸汽 (Micro Burrs & Steam)';
+      } else {
+        if (stageEl) stageEl.textContent = '04 / 04';
+        stageName = '04. 高硼矽雙層玻璃杯 · 黃金 Crema (Final Immersion)';
+      }
+      if (titleEl) titleEl.textContent = stageName;
+
+      // 更新音頻音調
+      if (isBrewAudioOn && brewAudioCtx && brewWindOsc) {
+        const targetPitch = 110 + p * 220 + vel * 3200;
+        brewWindOsc.frequency.setTargetAtTime(targetPitch, brewAudioCtx.currentTime, 0.1);
+        if (p > 0.25 && p < 0.75) {
+          brewGrinderGain.gain.setTargetAtTime(Math.min(0.04 + vel * 7, 0.16), brewAudioCtx.currentTime, 0.08);
+        } else {
+          brewGrinderGain.gain.setTargetAtTime(0, brewAudioCtx.currentTime, 0.2);
+        }
+      }
+    }
+
+    function drawBrewWorldScenes(ctx, canvas, p, vel) {
+      const w = canvas.width;
+      const h = canvas.height;
+      if (w <= 0 || h <= 0) return;
+
+      if (p < 0.25) {
+        const localP = p / 0.25;
+        drawDioramaScene(ctx, w, h, localP);
+      } else if (p < 0.50) {
+        const localP = (p - 0.25) / 0.25;
+        drawGrinderDiveScene(ctx, w, h, localP);
+      } else if (p < 0.75) {
+        const localP = (p - 0.50) / 0.25;
+        drawSteamBurrScene(ctx, w, h, localP);
+      } else {
+        const localP = (p - 0.75) / 0.25;
+        drawGlassCupScene(ctx, w, h, localP);
+      }
+    }
+
+    // 繪製場景 1: 等角莊園 (Isometric Diorama)
+    function drawDioramaScene(ctx, w, h, p) {
+      const cx = w * 0.5;
+      const cy = h * 0.54;
+      const scale = 1 + p * 2.2;
+
+      ctx.save();
+      ctx.fillStyle = '#060A12';
+      ctx.fillRect(0, 0, w, h);
+
+      const bg = ctx.createRadialGradient(cx, cy * 0.7, 30, cx, cy * 0.7, w * 0.7);
+      bg.addColorStop(0, '#1E293B');
+      bg.addColorStop(0.5, '#0F172A');
+      bg.addColorStop(1, '#05070A');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+
+      // 頂部菱形草坪 (Isometric Ground)
+      ctx.beginPath();
+      ctx.moveTo(0, -90);
+      ctx.lineTo(190, 0);
+      ctx.lineTo(0, 90);
+      ctx.lineTo(-190, 0);
+      ctx.closePath();
+      const g = ctx.createLinearGradient(-190, -90, 190, 90);
+      g.addColorStop(0, '#15803D');
+      g.addColorStop(1, '#14532D');
+      ctx.fillStyle = g;
+      ctx.fill();
+      ctx.strokeStyle = '#4ADE80';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // 岩石側面厚度
+      ctx.beginPath();
+      ctx.moveTo(-190, 0);
+      ctx.lineTo(0, 90);
+      ctx.lineTo(0, 180);
+      ctx.lineTo(-190, 90);
+      ctx.closePath();
+      ctx.fillStyle = '#1C1917';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(0, 90);
+      ctx.lineTo(190, 0);
+      ctx.lineTo(190, 90);
+      ctx.lineTo(0, 180);
+      ctx.closePath();
+      ctx.fillStyle = '#292524';
+      ctx.fill();
+
+      // 咖啡工坊小建築
+      ctx.fillStyle = '#B45309';
+      ctx.fillRect(-35, -60, 70, 55);
+      ctx.beginPath();
+      ctx.moveTo(-45, -60);
+      ctx.lineTo(0, -100);
+      ctx.lineTo(45, -60);
+      ctx.closePath();
+      ctx.fillStyle = '#78350F';
+      ctx.fill();
+
+      // 亮燈窗戶 (Zoom in Target)
+      ctx.fillStyle = '#FBBF24';
+      ctx.shadowColor = '#F59E0B';
+      ctx.shadowBlur = 20;
+      ctx.fillRect(-12, -40, 24, 25);
+      ctx.shadowBlur = 0;
+
+      ctx.restore();
+      drawBrewParticles(ctx, w, h, p, '#F59E0B');
+    }
+
+    // 繪製場景 2: 飛入黃銅磨豆機 (Camera Dive)
+    function drawGrinderDiveScene(ctx, w, h, p) {
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+      const scale = 1 + p * 3.0;
+
+      ctx.save();
+      ctx.fillStyle = '#0B0907';
+      ctx.fillRect(0, 0, w, h);
+
+      const glow = ctx.createRadialGradient(cx, cy, 20, cx, cy, w * 0.6);
+      glow.addColorStop(0, '#78350F');
+      glow.addColorStop(0.6, '#1C1917');
+      glow.addColorStop(1, '#05070A');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+
+      // 黃銅漏斗 (Hopper Cone)
+      ctx.beginPath();
+      ctx.moveTo(-130, -180);
+      ctx.lineTo(130, -180);
+      ctx.lineTo(50, 50);
+      ctx.lineTo(-50, 50);
+      ctx.closePath();
+      const brass = ctx.createLinearGradient(-130, -180, 130, 50);
+      brass.addColorStop(0, '#F59E0B');
+      brass.addColorStop(0.3, '#FDE68A');
+      brass.addColorStop(0.7, '#D97706');
+      brass.addColorStop(1, '#78350F');
+      ctx.fillStyle = brass;
+      ctx.fill();
+
+      // 漏斗內滾動咖啡豆
+      for (let i = 0; i < 14; i++) {
+        const a = (i / 14) * Math.PI * 2 + p * 3.5;
+        const rad = 20 + (i % 3) * 18;
+        const bx = Math.cos(a) * rad;
+        const by = -65 + Math.sin(a) * (rad * 0.5);
+        ctx.save();
+        ctx.translate(bx, by);
+        ctx.rotate(a);
+        ctx.fillStyle = '#26160B';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 11, 8, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#D97706';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(-7, 0);
+        ctx.quadraticCurveTo(0, 2, 7, 0);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      ctx.restore();
+      drawBrewParticles(ctx, w, h, p, '#D97706');
+    }
+
+    // 繪製場景 3: 鈦合金刀盤與蒸汽 (Burrs & Steam)
+    function drawSteamBurrScene(ctx, w, h, p) {
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+
+      ctx.save();
+      ctx.fillStyle = '#070A0F';
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.translate(cx, cy);
+      ctx.rotate(p * Math.PI * 3.5);
+
+      const burrGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, 260);
+      burrGrad.addColorStop(0, '#0F172A');
+      burrGrad.addColorStop(0.6, '#334155');
+      burrGrad.addColorStop(1, '#94A3B8');
+      ctx.strokeStyle = burrGrad;
+      ctx.lineWidth = 11;
+
+      for (let i = 0; i < 20; i++) {
+        ctx.beginPath();
+        const a = (i / 20) * Math.PI * 2;
+        ctx.moveTo(Math.cos(a) * 35, Math.sin(a) * 35);
+        ctx.lineTo(Math.cos(a + 0.3) * 230, Math.sin(a + 0.3) * 230);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // 蒸汽薄霧
+      ctx.save();
+      const steam = ctx.createRadialGradient(cx, cy, 40, cx, cy, w * 0.55);
+      steam.addColorStop(0, `rgba(255, 255, 255, ${0.35 + p * 0.35})`);
+      steam.addColorStop(0.5, `rgba(245, 158, 11, ${0.2 + p * 0.15})`);
+      steam.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = steam;
+      ctx.fillRect(0, 0, w, h);
+      ctx.restore();
+
+      drawBrewParticles(ctx, w, h, p * 2.2, '#FFFFFF');
+    }
+
+    // 繪製場景 4: 雙層玻璃杯與黃金 Crema (Double-Walled Glass Cup)
+    function drawGlassCupScene(ctx, w, h, p) {
+      const cx = w * 0.5;
+      const cy = h * 0.52;
+      const scale = 1.15 - (1 - p) * 0.25;
+
+      ctx.save();
+      ctx.fillStyle = '#06080D';
+      ctx.fillRect(0, 0, w, h);
+
+      const spot = ctx.createRadialGradient(cx, cy * 0.8, 30, cx, cy, w * 0.6);
+      spot.addColorStop(0, '#2D1B0A');
+      spot.addColorStop(0.5, '#120D08');
+      spot.addColorStop(1, '#05070A');
+      ctx.fillStyle = spot;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+
+      // 雙層玻璃外壁
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.roundRect(-110, -140, 220, 250, [12, 12, 45, 45]);
+      ctx.stroke();
+
+      // 雙層玻璃內壁
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(-85, -125, 170, 210, [8, 8, 35, 35]);
+      ctx.stroke();
+
+      // 咖啡液體
+      const coffee = ctx.createLinearGradient(0, -30, 0, 80);
+      coffee.addColorStop(0, '#381C06');
+      coffee.addColorStop(1, '#1A0B02');
+      ctx.fillStyle = coffee;
+      ctx.beginPath();
+      ctx.roundRect(-84, -45, 168, 128, [0, 0, 33, 33]);
+      ctx.fill();
+
+      // 黃金 Crema
+      const crema = ctx.createLinearGradient(-80, -65, 80, -40);
+      crema.addColorStop(0, '#D97706');
+      crema.addColorStop(0.5, '#F59E0B');
+      crema.addColorStop(1, '#B45309');
+      ctx.fillStyle = crema;
+      ctx.beginPath();
+      ctx.roundRect(-84, -65, 168, 22, [5, 5, 0, 0]);
+      ctx.fill();
+
+      // 反光高光條
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(-98, -125);
+      ctx.lineTo(-98, 70);
+      ctx.stroke();
+
+      ctx.restore();
+      drawBrewParticles(ctx, w, h, 0.2, '#F59E0B');
+    }
+
+    function drawBrewParticles(ctx, w, h, speedMult, baseColor) {
+      ctx.save();
+      for (let i = 0; i < brewParticles.length; i++) {
+        const pt = brewParticles[i];
+        pt.y -= (0.3 + speedMult * 2.0);
+        pt.x += pt.vx;
+        if (pt.y < 0) pt.y = h;
+        if (pt.x < 0) pt.x = w;
+        if (pt.x > w) pt.x = 0;
+
+        ctx.fillStyle = `${baseColor} 0.55)`;
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    function toggleScrollWorldAudio() {
+      if (!brewAudioCtx) {
+        brewAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        setupBrewAudioNodes();
+      }
+
+      if (brewAudioCtx.state === 'suspended') {
+        brewAudioCtx.resume();
+      }
+
+      isBrewAudioOn = !isBrewAudioOn;
+      const icon = document.getElementById('brewSoundIcon');
+      const label = document.getElementById('brewSoundLabel');
+      if (isBrewAudioOn) {
+        if (icon) icon.textContent = '🔊';
+        if (label) label.textContent = '靜音';
+        brewWindGain.gain.setTargetAtTime(0.07, brewAudioCtx.currentTime, 0.2);
+        showToast('🔊 已開啟 3D 空間環境音效');
+      } else {
+        if (icon) icon.textContent = '🔇';
+        if (label) label.textContent = '開啟環境音效';
+        brewWindGain.gain.setTargetAtTime(0, brewAudioCtx.currentTime, 0.2);
+        brewGrinderGain.gain.setTargetAtTime(0, brewAudioCtx.currentTime, 0.2);
+        showToast('🔇 已靜音');
+      }
+    }
+
+    function setupBrewAudioNodes() {
+      brewWindOsc = brewAudioCtx.createOscillator();
+      brewWindOsc.type = 'sine';
+      brewWindOsc.frequency.setValueAtTime(110, brewAudioCtx.currentTime);
+      brewWindGain = brewAudioCtx.createGain();
+      brewWindGain.gain.setValueAtTime(0, brewAudioCtx.currentTime);
+      brewWindOsc.connect(brewWindGain);
+      brewWindGain.connect(brewAudioCtx.destination);
+      brewWindOsc.start();
+
+      brewGrinderOsc = brewAudioCtx.createOscillator();
+      brewGrinderOsc.type = 'triangle';
+      brewGrinderOsc.frequency.setValueAtTime(260, brewAudioCtx.currentTime);
+      brewGrinderGain = brewAudioCtx.createGain();
+      brewGrinderGain.gain.setValueAtTime(0, brewAudioCtx.currentTime);
+      brewGrinderOsc.connect(brewGrinderGain);
+      brewGrinderGain.connect(brewAudioCtx.destination);
+      brewGrinderOsc.start();
     }
 
     // 5. Persistent Brewer Email Registration & 4-Digit Passkey Logic (No re-login before Logout)
@@ -2344,62 +3306,32 @@
       window.open(waUrl, '_blank');
     }
 
-    function toggleAuditBigBtn(type) {
-      const chk = document.getElementById(`chk-${type}`);
-      if (!chk) return;
-      chk.checked = !chk.checked;
-      syncAuditBtnStates();
-      checkPaymentVerification();
-    }
-
-    function syncAuditBtnStates() {
-      ['amount', 'time', 'status'].forEach(type => {
-        const chk = document.getElementById(`chk-${type}`);
-        const btn = document.getElementById(`btn-chk-${type}`);
-        const icon = document.getElementById(`icon-chk-${type}`);
-        if (!chk || !btn || !icon) return;
-        if (chk.checked) {
-          btn.className = "tactile-btn py-3.5 px-2 rounded-xl bg-emerald-400 text-stone-950 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] flex flex-col items-center justify-center gap-1 transition active:translate-y-0.5 cursor-pointer";
-          icon.textContent = "✅";
-        } else {
-          btn.className = "tactile-btn py-3.5 px-2 rounded-xl bg-white text-stone-800 font-black text-xs sm:text-sm border-2 border-stone-900 shadow-[2px_2px_0px_#1C1917] flex flex-col items-center justify-center gap-1 transition active:translate-y-0.5 cursor-pointer";
-          icon.textContent = "⬜";
-        }
-      });
-    }
-
     function checkPaymentVerification() {
-      const c1 = document.getElementById('chk-amount')?.checked;
-      const c2 = document.getElementById('chk-time')?.checked;
-      const c3 = document.getElementById('chk-status')?.checked;
+      const c1 = document.getElementById('chk-amount').checked;
+      const c2 = document.getElementById('chk-time').checked;
+      const c3 = document.getElementById('chk-status').checked;
       const btn = document.getElementById('unlock-brew-btn');
-      const orderId = document.getElementById('manual-order-id')?.value || formatOrderId(activeOrderSeq);
+      const orderId = document.getElementById('manual-order-id').value || formatOrderId(activeOrderSeq);
 
-      if (btn) {
-        if (c1 && c2 && c3) {
-          btn.disabled = false;
-          btn.textContent = `✅ 對數完成！解鎖 #${orderId} 進入「🟠 沖緊」`;
-        } else {
-          btn.disabled = true;
-          btn.textContent = `🔒 對數後解鎖「🟠 沖緊」`;
-        }
+      if (c1 && c2 && c3) {
+        btn.disabled = false;
+        btn.textContent = `✅ 對數完成！解鎖 #${orderId} 進入「🟠 沖緊」`;
+      } else {
+        btn.disabled = true;
+        btn.textContent = `🔒 對數後解鎖「🟠 沖緊」`;
       }
     }
 
     function simulateCustomerPaid() {
-      const c1 = document.getElementById('chk-amount');
-      const c2 = document.getElementById('chk-time');
-      const c3 = document.getElementById('chk-status');
-      if (c1) c1.checked = true;
-      if (c2) c2.checked = true;
-      if (c3) c3.checked = true;
-      syncAuditBtnStates();
+      document.getElementById('chk-amount').checked = true;
+      document.getElementById('chk-time').checked = true;
+      document.getElementById('chk-status').checked = true;
       checkPaymentVerification();
       proceedToBrewing();
     }
 
     function proceedToBrewing() {
-      const orderId = document.getElementById('manual-order-id')?.value;
+      const orderId = document.getElementById('manual-order-id').value;
       const target = kdsOrders.find(o => String(o.id) === String(orderId)) || kdsOrders[0];
       if (target) {
         target.paymentVerified = true;
@@ -2409,13 +3341,9 @@
         renderAllOrderViews();
         showToast(`🟠 訂單 #${target.id} 已對數，開始沖啡！`);
       }
-      const c1 = document.getElementById('chk-amount');
-      const c2 = document.getElementById('chk-time');
-      const c3 = document.getElementById('chk-status');
-      if (c1) c1.checked = false;
-      if (c2) c2.checked = false;
-      if (c3) c3.checked = false;
-      syncAuditBtnStates();
+      document.getElementById('chk-amount').checked = false;
+      document.getElementById('chk-time').checked = false;
+      document.getElementById('chk-status').checked = false;
       checkPaymentVerification();
     }
 
@@ -2656,10 +3584,6 @@
         }
       });
       renderCrmAuditDashboard();
-      if (tab === 'accounts') {
-        initDefaultCrmAccess();
-        renderAuthAccountsTable();
-      }
     }
 
     function pct(part, total) {
@@ -2900,520 +3824,404 @@
         }).join('');
       }
 
-      // Table 4: Backend Email & Passkey Records & 2-Tier Authentication
-    let crmAccessMode = null; // 'owner' | 'brewer' | null
-    let crmAccessEmail = null; // matching email when in 'brewer' mode
-    let crmAccountsAuditDate = null; // YYYY-MM-DD filter for account audit & CSV
-
-    function initDefaultCrmAccess() {
-      if (crmAccessMode === null) {
-        const saved = getSavedBrewerAuth();
-        if (saved && saved.email) {
-          crmAccessMode = 'brewer';
-          crmAccessEmail = saved.email.trim().toLowerCase();
-        } else if (brewerAccountsRegistry && brewerAccountsRegistry.length > 0) {
-          crmAccessMode = 'brewer';
-          crmAccessEmail = brewerAccountsRegistry[0].email.trim().toLowerCase();
-        } else {
-          crmAccessMode = 'brewer';
-          crmAccessEmail = '4lome.hk@gmail.com';
-        }
-      }
-    }
-
-    function verifyCrmAccountAccess(keyOverride) {
-      const input = document.getElementById('crm-access-key-input');
-      const key = String(keyOverride !== undefined ? keyOverride : (input ? input.value : '')).trim();
-
-      if (!key) {
-        showToast('⚠️ 請輸入 4 位 Passkey 或專屬金鑰');
-        return;
-      }
-
-      // 1. Owner Key "imowner" (不需顯示 admin，顯示全部數據)
-      if (key === 'imowner') {
-        crmAccessMode = 'owner';
-        crmAccessEmail = null;
-        if (input) input.value = '';
-        fetchAuthAuditFromServer();
-        renderAuthAccountsTable();
-        showToast('👑 專屬權限已認證：已解鎖全部帳號及管理功能');
-        return;
-      }
-
-      // 2. Brewer 4-digit Passkey
-      const localMatch = brewerAccountsRegistry.find(a => String(a.passkey || a.pin).trim() === key);
-      if (localMatch) {
-        crmAccessMode = 'brewer';
-        crmAccessEmail = localMatch.email.trim().toLowerCase();
-        if (input) input.value = '';
-        renderAuthAccountsTable();
-        showToast(`☕ 咖啡師 Brewer：已顯示 ${localMatch.email}`);
-        return;
-      }
-
-      // Check with backend API
-      fetch(`/api/brew/accounts?key=${encodeURIComponent(key)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data && data.success) {
-            crmAccessMode = data.mode;
-            if (data.mode === 'owner') {
-              crmAccessEmail = null;
-              if (Array.isArray(data.accounts)) brewerAccountsRegistry = data.accounts;
-              if (Array.isArray(data.authLogs)) brewerAuthEventLogs = data.authLogs;
-              showToast('👑 專屬權限已認證：已解鎖全部帳號及管理功能');
-            } else if (data.mode === 'brewer') {
-              crmAccessEmail = (data.email || (data.accounts && data.accounts[0]?.email) || '').trim().toLowerCase();
-              if (data.accounts) {
-                data.accounts.forEach(acc => {
-                  const idx = brewerAccountsRegistry.findIndex(a => a.email === acc.email);
-                  if (idx >= 0) brewerAccountsRegistry[idx] = acc;
-                  else brewerAccountsRegistry.push(acc);
-                });
-              }
-              showToast(`☕ 咖啡師 Brewer：已顯示 ${crmAccessEmail}`);
-            }
-            if (input) input.value = '';
-            renderAuthAccountsTable();
-          } else {
-            showToast('⚠️ 密碼或 Passkey 唔啱，無法進入');
-          }
-        })
-        .catch(() => {
-          showToast('⚠️ 驗證失敗，請再試');
-        });
-    }
-
-    function lockCrmAccountAccess() {
-      const saved = getSavedBrewerAuth();
-      crmAccessMode = 'brewer';
-      crmAccessEmail = (saved && saved.email) ? saved.email.trim().toLowerCase() : (brewerAccountsRegistry[0]?.email || '4lome.hk@gmail.com');
-      const input = document.getElementById('crm-access-key-input');
-      if (input) input.value = '';
-      showToast('☕ 已恢復咖啡師 Brewer 個人資料');
+      // Table 4: Backend Email & Passkey Records
       renderAuthAccountsTable();
     }
 
-    function applyAccountDateFilter() {
-      const picker = document.getElementById('crm-accounts-audit-date');
-      const val = picker ? picker.value : '';
-      if (!val) {
-        showToast('⚠️ 請先選擇核數日期');
+    
+    // =========================================================================
+    // Enhanced Customer Bank & WhatsApp Flow (No QR Code)
+    // =========================================================================
+    function updateBankFpsPrompt() {
+      const bankSelect = document.getElementById('cust-bank-select');
+      const activeBankName = document.getElementById('cust-active-bank-name');
+      if (bankSelect && activeBankName) {
+        const val = bankSelect.value;
+        activeBankName.textContent = val;
+      }
+    }
+
+    function openCustomerWhatsApp() {
+      const bank = document.getElementById('cust-bank-select') ? document.getElementById('cust-bank-select').value : '銀行';
+      const orderId = document.getElementById('cust-top-order-id') ? document.getElementById('cust-top-order-id').textContent.replace('#', '') : '00';
+      const amount = document.getElementById('customer-order-price') ? document.getElementById('customer-order-price').textContent : '0';
+      const name = document.getElementById('cust-name-input') ? document.getElementById('cust-name-input').value : '客人';
+      const phone = document.getElementById('cust-whatsapp-input') ? document.getElementById('cust-whatsapp-input').value : '';
+      const ig = document.getElementById('cust-ig-input') ? document.getElementById('cust-ig-input').value : '';
+      const desc = document.getElementById('customer-order-desc') ? document.getElementById('customer-order-desc').textContent.trim() : '手沖咖啡';
+
+      const msg = "☕【BREW】你好咖啡師！我已透過 " + bank + " 轉數快 FPS 過數。\n" +
+                  "📌 單號：#" + orderId + "\n" +
+                  "💰 金額：$" + amount + " HKD\n" +
+                  "👤 客人：" + name + " (WhatsApp: " + phone + " · IG: " + ig + ")\n" +
+                  "☕ 飲品：" + desc + "\n" +
+                  "📸 已附上轉數快過數截圖，請核對相方資料開沖，唔該！";
+
+      const waUrl = "https://wa.me/85291236789?text=" + encodeURIComponent(msg);
+      window.open(waUrl, '_blank');
+      showToast("💬 已開啟 WhatsApp 傳送過數截圖與單號！");
+    }
+
+    // =========================================================================
+    // Barista Mode: Tactile Big Buttons Verification & Reset / Reload
+    // =========================================================================
+    let verificationSteps = { amount: false, time: false, status: false };
+
+    function toggleVerificationStep(step) {
+      verificationSteps[step] = !verificationSteps[step];
+      const chk = document.getElementById('chk-' + step);
+      if (chk) chk.checked = verificationSteps[step];
+
+      const btn = document.getElementById('btn-chk-' + step);
+      const icon = document.getElementById('icon-chk-' + step);
+
+      if (btn && icon) {
+        if (verificationSteps[step]) {
+          btn.classList.remove('bg-white', 'text-stone-800');
+          btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-800', 'shadow-[2px_2px_0px_#065F46]');
+          icon.textContent = '✅';
+        } else {
+          btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-800', 'shadow-[2px_2px_0px_#065F46]');
+          btn.classList.add('bg-white', 'text-stone-800');
+          icon.textContent = '◻️';
+        }
+      }
+      checkPaymentVerification();
+    }
+
+    function resetToZeroSafe(source = 'customer') {
+      const orderId = document.getElementById('manual-order-id') ? document.getElementById('manual-order-id').value : '00';
+      const target = kdsOrders.find(o => String(o.id) === String(orderId)) || kdsOrders[0];
+
+      // 付款後不能改！
+      if (target && (target.paymentVerified || target.status === '沖緊' || target.status === '搞掂')) {
+        showToast("⚠️ 此單 (#" + target.id + ") 已完成付款對數，付款後不能改！請等完成或另開新單。");
         return;
       }
-      crmAccountsAuditDate = val;
-      const lbl = document.getElementById('crm-accounts-filter-label');
-      if (lbl) lbl.textContent = `篩選日期：${val}`;
 
-      // Synchronize with CRM general date filter
-      const genSelect = document.getElementById('crm-date-filter');
-      if (genSelect) {
-        genSelect.value = val;
-        renderCrmAuditDashboard();
-      }
-      showToast(`📅 已篩選核數日期：${val}`);
+      // 执行一次过 Reset
+      activeOrderSeq = 0;
+      kdsOrders = [];
+      try {
+        localStorage.removeItem(ORDERS_STORAGE_KEY);
+      } catch (e) {}
+      fetch('/api/brew/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'resetOrders' })
+      }).catch(() => {});
+
+      const id00 = formatOrderId(0);
+      const custTopId = document.getElementById('cust-top-order-id');
+      if (custTopId) custTopId.textContent = '#' + id00;
+      const custMemoId = document.getElementById('cust-fps-memo-order-id');
+      if (custMemoId) custMemoId.textContent = '#' + id00;
+      const custStep2Id = document.getElementById('cust-step2-order-id');
+      if (custStep2Id) custStep2Id.textContent = '#' + id00;
+
+      const manualId = document.getElementById('manual-order-id');
+      if (manualId) manualId.value = id00;
+      const manualAmt = document.getElementById('manual-hkd-amount');
+      if (manualAmt) manualAmt.value = 0;
+      const custFpsAmt = document.getElementById('cust-fps-amount-display');
+      if (custFpsAmt) custFpsAmt.textContent = 'HK$0';
+      const custPrice = document.getElementById('customer-order-price');
+      if (custPrice) custPrice.textContent = '0';
+      const custDesc = document.getElementById('customer-order-desc');
+      if (custDesc) custDesc.textContent = '（已重設歸零，請重新點選飲品）';
+      const orderInput = document.getElementById('order-input');
+      if (orderInput) orderInput.value = '';
+
+      // Reset verification steps
+      verificationSteps = { amount: false, time: false, status: false };
+      ['amount', 'time', 'status'].forEach(step => {
+        const chk = document.getElementById('chk-' + step);
+        if (chk) chk.checked = false;
+        const btn = document.getElementById('btn-chk-' + step);
+        const icon = document.getElementById('icon-chk-' + step);
+        if (btn && icon) {
+          btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-800', 'shadow-[2px_2px_0px_#065F46]');
+          btn.classList.add('bg-white', 'text-stone-800');
+          icon.textContent = '◻️';
+        }
+      });
+      checkPaymentVerification();
+
+      renderAllOrderViews();
+      showToast("🔄 單號及金額已 1 次過重設歸零 (#00 / HK$0)！");
     }
 
-    function resetAccountDateFilter() {
-      crmAccountsAuditDate = null;
-      const picker = document.getElementById('crm-accounts-audit-date');
-      if (picker) picker.value = '';
-      const lbl = document.getElementById('crm-accounts-filter-label');
-      if (lbl) lbl.textContent = '顯示全部訂單';
-
-      const genSelect = document.getElementById('crm-date-filter');
-      if (genSelect) {
-        genSelect.value = 'ALL';
-        renderCrmAuditDashboard();
-      }
-      showToast('🔄 已重設為全部日期');
+    function reloadBrewTimeAndQueue(source = 'brewer') {
+      const nowStr = new Date().toLocaleTimeString('zh-HK', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+      kdsOrders.forEach(o => {
+        if (o.status === '沖緊' && !o.prepStartTime) {
+          o.prepStartTime = nowStr;
+        }
+      });
+      syncOrdersEverywhere();
+      renderAllOrderViews();
+      renderCrmAuditDashboard();
+      showToast("⏱️ Reload 成功：製作時間已即時更新 (" + nowStr + ")！");
     }
 
+    // =========================================================================
+    // 2-Tier Passkey System (Owner "imowner" vs Individual Brewer)
+    // =========================================================================
+    let isOwnerMode = false;
+    let currentLoggedBrewerEmail = '4lome.hk@gmail.com';
+    let currentLoggedBrewerPasskey = '0326';
+
+    function unlockOwnerMode() {
+      const passInput = document.getElementById('owner-passkey-input');
+      const pass = passInput ? passInput.value.trim() : '';
+
+      if (pass === 'imowner') {
+        isOwnerMode = true;
+        document.getElementById('crm-auth-mode-badge').textContent = '🌟 全域管理模式 (Owner Master)';
+        document.getElementById('crm-auth-mode-badge').className = 'px-2 py-0.5 rounded bg-amber-400 text-stone-950 font-mono text-xs font-black';
+        document.getElementById('crm-auth-mode-desc').textContent = '已解鎖擁有人最高權限：可修改所有 Email 及 Passkey、新增/移除 Brewer、設定核數日期及匯出全量 CSV。';
+        document.getElementById('owner-add-brewer-card').classList.remove('hidden');
+        document.getElementById('auth-log-scope-hint').textContent = '（全域完整活動紀錄）';
+        if (passInput) passInput.value = '';
+
+        fetchAuthAuditFromServer();
+        showToast('🌟 擁有人密碼正確！已進入全域總管模式。');
+      } else {
+        showToast('❌ 密碼不正確，只有擁有人密碼可解鎖全域管理。');
+      }
+    }
+
+    async function ownerAddBrewerAccount() {
+      if (!isOwnerMode) {
+        showToast('⚠️ 需要先解鎖擁有人密碼！');
+        return;
+      }
+      const email = document.getElementById('new-brewer-email').value.trim();
+      const pin = document.getElementById('new-brewer-pin').value.trim();
+      const auditDate = document.getElementById('new-brewer-audit-date').value;
+
+      if (!email || !pin || pin.length !== 4) {
+        showToast('⚠️ 請輸入有效 Email 及 4 位數字 Passkey！');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/brew/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'owner_add_account',
+            passkey: 'imowner',
+            newEmail: email,
+            newPin: pin,
+            auditDate: auditDate || getTodayDateStr()
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('✅ 成功增加 Brewer: ' + email);
+          document.getElementById('new-brewer-email').value = '';
+          document.getElementById('new-brewer-pin').value = '';
+          fetchAuthAuditFromServer();
+        } else {
+          showToast('❌ 增加失敗: ' + (data.error || '未知錯誤'));
+        }
+      } catch (e) {
+        // Fallback local update
+        brewerAccountsRegistry.push({
+          email: email,
+          passkey: pin,
+          pin: pin,
+          auditDate: auditDate || getTodayDateStr(),
+          loginCount: 0,
+          registeredAt: new Date().toISOString(),
+          lastLoginAt: '未登入',
+          lastLogoutAt: null
+        });
+        renderAuthAccountsTable();
+        showToast('✅ 已於本機新增 Brewer: ' + email);
+      }
+    }
+
+    async function ownerEditBrewer(origEmail) {
+      if (!isOwnerMode) {
+        showToast('⚠️ 需要擁有人密碼權限！');
+        return;
+      }
+      const target = brewerAccountsRegistry.find(a => a.email === origEmail);
+      const newEmail = prompt('修改 Brewer Email：', origEmail);
+      if (!newEmail) return;
+      const newPin = prompt('修改 4 位 Passkey：', target ? (target.passkey || target.pin || '0326') : '0326');
+      if (!newPin || newPin.length !== 4) {
+        showToast('⚠️ Passkey 必須為 4 位數字！');
+        return;
+      }
+      const newAuditDate = prompt('修改核數日期 (YYYY-MM-DD)：', target && target.auditDate ? target.auditDate : getTodayDateStr());
+
+      try {
+        const res = await fetch('/api/brew/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'owner_update_account',
+            passkey: 'imowner',
+            originalEmail: origEmail,
+            newEmail: newEmail.trim(),
+            newPin: newPin.trim(),
+            auditDate: newAuditDate
+          })
+        });
+        fetchAuthAuditFromServer();
+        showToast('✅ 帳號資料已更新！');
+      } catch (e) {
+        if (target) {
+          target.email = newEmail.trim();
+          target.passkey = newPin.trim();
+          target.pin = newPin.trim();
+          target.auditDate = newAuditDate;
+        }
+        renderAuthAccountsTable();
+        showToast('✅ 帳號已更新 (本機)！');
+      }
+    }
+
+    async function ownerDeleteBrewer(email) {
+      if (!isOwnerMode) {
+        showToast('⚠️ 需要擁有人密碼權限！');
+        return;
+      }
+      if (!confirm('確定要移除此 Brewer (' + email + ') 嗎？')) return;
+
+      try {
+        await fetch('/api/brew/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'owner_delete_account',
+            passkey: 'imowner',
+            email: email
+          })
+        });
+        fetchAuthAuditFromServer();
+        showToast('🗑️ 已移除 Brewer 帳號');
+      } catch (e) {
+        brewerAccountsRegistry = brewerAccountsRegistry.filter(a => a.email !== email);
+        renderAuthAccountsTable();
+        showToast('🗑️ 已移除 Brewer 帳號 (本機)');
+      }
+    }
+
+    async function brewerEditSelf(email) {
+      const target = brewerAccountsRegistry.find(a => a.email === email);
+      const newEmail = prompt('修改個人 Email：', email);
+      if (!newEmail) return;
+      const newPin = prompt('修改個人 4 位 Passkey：', target ? (target.passkey || target.pin || '0326') : '0326');
+      if (!newPin || newPin.length !== 4) {
+        showToast('⚠️ Passkey 必須為 4 位數字！');
+        return;
+      }
+      const newAuditDate = prompt('設定個人核數日期 (YYYY-MM-DD)：', target && target.auditDate ? target.auditDate : getTodayDateStr());
+
+      try {
+        await fetch('/api/brew/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'brewer_update_self',
+            email: email,
+            pin: target ? (target.passkey || target.pin) : '0326',
+            newEmail: newEmail.trim(),
+            newPin: newPin.trim(),
+            auditDate: newAuditDate
+          })
+        });
+        currentLoggedBrewerEmail = newEmail.trim();
+        currentLoggedBrewerPasskey = newPin.trim();
+        const emailBadge = document.getElementById('active-brewer-email');
+        if (emailBadge) emailBadge.textContent = currentLoggedBrewerEmail;
+        const pinBadge = document.getElementById('active-brewer-pin-badge');
+        if (pinBadge) pinBadge.textContent = currentLoggedBrewerPasskey;
+        fetchAuthAuditFromServer();
+        showToast('✅ 個人資料及核數日期已更新！');
+      } catch (e) {
+        if (target) {
+          target.email = newEmail.trim();
+          target.passkey = newPin.trim();
+          target.pin = newPin.trim();
+          target.auditDate = newAuditDate;
+        }
+        renderAuthAccountsTable();
+        showToast('✅ 個人資料已更新！');
+      }
+    }
+  
     function renderAuthAccountsTable() {
-      initDefaultCrmAccess();
-
       const accTbody = document.getElementById('crm-accounts-tbody');
       const logsTbody = document.getElementById('crm-auth-logs-tbody');
-      const badge = document.getElementById('crm-access-badge');
-      const banner = document.getElementById('crm-access-banner');
-      const ownerAddPanel = document.getElementById('crm-owner-add-panel');
-      const brewerSelfPanel = document.getElementById('crm-brewer-self-edit-panel');
-      const actionTh = document.getElementById('crm-accounts-action-th');
-      const logsScope = document.getElementById('crm-auth-logs-scope-label');
 
-      // 1. Badge & Banner states (Zero mention of "admin")
-      if (crmAccessMode === 'owner') {
-        if (badge) {
-          badge.className = 'px-2.5 py-1 rounded-lg bg-amber-400 text-stone-950 font-mono font-black text-xs border border-stone-900';
-          badge.textContent = '👑 專屬權限 (全部)';
-        }
-        if (banner) {
-          banner.className = 'p-3 rounded-xl bg-amber-100 border-2 border-stone-900 text-xs font-bold text-stone-900 space-y-1';
-          banner.innerHTML = `
-            <div>👑 <strong>專屬權限已生效：</strong>顯示所有登記 Email 及 4 位 Passkey。可在此修改任何帳號、手動增加新咖啡師、移除帳號、指定核數日期及匯出完整 CSV。</div>
-          `;
-        }
-        if (ownerAddPanel) ownerAddPanel.classList.remove('hidden');
-        if (brewerSelfPanel) brewerSelfPanel.classList.add('hidden');
-        if (actionTh) actionTh.classList.remove('hidden');
-        if (logsScope) logsScope.textContent = '全部帳號活動記錄';
-      } else {
-        // Default to brewer view - always display brewer!
-        crmAccessMode = 'brewer';
-        if (badge) {
-          badge.className = 'px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-mono font-black text-xs border border-emerald-900';
-          badge.textContent = `☕ 咖啡師 Brewer`;
-        }
-        if (banner) {
-          banner.className = 'p-3 rounded-xl bg-emerald-50 border-2 border-emerald-800 text-xs font-bold text-emerald-950 space-y-1';
-          banner.innerHTML = `
-            <div>☕ <strong>咖啡師 Brewer 資料：</strong>現正顯示 <strong class="underline font-mono">${crmAccessEmail || '本人帳號'}</strong> 之登記電郵及 4 位 Passkey。可於下方直接修改個人電郵與 Passkey，並可選取核數日期匯出個人核數表。如需解鎖所有帳號，可於上方輸入專屬金鑰。</div>
-          `;
-        }
-        if (ownerAddPanel) ownerAddPanel.classList.add('hidden');
-        if (brewerSelfPanel) {
-          brewerSelfPanel.classList.remove('hidden');
-          const currAcc = brewerAccountsRegistry.find(a => a.email === crmAccessEmail);
-          const emailInput = document.getElementById('self-edit-email');
-          const pinInput = document.getElementById('self-edit-pin');
-          const hint = document.getElementById('self-edit-status-hint');
-          const saved = getSavedBrewerAuth();
-          const dispEmail = currAcc?.email || crmAccessEmail || saved?.email || '4lome.hk@gmail.com';
-          const dispPin = currAcc?.passkey || currAcc?.pin || saved?.pin || '0326';
-          if (emailInput && !emailInput.value) emailInput.value = dispEmail;
-          if (pinInput && !pinInput.value) pinInput.value = dispPin;
-          if (hint) hint.textContent = `現時：${dispEmail} (Passkey: ${dispPin})`;
-        }
-        if (actionTh) actionTh.classList.remove('hidden');
-        if (logsScope) logsScope.textContent = `僅顯示 ${crmAccessEmail} 活動`;
-      }
+      // Filter visible accounts: Owner sees ALL, individual Brewer sees ONLY their own account!
+      const visibleAccounts = isOwnerMode
+        ? brewerAccountsRegistry
+        : brewerAccountsRegistry.filter(a => a.email === currentLoggedBrewerEmail);
 
-      // 2. Filter accounts by access level
-      let visibleAccounts = [];
-      if (crmAccessMode === 'owner') {
-        visibleAccounts = brewerAccountsRegistry;
-      } else {
-        visibleAccounts = brewerAccountsRegistry.filter(a => a.email === crmAccessEmail);
-        if (visibleAccounts.length === 0) {
-          const saved = getSavedBrewerAuth();
-          visibleAccounts = [{
-            email: crmAccessEmail || saved?.email || '4lome.hk@gmail.com',
-            passkey: saved?.pin || '0326',
-            pin: saved?.pin || '0326',
-            loginCount: 1,
-            registeredAt: getTodayDateStr() + ' 09:00:00',
-            lastLoginAt: getTodayDateStr() + ' 09:00:00',
-            lastLogoutAt: null
-          }];
-        }
-      }
-
-      // 3. Render accounts table
       if (accTbody) {
-        accTbody.innerHTML = visibleAccounts.map(acc => {
-          const passkey = acc.passkey || acc.pin || '----';
-          const isOwner = crmAccessMode === 'owner';
-          const actionButtons = isOwner ? `
-            <div class="flex items-center gap-1">
-              <button
-                type="button"
-                onclick="ownerEditAccount('${acc.email}', '${passkey}')"
-                class="tactile-btn px-2 py-1 rounded bg-stone-100 hover:bg-stone-200 text-stone-900 font-black text-[11px] border border-stone-400 cursor-pointer"
-                title="修改此帳號 Email 及 Passkey"
-              >
-                ✏️ 修改
-              </button>
-              <button
-                type="button"
-                onclick="ownerDeleteAccount('${acc.email}')"
-                class="tactile-btn px-2 py-1 rounded bg-rose-100 hover:bg-rose-200 text-rose-900 font-black text-[11px] border border-rose-400 cursor-pointer"
-                title="移除此帳號"
-              >
-                🗑️ 移除
-              </button>
-            </div>
-          ` : `
-            <button
-              type="button"
-              onclick="populateBrewerSelfEdit('${acc.email}', '${passkey}')"
-              class="tactile-btn py-1 px-2.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs border border-stone-900 cursor-pointer"
-            >
-              ✏️ 修改此帳號
-            </button>
-          `;
+        if (visibleAccounts.length === 0) {
+          accTbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-stone-500 font-sans">無帳號資料</td></tr>';
+        } else {
+          accTbody.innerHTML = visibleAccounts.map(acc => {
+            const auditDate = acc.auditDate || getTodayDateStr();
+            const actionButtons = isOwnerMode
+              ? '<div class="flex gap-1.5"><button type="button" onclick="ownerEditBrewer(\'' + acc.email + '\')" class="px-2 py-1 rounded bg-amber-200 hover:bg-amber-300 text-stone-950 font-black text-xs">✏️ 修改</button><button type="button" onclick="ownerDeleteBrewer(\'' + acc.email + '\')" class="px-2 py-1 rounded bg-rose-200 hover:bg-rose-300 text-rose-950 font-black text-xs">🗑️ 移除</button></div>'
+              : '<button type="button" onclick="brewerEditSelf(\'' + acc.email + '\')" class="px-2.5 py-1 rounded bg-sky-200 hover:bg-sky-300 text-sky-950 font-black text-xs">✏️ 修改個人資料</button>';
 
-          return `
-            <tr class="hover:bg-stone-50">
-              <td class="p-2.5 font-black text-stone-900">${acc.email}</td>
-              <td class="p-2.5">
-                <span class="px-2 py-0.5 rounded bg-amber-100 border border-stone-800 font-black text-stone-900">
-                  ${passkey}
-                </span>
-              </td>
-              <td class="p-2.5 font-bold text-emerald-800">${acc.loginCount || 1} 次</td>
-              <td class="p-2.5 text-stone-600">${String(acc.registeredAt || '').replace('T', ' ').slice(0, 19)}</td>
-              <td class="p-2.5 text-stone-900 font-bold">${String(acc.lastLoginAt || '').replace('T', ' ').slice(0, 19)}</td>
-              <td class="p-2.5 text-stone-500">${acc.lastLogoutAt ? String(acc.lastLogoutAt).replace('T', ' ').slice(0, 19) : '保持登入中'}</td>
-              <td class="p-2.5">${actionButtons}</td>
-            </tr>
-          `;
-        }).join('');
+            return '<tr class="hover:bg-stone-50">' +
+              '<td class="p-2.5 font-black text-stone-900">' + acc.email + '</td>' +
+              '<td class="p-2.5"><span class="px-2 py-0.5 rounded bg-amber-100 border border-stone-800 font-black text-stone-900">' + (acc.passkey || acc.pin || '----') + '</span></td>' +
+              '<td class="p-2.5 font-bold text-stone-800">' + auditDate + '</td>' +
+              '<td class="p-2.5 font-bold text-emerald-800">' + (acc.loginCount || 1) + ' 次</td>' +
+              '<td class="p-2.5 text-stone-900 font-bold">' + String(acc.lastLoginAt || '').replace('T', ' ').slice(0, 19) + '</td>' +
+              '<td class="p-2.5">' + actionButtons + '</td>' +
+            '</tr>';
+          }).join('');
+        }
       }
 
-      // 4. Render activity logs
       if (logsTbody) {
-        let visibleLogs = brewerAuthEventLogs;
-        if (crmAccessMode === 'brewer') {
-          visibleLogs = brewerAuthEventLogs.filter(l => l.email === crmAccessEmail);
-        }
-        if (visibleLogs.length === 0) {
-          visibleLogs = [{
-            timestamp: getTodayDateStr() + ' 09:00:00',
-            action: '登入',
-            email: crmAccessEmail || '4lome.hk@gmail.com',
-            passkey: '0326',
-            note: '咖啡師已保持登入狀態'
-          }];
-        }
-        logsTbody.innerHTML = visibleLogs.slice(0, 25).map(l => `
-          <tr class="hover:bg-stone-50">
-            <td class="p-2 text-stone-600">${String(l.timestamp || l.date + ' ' + l.time || '').replace('T', ' ').slice(0, 19)}</td>
-            <td class="p-2 font-bold text-stone-900">${l.action}</td>
-            <td class="p-2 font-mono">${l.email}</td>
-            <td class="p-2 font-black text-amber-900">${l.passkey || l.pin || '----'}</td>
-            <td class="p-2 font-sans text-stone-600">${l.note || ''}</td>
-          </tr>
-        `).join('');
-      }
-    }
+        const visibleLogs = isOwnerMode
+          ? brewerAuthEventLogs.slice(0, 30)
+          : brewerAuthEventLogs.filter(l => l.email === currentLoggedBrewerEmail).slice(0, 20);
 
-    // 手動增加帳號 (imowner 模式)
-    async function submitManualAddAccount() {
-      const emailInput = document.getElementById('manual-add-email');
-      const pinInput = document.getElementById('manual-add-pin');
-      const email = emailInput?.value.trim().toLowerCase();
-      const pin = pinInput?.value.trim();
-
-      if (!email || !pin || !/^\d{4}$/.test(pin)) {
-        showToast('⚠️ 請輸入完整電郵及 4 位數字 Passkey');
-        return;
-      }
-
-      try {
-        const res = await fetch('/api/brew/accounts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ key: 'imowner', action: 'add', email, pin })
-        });
-        const data = await res.json();
-        if (data && data.success) {
-          if (Array.isArray(data.accounts)) brewerAccountsRegistry = data.accounts;
-          if (Array.isArray(data.authLogs)) brewerAuthEventLogs = data.authLogs;
-          if (emailInput) emailInput.value = '';
-          if (pinInput) pinInput.value = '';
-          renderAuthAccountsTable();
-          showToast(`✅ 已手動增加咖啡師帳號：${email}`);
-        } else {
-          showToast(`⚠️ ${data?.error || '增加失敗'}`);
-        }
-      } catch (e) {
-        if (emailInput) emailInput.value = '';
-        if (pinInput) pinInput.value = '';
-        renderAuthAccountsTable();
-        showToast(`✅ 已在本地增加帳號：${email}`);
-      }
-    }
-
-    // 修改個人登入資料 (Brewer 模式)
-    async function submitSelfAccountUpdate() {
-      const emailInput = document.getElementById('self-edit-email');
-      const pinInput = document.getElementById('self-edit-pin');
-      const newEmail = emailInput?.value.trim().toLowerCase();
-      const newPin = pinInput?.value.trim();
-
-      if (!newEmail || !newPin || !/^\d{4}$/.test(newPin)) {
-        showToast('⚠️ 請輸入完整新電郵及 4 位數字 Passkey');
-        return;
-      }
-
-      const saved = getSavedBrewerAuth();
-      const currentAcc = brewerAccountsRegistry.find(a => a.email === crmAccessEmail);
-      const currentPin = currentAcc ? (currentAcc.passkey || currentAcc.pin) : (saved?.pin || newPin);
-      const targetEmail = crmAccessEmail || saved?.email || '4lome.hk@gmail.com';
-
-      try {
-        const res = await fetch('/api/brew/accounts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            key: currentPin,
-            action: 'update',
-            targetEmail,
-            newEmail,
-            newPin
-          })
-        });
-        const data = await res.json();
-        if (data && data.success) {
-          saveBrewerAuth(newEmail, newPin);
-          crmAccessEmail = newEmail;
-          if (Array.isArray(data.accounts)) brewerAccountsRegistry = data.accounts;
-          renderAuthAccountsTable();
-          const activeEmailEl = document.getElementById('active-brewer-email');
-          if (activeEmailEl) activeEmailEl.textContent = newEmail;
-          const activePinEl = document.getElementById('active-brewer-pin-badge');
-          if (activePinEl) activePinEl.textContent = newPin;
-          showToast('✅ 已成功更新咖啡師個人 Email 及 Passkey！');
-        } else {
-          showToast(`⚠️ ${data?.error || '更新失敗'}`);
-        }
-      } catch (e) {
-        saveBrewerAuth(newEmail, newPin);
-        if (currentAcc) {
-          currentAcc.email = newEmail;
-          currentAcc.pin = newPin;
-          currentAcc.passkey = newPin;
-        }
-        crmAccessEmail = newEmail;
-        renderAuthAccountsTable();
-        const activeEmailEl = document.getElementById('active-brewer-email');
-        if (activeEmailEl) activeEmailEl.textContent = newEmail;
-        const activePinEl = document.getElementById('active-brewer-pin-badge');
-        if (activePinEl) activePinEl.textContent = newPin;
-        showToast('✅ 已儲存個人更新！');
-      }
-    }
-
-    function populateBrewerSelfEdit(email, passkey) {
-      const targetEmail = email || crmAccessEmail;
-      const currAcc = brewerAccountsRegistry.find(a => a.email === targetEmail);
-      const emailInput = document.getElementById('self-edit-email');
-      const pinInput = document.getElementById('self-edit-pin');
-      const targetPin = passkey || (currAcc ? (currAcc.passkey || currAcc.pin) : '0326');
-      if (emailInput) {
-        emailInput.value = targetEmail || '';
-        emailInput.focus();
-      }
-      if (pinInput) {
-        pinInput.value = targetPin || '';
-      }
-      const selfPanel = document.getElementById('crm-brewer-self-edit-panel');
-      if (selfPanel) {
-        selfPanel.classList.remove('hidden');
-        selfPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-      showToast(`✏️ 請在「修改個人登入資料」欄位修改後按「💾 儲存修改」`);
-    }
-
-    // Owner 修改任何帳號
-    async function ownerEditAccount(targetEmail, currentPin) {
-      const newEmail = prompt(`修改帳號 ${targetEmail}\n請輸入新的 Email（留空維持不變）：`, targetEmail);
-      if (newEmail === null) return;
-      const newPin = prompt(`請輸入新的 4 位數字 Passkey（留空維持原密碼 ${currentPin}）：`, currentPin);
-      if (newPin === null) return;
-
-      const finalEmail = (newEmail.trim() || targetEmail).toLowerCase();
-      const finalPin = newPin.trim() || currentPin;
-
-      if (!/^\d{4}$/.test(finalPin)) {
-        showToast('⚠️ Passkey 必須為 4 位數字');
-        return;
-      }
-
-      try {
-        const res = await fetch('/api/brew/accounts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            key: 'imowner',
-            action: 'update',
-            targetEmail,
-            newEmail: finalEmail,
-            newPin: finalPin
-          })
-        });
-        const data = await res.json();
-        if (data && data.success) {
-          if (Array.isArray(data.accounts)) brewerAccountsRegistry = data.accounts;
-          renderAuthAccountsTable();
-          showToast(`✅ 已更新帳號：${finalEmail}`);
-        } else {
-          showToast(`⚠️ ${data?.error || '修改失敗'}`);
-        }
-      } catch (e) {
-        const acc = brewerAccountsRegistry.find(a => a.email === targetEmail);
-        if (acc) {
-          acc.email = finalEmail;
-          acc.pin = finalPin;
-          acc.passkey = finalPin;
-        }
-        renderAuthAccountsTable();
-        showToast(`✅ 已在本地修改帳號：${finalEmail}`);
-      }
-    }
-
-    // Owner 移除帳號
-    async function ownerDeleteAccount(targetEmail) {
-      if (!confirm(`確認要移除帳號「${targetEmail}」嗎？此動作不可逆。`)) return;
-
-      try {
-        const res = await fetch('/api/brew/accounts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ key: 'imowner', action: 'delete', targetEmail })
-        });
-        const data = await res.json();
-        if (data && data.success) {
-          if (Array.isArray(data.accounts)) brewerAccountsRegistry = data.accounts;
-          renderAuthAccountsTable();
-          showToast(`🗑️ 已移除帳號：${targetEmail}`);
-        } else {
-          showToast(`⚠️ ${data?.error || '移除失敗'}`);
-        }
-      } catch (e) {
-        const idx = brewerAccountsRegistry.findIndex(a => a.email === targetEmail);
-        if (idx >= 0) brewerAccountsRegistry.splice(idx, 1);
-        renderAuthAccountsTable();
-        showToast(`🗑️ 已移除帳號：${targetEmail}`);
+        logsTbody.innerHTML = visibleLogs.map(l =>
+          '<tr class="hover:bg-stone-50">' +
+            '<td class="p-2 text-stone-600">' + String(l.timestamp || '').replace('T', ' ').slice(0, 19) + '</td>' +
+            '<td class="p-2 font-bold text-stone-900">' + l.action + '</td>' +
+            '<td class="p-2">' + l.email + '</td>' +
+            '<td class="p-2 font-black text-amber-900">' + l.passkey + '</td>' +
+            '<td class="p-2 font-sans text-stone-600">' + (l.note || '') + '</td>' +
+          '</tr>'
+        ).join('');
       }
     }
 
     async function fetchAuthAuditFromServer() {
       try {
-        const keyParam = crmAccessMode === 'owner' ? '?key=imowner' : (crmAccessEmail ? `?email=${encodeURIComponent(crmAccessEmail)}` : '');
-        const res = await fetch('/api/brew/accounts' + keyParam);
+        const query = isOwnerMode ? '?passkey=imowner' : ('?email=' + encodeURIComponent(currentLoggedBrewerEmail));
+        const res = await fetch('/api/brew/auth' + query);
         const data = await res.json();
-        if (data && data.success) {
-          if (Array.isArray(data.accounts)) brewerAccountsRegistry = data.accounts;
-          if (Array.isArray(data.authLogs)) brewerAuthEventLogs = data.authLogs;
-          renderAuthAccountsTable();
+        if (data && Array.isArray(data.accounts) && data.accounts.length > 0) {
+          brewerAccountsRegistry = data.accounts;
         }
-      } catch (e) {
+        if (data && Array.isArray(data.authLogs) && data.authLogs.length > 0) {
+          brewerAuthEventLogs = data.authLogs;
+        }
         renderAuthAccountsTable();
-      }
+      } catch (e) {}
+    } catch (e) {}
     }
 
-    // 匯出 CSV 核數表 (支持核數日期篩選及 2 組權限隔離)
-    function exportCrmAuditCsv(forcedMode) {
-      initDefaultCrmAccess();
-      const mode = forcedMode || crmAccessMode || 'brewer';
-      const targetDate = crmAccountsAuditDate || document.getElementById('crm-date-filter')?.value || 'ALL';
-
-      let targetOrders = kdsOrders;
-
-      // Filter by brewer ownership if in brewer mode
-      if (mode === 'brewer' && crmAccessEmail) {
-        targetOrders = targetOrders.filter(o => !o.brewerEmail || o.brewerEmail.toLowerCase() === crmAccessEmail.toLowerCase());
-      }
-
-      // Filter by audit date if specified
-      if (targetDate && targetDate !== 'ALL') {
-        targetOrders = targetOrders.filter(o => (o.date || getTodayDateStr()) === targetDate);
-      }
-
-      const headers = ['單號', '日期', '時間', '客人稱呼', 'WhatsApp', 'IG', '咖啡豆', '飲品內容', '金額(HKD)', '狀態', '已對數', '咖啡師Email'];
-      const rows = targetOrders.map(o => [
+    function exportCrmAuditCsv() {
+      const headers = ['單號', '日期', '時間', '客人稱呼', 'WhatsApp', 'IG', '咖啡豆', '飲品內容', '金額(HKD)', '狀態', '已對數'];
+      const rows = kdsOrders.map(o => [
         `#${o.id}`,
         o.date || getTodayDateStr(),
         o.time || '',
@@ -3424,23 +4232,19 @@
         `"${(o.kdsDesc || '').replace(/"/g, '""')}"`,
         o.amount || 0,
         o.status || '',
-        o.paymentVerified ? 'YES' : 'NO',
-        `"${(o.brewerEmail || crmAccessEmail || 'brewer@brew.hk').replace(/"/g, '""')}"`
+        o.paymentVerified ? 'YES' : 'NO'
       ]);
-
       const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      const dateTag = targetDate !== 'ALL' ? targetDate : getTodayDateStr();
-      const prefix = mode === 'brewer' ? `BREW_Audit_${crmAccessEmail || 'personal'}` : `BREW_Audit_Full`;
-      a.download = `${prefix}_${dateTag}.csv`;
+      a.download = `BREW_CRM_Audit_${getTodayDateStr()}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast(`📥 已匯出 CSV 核數表 (${rows.length} 筆訂單 · ${dateTag})`);
+      showToast('📥 已匯出 BREW CRM 核數 CSV 報表');
     }
 
     // 12. Real-time Multi-Tab & Server Sync
@@ -3578,8 +4382,6 @@
       parseOrderInput();
       updatePaymentTemplates();
       renderAllOrderViews();
-      initDefaultCrmAccess();
-      renderAuthAccountsTable();
       fetchOrdersFromServer(true);
       fetchAuthAuditFromServer();
       setInterval(() => fetchOrdersFromServer(true), 3000);
