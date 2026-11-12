@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scroll-World · Scroll-Driven 3D「飛入世界」Landing Page 引擎</title>
+  <meta name="description" content="零 Cut 鏡頭連續穿透：由等角微縮建築一路俯衝飛入咖啡豆磨豆機、蒸汽萃取與雙層玻璃杯，純原生 Vanilla JS 物理滾動引擎。">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    /* 隱藏滾動條但保持滾動 */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #070B14; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
+  </style>
+</head>
+<body class="bg-[#05070A] text-slate-100 selection:bg-amber-500 selection:text-black">
+
+  <!-- ========================================== -->
+  <!-- 1. 全螢幕固定畫布與影片雙緩衝層 (Fixed Background) -->
+  <!-- ========================================== -->
+  <div class="fixed inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+    <canvas id="worldCanvas" class="w-full h-full object-cover block"></canvas>
+    
+    <!-- 噪點遮罩增加電影膠卷感 -->
+    <div class="absolute inset-0 bg-radial from-transparent via-black/40 to-black/80 pointer-events-none"></div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 2. 常駐頂部導航與狀態 HUD (Floating Header) -->
+  <!-- ========================================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 p-4 sm:p-6 flex items-center justify-between pointer-events-auto">
+    <div class="flex items-center gap-3">
+      <div class="w-3 h-3 rounded-full bg-amber-500 animate-ping"></div>
+      <div class="w-3 h-3 rounded-full bg-amber-500 -ml-6"></div>
+      <div>
+        <span class="font-mono text-xs uppercase tracking-widest text-amber-400 font-black">SCROLL-WORLD ENGINE</span>
+        <h1 class="text-sm sm:text-base font-black tracking-tight text-white flex items-center gap-2">
+          <span>飛入微觀世界</span>
+          <span class="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono font-normal">GOP=1 Scrubbing</span>
+        </h1>
+      </div>
+    </div>
+
+    <!-- 控制區：場景快轉與音效開關 -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <button id="soundToggleBtn" onclick="toggleAudio()" class="px-3 py-1.5 rounded-full text-xs font-mono font-bold glass-pill hover:bg-white/20 transition flex items-center gap-1.5 cursor-pointer">
+        <span id="soundIcon">🔇</span> <span id="soundLabel" class="hidden sm:inline">開啟環境音效</span>
+      </button>
+      <button onclick="toggleDocModal()" class="px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-amber-500 hover:bg-amber-400 text-black transition flex items-center gap-1 cursor-pointer">
+        <span>📖</span> <span class="hidden sm:inline">整合代碼</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- 3. 右側即時遙測儀錶板 (Telemetry HUD) -->
+  <!-- ========================================== -->
+  <aside class="fixed right-4 sm:right-8 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col gap-3 font-mono text-xs pointer-events-auto">
+    <div class="glass-panel p-4 rounded-xl space-y-3 min-w-[200px] border border-white/10">
+      <div class="flex items-center justify-between border-b border-white/10 pb-2">
+        <span class="text-slate-400">CAMERA TELEMETRY</span>
+        <span id="fpsBadge" class="text-emerald-400 font-bold">60 FPS</span>
+      </div>
+
+      <div>
+        <div class="text-[10px] text-slate-400">ZOOM DEPTH</div>
+        <div id="depthText" class="text-lg font-black text-amber-400 tracking-wider">0.00 m</div>
+      </div>
+
+      <div>
+        <div class="text-[10px] text-slate-400">MAGNIFICATION</div>
+        <div id="zoomText" class="text-sm font-bold text-cyan-400">1.00x</div>
+      </div>
+
+      <div>
+        <div class="text-[10px] text-slate-400">SCRUB VELOCITY</div>
+        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mt-1">
+          <div id="velocityBar" class="bg-amber-400 h-full w-0 transition-all duration-75"></div>
+        </div>
+      </div>
+
+      <!-- 四幕場景切換快速跳轉 -->
+      <div class="pt-2 border-t border-white/10 space-y-1">
+        <div class="text-[10px] text-slate-400 mb-1">SCENE CHECKPOINTS</div>
+        <button onclick="seekTo(0.02)" class="w-full text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] transition flex items-center justify-between text-slate-300">
+          <span>01. 雲霧等角莊園</span> <span class="text-amber-400">0%</span>
+        </button>
+        <button onclick="seekTo(0.28)" class="w-full text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] transition flex items-center justify-between text-slate-300">
+          <span>02. 烘焙工坊木門</span> <span class="text-amber-400">28%</span>
+        </button>
+        <button onclick="seekTo(0.55)" class="w-full text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] transition flex items-center justify-between text-slate-300">
+          <span>03. 磨豆鋼刀高壓</span> <span class="text-amber-400">55%</span>
+        </button>
+        <button onclick="seekTo(0.85)" class="w-full text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] transition flex items-center justify-between text-slate-300">
+          <span>04. 雙層玻璃杯</span> <span class="text-amber-400">85%</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================== -->
+  <!-- 4. 底部滾動進度條 (Timeline Scrubber) -->
+  <!-- ========================================== -->
+  <div class="fixed bottom-0 left-0 right-0 z-50 p-4 sm:p-6 pointer-events-none">
+    <div class="max-w-2xl mx-auto glass-panel p-3 rounded-full flex items-center gap-4 pointer-events-auto shadow-2xl">
+      <span class="font-mono text-xs font-bold text-amber-400 pl-2" id="sceneIndicator">STAGE 01 / 04</span>
+      <div class="flex-1 bg-slate-800/80 h-2 rounded-full overflow-hidden relative">
+        <div id="timelineProgress" class="bg-gradient-to-r from-amber-500 via-orange-400 to-cyan-400 h-full w-0 transition-all duration-75"></div>
+      </div>
+      <span class="font-mono text-xs font-black text-white pr-2" id="progressPercent">0%</span>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 5. 虛擬滾動軌道 (Virtual Scroll Canvas Track) -->
+  <!-- 透過足夠的高度驅動滾動時間軸 (450vh) -->
+  <!-- ========================================== -->
+  <main class="relative z-10 min-h-[450vh] pointer-events-none">
+
+    <!-- 場景 1: 等角微縮莊園 (0% - 25%) -->
+    <section class="h-screen sticky top-0 flex items-center justify-start p-6 sm:p-16 max-w-3xl pointer-events-auto" id="stage-card-1">
+      <div class="glass-panel p-6 sm:p-8 rounded-2xl space-y-4 max-w-lg border border-amber-500/20">
+        <div class="flex items-center gap-2 font-mono text-xs font-black text-amber-400">
+          <span class="px-2 py-0.5 rounded bg-amber-500/20">SCENE 01</span>
+          <span>等角微縮建築 · ISOMETRIC DIORAMA</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-black text-white leading-tight">
+          海拔 2,200 米<br><span class="text-amber-400">火山雲霧咖啡聖地</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+          上帝視角俯瞰。整座懸浮微縮莊園被熱帶雨林與梯田環抱，梯田最深處是一棟散發暖黃光芒的原木烘焙工坊。
+        </p>
+        <div class="pt-2 flex items-center gap-3 text-xs font-mono text-slate-400">
+          <span class="animate-bounce">↓ 向下滾動穿透世界</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 場景 2: 鏡頭極速飛入木門 (25% - 50%) -->
+    <section class="h-screen sticky top-0 flex items-center justify-end p-6 sm:p-16 max-w-7xl mx-auto pointer-events-auto opacity-0 transition-opacity duration-300" id="stage-card-2">
+      <div class="glass-panel p-6 sm:p-8 rounded-2xl space-y-4 max-w-lg border border-cyan-500/20">
+        <div class="flex items-center gap-2 font-mono text-xs font-black text-cyan-400">
+          <span class="px-2 py-0.5 rounded bg-cyan-500/20">SCENE 02</span>
+          <span>無縫穿透飛入 · CAMERA DIVE</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-black text-white leading-tight">
+          穿透黃銅工坊木門<br><span class="text-cyan-400">直逼磨豆機核心</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+          零剪接無縫加速！鏡頭直接撞入玻璃氣窗，掠過懸浮木塵與原木烘焙桶，以 FPV 穿梭視角直插中央重工業黃銅磨豆機料斗。
+        </p>
+        <div class="text-xs font-mono text-slate-400">
+          <span>⚡ 當前放大率：12.5x 微距景深</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 場景 3: 刀盤微距粉碎與高壓蒸汽 (50% - 75%) -->
+    <section class="h-screen sticky top-0 flex items-center justify-start p-6 sm:p-16 max-w-3xl pointer-events-auto opacity-0 transition-opacity duration-300" id="stage-card-3">
+      <div class="glass-panel p-6 sm:p-8 rounded-2xl space-y-4 max-w-lg border border-rose-500/20">
+        <div class="flex items-center gap-2 font-mono text-xs font-black text-rose-400">
+          <span class="px-2 py-0.5 rounded bg-rose-500/20">SCENE 03</span>
+          <span>微米刀盤 ＆ 蒸汽 · MICRO BURRS</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-black text-white leading-tight">
+          鈦合金鋼刀粉碎<br><span class="text-rose-400">9 BAR 高壓蒸汽暴湧</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+          進入微米世界！深焙咖啡豆在以每分鐘 1,400 轉的刀盤間瞬間崩解，緊接著 92°C 飽和蒸汽與熱水霧氣呼嘯而過，油脂徹底乳化！
+        </p>
+        <div class="text-xs font-mono text-rose-300">
+          <span>🔥 粒子微流體物理實時渲染中</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 場景 4: 雙層玻璃杯與黃金 Crema (75% - 100%) -->
+    <section class="h-screen sticky top-0 flex items-center justify-center p-6 sm:p-16 max-w-4xl mx-auto pointer-events-auto opacity-0 transition-opacity duration-300" id="stage-card-4">
+      <div class="glass-panel p-6 sm:p-10 rounded-2xl space-y-5 max-w-xl text-center border border-amber-400/40">
+        <div class="inline-flex items-center gap-2 font-mono text-xs font-black text-amber-400 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
+          <span>SCENE 04 · FINAL IMMERSION</span>
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-black text-white leading-tight">
+          極致雙層玻璃杯<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">醇厚黃金 Crema 凝結</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans max-w-md mx-auto">
+          鏡頭緩慢定格。濃縮咖啡液滴入高硼矽雙層隔熱玻璃杯，琥珀色與綿密黃金油沫交融，達成全場景無斷點沉浸式旅程。
+        </p>
+        <div class="pt-4 flex flex-wrap items-center justify-center gap-3">
+          <button onclick="seekTo(0)" class="px-5 py-2.5 rounded-full text-xs font-mono font-bold bg-white text-black hover:bg-amber-400 transition cursor-pointer">
+            ↺ 重新穿透體驗 (Back to Top)
+          </button>
+          <button onclick="toggleDocModal()" class="px-5 py-2.5 rounded-full text-xs font-mono font-bold glass-pill hover:bg-white/20 transition cursor-pointer">
+            檢視 Vanilla JS 引擎配置
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- 6. 整合指南彈窗 (Integration Modal) -->
+  <!-- ========================================== -->
+  <div id="docModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 sm:p-8">
+    <div class="glass-panel max-w-3xl w-full max-h-[85vh] rounded-2xl overflow-hidden flex flex-col border border-white/20">
+      <div class="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between">
+        <h3 class="font-mono text-sm sm:text-base font-black text-white flex items-center gap-2">
+          <span>🚀 Scroll-World 整合代碼指南</span>
+        </h3>
+        <button onclick="toggleDocModal()" class="text-slate-400 hover:text-white font-mono text-lg cursor-pointer">✕</button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-4 font-mono text-xs text-slate-300 leading-relaxed">
+        <p class="text-amber-400 font-bold">1. 引入 Scrubber 引擎（無任何第三方依賴）：</p>
+        <pre class="bg-black/60 p-4 rounded-xl border border-white/10 text-emerald-400 overflow-x-auto">import { ScrollWorldScrubber } from './src/scrubber.js';
+
+const engine = new ScrollWorldScrubber({
+  canvas: document.getElementById('worldCanvas'),
+  lerpFactor: 0.08, // 慣性平滑度
+  trackHeight: 4500, // 虛擬高度
+  onProgress: (p, velocity) => {
+    console.log(`Global Progress: ${(p * 100).toFixed(1)}%`);
+  }
+});</pre>
+
+        <p class="text-cyan-400 font-bold">2. 替換成你自己的 AI 影片 (GOP=1)：</p>
+        <pre class="bg-black/60 p-4 rounded-xl border border-white/10 text-slate-200 overflow-x-auto"># 終端轉碼指令 (確保 60FPS 搓動零遲滯)
+ffmpeg -i my_dive.mp4 -c:v libx264 -g 1 -keyint_min 1 -crf 22 -an output_gop1.mp4</pre>
+
+        <p class="text-slate-400">已完整封裝在專案目錄：<code class="text-amber-300">projects/scroll-world/</code> 與 Skill 規範：<code class="text-amber-300">skills/scroll-world/</code></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 7. 核心引擎執行腳本 -->
+  <!-- ========================================== -->
+  <script type="module">
+    import { ScrollWorldScrubber } from './src/scrubber.js';
+
+    // 取得 DOM
+    const canvas = document.getElementById('worldCanvas');
+    const ctx = canvas.getContext('2d');
+    const depthText = document.getElementById('depthText');
+    const zoomText = document.getElementById('zoomText');
+    const velocityBar = document.getElementById('velocityBar');
+    const timelineProgress = document.getElementById('timelineProgress');
+    const progressPercent = document.getElementById('progressPercent');
+    const sceneIndicator = document.getElementById('sceneIndicator');
+
+    const card1 = document.getElementById('stage-card-1');
+    const card2 = document.getElementById('stage-card-2');
+    const card3 = document.getElementById('stage-card-3');
+    const card4 = document.getElementById('stage-card-4');
+
+    // 粒子系統（咖啡豆粉、木塵、高壓蒸汽）
+    const particles = [];
+    for (let i = 0; i < 120; i++) {
+      particles.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        z: Math.random() * 2000,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 3 + 1,
+        color: Math.random() > 0.4 ? 'rgba(245, 158, 11, ' : 'rgba(255, 255, 255, '
+      });
+    }
+
+    // 4 大場景程序化繪製渲染器 (支援無縫插值與真實影片置換)
+    const scenes = [
+      {
+        id: 'scene-1',
+        start: 0,
+        end: 0.25,
+        render: (ctx, localP, canvas, vel) => {
+          renderDiorama(ctx, localP, canvas, vel);
+        }
+      },
+      {
+        id: 'scene-2',
+        start: 0.25,
+        end: 0.50,
+        render: (ctx, localP, canvas, vel) => {
+          renderGrinderDive(ctx, localP, canvas, vel);
+        }
+      },
+      {
+        id: 'scene-3',
+        start: 0.50,
+        end: 0.75,
+        render: (ctx, localP, canvas, vel) => {
+          renderSteamExtraction(ctx, localP, canvas, vel);
+        }
+      },
+      {
+        id: 'scene-4',
+        start: 0.75,
+        end: 1.0,
+        render: (ctx, localP, canvas, vel) => {
+          renderGlassCup(ctx, localP, canvas, vel);
+        }
+      }
+    ];
+
+    // 初始化 Scrubber
+    const scrubber = new ScrollWorldScrubber({
+      canvas: canvas,
+      scenes: scenes,
+      lerpFactor: 0.08,
+      onProgress: (progress, velocity) => {
+        // 更新進度條
+        const pct = Math.round(progress * 100);
+        timelineProgress.style.width = `${pct}%`;
+        progressPercent.textContent = `${pct}%`;
+
+        // 更新遙測指標
+        const currentDepth = (progress * 420).toFixed(2);
+        depthText.textContent = `${currentDepth} m`;
+
+        const currentZoom = (1.0 + Math.pow(progress, 2.2) * 99).toFixed(2);
+        zoomText.textContent = `${currentZoom}x`;
+
+        const velPercent = Math.min(velocity * 8000, 100);
+        velocityBar.style.width = `${velPercent}%`;
+
+        // 更新音效強度
+        updateAudioVelocity(velocity, progress);
+
+        // 卡片透明度平滑切換
+        updateCards(progress);
+      },
+      onSceneChange: (idx) => {
+        sceneIndicator.textContent = `STAGE 0${idx + 1} / 04`;
+      }
+    });
+
+    window.seekTo = (p) => scrubber.seekToProgress(p);
+
+    function updateCards(p) {
+      card1.style.opacity = p < 0.22 ? `${1 - p * 3.5}` : '0';
+      card2.style.opacity = p >= 0.20 && p < 0.48 ? `${Math.sin(((p - 0.20) / 0.28) * Math.PI)}` : '0';
+      card3.style.opacity = p >= 0.46 && p < 0.74 ? `${Math.sin(((p - 0.46) / 0.28) * Math.PI)}` : '0';
+      card4.style.opacity = p >= 0.72 ? `${Math.min((p - 0.72) * 4, 1)}` : '0';
+    }
+
+    // ==========================================
+    // 繪圖管線：場景 1 (Isometric Diorama)
+    // ==========================================
+    function renderDiorama(ctx, p, canvas, vel) {
+      const w = canvas.width;
+      const h = canvas.height;
+      const scale = 1 + p * 2.5; // 逐漸拉近
+      const cx = w * 0.5;
+      const cy = h * 0.52;
+
+      ctx.save();
+      ctx.fillStyle = '#060A12';
+      ctx.fillRect(0, 0, w, h);
+
+      // 背景漸層火山
+      const bgGrad = ctx.createRadialGradient(cx, cy * 0.7, 50, cx, cy * 0.7, w * 0.8);
+      bgGrad.addColorStop(0, '#1E293B');
+      bgGrad.addColorStop(0.5, '#0F172A');
+      bgGrad.addColorStop(1, '#05070A');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      // 繪製等角微縮懸浮島 (Isometric Island Block)
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+
+      // 頂層綠色草皮
+      ctx.beginPath();
+      ctx.moveTo(0, -120);
+      ctx.lineTo(240, 0);
+      ctx.lineTo(0, 120);
+      ctx.lineTo(-240, 0);
+      ctx.closePath();
+      const grassGrad = ctx.createLinearGradient(-240, -120, 240, 120);
+      grassGrad.addColorStop(0, '#15803D');
+      grassGrad.addColorStop(1, '#166534');
+      ctx.fillStyle = grassGrad;
+      ctx.fill();
+      ctx.strokeStyle = '#22C55E';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // 島身側面岩石 (3D Cutaway Depth)
+      ctx.beginPath();
+      ctx.moveTo(-240, 0);
+      ctx.lineTo(0, 120);
+      ctx.lineTo(0, 240);
+      ctx.lineTo(-240, 120);
+      ctx.closePath();
+      ctx.fillStyle = '#1E1B18';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(0, 120);
+      ctx.lineTo(240, 0);
+      ctx.lineTo(240, 120);
+      ctx.lineTo(0, 240);
+      ctx.closePath();
+      ctx.fillStyle = '#2B2621';
+      ctx.fill();
+
+      // 工坊微縮木屋建築 (Workshop)
+      ctx.fillStyle = '#B45309';
+      ctx.fillRect(-45, -80, 90, 70);
+      // 屋頂
+      ctx.beginPath();
+      ctx.moveTo(-60, -80);
+      ctx.lineTo(0, -135);
+      ctx.lineTo(60, -80);
+      ctx.closePath();
+      ctx.fillStyle = '#92400E';
+      ctx.fill();
+      // 亮燈窗戶 (Zoom in Target Window)
+      ctx.fillStyle = '#FBBF24';
+      ctx.shadowColor = '#F59E0B';
+      ctx.shadowBlur = 25;
+      ctx.fillRect(-15, -55, 30, 35);
+      ctx.shadowBlur = 0;
+
+      ctx.restore();
+
+      drawParticles(ctx, w, h, p, '#F59E0B');
+    }
+
+    // ==========================================
+    // 繪圖管線：場景 2 (Camera Dive into Grinder)
+    // ==========================================
+    function renderGrinderDive(ctx, p, canvas, vel) {
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+      const scale = 1 + p * 3.2;
+
+      ctx.save();
+      ctx.fillStyle = '#0B0907';
+      ctx.fillRect(0, 0, w, h);
+
+      // 工坊木質氛圍光
+      const glow = ctx.createRadialGradient(cx, cy, 20, cx, cy, w * 0.7);
+      glow.addColorStop(0, '#78350F');
+      glow.addColorStop(0.6, '#1C1917');
+      glow.addColorStop(1, '#05070A');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+
+      // 黃銅磨豆機料斗 (Brass Hopper Cone)
+      ctx.beginPath();
+      ctx.moveTo(-160, -220);
+      ctx.lineTo(160, -220);
+      ctx.lineTo(60, 60);
+      ctx.lineTo(-60, 60);
+      ctx.closePath();
+      const brassGrad = ctx.createLinearGradient(-160, -220, 160, 60);
+      brassGrad.addColorStop(0, '#F59E0B');
+      brassGrad.addColorStop(0.3, '#FDE68A');
+      brassGrad.addColorStop(0.7, '#D97706');
+      brassGrad.addColorStop(1, '#78350F');
+      ctx.fillStyle = brassGrad;
+      ctx.fill();
+
+      // 料斗內的旋轉咖啡豆
+      for (let i = 0; i < 18; i++) {
+        const angle = (i / 18) * Math.PI * 2 + p * 4;
+        const rad = 25 + (i % 4) * 22;
+        const bx = Math.cos(angle) * rad;
+        const by = -80 + Math.sin(angle) * (rad * 0.5);
+        drawCoffeeBean(ctx, bx, by, 12, angle);
+      }
+
+      ctx.restore();
+
+      drawParticles(ctx, w, h, p, '#D97706');
+    }
+
+    // ==========================================
+    // 繪圖管線：場景 3 (Micro Titanium Burrs & Steam)
+    // ==========================================
+    function renderSteamExtraction(ctx, p, canvas, vel) {
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+
+      ctx.save();
+      ctx.fillStyle = '#070A0F';
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.translate(cx, cy);
+
+      // 旋轉微距鈦合金刀盤 (Rotating Burrs)
+      const rotation = p * Math.PI * 4;
+      ctx.rotate(rotation);
+
+      const burrGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, 320);
+      burrGrad.addColorStop(0, '#0F172A');
+      burrGrad.addColorStop(0.7, '#334155');
+      burrGrad.addColorStop(1, '#94A3B8');
+      ctx.strokeStyle = burrGrad;
+      ctx.lineWidth = 14;
+
+      for (let i = 0; i < 24; i++) {
+        ctx.beginPath();
+        const a = (i / 24) * Math.PI * 2;
+        ctx.moveTo(Math.cos(a) * 40, Math.sin(a) * 40);
+        ctx.lineTo(Math.cos(a + 0.3) * 280, Math.sin(a + 0.3) * 280);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+
+      // 高壓蒸汽霧氣層 (Steam Fog Overlay)
+      ctx.save();
+      const steamGrad = ctx.createRadialGradient(cx, cy, 50, cx, cy, w * 0.6);
+      steamGrad.addColorStop(0, `rgba(255, 255, 255, ${0.4 + p * 0.4})`);
+      steamGrad.addColorStop(0.5, `rgba(245, 158, 11, ${0.25 + p * 0.2})`);
+      steamGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = steamGrad;
+      ctx.fillRect(0, 0, w, h);
+      ctx.restore();
+
+      drawParticles(ctx, w, h, p * 2, '#FFFFFF');
+    }
+
+    // ==========================================
+    // 繪圖管線：場景 4 (Double-Walled Glass Cup & Crema)
+    // ==========================================
+    function renderGlassCup(ctx, p, canvas, vel) {
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w * 0.5;
+      const cy = h * 0.52;
+      const scale = 1.2 - (1 - p) * 0.3;
+
+      ctx.save();
+      ctx.fillStyle = '#06080D';
+      ctx.fillRect(0, 0, w, h);
+
+      // 高級暗色展台聚光燈 (Spotlight)
+      const spot = ctx.createRadialGradient(cx, cy * 0.8, 40, cx, cy, w * 0.65);
+      spot.addColorStop(0, '#2D1B0A');
+      spot.addColorStop(0.5, '#120D08');
+      spot.addColorStop(1, '#05070A');
+      ctx.fillStyle = spot;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+
+      // 雙層玻璃外壁 (Outer Borosilicate Glass)
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.roundRect(-140, -180, 280, 320, [15, 15, 60, 60]);
+      ctx.stroke();
+
+      // 雙層玻璃內壁 (Inner Chamber with Liquid)
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.roundRect(-110, -160, 220, 270, [10, 10, 45, 45]);
+      ctx.stroke();
+
+      // 濃縮黑咖啡液體 (Rich Espresso Body)
+      const coffeeGrad = ctx.createLinearGradient(0, -40, 0, 100);
+      coffeeGrad.addColorStop(0, '#381C06');
+      coffeeGrad.addColorStop(1, '#1A0B02');
+      ctx.fillStyle = coffeeGrad;
+      ctx.beginPath();
+      ctx.roundRect(-108, -60, 216, 168, [0, 0, 43, 43]);
+      ctx.fill();
+
+      // 頂部黃金 Crema 油沫層 (Golden Crema Layer)
+      const cremaGrad = ctx.createLinearGradient(-100, -80, 100, -50);
+      cremaGrad.addColorStop(0, '#D97706');
+      cremaGrad.addColorStop(0.5, '#F59E0B');
+      cremaGrad.addColorStop(1, '#B45309');
+      ctx.fillStyle = cremaGrad;
+      ctx.beginPath();
+      ctx.roundRect(-108, -80, 216, 26, [6, 6, 0, 0]);
+      ctx.fill();
+
+      // 玻璃高光反光 (Reflections)
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(-125, -160);
+      ctx.lineTo(-125, 90);
+      ctx.stroke();
+
+      ctx.restore();
+
+      drawParticles(ctx, w, h, 0.2, '#F59E0B');
+    }
+
+    function drawCoffeeBean(ctx, x, y, r, angle) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.fillStyle = '#26160B';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, r * 1.3, r, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // 中間裂紋
+      ctx.strokeStyle = '#D97706';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(-r * 0.9, 0);
+      ctx.quadraticCurveTo(0, 3, r * 0.9, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawParticles(ctx, w, h, speedMult, baseColor) {
+      ctx.save();
+      for (let i = 0; i < particles.length; i++) {
+        const pt = particles[i];
+        pt.y -= (0.4 + speedMult * 2.5);
+        pt.x += pt.vx;
+        if (pt.y < 0) pt.y = h;
+        if (pt.x < 0) pt.x = w;
+        if (pt.x > w) pt.x = 0;
+
+        ctx.fillStyle = `${baseColor} 0.6)`;
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    // ==========================================
+    // Web Audio 空間實時環境音效合成器
+    // ==========================================
+    let audioCtx = null;
+    let isAudioOn = false;
+    let windOsc = null;
+    let windGain = null;
+    let grinderOsc = null;
+    let grinderGain = null;
+
+    window.toggleAudio = function() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        setupAudioNodes();
+      }
+
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      isAudioOn = !isAudioOn;
+      const soundIcon = document.getElementById('soundIcon');
+      const soundLabel = document.getElementById('soundLabel');
+      if (isAudioOn) {
+        soundIcon.textContent = '🔊';
+        soundLabel.textContent = '靜音';
+        windGain.gain.setTargetAtTime(0.08, audioCtx.currentTime, 0.2);
+      } else {
+        soundIcon.textContent = '🔇';
+        soundLabel.textContent = '開啟環境音效';
+        windGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.2);
+        grinderGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.2);
+      }
+    };
+
+    function setupAudioNodes() {
+      // 1. 低頻風聲與雲霧微風
+      windOsc = audioCtx.createOscillator();
+      windOsc.type = 'sine';
+      windOsc.frequency.setValueAtTime(110, audioCtx.currentTime);
+      windGain = audioCtx.createGain();
+      windGain.gain.setValueAtTime(0, audioCtx.currentTime);
+      windOsc.connect(windGain);
+      windGain.connect(audioCtx.destination);
+      windOsc.start();
+
+      // 2. 磨豆與高壓共鳴
+      grinderOsc = audioCtx.createOscillator();
+      grinderOsc.type = 'triangle';
+      grinderOsc.frequency.setValueAtTime(280, audioCtx.currentTime);
+      grinderGain = audioCtx.createGain();
+      grinderGain.gain.setValueAtTime(0, audioCtx.currentTime);
+      grinderOsc.connect(grinderGain);
+      grinderGain.connect(audioCtx.destination);
+      grinderOsc.start();
+    }
+
+    function updateAudioVelocity(vel, p) {
+      if (!isAudioOn || !audioCtx) return;
+      const targetPitch = 120 + p * 240 + vel * 3000;
+      windOsc.frequency.setTargetAtTime(targetPitch, audioCtx.currentTime, 0.1);
+
+      // 磨豆機階段音效拉高
+      if (p > 0.25 && p < 0.75) {
+        const grinderVol = Math.min(0.05 + vel * 8, 0.18);
+        grinderGain.gain.setTargetAtTime(grinderVol, audioCtx.currentTime, 0.08);
+      } else {
+        grinderGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.2);
+      }
+    }
+
+    // Modal
+    window.toggleDocModal = function() {
+      const modal = document.getElementById('docModal');
+      modal.classList.toggle('hidden');
+      modal.classList.toggle('flex');
+    };
+  </script>
+</body>
+</html>
