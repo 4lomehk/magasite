@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espresso Machine Shot Extraction 3D</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- OrbitControls -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+    
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+      background-color: #111111;
+      color: #e5e5e5;
+      user-select: none;
+    }
+
+    /* Glassmorphism panel styles */
+    .glass-panel {
+      background: rgba(22, 22, 26, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .glass-button {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-button:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+    .glass-button.active {
+      background: #e5a93c;
+      color: #111;
+      font-weight: 700;
+      border-color: #f5bc56;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    /* Glowing marker badge overlay */
+    #target-badge {
+      position: absolute;
+      pointer-events: none;
+      transition: transform 0.1s ease-out;
+      display: none;
+    }
+
+    /* Gauge needle animation simulation */
+    .gauge-pulse {
+      animation: pulseNeedle 2s infinite ease-in-out;
+    }
+    @keyframes pulseNeedle {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(8deg); }
+    }
+  </style>
+</head>
+<body class="w-screen h-screen overflow-hidden">
+
+  <!-- 3D Canvas -->
+  <div id="webgl-container" class="w-full h-full absolute inset-0 z-0"></div>
+
+  <!-- UI Overlay Layer -->
+  <div class="relative z-10 w-full h-full flex flex-col justify-between p-4 pointer-events-none">
+    
+    <!-- TOP BAR -->
+    <header class="w-full glass-panel rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3 pointer-events-auto">
+      <!-- Logo & Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg">
+          <i class="fa-solid font-bold fa-mug-hot"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-base tracking-wide text-white leading-tight">Espresso Shot Simulator</h1>
+          <p class="text-xs text-neutral-400">意式咖啡機萃取運作原理 3D 模型</p>
+        </div>
+      </div>
+
+      <!-- Area Switcher Quick Nav -->
+      <div class="hidden md:flex items-center gap-1 bg-neutral-900/60 p-1 rounded-xl border border-white/5">
+        <button onclick="focusArea('overview')" class="glass-button active px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5" id="nav-overview">
+          <i class="fa-solid fa-cube"></i> 全景 (Overview)
+        </button>
+        <button onclick="focusArea('grouphead')" class="glass-button px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5" id="nav-grouphead">
+          <i class="fa-solid fa-filter"></i> 沖煮頭 (Group Head)
+        </button>
+        <button onclick="focusArea('boiler')" class="glass-button px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5" id="nav-boiler">
+          <i class="fa-solid fa-temperature-high"></i> 鍋爐 (Boiler)
+        </button>
+        <button onclick="focusArea('gauge')" class="glass-button px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5" id="nav-gauge">
+          <i class="fa-solid fa-gauge-high"></i> 壓力表 (Gauge)
+        </button>
+        <button onclick="focusArea('cup')" class="glass-button px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5" id="nav-cup">
+          <i class="fa-solid fa-coffee"></i> 咖啡杯 (Cup)
+        </button>
+      </div>
+
+      <!-- Controls Right (Weather, Day/Night, Live Clock) -->
+      <div class="flex items-center gap-2">
+        <!-- Weather Selector -->
+        <div class="relative">
+          <select id="weather-select" onchange="changeWeather(this.value)" class="glass-button text-xs px-3 py-1.5 rounded-xl bg-neutral-800 text-neutral-200 outline-none cursor-pointer">
+            <option value="clear">☀️ 晴朗 (Clear)</option>
+            <option value="steam">🌫️ 蒸汽霧 (Steam Haze)</option>
+            <option value="dust">🍂 咖啡粉塵 (Coffee Dust)</option>
+            <option value="night">🌙 夜景 (Night Chill)</option>
+          </select>
+        </div>
+
+        <!-- Cinematic Mode Toggle -->
+        <button onclick="toggleCinematic()" id="cinematic-btn" title="鏡頭巡航" class="glass-button w-9 h-9 rounded-xl flex items-center justify-center text-xs text-amber-400">
+          <i class="fa-solid fa-video"></i>
+        </button>
+
+        <!-- Extraction Trigger -->
+        <button onclick="toggleBrewing()" id="brew-btn" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-1.5 rounded-xl text-xs transition shadow-lg flex items-center gap-2">
+          <i class="fa-solid fa-play" id="brew-icon"></i> <span id="brew-text">開始萃取</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MIDDLE FLOATING CONTENT -->
+    <div class="flex-1 my-3 flex justify-between items-start pointer-events-none relative overflow-hidden">
+      
+      <!-- Left KPI Cards -->
+      <div class="flex flex-col gap-3 pointer-events-auto w-48 sm:w-56">
+        <!-- KPI 1 -->
+        <div class="glass-panel p-3.5 rounded-2xl flex items-center justify-between border-l-4 border-l-amber-500">
+          <div>
+            <div class="text-[10px] text-neutral-400 font-semibold tracking-wider uppercase">Extraction Pressure</div>
+            <div class="text-xl font-bold text-white mt-0.5" id="kpi-pressure">9.1 <span class="text-xs font-normal text-amber-400">BAR</span></div>
+          </div>
+          <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400">
+            <i class="fa-solid fa-gauge-high"></i>
+          </div>
+        </div>
+
+        <!-- KPI 2 -->
+        <div class="glass-panel p-3.5 rounded-2xl flex items-center justify-between border-l-4 border-l-rose-500">
+          <div>
+            <div class="text-[10px] text-neutral-400 font-semibold tracking-wider uppercase">Water Temp</div>
+            <div class="text-xl font-bold text-white mt-0.5" id="kpi-temp">93.0 <span class="text-xs font-normal text-rose-400">°C</span></div>
+          </div>
+          <div class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400">
+            <i class="fa-solid fa-fire"></i>
+          </div>
+        </div>
+
+        <!-- KPI 3 -->
+        <div class="glass-panel p-3.5 rounded-2xl flex items-center justify-between border-l-4 border-l-cyan-500">
+          <div>
+            <div class="text-[10px] text-neutral-400 font-semibold tracking-wider uppercase">Flow Speed</div>
+            <div class="text-xl font-bold text-white mt-0.5" id="kpi-flow">1.8 <span class="text-xs font-normal text-cyan-400">mL/s</span></div>
+          </div>
+          <div class="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400">
+            <i class="fa-solid fa-droplet"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Detail Panel (Dynamic Component Info) -->
+      <div id="detail-panel" class="glass-panel w-72 sm:w-80 p-4 rounded-2xl pointer-events-auto transition-all duration-300 transform translate-x-0">
+        <div class="flex items-center justify-between pb-3 border-b border-white/10">
+          <div class="flex items-center gap-2">
+            <span id="detail-icon" class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs">
+              <i class="fa-solid fa-layer-group"></i>
+            </span>
+            <h3 id="detail-title" class="font-bold text-white text-sm">全景概覽 (Overview)</h3>
+          </div>
+          <span id="detail-tag" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-medium border border-emerald-500/30">系統正常</span>
+        </div>
+
+        <p id="detail-desc" class="text-xs text-neutral-300 my-3 leading-relaxed">
+          這是一部低聚數 3D 模擬 Espresso 濃縮咖啡機。你可以點擊任何部件查看數據細節，或開啟萃取模擬。
+        </p>
+
+        <!-- Stats List -->
+        <div class="space-y-2 text-xs bg-black/30 p-2.5 rounded-xl border border-white/5">
+          <div class="flex justify-between text-neutral-400">
+            <span>部件狀態 (Status):</span>
+            <span id="stat-1" class="text-white font-medium">Ready 待命中</span>
+          </div>
+          <div class="flex justify-between text-neutral-400">
+            <span>核心參數 (Parameter):</span>
+            <span id="stat-2" class="text-amber-400 font-medium">Standard 9 Bar</span>
+          </div>
+          <div class="flex justify-between text-neutral-400">
+            <span>建議維護 (Maintenance):</span>
+            <span id="stat-3" class="text-white font-medium">優良 (Good)</span>
+          </div>
+        </div>
+
+        <!-- Interactive action inside panel -->
+        <button onclick="triggerInspect()" class="w-full mt-3 glass-button py-2 rounded-xl text-xs font-semibold text-amber-400 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-crosshairs"></i> 特寫放大 inspect
+        </button>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM BAR: PROCESS TRACKER & TABBED TABLE -->
+    <footer class="w-full flex flex-col md:flex-row gap-3 items-stretch pointer-events-auto">
+      
+      <!-- Bottom Left 6-Step Process Tracker -->
+      <div class="glass-panel p-3 rounded-2xl flex-1 flex flex-col justify-between">
+        <div class="text-[11px] font-bold text-neutral-400 mb-2 uppercase tracking-wider flex items-center gap-2">
+          <i class="fa-solid fa-list-check text-amber-400"></i> 萃取 6 步流程跟蹤器 (Extraction Lifecycle)
+        </div>
+        
+        <div class="grid grid-cols-6 gap-1.5 text-center">
+          <!-- Step 1 -->
+          <div id="step-1" class="p-1.5 rounded-xl bg-amber-500 text-neutral-950 font-bold text-[10px] border border-amber-400 shadow-lg">
+            1. 磨粉 Grind
+          </div>
+          <!-- Step 2 -->
+          <div id="step-2" class="p-1.5 rounded-xl bg-white/5 text-neutral-400 text-[10px] border border-white/5">
+            2. 壓粉 Tamp
+          </div>
+          <!-- Step 3 -->
+          <div id="step-3" class="p-1.5 rounded-xl bg-white/5 text-neutral-400 text-[10px] border border-white/5">
+            3. 預浸 Pre-Inf
+          </div>
+          <!-- Step 4 -->
+          <div id="step-4" class="p-1.5 rounded-xl bg-white/5 text-neutral-400 text-[10px] border border-white/5">
+            4. 加壓 Ramp
+          </div>
+          <!-- Step 5 -->
+          <div id="step-5" class="p-1.5 rounded-xl bg-white/5 text-neutral-400 text-[10px] border border-white/5">
+            5. 萃取 Extract
+          </div>
+          <!-- Step 6 -->
+          <div id="step-6" class="p-1.5 rounded-xl bg-white/5 text-neutral-400 text-[10px] border border-white/5">
+            6. 出杯 Serve
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Right Tabbed Data Table -->
+      <div class="glass-panel p-3 rounded-2xl w-full md:w-96 flex flex-col justify-between">
+        <!-- Tabs header -->
+        <div class="flex items-center justify-between mb-2 border-b border-white/10 pb-1">
+          <div class="flex gap-2">
+            <button onclick="switchTab('pressure')" id="tab-btn-pressure" class="text-xs px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/30">壓力 Logs</button>
+            <button onclick="switchTab('temp')" id="tab-btn-temp" class="text-xs px-2.5 py-1 rounded-lg text-neutral-400 hover:text-white">水溫 Temp</button>
+            <button onclick="switchTab('yield')" id="tab-btn-yield" class="text-xs px-2.5 py-1 rounded-lg text-neutral-400 hover:text-white">流量 Yield</button>
+          </div>
+          <span class="text-[10px] text-neutral-400" id="live-clock">13:22:00</span>
+        </div>
+
+        <!-- Tab Content Container -->
+        <div id="tab-content" class="text-xs text-neutral-300 space-y-1">
+          <!-- Dynamic Content Rendered by JS -->
+        </div>
+      </div>
+
+    </footer>
+  </div>
+
+  <!-- 3D Selected Target Label Badge Overlay -->
+  <div id="target-badge" class="glass-panel px-3 py-1 rounded-full border border-amber-400/50 flex items-center gap-2 text-xs font-bold text-amber-300 shadow-xl">
+    <div class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></div>
+    <span id="target-badge-name">Boiler 鍋爐</span>
+  </div>
+
+  <!-- THREE.JS LOGIC & APPLICATION ENGINE -->
+  <script>
+    // Global App State
+    const state = {
+      isBrewing: false,
+      brewingProgress: 0,
+      activeComponent: 'overview',
+      weather: 'clear',
+      isCinematic: false,
+      cinematicAngle: 0,
+      activeTab: 'pressure',
+      kpi: {
+        pressure: 0.0,
+        targetPressure: 9.1,
+        temp: 93.0,
+        flow: 0.0
+      }
+    };
+
+    // Scene Setup Variables
+    let scene, camera, renderer, controls;
+    let components = {}; // Store mesh references
+    let steamParticles, waterStreamParticles, dustParticles;
+    let cameraTargetPos = new THREE.Vector3(0, 1.2, 0);
+    let cameraTargetLook = new THREE.Vector3(0, 0, 0);
+
+    // Initializer
+    window.onload = function() {
+      initThree();
+      buildEspressoMachine();
+      initParticles();
+      initEvents();
+      startAnimationLoop();
+      updateClock();
+      setInterval(updateClock, 1000);
+      switchTab('pressure');
+    };
+
+    function initThree() {
+      const container = document.getElementById('webgl-container');
+      
+      // Scene
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x111111);
+      scene.fog = new THREE.FogExp2(0x111111, 0.035);
+
+      // Camera (Isometric angle setup)
+      camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.set(5.5, 4.5, 5.5);
+
+      // Renderer
+      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      container.appendChild(renderer.domElement);
+
+      // Controls
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxPolarAngle = Math.PI / 2 - 0.02; // Don't clip below ground
+      controls.minDistance = 2;
+      controls.maxDistance = 12;
+
+      // Lights (Soft Clay-like Studio Lighting)
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+      scene.add(ambientLight);
+
+      const mainLight = new THREE.DirectionalLight(0xfff5ea, 1.2);
+      mainLight.position.set(6, 10, 5);
+      mainLight.castShadow = true;
+      mainLight.shadow.mapSize.width = 2048;
+      mainLight.shadow.mapSize.height = 2048;
+      mainLight.shadow.camera.near = 0.5;
+      mainLight.shadow.camera.far = 25;
+      mainLight.shadow.bias = -0.0005;
+      scene.add(mainLight);
+
+      const fillLight = new THREE.DirectionalLight(0x90b0ff, 0.4);
+      fillLight.position.set(-5, 4, -5);
+      scene.add(fillLight);
+
+      // Accent Warm Rim Light
+      const rimLight = new THREE.PointLight(0xe5a93c, 0.8, 8);
+      rimLight.position.set(0, 3, -2);
+      scene.add(rimLight);
+    }
+
+    /* --------------------------------------------------
+     * 3D LOW-POLY ESPRESSO MACHINE BUILDER (CLAY LOOK)
+     * -------------------------------------------------- */
+    function buildEspressoMachine() {
+      // Materials Palette (Toy/Clay Style)
+      const matBody = new THREE.MeshStandardMaterial({ color: 0xefefef, roughness: 0.3, metalness: 0.1 });
+      const matAccent = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.4 });
+      const matMetal = new THREE.MeshStandardMaterial({ color: 0xcccccc, roughness: 0.2, metalness: 0.8 });
+      const matCopper = new THREE.MeshStandardMaterial({ color: 0xd97736, roughness: 0.3, metalness: 0.6 });
+      const matGlass = new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.85, opacity: 1, transparent: true, roughness: 0.1, ior: 1.4 });
+      const matCoffee = new THREE.MeshStandardMaterial({ color: 0x3d2314, roughness: 0.2 });
+      const matDarkMetal = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.5 });
+
+      const machineGroup = new THREE.Group();
+
+      // 0. Base Platform / Grid Stand
+      const baseGeo = new THREE.BoxGeometry(2.6, 0.2, 2.2);
+      const baseMesh = new THREE.Mesh(baseGeo, matBody);
+      baseMesh.position.set(0, 0.1, 0);
+      baseMesh.receiveShadow = true;
+      baseMesh.castShadow = true;
+      machineGroup.add(baseMesh);
+
+      // Drip Tray & Metal Grate (Component #1)
+      const dripGroup = new THREE.Group();
+      const dripTrayGeo = new THREE.BoxGeometry(2.4, 0.15, 1.2);
+      const dripMesh = new THREE.Mesh(dripTrayGeo, matDarkMetal);
+      dripMesh.position.set(0, 0.25, 0.4);
+      dripMesh.castShadow = true;
+      dripGroup.add(dripMesh);
+
+      // Metal Top Grid Lines
+      for(let i = -0.9; i <= 0.9; i += 0.2) {
+        const slat = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.02, 1.1), matMetal);
+        slat.position.set(i, 0.33, 0.4);
+        dripGroup.add(slat);
+      }
+      dripGroup.name = "Drip Tray 滴水盤";
+      dripGroup.userData = { id: 'drip', name: 'Drip Tray 滴水盤', desc: '可拆卸式304不銹鋼集水盤，配備滿水浮標指示，方便清潔積水與咖啡渣。' };
+      machineGroup.add(dripGroup);
+      components.drip = dripGroup;
+
+      // Main Back Tower / Housing
+      const mainTowerGeo = new THREE.BoxGeometry(2.6, 2.8, 1.0);
+      const mainTower = new THREE.Mesh(mainTowerGeo, matBody);
+      mainTower.position.set(0, 1.6, -0.6);
+      mainTower.castShadow = true;
+      mainTower.receiveShadow = true;
+      machineGroup.add(mainTower);
+
+      // 1. Water Tank (Component #2 - Glass transparent tank at rear)
+      const tankGroup = new THREE.Group();
+      const tankGeo = new THREE.BoxGeometry(0.7, 1.8, 0.8);
+      const tankMesh = new THREE.Mesh(tankGeo, matGlass);
+      tankMesh.position.set(-0.8, 1.8, -0.6);
+      tankGroup.add(tankMesh);
+
+      // Water Level inside Tank
+      const waterLevelGeo = new THREE.BoxGeometry(0.64, 1.3, 0.74);
+      const matWater = new THREE.MeshStandardMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.6 });
+      const waterMesh = new THREE.Mesh(waterLevelGeo, matWater);
+      waterMesh.position.set(-0.8, 1.5, -0.6);
+      tankGroup.add(waterMesh);
+      tankGroup.name = "Water Tank 水箱";
+      tankGroup.userData = { id: 'tank', name: 'Water Tank 獨立水箱', desc: '2.5L 大容量儲水箱，設有水質軟化過濾器與低水位自動感應保護。' };
+      machineGroup.add(tankGroup);
+      components.tank = tankGroup;
+
+      // 2. Internal Boiler Unit (Component #3 - Hidden inside, top view)
+      const boilerGroup = new THREE.Group();
+      const boilerGeo = new THREE.CylinderGeometry(0.35, 0.35, 0.9, 16);
+      const boilerMesh = new THREE.Mesh(boilerGeo, matCopper);
+      boilerMesh.rotation.z = Math.PI / 2;
+      boilerMesh.position.set(0.4, 2.2, -0.6);
+      boilerMesh.castShadow = true;
+      boilerGroup.add(boilerMesh);
+      boilerGroup.name = "Boiler 雙獨立鍋爐";
+      boilerGroup.userData = { id: 'boiler', name: 'PID 雙銅質鍋爐', desc: 'PID 精確溫控黃銅雙鍋爐，提供穩定的 93°C 萃取水溫與強勁乾燥蒸汽。' };
+      machineGroup.add(boilerGroup);
+      components.boiler = boilerGroup;
+
+      // 3. Front Extraction Block & Group Head (Component #4)
+      const groupHeadGroup = new THREE.Group();
+      const blockGeo = new THREE.BoxGeometry(1.2, 0.8, 0.9);
+      const blockMesh = new THREE.Mesh(blockGeo, matBody);
+      blockMesh.position.set(0, 2.0, 0.15);
+      blockMesh.castShadow = true;
+      groupHeadGroup.add(blockMesh);
+
+      // E61 Style Brass Group Head Outlet
+      const headGeo = new THREE.CylinderGeometry(0.3, 0.35, 0.3, 16);
+      const headMesh = new THREE.Mesh(headGeo, matMetal);
+      headMesh.position.set(0, 1.5, 0.25);
+      headMesh.castShadow = true;
+      groupHeadGroup.add(headMesh);
+      groupHeadGroup.name = "Group Head E61沖煮頭";
+      groupHeadGroup.userData = { id: 'grouphead', name: 'E61 沖煮頭 (Group Head)', desc: '經典 E61 恆溫循環沖煮頭，具備自動低壓預浸功能，確保咖啡粉餅均勻萃取。' };
+      machineGroup.add(groupHeadGroup);
+      components.grouphead = groupHeadGroup;
+
+      // 4. Portafilter Handle (Component #5)
+      const portaGroup = new THREE.Group();
+      const filterBasket = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.24, 0.2, 16), matMetal);
+      filterBasket.position.set(0, 1.38, 0.25);
+      portaGroup.add(filterBasket);
+
+      const handleRod = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.7, 12), matDarkMetal);
+      handleRod.rotation.x = Math.PI / 2;
+      handleRod.position.set(0, 1.38, 0.65);
+      handleRod.castShadow = true;
+      portaGroup.add(handleRod);
+
+      const handleTip = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), matAccent);
+      handleTip.position.set(0, 1.38, 1.0);
+      portaGroup.add(handleTip);
+      portaGroup.name = "Portafilter 萃取手把";
+      portaGroup.userData = { id: 'portafilter', name: '58mm 無底手把 (Portafilter)', desc: '商用級 58mm 重量級黃銅手把，能直觀觀察濃縮咖啡萃取油脂 (Crema) 狀態。' };
+      machineGroup.add(portaGroup);
+      components.portafilter = portaGroup;
+
+      // 5. Dual Pressure Gauge (Component #6)
+      const gaugeGroup = new THREE.Group();
+      const gaugeFrame = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.08, 24), matMetal);
+      gaugeFrame.rotation.x = Math.PI / 2;
+      gaugeFrame.position.set(0.4, 2.15, 0.61);
+      gaugeGroup.add(gaugeFrame);
+
+      const gaugeFace = new THREE.Mesh(new THREE.CircleGeometry(0.18, 24), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      gaugeFace.position.set(0.4, 2.15, 0.66);
+      gaugeGroup.add(gaugeFace);
+
+      // Needle
+      const needleGeo = new THREE.BoxGeometry(0.02, 0.14, 0.01);
+      const needleMat = new THREE.MeshBasicMaterial({ color: 0xd93636 });
+      const needleMesh = new THREE.Mesh(needleGeo, needleMat);
+      needleMesh.position.set(0.4, 2.15, 0.67);
+      needleMesh.geometry.translate(0, 0.06, 0); // Pivot point offset
+      gaugeGroup.add(needleMesh);
+      components.needle = needleMesh;
+
+      gaugeGroup.name = "Pressure Gauge 雙動態壓力表";
+      gaugeGroup.userData = { id: 'gauge', name: '萃取壓力監測表 (Bar Gauge)', desc: '實時顯示沖煮頭內部 0-15 Bar 壓力變化。最佳萃取區間為 8.5 - 9.5 Bar。' };
+      machineGroup.add(gaugeGroup);
+      components.gauge = gaugeGroup;
+
+      // 6. Espresso Cup & Liquid (Component #7)
+      const cupGroup = new THREE.Group();
+      const cupGeo = new THREE.CylinderGeometry(0.2, 0.14, 0.28, 16);
+      const cupMesh = new THREE.Mesh(cupGeo, matBody);
+      cupMesh.position.set(0, 0.47, 0.25);
+      cupMesh.castShadow = true;
+      cupGroup.add(cupMesh);
+
+      // Handle for cup
+      const cupHandleGeo = new THREE.TorusGeometry(0.08, 0.025, 8, 16);
+      const cupHandle = new THREE.Mesh(cupHandleGeo, matBody);
+      cupHandle.position.set(0.2, 0.47, 0.25);
+      cupGroup.add(cupHandle);
+
+      // Liquid Surface inside Cup
+      const liquidGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.02, 16);
+      const liquidMesh = new THREE.Mesh(liquidGeo, matCoffee);
+      liquidMesh.position.set(0, 0.56, 0.25);
+      liquidMesh.scale.set(0.001, 1, 0.001); // Start empty
+      cupGroup.add(liquidMesh);
+      components.cupLiquid = liquidMesh;
+
+      cupGroup.name = "Espresso Cup 濃縮咖啡杯";
+      cupGroup.userData = { id: 'cup', name: '雙層陶瓷咖啡杯 (Espresso Cup)', desc: '保持液體溫度的雙層保溫陶瓷杯，容量 60ml。' };
+      machineGroup.add(cupGroup);
+      components.cup = cupGroup;
+
+      // 7. Steam Wand (Component #8)
+      const steamWandGroup = new THREE.Group();
+      const wandPipe = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.8, 12), matMetal);
+      wandPipe.position.set(-0.6, 1.3, 0.35);
+      wandPipe.rotation.z = -Math.PI / 8;
+      wandPipe.castShadow = true;
+      steamWandGroup.add(wandPipe);
+
+      const wandTip = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.02, 0.08, 12), matMetal);
+      wandTip.position.set(-0.75, 0.95, 0.35);
+      steamWandGroup.add(wandTip);
+      steamWandGroup.name = "Steam Wand 萬向蒸汽棒";
+      steamWandGroup.userData = { id: 'steam', name: '防燙強勁蒸汽棒', desc: '專業 4 孔蒸汽噴嘴，能快速打出極致綿密打發奶泡 (Micro-foam)。' };
+      machineGroup.add(steamWandGroup);
+      components.steam = steamWandGroup;
+
+      // 8. Top Cup Warmer & Coffee Beans Decorative Props (Component #9)
+      const topWarmerGroup = new THREE.Group();
+      // Cup warming knobs
+      for(let x = -0.5; x <= 0.5; x += 0.35) {
+        for(let z = -0.8; z <= -0.4; z += 0.35) {
+          const knob = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.1, 12), matBody);
+          knob.position.set(x, 3.05, z);
+          knob.castShadow = true;
+          topWarmerGroup.add(knob);
+        }
+      }
+      // Scattered Low Poly Coffee Beans
+      const beanGeo = new THREE.SphereGeometry(0.05, 6, 6);
+      beanGeo.scale(1.4, 0.8, 0.9);
+      for(let b = 0; b < 12; b++) {
+        const bean = new THREE.Mesh(beanGeo, matCoffee);
+        bean.position.set((Math.random()-0.5)*1.8, 0.32, 0.4 + (Math.random()-0.5)*0.6);
+        bean.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
+        machineGroup.add(bean);
+      }
+
+      scene.add(machineGroup);
+    }
+
+    /* --------------------------------------------------
+     * PARTICLE SYSTEMS (Steam, Water Flow, Coffee Dust)
+     * -------------------------------------------------- */
+    function initParticles() {
+      // 1. Steam Particles System
+      const steamCount = 60;
+      const steamGeo = new THREE.BufferGeometry();
+      const steamPos = new Float32Array(steamCount * 3);
+      for(let i=0; i<steamCount*3; i+=3) {
+        steamPos[i] = -0.75 + (Math.random()-0.5)*0.1;
+        steamPos[i+1] = 0.9 + Math.random()*0.4;
+        steamPos[i+2] = 0.35 + (Math.random()-0.5)*0.1;
+      }
+      steamGeo.setAttribute('position', new THREE.BufferAttribute(steamPos, 3));
+      const steamMat = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.08,
+        transparent: true,
+        opacity: 0.3,
+        blending: THREE.AdditiveBlending
+      });
+      steamParticles = new THREE.Points(steamGeo, steamMat);
+      scene.add(steamParticles);
+
+      // 2. Coffee Extraction Stream Particles
+      const streamCount = 100;
+      const streamGeo = new THREE.BufferGeometry();
+      const streamPos = new Float32Array(streamCount * 3);
+      for(let i=0; i<streamCount*3; i+=3) {
+        streamPos[i] = 0 + (Math.random()-0.5)*0.03;
+        streamPos[i+1] = 0.6 + Math.random()*0.75;
+        streamPos[i+2] = 0.25 + (Math.random()-0.5)*0.03;
+      }
+      streamGeo.setAttribute('position', new THREE.BufferAttribute(streamPos, 3));
+      const streamMat = new THREE.PointsMaterial({
+        color: 0x6e3b19,
+        size: 0.04,
+        transparent: true,
+        opacity: 0.0 // Initially invisible until brewing
+      });
+      waterStreamParticles = new THREE.Points(streamGeo, streamMat);
+      scene.add(waterStreamParticles);
+
+      // 3. Environmental Dust Particles (Coffee Dust Weather)
+      const dustCount = 150;
+      const dustGeo = new THREE.BufferGeometry();
+      const dustPos = new Float32Array(dustCount * 3);
+      for(let i=0; i<dustCount*3; i+=3) {
+        dustPos[i] = (Math.random()-0.5)*10;
+        dustPos[i+1] = Math.random()*6;
+        dustPos[i+2] = (Math.random()-0.5)*10;
+      }
+      dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+      const dustMat = new THREE.PointsMaterial({
+        color: 0xd97736,
+        size: 0.05,
+        transparent: true,
+        opacity: 0.0
+      });
+      dustParticles = new THREE.Points(dustGeo, dustMat);
+      scene.add(dustParticles);
+    }
+
+    /* --------------------------------------------------
+     * INTERACTION & RAYCASTING
+     * -------------------------------------------------- */
+    function initEvents() {
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();
+
+      window.addEventListener('resize', onWindowResize);
+
+      // Click to select components
+      window.addEventListener('pointerdown', (e) => {
+        // Prevent clicking UI controls
+        if(e.target.closest('.pointer-events-auto')) return;
+
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        
+        // Target component meshes
+        let intersectableObjects = [];
+        Object.values(components).forEach(comp => {
+          comp.traverse(child => {
+            if(child.isMesh) intersectableObjects.push(child);
+          });
+        });
+
+        const intersects = raycaster.intersectObjects(intersectableObjects);
+        if(intersects.length > 0) {
+          // Find root component group
+          let hitObj = intersects[0].object;
+          while(hitObj.parent && hitObj.parent !== scene && !hitObj.userData.id) {
+            hitObj = hitObj.parent;
+          }
+          if(hitObj.userData && hitObj.userData.id) {
+            focusArea(hitObj.userData.id);
+          }
+        }
+      });
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    /* --------------------------------------------------
+     * CAMERA FOCUS & AREA SWITCHER
+     * -------------------------------------------------- */
+    function focusArea(areaKey) {
+      state.activeComponent = areaKey;
+      state.isCinematic = false;
+      document.getElementById('cinematic-btn').classList.remove('active');
+
+      // Update Nav Buttons State
+      document.querySelectorAll('[id^="nav-"]').forEach(btn => btn.classList.remove('active'));
+      const activeNav = document.getElementById(`nav-${areaKey}`);
+      if(activeNav) activeNav.classList.add('active');
+
+      const targetBadge = document.getElementById('target-badge');
+
+      switch(areaKey) {
+        case 'overview':
+          cameraTargetPos.set(5.5, 4.5, 5.5);
+          cameraTargetLook.set(0, 1.0, 0);
+          updateDetailPanel("全景概覽 (Overview)", "這是一部低聚數 3D 模擬 Espresso 濃縮咖啡機。你可以點擊任何部件查看數據細節，或開啟萃取模擬。", "系統正常", "Ready 待命", "9.1 Bar (Standard)", "優良");
+          targetBadge.style.display = 'none';
+          break;
+
+        case 'grouphead':
+          cameraTargetPos.set(1.5, 2.2, 2.5);
+          cameraTargetLook.set(0, 1.6, 0.2);
+          updateDetailPanel("E61 沖煮頭 (Group Head)", components.grouphead.userData.desc, "溫控中", "93.0°C", "Pre-infusion ON", "良好");
+          showTargetBadge("E61 沖煮頭", 0, 1.8, 0.2);
+          break;
+
+        case 'boiler':
+          cameraTargetPos.set(2.2, 3.2, -0.2);
+          cameraTargetLook.set(0.4, 2.2, -0.6);
+          updateDetailPanel("PID 雙銅質鍋爐", components.boiler.userData.desc, "加熱完畢", "121.5°C 蒸汽", "1.5 Bar 蒸汽壓", "正常");
+          showTargetBadge("雙銅質鍋爐", 0.4, 2.2, -0.6);
+          break;
+
+        case 'gauge':
+          cameraTargetPos.set(1.2, 2.3, 1.8);
+          cameraTargetLook.set(0.4, 2.15, 0.61);
+          updateDetailPanel("雙動態壓力表", components.gauge.userData.desc, "高精度感應", state.isBrewing ? "9.1 Bar" : "0.0 Bar", "Dynamic Needle", "校準完成");
+          showTargetBadge("萃取壓力表", 0.4, 2.15, 0.61);
+          break;
+
+        case 'cup':
+          cameraTargetPos.set(1.4, 1.2, 1.6);
+          cameraTargetLook.set(0, 0.6, 0.25);
+          updateDetailPanel("濃縮咖啡杯", components.cup.userData.desc, "已就位", "60ml 容量", "預熱 65°C", "乾淨");
+          showTargetBadge("Espresso Cup", 0, 0.6, 0.25);
+          break;
+
+        case 'tank':
+          cameraTargetPos.set(-2.2, 2.4, 0.8);
+          cameraTargetLook.set(-0.8, 1.5, -0.6);
+          updateDetailPanel("獨立水箱", components.tank.userData.desc, "水量充足", "85% 水位", "TDS: 75 ppm", "需定期除垢");
+          showTargetBadge("獨立水箱", -0.8, 1.5, -0.6);
+          break;
+
+        case 'steam':
+          cameraTargetPos.set(-2.0, 1.6, 1.8);
+          cameraTargetLook.set(-0.7, 1.1, 0.35);
+          updateDetailPanel("萬向蒸汽棒", components.steam.userData.desc, "蒸汽待命", "乾燥蒸汽", "4-Hole Tip", "乾淨");
+          showTargetBadge("蒸汽棒", -0.7, 1.1, 0.35);
+          break;
+      }
+    }
+
+    function updateDetailPanel(title, desc, status, param, maint, note) {
+      document.getElementById('detail-title').innerText = title;
+      document.getElementById('detail-desc').innerText = desc;
+      document.getElementById('stat-1').innerText = status;
+      document.getElementById('stat-2').innerText = param;
+      document.getElementById('stat-3').innerText = maint;
+    }
+
+    function showTargetBadge(name, x, y, z) {
+      const badge = document.getElementById('target-badge');
+      document.getElementById('target-badge-name').innerText = name;
+      badge.style.display = 'flex';
+      badge.userData = { worldPos: new THREE.Vector3(x, y, z) };
+    }
+
+    function triggerInspect() {
+      if(state.activeComponent !== 'overview') {
+        // Zoom closer
+        cameraTargetPos.multiplyScalar(0.85);
+      }
+    }
+
+    /* --------------------------------------------------
+     * BREWING SIMULATION LOGIC & ANIMATION LOOP
+     * -------------------------------------------------- */
+    function toggleBrewing() {
+      state.isBrewing = !state.isBrewing;
+      const btn = document.getElementById('brew-btn');
+      const icon = document.getElementById('brew-icon');
+      const text = document.getElementById('brew-text');
+
+      if(state.isBrewing) {
+        btn.classList.replace('bg-amber-500', 'bg-rose-600');
+        btn.classList.replace('hover:bg-amber-400', 'hover:bg-rose-500');
+        icon.className = "fa-solid fa-square";
+        text.innerText = "停止萃取";
+        state.brewingProgress = 0;
+      } else {
+        btn.classList.replace('bg-rose-600', 'bg-amber-500');
+        btn.classList.replace('hover:bg-rose-500', 'hover:bg-amber-400');
+        icon.className = "fa-solid fa-play";
+        text.innerText = "開始萃取";
+        // Reset liquid particle stream opacity & needle
+        waterStreamParticles.material.opacity = 0.0;
+        updateProcessStep(1);
+      }
+    }
+
+    function updateProcessStep(stepNum) {
+      for(let i=1; i<=6; i++) {
+        const el = document.getElementById(`step-${i}`);
+        if(i === stepNum) {
+          el.className = "p-1.5 rounded-xl bg-amber-500 text-neutral-950 font-bold text-[10px] border border-amber-400 shadow-lg animate-pulse";
+        } else if(i < stepNum) {
+          el.className = "p-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 font-semibold text-[10px] border border-emerald-500/30";
+        } else {
+          el.className = "p-1.5 rounded-xl bg-white/5 text-neutral-400 text-[10px] border border-white/5";
+        }
+      }
+    }
+
+    function toggleCinematic() {
+      state.isCinematic = !state.isCinematic;
+      const btn = document.getElementById('cinematic-btn');
+      if(state.isCinematic) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    }
+
+    function changeWeather(mode) {
+      state.weather = mode;
+      const bg = scene.background;
+      
+      if(mode === 'night') {
+        scene.background.setHex(0x050508);
+        scene.fog.color.setHex(0x050508);
+        dustParticles.material.opacity = 0.0;
+        steamParticles.material.opacity = 0.15;
+      } else if(mode === 'steam') {
+        scene.background.setHex(0x1a1c23);
+        scene.fog.color.setHex(0x1a1c23);
+        steamParticles.material.opacity = 0.7;
+        dustParticles.material.opacity = 0.0;
+      } else if(mode === 'dust') {
+        scene.background.setHex(0x1c140d);
+        scene.fog.color.setHex(0x1c140d);
+        dustParticles.material.opacity = 0.6;
+        steamParticles.material.opacity = 0.2;
+      } else {
+        // Clear
+        scene.background.setHex(0x111111);
+        scene.fog.color.setHex(0x111111);
+        steamParticles.material.opacity = 0.3;
+        dustParticles.material.opacity = 0.0;
+      }
+    }
+
+    /* --------------------------------------------------
+     * MAIN ANIMATION LOOP
+     * -------------------------------------------------- */
+    function startAnimationLoop() {
+      const clock = new THREE.Clock();
+
+      function animate() {
+        requestAnimationFrame(animate);
+        const elapsedTime = clock.getElapsedTime();
+
+        // 1. Smooth Camera Motion Glide
+        if(state.isCinematic) {
+          state.cinematicAngle += 0.005;
+          const radius = 6;
+          camera.position.x = Math.sin(state.cinematicAngle) * radius;
+          camera.position.z = Math.cos(state.cinematicAngle) * radius;
+          camera.position.y = 3.5 + Math.sin(state.cinematicAngle * 2) * 0.5;
+          controls.target.set(0, 1.2, 0);
+        } else {
+          camera.position.lerp(cameraTargetPos, 0.05);
+          controls.target.lerp(cameraTargetLook, 0.05);
+        }
+        controls.update();
+
+        // 2. Steam Particles Animation
+        const steamPositions = steamParticles.geometry.attributes.position.array;
+        for(let i=1; i<steamPositions.length; i+=3) {
+          steamPositions[i] += 0.008;
+          if(steamPositions[i] > 2.0) steamPositions[i] = 0.9;
+        }
+        steamParticles.geometry.attributes.position.needsUpdate = true;
+
+        // 3. Coffee Dust Particles Animation
+        if(dustParticles.material.opacity > 0) {
+          const dustPos = dustParticles.geometry.attributes.position.array;
+          for(let i=0; i<dustPos.length; i+=3) {
+            dustPos[i] += Math.sin(elapsedTime + i) * 0.003;
+            dustPos[i+1] -= 0.002;
+            if(dustPos[i+1] < 0) dustPos[i+1] = 5;
+          }
+          dustParticles.geometry.attributes.position.needsUpdate = true;
+        }
+
+        // 4. Extraction Logic & Liquid Animation
+        if(state.isBrewing) {
+          state.brewingProgress += 0.005;
+          
+          // Step progression based on time
+          if(state.brewingProgress < 0.15) {
+            updateProcessStep(2); // Tamp
+            state.kpi.pressure = 1.2;
+            state.kpi.flow = 0.0;
+          } else if(state.brewingProgress < 0.35) {
+            updateProcessStep(3); // Pre-infusion
+            state.kpi.pressure = 3.0;
+            state.kpi.flow = 0.4;
+            waterStreamParticles.material.opacity = 0.4;
+          } else if(state.brewingProgress < 0.55) {
+            updateProcessStep(4); // Ramp Pressure
+            state.kpi.pressure = 9.1;
+            state.kpi.flow = 1.8;
+            waterStreamParticles.material.opacity = 0.95;
+          } else if(state.brewingProgress < 0.85) {
+            updateProcessStep(5); // Extracting
+            state.kpi.pressure = 9.2 + Math.sin(elapsedTime*10)*0.1;
+          } else if(state.brewingProgress < 1.0) {
+            updateProcessStep(6); // Serve
+          } else {
+            // Cycle finished
+            state.brewingProgress = 0.4; // Loop extraction state
+          }
+
+          // Liquid level in cup rises
+          if(components.cupLiquid && components.cupLiquid.scale.x < 1.0) {
+            const s = Math.min(1.0, components.cupLiquid.scale.x + 0.003);
+            components.cupLiquid.scale.set(s, 1, s);
+          }
+
+          // Gauge Needle Rotation Pulsing
+          if(components.needle) {
+            const targetRot = (state.kpi.pressure / 15) * -Math.PI * 1.2;
+            components.needle.rotation.z = targetRot + Math.sin(elapsedTime * 12) * 0.04;
+          }
+
+          // Stream particles flow downward
+          const streamPos = waterStreamParticles.geometry.attributes.position.array;
+          for(let i=1; i<streamPos.length; i+=3) {
+            streamPos[i] -= 0.025;
+            if(streamPos[i] < 0.58) streamPos[i] = 1.35;
+          }
+          waterStreamParticles.geometry.attributes.position.needsUpdate = true;
+
+        } else {
+          // Idle state needle
+          if(components.needle) {
+            components.needle.rotation.z = THREE.MathUtils.lerp(components.needle.rotation.z, 0, 0.05);
+          }
+          state.kpi.pressure = THREE.MathUtils.lerp(state.kpi.pressure, 0, 0.05);
+          state.kpi.flow = THREE.MathUtils.lerp(state.kpi.flow, 0, 0.05);
+        }
+
+        // Update KPI UI Elements
+        document.getElementById('kpi-pressure').innerHTML = `${state.kpi.pressure.toFixed(1)} <span class="text-xs font-normal text-amber-400">BAR</span>`;
+        document.getElementById('kpi-flow').innerHTML = `${state.kpi.flow.toFixed(1)} <span class="text-xs font-normal text-cyan-400">mL/s</span>`;
+
+        // Update Target Badge Screen Position
+        const badge = document.getElementById('target-badge');
+        if(badge.style.display !== 'none' && badge.userData && badge.userData.worldPos) {
+          const screenVector = badge.userData.worldPos.clone().project(camera);
+          const x = (screenVector.x * .5 + .5) * window.innerWidth;
+          const y = (-(screenVector.y * .5) + .5) * window.innerHeight;
+          badge.style.transform = `translate3d(${x}px, ${y}px, 0px) translate(-50%, -100%)`;
+        }
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    }
+
+    /* --------------------------------------------------
+     * UI DATA TABS & CLOCK
+     * -------------------------------------------------- */
+    function switchTab(tabKey) {
+      state.activeTab = tabKey;
+      const content = document.getElementById('tab-content');
+      
+      const tabBtns = ['pressure', 'temp', 'yield'];
+      tabBtns.forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if(t === tabKey) {
+          btn.className = "text-xs px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/30";
+        } else {
+          btn.className = "text-xs px-2.5 py-1 rounded-lg text-neutral-400 hover:text-white";
+        }
+      });
+
+      if(tabKey === 'pressure') {
+        content.innerHTML = `
+          <div class="flex justify-between border-b border-white/5 py-1">
+            <span>預浸階段 (Pre-Infusion)</span>
+            <span class="text-amber-400 font-mono">3.0 BAR (5s)</span>
+          </div>
+          <div class="flex justify-between border-b border-white/5 py-1">
+            <span>黃金萃取區間 (Golden Ramp)</span>
+            <span class="text-emerald-400 font-mono">9.1 BAR (25s)</span>
+          </div>
+          <div class="flex justify-between py-1">
+            <span>迴壓閥狀態 (OPV Relief)</span>
+            <span class="text-neutral-400 font-mono">Normal (9.5 Max)</span>
+          </div>
+        `;
+      } else if(tabKey === 'temp') {
+        content.innerHTML = `
+          <div class="flex justify-between border-b border-white/5 py-1">
+            <span>鍋爐目標設定 (PID Target)</span>
+            <span class="text-rose-400 font-mono">93.0 °C</span>
+          </div>
+          <div class="flex justify-between border-b border-white/5 py-1">
+            <span>沖煮頭實時溫差 (Delta T)</span>
+            <span class="text-emerald-400 font-mono">±0.2 °C</span>
+          </div>
+          <div class="flex justify-between py-1">
+            <span>蒸汽鍋爐溫度 (Steam Boiler)</span>
+            <span class="text-amber-400 font-mono">121.5 °C</span>
+          </div>
+        `;
+      } else if(tabKey === 'yield') {
+        content.innerHTML = `
+          <div class="flex justify-between border-b border-white/5 py-1">
+            <span>粉液比例 (Brew Ratio)</span>
+            <span class="text-cyan-400 font-mono">1 : 2.0 (18g -> 36g)</span>
+          </div>
+          <div class="flex justify-between border-b border-white/5 py-1">
+            <span>總萃取時間 (Total Time)</span>
+            <span class="text-white font-mono">28.5 秒</span>
+          </div>
+          <div class="flex justify-between py-1">
+            <span>預期油脂濃稠度 (Crema Quality)</span>
+            <span class="text-amber-400 font-mono">極佳 (Hazelnut Brown)</span>
+          </div>
+        `;
+      }
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.toTimeString().split(' ')[0];
+      document.getElementById('live-clock').innerText = timeStr;
+    }
+  </script>
+</body>
+</html>
