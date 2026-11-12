@@ -396,7 +396,53 @@
                 <p class="font-mono text-xs sm:text-sm font-bold text-news-winered mt-1.5">
                     先講重點：純羅漢果苷唔係果糖，亦唔等於水果天然糖。只係「非」能抗炎或「幫腸」！
                 </p>
-                
+                <!-- A1 羅漢果主題視覺與滾動視差展示盒 (Scroll-Parallax Monk Fruit Showcase) -->
+<div id="monk-fruit-stage" class="my-4 border-2 border-news-ink bg-[#FAF8F5] p-3.5 sm:p-5 shadow-sm overflow-hidden transition-transform duration-300">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        
+        <!-- 左側：上載羅漢果實物圖片 + 3D 滾動景深容器 -->
+        <div class="md:col-span-5 relative group">
+            <div class="border-2 border-news-ink bg-white p-2 shadow-[4px_4px_0px_#121212] overflow-hidden">
+                <div id="monk-fruit-parallax-wrapper" class="overflow-hidden bg-white transition-transform duration-200 ease-out will-change-transform">
+                    <!-- 請確保將上載圖片 Duck-ai-image-2026-11-12-04-03.jpeg 儲存為 images/monk-fruit.jpg 或替換為對應 Base64 / 圖片網址 -->
+                    <img 
+                        src="Duck-ai-image-2026-11-12-04-03.jpeg" 
+                        alt="羅漢果實物與內部乾燥果瓤結構" 
+                        class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500"
+                    />
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-slate-300 flex items-center justify-between font-mono text-[11px] text-news-subtle">
+                    <span class="font-black text-news-winered">FIG 14.1 // 羅漢果乾燥全果與果瓤</span>
+                    <span>MOGROSIDE V</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右側：羅漢果分子結構與減糖實戰拆解 -->
+        <div class="md:col-span-7 space-y-2.5 font-serif">
+            <div class="inline-flex items-center gap-1.5 bg-news-ink text-white font-mono text-xs font-bold px-2.5 py-0.5">
+                <span>🔍 視覺解剖：真．羅漢果 vs 商業代糖</span>
+            </div>
+            <h3 class="text-lg sm:text-xl font-black text-news-ink leading-snug">
+                甜度高蔗糖 300 倍，但人體酵素「拆唔開」嘅三萜分子
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                從圖中乾燥羅漢果剖面可見其海綿狀果瓤與種子，天然甜味源自<strong>羅漢果甜苷（Mogrosides）</strong>。由於分子體積龐大且結構特殊，不會被小腸吸收轉化為血糖，直接隨代謝排出，真正做到<strong>零升糖負荷</strong>[cite: 3, 4]。
+            </p>
+            <div class="grid grid-cols-2 gap-2 pt-1 font-mono text-xs">
+                <div class="p-2 bg-emerald-50 border border-emerald-700 text-emerald-950">
+                    <strong class="block text-emerald-800">✅ 純萃取液 / 乾果</strong>
+                    <span>無赤藻糖醇填充，不拉水、不引致腸道脹氣</span>
+                </div>
+                <div class="p-2 bg-red-50 border border-red-700 text-red-950">
+                    <strong class="block text-red-800">❌ 市售 99% 混充粉</strong>
+                    <span>高滲透壓糖醇填充，易致腹脹腹瀉[cite: 3]</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
                 <!-- Core Truth Box -->
                 <div class="mt-3 p-3.5 bg-amber-50 border-l-4 border-amber-600 text-slate-800 text-xs sm:text-sm leading-relaxed space-y-2">
                     <p>
