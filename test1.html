@@ -1,722 +1,1666 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scroll-World · Scroll-Driven 3D「飛入世界」Landing Page 引擎</title>
-  <meta name="description" content="零 Cut 鏡頭連續穿透：由等角微縮建築一路俯衝飛入咖啡豆磨豆機、蒸汽萃取與雙層玻璃杯，純原生 Vanilla JS 物理滾動引擎。">
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <link rel="stylesheet" href="styles/main.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PREM 24 · 羅漢果甜苷 Mogroside V 3D 解剖與咖啡減糖實戰庫</title>
+  <meta name="description" content="PREM 24 專屬 3D 滾動解剖實驗室：純羅漢果萃取甜苷 (Mogroside V) 分子結構解剖、ScrollMagic × Three.js 消化路徑演繹、踢爆赤藻糖醇混充陷阱與咖啡減糖實戰模擬器。" />
+
+  <!-- Safe WebSocket & HMR Sandbox Guard -->
+  <script>
+    (function () {
+      var OriginalWebSocket = window.WebSocket;
+      if (OriginalWebSocket) {
+        function SafeWebSocket(url, protocols) {
+          var isViteHmr =
+            (typeof protocols === 'string' && protocols.indexOf('vite-hmr') !== -1) ||
+            (Array.isArray(protocols) && protocols.indexOf('vite-hmr') !== -1) ||
+            (typeof url === 'string' && (url.indexOf('vite-hmr') !== -1 || url.indexOf(':3000') !== -1));
+
+          if (isViteHmr) {
+            var listeners = {};
+            var mockSocket = {
+              binaryType: 'blob',
+              bufferedAmount: 0,
+              extensions: '',
+              protocol: 'vite-hmr',
+              readyState: 1,
+              url: String(url),
+              CONNECTING: 0, OPEN: 1, CLOSING: 2, CLOSED: 3,
+              send: function () {},
+              close: function () { mockSocket.readyState = 3; },
+              addEventListener: function (type, fn) {
+                listeners[type] = listeners[type] || [];
+                listeners[type].push(fn);
+                if (type === 'open') {
+                  setTimeout(function () {
+                    try { fn({ type: 'open', target: mockSocket }); } catch (e) {}
+                  }, 0);
+                }
+              },
+              removeEventListener: function (type, fn) {
+                if (!listeners[type]) return;
+                listeners[type] = listeners[type].filter(function (f) { return f !== fn; });
+              },
+              dispatchEvent: function () { return true; },
+              onopen: null, onclose: null, onerror: null, onmessage: null
+            };
+            setTimeout(function () {
+              if (typeof mockSocket.onopen === 'function') {
+                try { mockSocket.onopen({ type: 'open', target: mockSocket }); } catch (e) {}
+              }
+            }, 0);
+            return mockSocket;
+          }
+          return new OriginalWebSocket(url, protocols);
+        }
+        SafeWebSocket.prototype = OriginalWebSocket.prototype;
+        SafeWebSocket.CONNECTING = 0; SafeWebSocket.OPEN = 1;
+        SafeWebSocket.CLOSING = 2; SafeWebSocket.CLOSED = 3;
+        window.WebSocket = SafeWebSocket;
+      }
+      window.addEventListener('unhandledrejection', function (event) {
+        if (!event || !event.reason) return;
+        var msg = String(event.reason.message || event.reason);
+        if (msg.indexOf('WebSocket') !== -1 || msg.indexOf('websocket') !== -1) {
+          event.preventDefault();
+        }
+      }, true);
+    })();
+  </script>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
+            serif: ['"Playfair Display"', '"Noto Sans TC"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            cream: '#F4F0E6',
+            creamSoft: '#FAF8F2',
+            olive: '#3B4B20',
+            oliveDeep: '#2C3917',
+            chamber: '#141910',
+            ink: '#1F2418',
+            inkMuted: '#535B46',
+            amberAccent: '#D97706',
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Google Fonts (2+1 Rule: Playfair Display / Plus Jakarta Sans + JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Icons & Celebration -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+
+  <!-- ScrollMagic 2.0.8 (Exact pinned version per /3dscroll skill) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/ScrollMagic.min.js"></script>
+
+  <!-- Three.js Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+      }
+    }
+  </script>
+
   <style>
-    /* 隱藏滾動條但保持滾動 */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #070B14; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
+    :root {
+      --bg-cream: #F4F0E6;
+      --bg-olive: #3B4B20;
+      --bg-chamber: #141910;
+      --text-ink: #1F2418;
+      --accent-amber: #D97706;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-ink);
+      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .headline-balance {
+      text-wrap: balance;
+    }
+
+    /* Hairline editorial dividers */
+    .hairline-cream {
+      border-color: rgba(31, 36, 24, 0.12);
+    }
+    .hairline-olive {
+      border-color: rgba(244, 240, 230, 0.16);
+    }
+
+    /* Isometric SVG station interactive transitions */
+    .iso-station {
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+    .iso-station .iso-inner {
+      transform-box: fill-box;
+      transform-origin: center;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .iso-station:hover {
+      opacity: 1;
+    }
+
+    /* Custom slider styling for bottom 3D control dock */
+    input[type="range"].dock-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(244, 240, 230, 0.18);
+      height: 4px;
+      border-radius: 999px;
+      outline: none;
+    }
+    input[type="range"].dock-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: #F59E0B;
+      border: 2px solid #141910;
+      cursor: pointer;
+    }
+
+    /* Image fallback background */
+    .botanical-fallback {
+      background: radial-gradient(circle at 35% 35%, #566B2F 0%, #3B4B20 65%, #232D12 100%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      .parallax-circle {
+        transform: none !important;
+      }
+    }
   </style>
 </head>
-<body class="bg-[#05070A] text-slate-100 selection:bg-amber-500 selection:text-black">
+<body class="min-h-screen antialiased selection:bg-[#3B4B20] selection:text-[#F4F0E6]">
 
-  <!-- ========================================== -->
-  <!-- 1. 全螢幕固定畫布與影片雙緩衝層 (Fixed Background) -->
-  <!-- ========================================== -->
-  <div class="fixed inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
-    <canvas id="worldCanvas" class="w-full h-full object-cover block"></canvas>
-    
-    <!-- 噪點遮罩增加電影膠卷感 -->
-    <div class="absolute inset-0 bg-radial from-transparent via-black/40 to-black/80 pointer-events-none"></div>
-  </div>
+  <!-- STRICT 3-ZONE TOP BAR -->
+  <header class="sticky top-0 z-50 bg-[#F4F0E6]/95 border-b hairline-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between gap-8">
+      <!-- Zone 1: Single-element brand wordmark -->
+      <a href="/prem-24.html" class="font-serif italic font-black text-xl sm:text-2xl tracking-tight text-[#1F2418] whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-[#3B4B20]">
+        PREM 24
+      </a>
 
-  <!-- ========================================== -->
-  <!-- 2. 常駐頂部導航與狀態 HUD (Floating Header) -->
-  <!-- ========================================== -->
-  <header class="fixed top-0 left-0 right-0 z-50 p-4 sm:p-6 flex items-center justify-between pointer-events-auto">
-    <div class="flex items-center gap-3">
-      <div class="w-3 h-3 rounded-full bg-amber-500 animate-ping"></div>
-      <div class="w-3 h-3 rounded-full bg-amber-500 -ml-6"></div>
-      <div>
-        <span class="font-mono text-xs uppercase tracking-widest text-amber-400 font-black">SCROLL-WORLD ENGINE</span>
-        <h1 class="text-sm sm:text-base font-black tracking-tight text-white flex items-center gap-2">
-          <span>飛入微觀世界</span>
-          <span class="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono font-normal">GOP=1 Scrubbing</span>
-        </h1>
+      <!-- Zone 2: 4 single-line nav links (revealed smoothly via anchor jumps once unlocked) -->
+      <nav aria-label="章節導覽" class="hidden md:flex items-center gap-7 text-sm font-medium text-[#535B46]">
+        <a href="#band-truth" class="hover:text-[#1F2418] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0">羅漢果真相</a>
+        <a href="#band-3d-observatory" class="hover:text-[#1F2418] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0">3D 滾動解剖</a>
+        <a href="#band-anatomy" class="hover:text-[#1F2418] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0">消化節點</a>
+        <a href="#band-simulator" class="hover:text-[#1F2418] hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0">咖啡模擬器</a>
+      </nav>
+
+      <!-- Zone 3: 1 primary CTA -->
+      <div class="flex items-center shrink-0">
+        <a href="/dailyflow.html" class="px-4 py-2 rounded-lg bg-[#3B4B20] hover:bg-[#2C3917] text-[#F4F0E6] text-xs font-bold transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3B4B20]">
+          返回抗炎日報
+        </a>
       </div>
-    </div>
-
-    <!-- 控制區：場景快轉與音效開關 -->
-    <div class="flex items-center gap-2 sm:gap-3">
-      <button id="soundToggleBtn" onclick="toggleAudio()" class="px-3 py-1.5 rounded-full text-xs font-mono font-bold glass-pill hover:bg-white/20 transition flex items-center gap-1.5 cursor-pointer">
-        <span id="soundIcon">🔇</span> <span id="soundLabel" class="hidden sm:inline">開啟環境音效</span>
-      </button>
-      <button onclick="toggleDocModal()" class="px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-amber-500 hover:bg-amber-400 text-black transition flex items-center gap-1 cursor-pointer">
-        <span>📖</span> <span class="hidden sm:inline">整合代碼</span>
-      </button>
     </div>
   </header>
 
-  <!-- ========================================== -->
-  <!-- 3. 右側即時遙測儀錶板 (Telemetry HUD) -->
-  <!-- ========================================== -->
-  <aside class="fixed right-4 sm:right-8 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col gap-3 font-mono text-xs pointer-events-auto">
-    <div class="glass-panel p-4 rounded-xl space-y-3 min-w-[200px] border border-white/10">
-      <div class="flex items-center justify-between border-b border-white/10 pb-2">
-        <span class="text-slate-400">CAMERA TELEMETRY</span>
-        <span id="fpsBadge" class="text-emerald-400 font-bold">60 FPS</span>
+  <!-- PASSKEY BARRIER (Blocks all 3D scroll anatomy stages until unlocked) -->
+  <section id="passkey-barrier" class="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+    <div class="bg-[#FAF8F2] border hairline-cream rounded-2xl p-8 sm:p-12 text-center shadow-sm space-y-6">
+      <div class="text-xs font-mono tracking-wider text-[#535B46]">
+        <span>PREM 24 專屬解剖室</span>
+        <span aria-hidden="true" class="mx-2">·</span>
+        <span>3D 分子滾動檔案</span>
+        <span aria-hidden="true" class="mx-2">·</span>
+        <span>通行碼保護</span>
       </div>
 
-      <div>
-        <div class="text-[10px] text-slate-400">ZOOM DEPTH</div>
-        <div id="depthText" class="text-lg font-black text-amber-400 tracking-wider">0.00 m</div>
+      <h1 class="font-serif text-3xl sm:text-4xl font-black text-[#1F2418] leading-tight headline-balance">
+        解鎖羅漢果甜苷 3D 解剖與咖啡減糖模擬器
+      </h1>
+
+      <p class="text-sm sm:text-base text-[#535B46] max-w-xl mx-auto leading-relaxed">
+        本檔案內含 ScrollMagic × Three.js 3D 分子滾動觀察室、人體消化道等距剖面節點，以及踢爆市售 99% 赤藻糖醇混充陷阱嘅咖啡減糖模擬器。輸入專屬通行碼即可開啟全部互動體驗。
+      </p>
+
+      <div class="max-w-md mx-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+        <input
+          id="passkey-input"
+          type="text"
+          aria-label="專屬通行碼"
+          placeholder="輸入解鎖碼（例：HK$18 或 4lome）"
+          class="flex-1 min-h-[44px] px-4 py-2.5 rounded-xl bg-white border border-[#1F2418]/20 text-[#1F2418] font-mono text-sm text-center sm:text-left focus:outline-none focus:border-[#3B4B20]"
+          onkeydown="if(event.key==='Enter') unlockVault()"
+        />
+        <button
+          type="button"
+          onclick="unlockVault()"
+          class="min-h-[44px] px-6 py-2.5 rounded-xl bg-[#3B4B20] hover:bg-[#2C3917] text-[#F4F0E6] font-bold text-sm transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+        >
+          驗證解鎖
+        </button>
       </div>
 
-      <div>
-        <div class="text-[10px] text-slate-400">MAGNIFICATION</div>
-        <div id="zoomText" class="text-sm font-bold text-cyan-400">1.00x</div>
-      </div>
+      <p id="passkey-err" role="alert" class="text-xs font-bold text-[#B91C1C] hidden">
+        通行碼無效，請確認後重試（支援 HK$18 或管理通行碼）。
+      </p>
 
-      <div>
-        <div class="text-[10px] text-slate-400">SCRUB VELOCITY</div>
-        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mt-1">
-          <div id="velocityBar" class="bg-amber-400 h-full w-0 transition-all duration-75"></div>
-        </div>
-      </div>
-
-      <!-- 四幕場景切換快速跳轉 -->
-      <div class="pt-2 border-t border-white/10 space-y-1">
-        <div class="text-[10px] text-slate-400 mb-1">SCENE CHECKPOINTS</div>
-        <button onclick="seekTo(0.02)" class="w-full text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] transition flex items-center justify-between text-slate-300">
-          <span>01. 雲霧等角莊園</span> <span class="text-amber-400">0%</span>
+      <div class="pt-4 border-t hairline-cream flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-[#535B46]">
+        <button type="button" onclick="fillDemoKey()" class="underline underline-offset-4 hover:text-[#1F2418] transition-colors cursor-pointer">
+          填入預設通行碼 (HK$18)
         </button>
-        <button onclick="seekTo(0.28)" class="w-full text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] transition flex items-center justify-between text-slate-300">
-          <span>02. 烘焙工坊木門</span> <span class="text-amber-400">28%</span>
-        </button>
-        <button onclick="seekTo(0.55)" class="w-full text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] transition flex items-center justify-between text-slate-300">
-          <span>03. 磨豆鋼刀高壓</span> <span class="text-amber-400">55%</span>
-        </button>
-        <button onclick="seekTo(0.85)" class="w-full text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] transition flex items-center justify-between text-slate-300">
-          <span>04. 雙層玻璃杯</span> <span class="text-amber-400">85%</span>
-        </button>
+        <span aria-hidden="true">·</span>
+        <a href="/prem-24-en.html" class="underline underline-offset-4 hover:text-[#1F2418] transition-colors">
+          Switch to English Edition
+        </a>
       </div>
     </div>
-  </aside>
+  </section>
 
-  <!-- ========================================== -->
-  <!-- 4. 底部滾動進度條 (Timeline Scrubber) -->
-  <!-- ========================================== -->
-  <div class="fixed bottom-0 left-0 right-0 z-50 p-4 sm:p-6 pointer-events-none">
-    <div class="max-w-2xl mx-auto glass-panel p-3 rounded-full flex items-center gap-4 pointer-events-auto shadow-2xl">
-      <span class="font-mono text-xs font-bold text-amber-400 pl-2" id="sceneIndicator">STAGE 01 / 04</span>
-      <div class="flex-1 bg-slate-800/80 h-2 rounded-full overflow-hidden relative">
-        <div id="timelineProgress" class="bg-gradient-to-r from-amber-500 via-orange-400 to-cyan-400 h-full w-0 transition-all duration-75"></div>
-      </div>
-      <span class="font-mono text-xs font-black text-white pr-2" id="progressPercent">0%</span>
-    </div>
-  </div>
+  <!-- UNLOCKED VAULT CONTENT (All 3D Scroll Stages live strictly inside here) -->
+  <main id="vault-content" class="hidden">
 
-  <!-- ========================================== -->
-  <!-- 5. 虛擬滾動軌道 (Virtual Scroll Canvas Track) -->
-  <!-- 透過足夠的高度驅動滾動時間軸 (450vh) -->
-  <!-- ========================================== -->
-  <main class="relative z-10 min-h-[450vh] pointer-events-none">
+    <!-- ================================================================ -->
+    <!-- BAND A (WARM CREAM): DUAL-CIRCLE MONK FRUIT SHOWCASE & MANIFESTO  -->
+    <!-- ================================================================ -->
+    <section id="band-truth" class="bg-[#F4F0E6] text-[#1F2418] py-14 sm:py-20 border-b hairline-cream">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 space-y-14">
 
-    <!-- 場景 1: 等角微縮莊園 (0% - 25%) -->
-    <section class="h-screen sticky top-0 flex items-center justify-start p-6 sm:p-16 max-w-3xl pointer-events-auto" id="stage-card-1">
-      <div class="glass-panel p-6 sm:p-8 rounded-2xl space-y-4 max-w-lg border border-amber-500/20">
-        <div class="flex items-center gap-2 font-mono text-xs font-black text-amber-400">
-          <span class="px-2 py-0.5 rounded bg-amber-500/20">SCENE 01</span>
-          <span>等角微縮建築 · ISOMETRIC DIORAMA</span>
-        </div>
-        <h2 class="text-2xl sm:text-4xl font-black text-white leading-tight">
-          海拔 2,200 米<br><span class="text-amber-400">火山雲霧咖啡聖地</span>
-        </h2>
-        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-          上帝視角俯瞰。整座懸浮微縮莊園被熱帶雨林與梯田環抱，梯田最深處是一棟散發暖黃光芒的原木烘焙工坊。
-        </p>
-        <div class="pt-2 flex items-center gap-3 text-xs font-mono text-slate-400">
-          <span class="animate-bounce">↓ 向下滾動穿透世界</span>
-        </div>
-      </div>
-    </section>
+        <!-- 2-Column Editorial Hero Split (Inspired by Cream/Olive Showcase & wearebrand.io) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          <!-- Left Copy Column -->
+          <div class="lg:col-span-7 space-y-6">
+            <div class="text-xs font-mono tracking-wide text-[#535B46]">
+              <span>Issue 24</span>
+              <span aria-hidden="true" class="mx-2">·</span>
+              <span>Mogroside V 三萜苷研究</span>
+              <span aria-hidden="true" class="mx-2">·</span>
+              <span>咖啡減糖實證</span>
+            </div>
 
-    <!-- 場景 2: 鏡頭極速飛入木門 (25% - 50%) -->
-    <section class="h-screen sticky top-0 flex items-center justify-end p-6 sm:p-16 max-w-7xl mx-auto pointer-events-auto opacity-0 transition-opacity duration-300" id="stage-card-2">
-      <div class="glass-panel p-6 sm:p-8 rounded-2xl space-y-4 max-w-lg border border-cyan-500/20">
-        <div class="flex items-center gap-2 font-mono text-xs font-black text-cyan-400">
-          <span class="px-2 py-0.5 rounded bg-cyan-500/20">SCENE 02</span>
-          <span>無縫穿透飛入 · CAMERA DIVE</span>
-        </div>
-        <h2 class="text-2xl sm:text-4xl font-black text-white leading-tight">
-          穿透黃銅工坊木門<br><span class="text-cyan-400">直逼磨豆機核心</span>
-        </h2>
-        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-          零剪接無縫加速！鏡頭直接撞入玻璃氣窗，掠過懸浮木塵與原木烘焙桶，以 FPV 穿梭視角直插中央重工業黃銅磨豆機料斗。
-        </p>
-        <div class="text-xs font-mono text-slate-400">
-          <span>⚡ 當前放大率：12.5x 微距景深</span>
-        </div>
-      </div>
-    </section>
+            <h1 class="font-serif text-3xl sm:text-5xl lg:text-[3.25rem] font-black text-[#1F2418] leading-[1.15] headline-balance">
+              純羅漢果萃取係「<span class="text-[#D97706] underline decoration-[#D97706]/50 underline-offset-8">減糖工具</span>」，咪當做腸道保健品！
+            </h1>
 
-    <!-- 場景 3: 刀盤微距粉碎與高壓蒸汽 (50% - 75%) -->
-    <section class="h-screen sticky top-0 flex items-center justify-start p-6 sm:p-16 max-w-3xl pointer-events-auto opacity-0 transition-opacity duration-300" id="stage-card-3">
-      <div class="glass-panel p-6 sm:p-8 rounded-2xl space-y-4 max-w-lg border border-rose-500/20">
-        <div class="flex items-center gap-2 font-mono text-xs font-black text-rose-400">
-          <span class="px-2 py-0.5 rounded bg-rose-500/20">SCENE 03</span>
-          <span>微米刀盤 ＆ 蒸汽 · MICRO BURRS</span>
-        </div>
-        <h2 class="text-2xl sm:text-4xl font-black text-white leading-tight">
-          鈦合金鋼刀粉碎<br><span class="text-rose-400">9 BAR 高壓蒸汽暴湧</span>
-        </h2>
-        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-          進入微米世界！深焙咖啡豆在以每分鐘 1,400 轉的刀盤間瞬間崩解，緊接著 92°C 飽和蒸汽與熱水霧氣呼嘯而過，油脂徹底乳化！
-        </p>
-        <div class="text-xs font-mono text-rose-300">
-          <span>🔥 粒子微流體物理實時渲染中</span>
-        </div>
-      </div>
-    </section>
+            <p class="text-base sm:text-lg text-[#535B46] leading-relaxed max-w-2xl">
+              先講最清醒嘅科學事實：<strong class="text-[#1F2418]">純羅漢果甜苷唔係果糖，亦唔等於水果天然糖</strong>。用微量代替咖啡砂糖確實能夠大幅削減添加糖同熱量；<strong class="text-[#1F2418]">但目前並無足夠人體臨床證據證明佢能抗發炎、修復腸道黏膜或者「幫腸」</strong>。
+            </p>
 
-    <!-- 場景 4: 雙層玻璃杯與黃金 Crema (75% - 100%) -->
-    <section class="h-screen sticky top-0 flex items-center justify-center p-6 sm:p-16 max-w-4xl mx-auto pointer-events-auto opacity-0 transition-opacity duration-300" id="stage-card-4">
-      <div class="glass-panel p-6 sm:p-10 rounded-2xl space-y-5 max-w-xl text-center border border-amber-400/40">
-        <div class="inline-flex items-center gap-2 font-mono text-xs font-black text-amber-400 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
-          <span>SCENE 04 · FINAL IMMERSION</span>
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+              <a href="#band-3d-observatory" class="px-6 py-3 rounded-xl bg-[#3B4B20] hover:bg-[#2C3917] text-[#F4F0E6] text-sm font-bold transition-colors whitespace-nowrap shrink-0">
+                向下進入 3D 滾動解剖
+              </a>
+              <a href="#band-simulator" class="px-6 py-3 rounded-xl border border-[#1F2418]/25 hover:border-[#1F2418] text-[#1F2418] text-sm font-bold transition-colors whitespace-nowrap shrink-0">
+                打開咖啡減糖模擬器
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Overlapping Dual-Circle Monk Fruit Photography -->
+          <div class="lg:col-span-5 relative flex items-center justify-center py-6">
+            <div class="relative w-full max-w-[440px] h-[340px] sm:h-[400px]">
+              <!-- Primary Large Circle (Clean Cutaway Dried Monk Fruit) -->
+              <div id="hero-circle-primary" class="parallax-circle absolute right-0 top-0 w-60 h-60 sm:w-72 sm:h-72 rounded-full overflow-hidden border border-[#1F2418]/15 shadow-lg botanical-fallback will-change-transform">
+                <img
+                  src="/assets/aistudio/monk-fruit_810e9b21.jpeg"
+                  alt="乾燥羅漢果剖面：海綿狀果瓤與種子結構"
+                  referrerPolicy="no-referrer"
+                  class="w-full h-full object-cover"
+                  onerror="this.style.display='none'"
+                />
+              </div>
+
+              <!-- Secondary Overlapping Circle (Atmospheric Wood Table & Clay Cup) -->
+              <div id="hero-circle-secondary" class="parallax-circle absolute left-0 bottom-0 w-44 h-44 sm:w-56 sm:h-56 rounded-full overflow-hidden border-4 border-[#F4F0E6] shadow-xl botanical-fallback will-change-transform">
+                <img
+                  src="/assets/aistudio/Duck-ai-image-2026-11-12-03-56_f20f170f.jpeg"
+                  alt="深木桌面上的羅漢果與陶杯實景"
+                  referrerPolicy="no-referrer"
+                  class="w-full h-full object-cover"
+                  onerror="this.style.display='none'"
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <h2 class="text-3xl sm:text-5xl font-black text-white leading-tight">
-          極致雙層玻璃杯<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">醇厚黃金 Crema 凝結</span>
-        </h2>
-        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans max-w-md mx-auto">
-          鏡頭緩慢定格。濃縮咖啡液滴入高硼矽雙層隔熱玻璃杯，琥珀色與綿密黃金油沫交融，達成全場景無斷點沉浸式旅程。
-        </p>
-        <div class="pt-4 flex flex-wrap items-center justify-center gap-3">
-          <button onclick="seekTo(0)" class="px-5 py-2.5 rounded-full text-xs font-mono font-bold bg-white text-black hover:bg-amber-400 transition cursor-pointer">
-            ↺ 重新穿透體驗 (Back to Top)
-          </button>
-          <button onclick="toggleDocModal()" class="px-5 py-2.5 rounded-full text-xs font-mono font-bold glass-pill hover:bg-white/20 transition cursor-pointer">
-            檢視 Vanilla JS 引擎配置
-          </button>
+
+        <!-- 4-Column Clinical Metrics Row (Tabular numerals, quiet hairline dividers, NO pill clusters) -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 border-t hairline-cream pt-8 gap-6">
+          <div class="space-y-1">
+            <div class="text-xs font-mono text-[#535B46]">相對蔗糖甜度倍數</div>
+            <div class="text-2xl sm:text-3xl font-mono font-extrabold text-[#1F2418] tabular-nums">250–350×</div>
+            <div class="text-xs text-[#535B46]">極微量即可滿足甜味</div>
+          </div>
+
+          <div class="space-y-1 lg:border-l hairline-cream lg:pl-6">
+            <div class="text-xs font-mono text-[#535B46]">核心化學分子結構</div>
+            <div class="text-2xl sm:text-3xl font-mono font-extrabold text-[#3B4B20] tabular-nums">Mogrol 三萜</div>
+            <div class="text-xs text-[#535B46]">外連 4–5 個葡萄糖基</div>
+          </div>
+
+          <div class="space-y-1 lg:border-l hairline-cream lg:pl-6">
+            <div class="text-xs font-mono text-[#535B46]">小腸直接吸收率</div>
+            <div class="text-2xl sm:text-3xl font-mono font-extrabold text-[#1F2418] tabular-nums">趨近 0%</div>
+            <div class="text-xs text-[#535B46]">消化酵素無法剪斷鍵結</div>
+          </div>
+
+          <div class="space-y-1 lg:border-l hairline-cream lg:pl-6">
+            <div class="text-xs font-mono text-[#535B46]">市售混充赤藻糖醇比例</div>
+            <div class="text-2xl sm:text-3xl font-mono font-extrabold text-[#B91C1C] tabular-nums">95–99%</div>
+            <div class="text-xs text-[#535B46]">超市羅漢果糖大多摻雜糖醇</div>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- ================================================================ -->
+    <!-- BAND B (CHARCOAL CHAMBER): SCROLLMAGIC + THREE.JS 3D STAGE       -->
+    <!-- ================================================================ -->
+    <section id="band-3d-observatory" class="bg-[#141910] text-[#F4F0E6] relative">
+      <!-- Pinned container driven by ScrollMagic -->
+      <div id="scroll-3d-pin-stage" class="relative w-full h-screen min-h-[600px] overflow-hidden select-none">
+
+        <!-- Dedicated Empty Three.js Canvas Mount (Zero backdrop-filter over this!) -->
+        <div id="three-mount" class="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing"></div>
+
+        <!-- Reduced-Motion or WebGL Context-Loss Static Fallback -->
+        <div id="webgl-fallback" class="hidden absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#141910]">
+          <img
+            src="/assets/aistudio/monk-fruit_810e9b21.jpeg"
+            alt="羅漢果與 Mogroside V 靜態結構圖"
+            referrerPolicy="no-referrer"
+            class="w-48 h-48 rounded-full object-cover border border-[#F59E0B]/40 mb-6"
+          />
+          <h2 class="font-serif text-2xl font-bold text-[#F4F0E6] mb-2">3D WebGL 觀察室已切換為靜態模式</h2>
+          <p class="text-sm text-[#F4F0E6]/75 max-w-md">系統偵測到精簡動態模式或 WebGL 渲染暫停。你仍然可以使用下方互動解剖機器與咖啡減糖模擬器。</p>
+        </div>
+
+        <!-- Top-Left Unobstructed Semantic Overlay HUD (Zero pulsing dots, no backdrop-blur) -->
+        <div class="pointer-events-none absolute top-6 left-4 sm:left-8 right-4 sm:right-auto max-w-md z-10 space-y-2.5">
+          <div class="flex items-center gap-2 text-xs font-mono text-[#F59E0B] tracking-wide">
+            <span id="hud-chapter-index">章節 01 / 04</span>
+            <span aria-hidden="true">·</span>
+            <span id="hud-chapter-tag">繼續向下滾動推進 3D 解剖</span>
+          </div>
+
+          <h2 id="hud-chapter-title" class="font-serif text-2xl sm:text-3xl font-black text-[#F4F0E6] leading-tight headline-balance">
+            羅漢果實物與口腔 T1R2/T1R3 受體鎖定
+          </h2>
+
+          <p id="hud-chapter-desc" class="text-xs sm:text-sm text-[#F4F0E6]/85 leading-relaxed bg-[#141910]/85 border border-[#F4F0E6]/12 rounded-xl p-3.5">
+            乾燥羅漢果海綿果瓤中的 Mogroside V 進入味蕾後，三萜疏水骨架鎖定 T1R2/T1R3 甜味受體，帶來相當於蔗糖 300 倍甜感，但無須引爆游離血糖飆升。
+          </p>
+
+          <!-- Compositor-only transform progress bar -->
+          <div class="w-full h-1 bg-[#F4F0E6]/15 rounded-full overflow-hidden">
+            <div id="hud-progress-bar" class="w-full h-full bg-[#F59E0B] origin-left" style="transform: scaleX(0.05);"></div>
+          </div>
+        </div>
+
+        <!-- Unified Collapsible Bottom Control Dock (Zero Viewport Occlusion per threejs skill) -->
+        <div
+          id="three-control-dock"
+          class="z-20 absolute bottom-5 left-1/2 -translate-x-1/2 w-[94vw] max-w-[820px] transition-transform duration-300 ease-out"
+        >
+          <!-- Collapse/Expand Zen Tab -->
+          <div class="flex justify-center mb-1.5">
+            <button
+              type="button"
+              id="btn-toggle-dock"
+              onclick="toggleControlDock()"
+              class="px-3.5 py-1 rounded-t-lg bg-[#1C2216] border border-b-0 border-[#F59E0B]/30 text-[11px] font-mono font-bold text-[#F4F0E6]/90 hover:text-[#F59E0B] transition-colors cursor-pointer"
+            >
+              收合控制台 (H)
+            </button>
+          </div>
+
+          <div id="dock-body" class="bg-[#0F140C]/95 border border-[#F59E0B]/30 rounded-2xl p-3 sm:p-4 shadow-2xl space-y-3">
+            <!-- Row 1: Chapter Jump Buttons -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 font-mono text-[11px]">
+              <button type="button" onclick="jumpToChapter(0)" id="dock-ch-0" class="dock-ch-btn px-2.5 py-2 rounded-lg bg-[#F59E0B] text-[#141910] font-bold text-left whitespace-nowrap truncate cursor-pointer">
+                01. 口腔甜味受體
+              </button>
+              <button type="button" onclick="jumpToChapter(1)" id="dock-ch-1" class="dock-ch-btn px-2.5 py-2 rounded-lg bg-[#1F261A] text-[#F4F0E6]/80 hover:text-white font-semibold text-left whitespace-nowrap truncate cursor-pointer">
+                02. 小腸酵素繞道
+              </button>
+              <button type="button" onclick="jumpToChapter(2)" id="dock-ch-2" class="dock-ch-btn px-2.5 py-2 rounded-lg bg-[#1F261A] text-[#F4F0E6]/80 hover:text-white font-semibold text-left whitespace-nowrap truncate cursor-pointer">
+                03. 大腸菌相剪切
+              </button>
+              <button type="button" onclick="jumpToChapter(3)" id="dock-ch-3" class="dock-ch-btn px-2.5 py-2 rounded-lg bg-[#1F261A] text-[#F4F0E6]/80 hover:text-white font-semibold text-left whitespace-nowrap truncate cursor-pointer">
+                04. 赤藻糖醇陷阱
+              </button>
+            </div>
+
+            <!-- Row 2: Exploded Separation Slider + Camera Presets -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-[#F4F0E6]/10 text-xs font-mono">
+              <div class="flex items-center gap-3 flex-1 min-w-[200px]">
+                <label for="explosion-slider" class="text-[#F4F0E6]/75 whitespace-nowrap">糖基拆解視角</label>
+                <input
+                  id="explosion-slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="15"
+                  class="dock-slider flex-1"
+                  oninput="setManualExplosion(this.value)"
+                />
+                <span id="explosion-readout" class="text-[#F59E0B] tabular-nums w-10 text-right">15%</span>
+              </div>
+
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button type="button" onclick="setCameraPreset('overview')" id="cam-btn-overview" class="cam-preset-btn px-2.5 py-1.5 rounded-md bg-[#F4F0E6]/15 text-white font-bold whitespace-nowrap cursor-pointer">
+                  全景
+                </button>
+                <button type="button" onclick="setCameraPreset('core')" id="cam-btn-core" class="cam-preset-btn px-2.5 py-1.5 rounded-md bg-transparent text-[#F4F0E6]/70 hover:text-white whitespace-nowrap cursor-pointer">
+                  三萜核心
+                </button>
+                <button type="button" onclick="setCameraPreset('osmotic')" id="cam-btn-osmotic" class="cam-preset-btn px-2.5 py-1.5 rounded-md bg-transparent text-[#F4F0E6]/70 hover:text-white whitespace-nowrap cursor-pointer">
+                  滲透粒子
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- BAND C (DEEP OLIVE): ISOMETRIC ANATOMY MACHINE + MOLECULE + TCM  -->
+    <!-- ================================================================ -->
+    <section id="band-anatomy" class="bg-[#3B4B20] text-[#F4F0E6] py-16 sm:py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 space-y-16">
+
+        <!-- Part 1: Interactive Isometric Anatomy Machine (wheresryan22/anatomy pattern) -->
+        <div class="space-y-8">
+          <div class="max-w-3xl space-y-2">
+            <div class="text-xs font-mono text-[#F4F0E6]/75">
+              <span>人體機械流向解剖</span>
+              <span aria-hidden="true" class="mx-2">·</span>
+              <span>Isometric Digestive Pathway</span>
+            </div>
+            <h2 class="font-serif text-3xl sm:text-4xl font-black text-[#F4F0E6] headline-balance">
+              羅漢果甜苷進入人體嘅 4 大機械節點
+            </h2>
+            <p class="text-sm sm:text-base text-[#F4F0E6]/80 leading-relaxed">
+              點擊等距結構圖中的節點或右側按鈕，逐層剖析點解 Mogroside V 唔會引致血糖失控，同時點解市面「羅漢果糖」依然令無數人飲到肚脹肚瀉。
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Left: Bespoke Interactive Isometric SVG Diagram -->
+            <div class="lg:col-span-6 bg-[#2C3917] border hairline-olive rounded-2xl p-4 sm:p-6">
+              <svg id="anatomy-iso-svg" viewBox="0 0 640 420" class="w-full h-auto" role="img" aria-label="羅漢果甜苷消化路徑等距解剖圖">
+                <defs>
+                  <linearGradient id="isoFlowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.9" />
+                    <stop offset="100%" stop-color="#6EE7B7" stop-opacity="0.9" />
+                  </linearGradient>
+                </defs>
+
+                <!-- Isometric Grid Floor Lines -->
+                <g stroke="rgba(244,240,230,0.08)" stroke-width="1">
+                  <path d="M 80 210 L 320 90 L 560 210 L 320 330 Z" fill="rgba(20,25,16,0.35)" />
+                  <line x1="160" y1="170" x2="400" y2="290" />
+                  <line x1="240" y1="130" x2="480" y2="250" />
+                  <line x1="160" y1="250" x2="400" y2="130" />
+                  <line x1="240" y1="290" x2="480" y2="170" />
+                </g>
+
+                <!-- Connecting Isometric Conduits -->
+                <path d="M 165 130 L 295 195 L 435 125" fill="none" stroke="url(#isoFlowGrad)" stroke-width="3" stroke-dasharray="6 4" />
+                <path d="M 295 195 L 455 275" fill="none" stroke="#F87171" stroke-width="2.5" stroke-dasharray="4 4" />
+
+                <!-- STATION 1: Oral Receptors (Top Left) -->
+                <g id="svg-node-1" class="iso-station" onclick="selectNode(1)" transform="translate(115, 70)">
+                  <g class="iso-inner">
+                    <polygon points="50,0 100,25 50,50 0,25" fill="#F59E0B" fill-opacity="0.22" stroke="#F59E0B" stroke-width="2" />
+                    <polygon points="0,25 50,50 50,76 0,51" fill="#D97706" fill-opacity="0.35" stroke="#F59E0B" stroke-width="1.5" />
+                    <polygon points="100,25 50,50 50,76 100,51" fill="#92400E" fill-opacity="0.45" stroke="#F59E0B" stroke-width="1.5" />
+                    <text x="50" y="30" text-anchor="middle" fill="#F4F0E6" font-family="JetBrains Mono, monospace" font-size="11" font-weight="800">01 口腔</text>
+                    <text x="50" y="96" text-anchor="middle" fill="#FDE68A" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="700">T1R2/T1R3 鎖定</text>
+                  </g>
+                </g>
+
+                <!-- STATION 2: Gastric & Small Intestine Bypass (Center) -->
+                <g id="svg-node-2" class="iso-station" onclick="selectNode(2)" transform="translate(245, 145)">
+                  <g class="iso-inner">
+                    <polygon points="50,0 100,25 50,50 0,25" fill="#38BDF8" fill-opacity="0.18" stroke="#38BDF8" stroke-width="1.8" />
+                    <polygon points="0,25 50,50 50,78 0,53" fill="#0284C7" fill-opacity="0.28" stroke="#38BDF8" stroke-width="1.4" />
+                    <polygon points="100,25 50,50 50,78 100,53" fill="#0369A1" fill-opacity="0.35" stroke="#38BDF8" stroke-width="1.4" />
+                    <text x="50" y="30" text-anchor="middle" fill="#F4F0E6" font-family="JetBrains Mono, monospace" font-size="11" font-weight="800">02 小腸</text>
+                    <text x="50" y="98" text-anchor="middle" fill="#BAE6FD" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="700">酵素零水解繞道</text>
+                  </g>
+                </g>
+
+                <!-- STATION 3: Colonic Microbiota Cleavage (Top Right) -->
+                <g id="svg-node-3" class="iso-station" onclick="selectNode(3)" transform="translate(390, 75)">
+                  <g class="iso-inner">
+                    <polygon points="50,0 100,25 50,50 0,25" fill="#34D399" fill-opacity="0.18" stroke="#34D399" stroke-width="1.8" />
+                    <polygon points="0,25 50,50 50,78 0,53" fill="#059669" fill-opacity="0.28" stroke="#34D399" stroke-width="1.4" />
+                    <polygon points="100,25 50,50 50,78 100,53" fill="#065F46" fill-opacity="0.35" stroke="#34D399" stroke-width="1.4" />
+                    <text x="50" y="30" text-anchor="middle" fill="#F4F0E6" font-family="JetBrains Mono, monospace" font-size="11" font-weight="800">03 大腸</text>
+                    <text x="50" y="98" text-anchor="middle" fill="#A7F3D0" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="700">菌群逐層脫糖基</text>
+                  </g>
+                </g>
+
+                <!-- STATION 4: Erythritol Adulteration Trap (Bottom Right) -->
+                <g id="svg-node-4" class="iso-station" onclick="selectNode(4)" transform="translate(405, 225)">
+                  <g class="iso-inner">
+                    <polygon points="55,0 110,27 55,54 0,27" fill="#EF4444" fill-opacity="0.2" stroke="#F87171" stroke-width="1.8" />
+                    <polygon points="0,27 55,54 55,82 0,55" fill="#B91C1C" fill-opacity="0.3" stroke="#F87171" stroke-width="1.4" />
+                    <polygon points="110,27 55,54 55,82 110,55" fill="#7F1D1D" fill-opacity="0.4" stroke="#F87171" stroke-width="1.4" />
+                    <text x="55" y="32" text-anchor="middle" fill="#FEE2E2" font-family="JetBrains Mono, monospace" font-size="11" font-weight="800">04 混充陷阱</text>
+                    <text x="55" y="102" text-anchor="middle" fill="#FECACA" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="700">赤藻糖醇拉水脹氣</text>
+                  </g>
+                </g>
+              </svg>
+            </div>
+
+            <!-- Right: Segmented Controls + Unified Readout Card -->
+            <div class="lg:col-span-6 space-y-5">
+              <div class="grid grid-cols-2 gap-2.5 font-mono text-xs">
+                <button type="button" onclick="selectNode(1)" id="btn-node-1" class="node-btn p-3.5 rounded-xl border border-[#F59E0B] bg-[#2C3917] text-left transition-colors cursor-pointer">
+                  <div class="text-[#F59E0B] font-bold">節點 01 · 口腔甜味受體</div>
+                  <div class="text-[#F4F0E6]/75 text-[11px] mt-1">T1R2/T1R3 機械鎖定</div>
+                </button>
+                <button type="button" onclick="selectNode(2)" id="btn-node-2" class="node-btn p-3.5 rounded-xl border hairline-olive bg-[#2C3917]/50 text-left hover:bg-[#2C3917] transition-colors cursor-pointer">
+                  <div class="text-[#F4F0E6] font-bold">節點 02 · 胃酸與小腸通道</div>
+                  <div class="text-[#F4F0E6]/70 text-[11px] mt-1">酵素拆唔開三萜骨架</div>
+                </button>
+                <button type="button" onclick="selectNode(3)" id="btn-node-3" class="node-btn p-3.5 rounded-xl border hairline-olive bg-[#2C3917]/50 text-left hover:bg-[#2C3917] transition-colors cursor-pointer">
+                  <div class="text-[#F4F0E6] font-bold">節點 03 · 大腸菌相生化腔</div>
+                  <div class="text-[#F4F0E6]/70 text-[11px] mt-1">結腸菌逐層脫糖基</div>
+                </button>
+                <button type="button" onclick="selectNode(4)" id="btn-node-4" class="node-btn p-3.5 rounded-xl border hairline-olive bg-[#2C3917]/50 text-left hover:bg-[#2C3917] transition-colors cursor-pointer">
+                  <div class="text-[#FCA5A5] font-bold">節點 04 · 赤藻糖醇爆擊</div>
+                  <div class="text-[#F4F0E6]/70 text-[11px] mt-1">高滲透壓拉水致腹瀉</div>
+                </button>
+              </div>
+
+              <div id="node-display" class="bg-[#2C3917] border hairline-olive rounded-2xl p-6 space-y-4">
+                <!-- Populated dynamically by selectNode() -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hairline Divider -->
+        <div class="border-t hairline-olive"></div>
+
+        <!-- Part 2: Free Sugars vs Mogroside V Structural Dissection -->
+        <div class="space-y-8">
+          <div class="max-w-3xl space-y-2">
+            <div class="text-xs font-mono text-[#F4F0E6]/75">
+              <span>分子結構大拆解</span>
+              <span aria-hidden="true" class="mx-2">·</span>
+              <span>為什麼它不等於果糖</span>
+            </div>
+            <h2 class="font-serif text-3xl sm:text-4xl font-black text-[#F4F0E6] headline-balance">
+              糖的零件接在三萜骨架上，唔係一粒游離糖
+            </h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Left: Free Sugar -->
+            <div class="p-6 sm:p-8 rounded-2xl bg-[#2C3917] border hairline-olive space-y-4">
+              <div class="text-xs font-mono text-[#FCA5A5]">
+                <span>一般游離糖 Free Sugars</span>
+                <span aria-hidden="true" class="mx-2">·</span>
+                <span>單分子游離狀態</span>
+              </div>
+              <h3 class="text-xl font-black text-[#F4F0E6]">葡萄糖 / 果糖 / 白砂糖</h3>
+              <p class="text-sm text-[#F4F0E6]/85 leading-relaxed">
+                獨立小分子，分子量僅約 180。入口後小腸上皮的 GLUT5 與 SGLT1 轉運體會在幾分鐘內全數吸收，直接衝擊肝臟代謝與胰島素，推動脂質過氧化與發炎訊號。
+              </p>
+              <div class="pt-3 border-t hairline-olive space-y-1.5 text-xs font-mono text-[#F4F0E6]/75">
+                <div>吸收速度：即刻穿透小腸黏膜</div>
+                <div>肝臟代價：過量游離果糖轉化成內臟脂肪</div>
+                <div>發炎風險：推高 NF-kB 與自由基壓力</div>
+              </div>
+            </div>
+
+            <!-- Right: Mogroside V -->
+            <div class="p-6 sm:p-8 rounded-2xl bg-[#141910] border border-[#F59E0B]/40 space-y-4">
+              <div class="text-xs font-mono text-[#F59E0B]">
+                <span>羅漢果甜苷 V (Mogroside V)</span>
+                <span aria-hidden="true" class="mx-2">·</span>
+                <span>大三萜苷分子 C₆₀H₁₀₂O₂₉</span>
+              </div>
+              <h3 class="text-xl font-black text-[#F4F0E6]">核心為 Mogrol，連著 5 個葡萄糖基</h3>
+              <p class="text-sm text-[#F4F0E6]/85 leading-relaxed">
+                分子量高達 1,287。糖基以 β-糖苷鍵牢牢接在三萜骨架上，既非游離糖，所含亦是葡萄糖基而非果糖基。人體唾液澱粉酶與胃酸拆不開這些鍵結，因此不會引發血糖飆升。
+              </p>
+              <div class="pt-3 border-t hairline-olive space-y-1.5 text-xs font-mono text-[#FDE68A]">
+                <div>吸收速度：小腸幾乎無法直接吸收</div>
+                <div>糖基類別：純葡萄糖基，不含游離果糖</div>
+                <div>科學底線：只屬減糖零件，不能取代腸道保健</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hairline Divider -->
+        <div class="border-t hairline-olive"></div>
+
+        <!-- Part 3: TCM Dialectics & Master Ni Perspective -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+          <div class="space-y-3">
+            <div class="text-xs font-mono text-[#F4F0E6]/70">中醫本草辨證 · 羅漢果性味</div>
+            <h3 class="font-serif text-2xl font-bold text-[#F4F0E6]">性涼味甘，脾胃虛寒者切忌日日狂飲</h3>
+            <p class="text-sm text-[#F4F0E6]/85 leading-relaxed">
+              傳統中醫記載羅漢果「性涼、味甘」，歸肺、大腸經，常用於清肺潤燥與利咽開音。但中醫辨證講求「中病即止」：如果你平時已經畏寒怕凍、容易腹瀉或大便偏爛，日日灌濃羅漢果水只會更加傷脾胃陽氣，令腸胃更易腹脹不適。
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <div class="text-xs font-mono text-[#F4F0E6]/70">經方視角 · 倪海廈論咖啡與腸胃</div>
+            <h3 class="font-serif text-2xl font-bold text-[#F4F0E6]">先斬白砂糖，且避免空腹狂飲刺激胃酸</h3>
+            <p class="text-sm text-[#F4F0E6]/85 leading-relaxed">
+              咖啡味苦微辛、性燥，本身就會刺激胃酸分泌及加快腸道蠕動。若戒不掉咖啡，最實際做法是改在餐後飲用、先把白砂糖減半或換成極微量純羅漢果萃取液，並連續三日做單一變量觀察胃酸與排便反應，有不適即停。
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- BAND D (WARM CREAM): COFFEE SIMULATOR & 24HR EXECUTION CHECKLIST -->
+    <!-- ================================================================ -->
+    <section id="band-simulator" class="bg-[#F4F0E6] text-[#1F2418] py-16 sm:py-24">
+      <div class="max-w-6xl mx-auto px-4 sm:px-8 space-y-16">
+
+        <!-- Interactive Coffee Sugar-Swap Tactical Simulator -->
+        <div class="bg-[#FAF8F2] border hairline-cream rounded-2xl p-6 sm:p-10 space-y-8">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b hairline-cream pb-6">
+            <div class="space-y-1.5">
+              <div class="text-xs font-mono text-[#535B46]">咖啡減糖實戰控制台 · Coffee Sugar-Swap Simulator</div>
+              <h2 class="font-serif text-2xl sm:text-3xl font-black text-[#1F2418]">
+                計一計你每日咖啡換糖嘅真實代價
+              </h2>
+            </div>
+            <span class="text-xs font-mono text-[#535B46]">調整每日杯數、甜味配方與個人腸胃體質</span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Left Controls -->
+            <div class="lg:col-span-5 space-y-5 font-mono text-xs">
+              <div>
+                <span class="block text-[#1F2418] font-bold mb-2">每日飲咖啡杯數</span>
+                <div class="grid grid-cols-3 gap-2">
+                  <button type="button" onclick="setCoffeeCups(1)" id="btn-cup-1" class="cup-btn min-h-[40px] py-2 rounded-lg bg-[#3B4B20] text-[#F4F0E6] font-bold cursor-pointer">1 杯</button>
+                  <button type="button" onclick="setCoffeeCups(2)" id="btn-cup-2" class="cup-btn min-h-[40px] py-2 rounded-lg bg-white border hairline-cream text-[#535B46] font-bold hover:text-[#1F2418] cursor-pointer">2 杯</button>
+                  <button type="button" onclick="setCoffeeCups(3)" id="btn-cup-3" class="cup-btn min-h-[40px] py-2 rounded-lg bg-white border hairline-cream text-[#535B46] font-bold hover:text-[#1F2418] cursor-pointer">3 杯以上</button>
+                </div>
+              </div>
+
+              <div>
+                <label for="sweetener-select" class="block text-[#1F2418] font-bold mb-2">甜味來源配方</label>
+                <select id="sweetener-select" onchange="updateSim()" class="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl bg-white border border-[#1F2418]/20 text-[#1F2418] font-mono text-xs focus:outline-none focus:border-[#3B4B20]">
+                  <option value="pure_monk" selected>純羅漢果萃取物 (Pure Mogroside V)</option>
+                  <option value="sugar">傳統白砂糖 / 蔗糖 (Table Sugar)</option>
+                  <option value="erythritol_blend">市售混合羅漢果糖 (含 99% 赤藻糖醇)</option>
+                  <option value="black_coffee">純黑咖啡 (Zero Added Sweetener)</option>
+                </select>
+              </div>
+
+              <div>
+                <span class="block text-[#1F2418] font-bold mb-2">個人腸胃耐受狀況</span>
+                <div class="space-y-2.5 font-sans text-sm">
+                  <label class="flex items-center gap-2.5 cursor-pointer text-[#1F2418]">
+                    <input type="checkbox" id="chk-reflux" onchange="updateSim()" class="w-4 h-4 accent-[#3B4B20]" />
+                    <span>容易胃酸倒流或空腹飲會胃頂</span>
+                  </label>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-[#1F2418]">
+                    <input type="checkbox" id="chk-cold" onchange="updateSim()" class="w-4 h-4 accent-[#3B4B20]" />
+                    <span>中醫辨證偏脾胃虛寒、容易便溏腹瀉</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Simulation Metrics Output -->
+            <div class="lg:col-span-7 bg-white border hairline-cream rounded-2xl p-6 space-y-5">
+              <div class="flex items-center justify-between border-b hairline-cream pb-3">
+                <span class="text-xs font-mono font-bold text-[#535B46]">即時模擬評估</span>
+                <span id="sim-status-badge" class="text-xs font-mono font-extrabold text-[#3B4B20]">
+                  ✓ 安全減糖首選
+                </span>
+              </div>
+
+              <div class="grid grid-cols-3 gap-4 font-mono">
+                <div>
+                  <div class="text-[11px] text-[#535B46]">年節省添加糖</div>
+                  <div id="sim-sugar-saved" class="text-xl sm:text-2xl font-extrabold text-[#1F2418] tabular-nums mt-0.5">3.7 kg</div>
+                </div>
+                <div class="border-l hairline-cream pl-4">
+                  <div class="text-[11px] text-[#535B46]">血糖負擔指數</div>
+                  <div id="sim-glycemic" class="text-xl sm:text-2xl font-extrabold text-[#3B4B20] tabular-nums mt-0.5">0 / 100</div>
+                </div>
+                <div class="border-l hairline-cream pl-4">
+                  <div class="text-[11px] text-[#535B46]">腸胃脹氣風險</div>
+                  <div id="sim-bloat" class="text-xl sm:text-2xl font-extrabold text-[#3B4B20] tabular-nums mt-0.5">極低</div>
+                </div>
+              </div>
+
+              <div id="sim-advice" class="text-sm text-[#1F2418] leading-relaxed bg-[#F4F0E6] rounded-xl p-4 border hairline-cream">
+                <!-- Populated dynamically by updateSim() -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 24-Hour Single-Variable Action Checklist -->
+        <div class="space-y-6">
+          <div class="space-y-1.5">
+            <div class="text-xs font-mono text-[#535B46]">24 小時實戰行動清單</div>
+            <h2 class="font-serif text-2xl sm:text-3xl font-black text-[#1F2418]">
+              今日開始：實行「單一變量」咖啡減糖測試
+            </h2>
+          </div>
+
+          <div class="divide-y hairline-cream border-y hairline-cream">
+            <div class="py-5 flex items-start gap-4 sm:gap-6">
+              <span class="font-mono font-black text-lg text-[#D97706] tabular-nums shrink-0">01</span>
+              <div class="space-y-1">
+                <h3 class="font-bold text-base text-[#1F2418]">翻轉家中「羅漢果糖」睇清背面配料表</h3>
+                <p class="text-sm text-[#535B46] leading-relaxed">如果第一位成分寫住「赤藻糖醇 (Erythritol)」、「菊糖」或「麥芽糊精」，即刻檢視自己平日飲完有冇腹脹、多氣或者軟便。想純減糖應揀無糖醇填充嘅純萃取液或純粉。</p>
+              </div>
+            </div>
+
+            <div class="py-5 flex items-start gap-4 sm:gap-6">
+              <span class="font-mono font-black text-lg text-[#D97706] tabular-nums shrink-0">02</span>
+              <div class="space-y-1">
+                <h3 class="font-bold text-base text-[#1F2418]">連續三日只改一個變量做實測</h3>
+                <p class="text-sm text-[#535B46] leading-relaxed">咖啡習慣不變，只將砂糖減半或換成幾滴純羅漢果萃取物，同時避免空腹飲用。記錄連續 3 日的胃酸、腹脹與排便狀態，若症狀變差立即停用。</p>
+              </div>
+            </div>
+
+            <div class="py-5 flex items-start gap-4 sm:gap-6">
+              <span class="font-mono font-black text-lg text-[#D97706] tabular-nums shrink-0">03</span>
+              <div class="space-y-1">
+                <h3 class="font-bold text-base text-[#1F2418]">回歸 RFK Jr. 倒轉金字塔真實營養基石</h3>
+                <p class="text-sm text-[#535B46] leading-relaxed">代糖永遠只係戒糖過程嘅過渡工具，真正穩定細胞能量與腸道屏障嘅，永遠係草飼牛油脂、頂級冷壓橄欖油 (EVOO)、充足水分、原型膳食纖維與規律作息。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- QUIET EDITORIAL FOOTER -->
+    <footer class="bg-[#F4F0E6] border-t hairline-cream py-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#535B46]">
+        <div class="flex flex-wrap items-center gap-4">
+          <a href="/dailyflow.html" class="hover:text-[#1F2418] transition-colors">抗炎日報</a>
+          <span aria-hidden="true">·</span>
+          <a href="/prem-24-en.html" class="hover:text-[#1F2418] transition-colors">English Edition</a>
+          <span aria-hidden="true">·</span>
+          <a href="/prem-23-25k.html" class="hover:text-[#1F2418] transition-colors">PREM 23 商業藍圖</a>
+          <span aria-hidden="true">·</span>
+          <a href="/index.html" class="hover:text-[#1F2418] transition-colors">MAGASite 首頁</a>
+        </div>
+        <div>MAGASite 抗炎實證庫 · 2026</div>
+      </div>
+    </footer>
   </main>
 
-  <!-- ========================================== -->
-  <!-- 6. 整合指南彈窗 (Integration Modal) -->
-  <!-- ========================================== -->
-  <div id="docModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 sm:p-8">
-    <div class="glass-panel max-w-3xl w-full max-h-[85vh] rounded-2xl overflow-hidden flex flex-col border border-white/20">
-      <div class="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between">
-        <h3 class="font-mono text-sm sm:text-base font-black text-white flex items-center gap-2">
-          <span>🚀 Scroll-World 整合代碼指南</span>
-        </h3>
-        <button onclick="toggleDocModal()" class="text-slate-400 hover:text-white font-mono text-lg cursor-pointer">✕</button>
-      </div>
-      <div class="p-6 overflow-y-auto space-y-4 font-mono text-xs text-slate-300 leading-relaxed">
-        <p class="text-amber-400 font-bold">1. 引入 Scrubber 引擎（無任何第三方依賴）：</p>
-        <pre class="bg-black/60 p-4 rounded-xl border border-white/10 text-emerald-400 overflow-x-auto">import { ScrollWorldScrubber } from './src/scrubber.js';
+  <!-- VAULT AUTH, ANATOMY & SIMULATOR SCRIPT -->
+  <script>
+    const MASTER_KEYS = ['hk$18', '4lome'];
+    let isVaultUnlocked = localStorage.getItem('maga_unlocked') === 'true';
+    let vaultInitialized = false;
 
-const engine = new ScrollWorldScrubber({
-  canvas: document.getElementById('worldCanvas'),
-  lerpFactor: 0.08, // 慣性平滑度
-  trackHeight: 4500, // 虛擬高度
-  onProgress: (p, velocity) => {
-    console.log(`Global Progress: ${(p * 100).toFixed(1)}%`);
-  }
-});</pre>
+    function fillDemoKey() {
+      const input = document.getElementById('passkey-input');
+      if (input) {
+        input.value = 'HK$18';
+        input.focus();
+      }
+    }
 
-        <p class="text-cyan-400 font-bold">2. 替換成你自己的 AI 影片 (GOP=1)：</p>
-        <pre class="bg-black/60 p-4 rounded-xl border border-white/10 text-slate-200 overflow-x-auto"># 終端轉碼指令 (確保 60FPS 搓動零遲滯)
-ffmpeg -i my_dive.mp4 -c:v libx264 -g 1 -keyint_min 1 -crf 22 -an output_gop1.mp4</pre>
+    function revealVault() {
+      const barrier = document.getElementById('passkey-barrier');
+      const vault = document.getElementById('vault-content');
+      if (barrier) barrier.classList.add('hidden');
+      if (vault) vault.classList.remove('hidden');
 
-        <p class="text-slate-400">已完整封裝在專案目錄：<code class="text-amber-300">projects/scroll-world/</code> 與 Skill 規範：<code class="text-amber-300">skills/scroll-world/</code></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- 7. 核心引擎執行腳本 -->
-  <!-- ========================================== -->
-  <script type="module">
-    import { ScrollWorldScrubber } from './src/scrubber.js';
-
-    // 取得 DOM
-    const canvas = document.getElementById('worldCanvas');
-    const ctx = canvas.getContext('2d');
-    const depthText = document.getElementById('depthText');
-    const zoomText = document.getElementById('zoomText');
-    const velocityBar = document.getElementById('velocityBar');
-    const timelineProgress = document.getElementById('timelineProgress');
-    const progressPercent = document.getElementById('progressPercent');
-    const sceneIndicator = document.getElementById('sceneIndicator');
-
-    const card1 = document.getElementById('stage-card-1');
-    const card2 = document.getElementById('stage-card-2');
-    const card3 = document.getElementById('stage-card-3');
-    const card4 = document.getElementById('stage-card-4');
-
-    // 粒子系統（咖啡豆粉、木塵、高壓蒸汽）
-    const particles = [];
-    for (let i = 0; i < 120; i++) {
-      particles.push({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        z: Math.random() * 2000,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 3 + 1,
-        color: Math.random() > 0.4 ? 'rgba(245, 158, 11, ' : 'rgba(255, 255, 255, '
+      requestAnimationFrame(() => {
+        if (window.lucide) lucide.createIcons();
+        if (!vaultInitialized) {
+          vaultInitialized = true;
+          if (typeof window.__boot3dScrollVault === 'function') {
+            window.__boot3dScrollVault();
+          }
+          initHeroParallax();
+        }
       });
     }
 
-    // 4 大場景程序化繪製渲染器 (支援無縫插值與真實影片置換)
-    const scenes = [
-      {
-        id: 'scene-1',
-        start: 0,
-        end: 0.25,
-        render: (ctx, localP, canvas, vel) => {
-          renderDiorama(ctx, localP, canvas, vel);
+    function checkInitialUnlock() {
+      if (isVaultUnlocked) {
+        revealVault();
+      }
+    }
+
+    function unlockVault() {
+      const input = (document.getElementById('passkey-input')?.value || '').trim().toLowerCase();
+      const err = document.getElementById('passkey-err');
+
+      if (MASTER_KEYS.includes(input)) {
+        if (err) err.classList.add('hidden');
+        localStorage.setItem('maga_unlocked', 'true');
+        isVaultUnlocked = true;
+        revealVault();
+        try {
+          if (window.confetti) {
+            confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+          }
+        } catch (e) {}
+      } else {
+        if (err) err.classList.remove('hidden');
+      }
+    }
+
+    // Compositor-only transform parallax for dual-circle Monk Fruit showcase
+    function initHeroParallax() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const c1 = document.getElementById('hero-circle-primary');
+      const c2 = document.getElementById('hero-circle-secondary');
+      if (!c1 || !c2) return;
+
+      let ticking = false;
+      function updateCircles() {
+        ticking = false;
+        const y = Math.min(window.scrollY, 600);
+        c1.style.transform = `translate3d(0, ${(y * -0.05).toFixed(1)}px, 0)`;
+        c2.style.transform = `translate3d(0, ${(y * 0.06).toFixed(1)}px, 0)`;
+      }
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(updateCircles);
         }
+      }, { passive: true });
+    }
+
+    // Anatomy Node Machine Data & State
+    const ANATOMY_NODES = {
+      1: {
+        title: "節點 01 · 口腔甜味受體 (T1R2 + T1R3 受體機械鎖定)",
+        status: "✓ 味覺滿足 · 不推升血糖",
+        statusClass: "text-[#FDE68A]",
+        chapterIndex: 0,
+        desc: "羅漢果甜苷 V 的葫蘆素型三萜母核契合味蕾 T1R2/T1R3 疏水囊腔，甜度達蔗糖 250–350 倍。舌尖發出強烈甜感訊號，但純甜苷本身不含游離葡萄糖或果糖。",
+        evidence: "臨床重點：用微量純萃取物代替咖啡白砂糖，可直接削減添加糖攝取而無致齲性。"
+      },
+      2: {
+        title: "節點 02 · 胃酸與小腸通道 (酵素零水解繞道)",
+        status: "✓ 完整穿過小腸 · 幾乎零吸收",
+        statusClass: "text-[#BAE6FD]",
+        chapterIndex: 1,
+        desc: "人體唾液澱粉酶、胃蛋白酶及小腸雙糖酶專門分解 α-糖苷鍵；對 Mogroside V 嘅 β-糖苷鍵與龐大三萜骨架無從下手，因此小腸不會把它拆成游離糖吸收。",
+        evidence: "臨床重點：分子內連接的是葡萄糖基，而非果糖基，更不存在「游離」進入血液令胰島素飆升的問題。"
+      },
+      3: {
+        title: "節點 03 · 大腸菌相生化腔 (結腸菌逐層脫糖基)",
+        status: "● 體外菌互作用 · 非腸道醫療實證",
+        statusClass: "text-[#A7F3D0]",
+        chapterIndex: 2,
+        desc: "未吸收的甜苷進入結腸，部分腸道厭氧菌（如擬桿菌屬）會逐步拆走外層葡萄糖基，剩低苷元 Mogrol 排出體外。注意：細胞實驗與體外糞菌培養只屬探索階段。",
+        evidence: "科學底線：研究發現「影響菌相互動」，絕對不等於人體臨床證實可以修復腸漏或治療發炎性腸病！"
+      },
+      4: {
+        title: "節點 04 · 市售赤藻糖醇混充爆擊 (高滲透壓拉水)",
+        status: "✖ 高脹氣與腹瀉陷阱 · 務必避開",
+        statusClass: "text-[#FECACA]",
+        chapterIndex: 3,
+        desc: "超市 95% 以上平價「羅漢果糖」其實 99% 是發酵赤藻糖醇（Erythritol）加 1% 羅漢果萃取。大量糖醇滯留腸道產生高滲透壓將水分拉入腸腔，引發劇烈肚脹、放屁甚至腹瀉。",
+        evidence: "採購鐵則：翻面看配料表，若排第一是赤藻糖醇或麥芽糊精，腸胃敏感人士應先避開或改用純萃取液。"
+      }
+    };
+
+    function selectNode(id) {
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`btn-node-${i}`);
+        const svgNode = document.getElementById(`svg-node-${i}`);
+        if (btn) {
+          if (i === id) {
+            btn.className = "node-btn p-3.5 rounded-xl border border-[#F59E0B] bg-[#2C3917] text-left transition-colors cursor-pointer";
+          } else {
+            btn.className = "node-btn p-3.5 rounded-xl border hairline-olive bg-[#2C3917]/50 text-left hover:bg-[#2C3917] transition-colors cursor-pointer";
+          }
+        }
+        if (svgNode) {
+          svgNode.style.opacity = i === id ? "1" : "0.62";
+          const inner = svgNode.querySelector('.iso-inner');
+          if (inner) {
+            inner.style.transform = i === id ? "scale(1.06)" : "scale(1)";
+          }
+        }
+      }
+
+      const n = ANATOMY_NODES[id];
+      const disp = document.getElementById('node-display');
+      if (!disp || !n) return;
+
+      disp.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b hairline-olive pb-3">
+          <h3 class="text-base sm:text-lg font-bold text-[#F4F0E6]">${n.title}</h3>
+          <span class="font-mono text-xs font-bold ${n.statusClass} shrink-0">${n.status}</span>
+        </div>
+        <p class="text-sm text-[#F4F0E6]/85 leading-relaxed">${n.desc}</p>
+        <div class="p-3.5 rounded-xl bg-[#141910]/60 border hairline-olive text-xs font-mono text-[#F4F0E6]/80">
+          ${n.evidence}
+        </div>
+        <div class="pt-1 flex justify-end">
+          <button type="button" onclick="jumpToChapter(${n.chapterIndex}); document.getElementById('band-3d-observatory').scrollIntoView({behavior:'smooth'})" class="text-xs font-mono font-bold text-[#F59E0B] hover:underline underline-offset-4 cursor-pointer">
+            跳轉至 3D 解剖觀察室對應章節 ↑
+          </button>
+        </div>
+      `;
+    }
+
+    // Coffee Sugar-Swap Simulator
+    let currentCups = 1;
+    function setCoffeeCups(cups) {
+      currentCups = cups;
+      [1, 2, 3].forEach((c) => {
+        const btn = document.getElementById(`btn-cup-${c}`);
+        if (!btn) return;
+        btn.className = c === cups
+          ? "cup-btn min-h-[40px] py-2 rounded-lg bg-[#3B4B20] text-[#F4F0E6] font-bold cursor-pointer"
+          : "cup-btn min-h-[40px] py-2 rounded-lg bg-white border hairline-cream text-[#535B46] font-bold hover:text-[#1F2418] cursor-pointer";
+      });
+      updateSim();
+    }
+
+    function updateSim() {
+      const type = document.getElementById('sweetener-select')?.value || 'pure_monk';
+      const isReflux = Boolean(document.getElementById('chk-reflux')?.checked);
+      const isCold = Boolean(document.getElementById('chk-cold')?.checked);
+
+      const badge = document.getElementById('sim-status-badge');
+      const sugarSaved = document.getElementById('sim-sugar-saved');
+      const glycemic = document.getElementById('sim-glycemic');
+      const bloat = document.getElementById('sim-bloat');
+      const advice = document.getElementById('sim-advice');
+      if (!badge || !sugarSaved || !glycemic || !bloat || !advice) return;
+
+      const kgPerYear = (currentCups * 10 * 365 / 1000).toFixed(1);
+
+      if (type === 'sugar') {
+        badge.className = "text-xs font-mono font-extrabold text-[#B91C1C]";
+        badge.textContent = "✖ 高添加糖與發炎負擔";
+        sugarSaved.textContent = "0.0 kg";
+        sugarSaved.className = "text-xl sm:text-2xl font-extrabold text-[#B91C1C] tabular-nums mt-0.5";
+        glycemic.textContent = "75 / 100";
+        glycemic.className = "text-xl sm:text-2xl font-extrabold text-[#B91C1C] tabular-nums mt-0.5";
+        bloat.textContent = "中等";
+        bloat.className = "text-xl sm:text-2xl font-extrabold text-[#D97706] tabular-nums mt-0.5";
+        advice.innerHTML = `<strong>實測警示：</strong>每日飲 ${currentCups} 杯落砂糖咖啡，一年會額外攝取約 <strong>${kgPerYear} kg 游離添加糖</strong>。建議先將砂糖減半，再逐步試用純羅漢果萃取液代替。`;
+      } else if (type === 'pure_monk') {
+        badge.className = "text-xs font-mono font-extrabold text-[#3B4B20]";
+        badge.textContent = "✓ 安全減糖工具首選";
+        sugarSaved.textContent = `${kgPerYear} kg`;
+        sugarSaved.className = "text-xl sm:text-2xl font-extrabold text-[#1F2418] tabular-nums mt-0.5";
+        glycemic.textContent = "0 / 100";
+        glycemic.className = "text-xl sm:text-2xl font-extrabold text-[#3B4B20] tabular-nums mt-0.5";
+        bloat.textContent = "極低";
+        bloat.className = "text-xl sm:text-2xl font-extrabold text-[#3B4B20] tabular-nums mt-0.5";
+
+        let extra = "";
+        if (isReflux) extra += "<br>注意：咖啡因本身可能誘發胃酸不適，請安排在飯後飲用並考慮減量或轉低因豆。";
+        if (isCold) extra += "<br>注意：脾胃偏虛寒人士切忌同時長期猛灌濃羅漢果水，保持極微量滴劑作減糖即可。";
+
+        advice.innerHTML = `<strong>建議執行方式：</strong>每日以極微量純羅漢果甜苷代替砂糖，一年約減少 <strong>${kgPerYear} kg 添加糖</strong>；謹記它只是減糖工具，並非腸道治療保健品。${extra}`;
+      } else if (type === 'erythritol_blend') {
+        badge.className = "text-xs font-mono font-extrabold text-[#D97706]";
+        badge.textContent = "▲ 小心赤藻糖醇脹氣";
+        sugarSaved.textContent = `${kgPerYear} kg`;
+        sugarSaved.className = "text-xl sm:text-2xl font-extrabold text-[#1F2418] tabular-nums mt-0.5";
+        glycemic.textContent = "2 / 100";
+        glycemic.className = "text-xl sm:text-2xl font-extrabold text-[#3B4B20] tabular-nums mt-0.5";
+        bloat.textContent = "偏高 (滲透壓)";
+        bloat.className = "text-xl sm:text-2xl font-extrabold text-[#B91C1C] tabular-nums mt-0.5";
+        advice.innerHTML = `<strong>成分陷阱：</strong>市售混合裝往往含高達 95–99% 赤藻糖醇。每日 ${currentCups} 杯若出現肚鳴、多氣或腹瀉，請立刻停用混合裝，轉用無糖醇填充嘅純萃取產品。`;
+      } else {
+        badge.className = "text-xs font-mono font-extrabold text-[#3B4B20]";
+        badge.textContent = "✓ 零糖純淨原味";
+        sugarSaved.textContent = `${kgPerYear} kg`;
+        sugarSaved.className = "text-xl sm:text-2xl font-extrabold text-[#1F2418] tabular-nums mt-0.5";
+        glycemic.textContent = "0 / 100";
+        glycemic.className = "text-xl sm:text-2xl font-extrabold text-[#3B4B20] tabular-nums mt-0.5";
+        bloat.textContent = "無";
+        bloat.className = "text-xl sm:text-2xl font-extrabold text-[#3B4B20] tabular-nums mt-0.5";
+        advice.innerHTML = `<strong>原型選擇：</strong>完全省去任何甜味劑，每年減少 <strong>${kgPerYear} kg 添加糖</strong>。只需觀察咖啡因本身對胃酸與腸蠕動嘅耐受程度即可。${isReflux ? '<br>建議飯後飲用或嘗試低咖啡因版本。' : ''}`;
+      }
+    }
+
+    // Boot non-3D handlers immediately; 3D boots strictly after vault reveal
+    selectNode(1);
+    updateSim();
+    checkInitialUnlock();
+  </script>
+
+  <!-- 3DSCROLL ENGINE: SCROLLMAGIC + THREE.JS WEBGL OBSERVATORY -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const CHAPTERS = [
+      {
+        index: '章節 01 / 04',
+        tag: '繼續向下滾動推進 3D 解剖',
+        title: '羅漢果實物與口腔 T1R2/T1R3 受體鎖定',
+        desc: '乾燥羅漢果海綿果瓤中的 Mogroside V 進入味蕾後，三萜疏水骨架鎖定 T1R2/T1R3 甜味受體，帶來相當於蔗糖 300 倍甜感，但無須引爆游離血糖飆升。'
       },
       {
-        id: 'scene-2',
-        start: 0.25,
-        end: 0.50,
-        render: (ctx, localP, canvas, vel) => {
-          renderGrinderDive(ctx, localP, canvas, vel);
-        }
+        index: '章節 02 / 04',
+        tag: '小腸零水解繞道',
+        title: '三萜骨架 × 5 葡萄糖基：酵素拆唔開',
+        desc: '圖中青翠外環代表連接在金色三萜核心 (Mogrol) 上的葡萄糖基（非果糖基）。人體澱粉酶與胃酸無法剪斷 β-鍵結，甜苷幾乎完整通過小腸。'
       },
       {
-        id: 'scene-3',
-        start: 0.50,
-        end: 0.75,
-        render: (ctx, localP, canvas, vel) => {
-          renderSteamExtraction(ctx, localP, canvas, vel);
-        }
+        index: '章節 03 / 04',
+        tag: '大腸菌相互動澄清',
+        title: '結腸細菌逐步咬解，但唔代表「幫腸」',
+        desc: '進入大腸後，特定腸道菌雖可逐步卸除部分糖基，但目前主要為體外糞菌實驗數據，缺乏人體臨床證明佢能修復腸道發炎或治療腸病。'
       },
       {
-        id: 'scene-4',
-        start: 0.75,
-        end: 1.0,
-        render: (ctx, localP, canvas, vel) => {
-          renderGlassCup(ctx, localP, canvas, vel);
-        }
+        index: '章節 04 / 04',
+        tag: '商業摻雜警報',
+        title: '踢爆 99% 赤藻糖醇混充嘅滲透壓拉水',
+        desc: '外圍湧出的晶體粒子模擬超市混裝「羅漢果糖」中的赤藻糖醇糖醇分子——滯留腸腔吸水引致肚脹、放屁同滲透性腹瀉！'
       }
     ];
 
-    // 初始化 Scrubber
-    const scrubber = new ScrollWorldScrubber({
-      canvas: canvas,
-      scenes: scenes,
-      lerpFactor: 0.08,
-      onProgress: (progress, velocity) => {
-        // 更新進度條
-        const pct = Math.round(progress * 100);
-        timelineProgress.style.width = `${pct}%`;
-        progressPercent.textContent = `${pct}%`;
+    let controller = null;
+    let pinSceneInstance = null;
+    let sceneInstance = null;
+    let rendererInstance = null;
+    let animationFrameId = 0;
+    let resizeObserver = null;
+    let dockCollapsed = false;
+    let userManualControlActive = false;
+    let stageBooted = false;
 
-        // 更新遙測指標
-        const currentDepth = (progress * 420).toFixed(2);
-        depthText.textContent = `${currentDepth} m`;
+    const scrollState = {
+      progress: 0,
+      activeChapter: 0,
+      targetExplosion: 0.15,
+      currentExplosion: 0.15,
+      cameraPreset: 'overview',
+      sceneOffsetStart: 0,
+      sceneDurationPx: 1000
+    };
 
-        const currentZoom = (1.0 + Math.pow(progress, 2.2) * 99).toFixed(2);
-        zoomText.textContent = `${currentZoom}x`;
+    // Pre-allocated math helpers outside render tick (Zero GC rule)
+    const _targetCamPos = new THREE.Vector3(0, 1.8, 7.2);
+    const _targetLookAt = new THREE.Vector3(0, 0, 0);
 
-        const velPercent = Math.min(velocity * 8000, 100);
-        velocityBar.style.width = `${velPercent}%`;
+    function detectSoftwareGl() {
+      try {
+        const probe = document.createElement('canvas');
+        const gl = probe.getContext('webgl2') || probe.getContext('webgl');
+        if (!gl) return true;
+        const ext = gl.getExtension('WEBGL_debug_renderer_info');
+        const param = ext ? ext.UNMASKED_RENDERER_WEBGL : gl.RENDERER;
+        const gpu = String(gl.getParameter(param) || '');
+        gl.getExtension('WEBGL_lose_context')?.loseContext();
+        return /SwiftShader|llvmpipe|softpipe|Software|Basic Render/i.test(gpu);
+      } catch (e) {
+        return true;
+      }
+    }
 
-        // 更新音效強度
-        updateAudioVelocity(velocity, progress);
+    function createProceduralFruitTexture() {
+      const c = document.createElement('canvas');
+      c.width = 256;
+      c.height = 256;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#4E3622';
+      ctx.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 420; i++) {
+        const x = (Math.sin(i * 12.9898) * 43758.5453) % 1;
+        const y = (Math.sin(i * 78.233) * 43758.5453) % 1;
+        const px = Math.abs(x) * 256;
+        const py = Math.abs(y) * 256;
+        ctx.fillStyle = i % 2 === 0 ? 'rgba(92, 66, 38, 0.55)' : 'rgba(35, 22, 12, 0.45)';
+        ctx.beginPath();
+        ctx.arc(px, py, 2 + (i % 6), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
 
-        // 卡片透明度平滑切換
-        updateCards(progress);
-      },
-      onSceneChange: (idx) => {
-        sceneIndicator.textContent = `STAGE 0${idx + 1} / 04`;
+    function updateChapterHud(chapterIdx, progress) {
+      const ch = CHAPTERS[chapterIdx] || CHAPTERS[0];
+      const idxEl = document.getElementById('hud-chapter-index');
+      const tagEl = document.getElementById('hud-chapter-tag');
+      const titleEl = document.getElementById('hud-chapter-title');
+      const descEl = document.getElementById('hud-chapter-desc');
+      const barEl = document.getElementById('hud-progress-bar');
+
+      if (idxEl) idxEl.textContent = ch.index;
+      if (tagEl) tagEl.textContent = ch.tag;
+      if (titleEl) titleEl.textContent = ch.title;
+      if (descEl) descEl.textContent = ch.desc;
+      if (barEl) barEl.style.transform = `scaleX(${Math.max(0.04, Math.min(1, progress)).toFixed(3)})`;
+
+      document.querySelectorAll('.dock-ch-btn').forEach((btn, idx) => {
+        btn.className = idx === chapterIdx
+          ? "dock-ch-btn px-2.5 py-2 rounded-lg bg-[#F59E0B] text-[#141910] font-bold text-left whitespace-nowrap truncate cursor-pointer"
+          : "dock-ch-btn px-2.5 py-2 rounded-lg bg-[#1F261A] text-[#F4F0E6]/80 hover:text-white font-semibold text-left whitespace-nowrap truncate cursor-pointer";
+      });
+    }
+
+    window.jumpToChapter = function (idx) {
+      const fraction = idx === 0 ? 0.04 : idx === 1 ? 0.34 : idx === 2 ? 0.62 : 0.90;
+      if (pinSceneInstance) {
+        scrollState.sceneOffsetStart = pinSceneInstance.scrollOffset();
+        scrollState.sceneDurationPx = pinSceneInstance.duration();
+      } else {
+        const obs = document.getElementById('band-3d-observatory');
+        if (obs) {
+          scrollState.sceneOffsetStart = obs.getBoundingClientRect().top + window.scrollY;
+          scrollState.sceneDurationPx = window.innerHeight * 3.2;
+        }
+      }
+      const targetY = scrollState.sceneOffsetStart + scrollState.sceneDurationPx * fraction;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    };
+
+    window.setManualExplosion = function (val) {
+      const pct = Math.max(0, Math.min(100, Number(val)));
+      scrollState.targetExplosion = pct / 100;
+      const readout = document.getElementById('explosion-readout');
+      if (readout) readout.textContent = `${Math.round(pct)}%`;
+    };
+
+    window.setCameraPreset = function (preset) {
+      scrollState.cameraPreset = preset;
+      userManualControlActive = false;
+      ['overview', 'core', 'osmotic'].forEach((name) => {
+        const btn = document.getElementById(`cam-btn-${name}`);
+        if (!btn) return;
+        btn.className = name === preset
+          ? "cam-preset-btn px-2.5 py-1.5 rounded-md bg-[#F4F0E6]/15 text-white font-bold whitespace-nowrap cursor-pointer"
+          : "cam-preset-btn px-2.5 py-1.5 rounded-md bg-transparent text-[#F4F0E6]/70 hover:text-white whitespace-nowrap cursor-pointer";
+      });
+      if (preset === 'core') {
+        _targetCamPos.set(0.6, 0.8, 4.3);
+      } else if (preset === 'osmotic') {
+        _targetCamPos.set(-3.2, 2.5, 6.2);
+      } else {
+        _targetCamPos.set(0, 1.8, 7.2);
+      }
+    };
+
+    window.toggleControlDock = function () {
+      dockCollapsed = !dockCollapsed;
+      const body = document.getElementById('dock-body');
+      const btn = document.getElementById('btn-toggle-dock');
+      if (body) body.classList.toggle('hidden', dockCollapsed);
+      if (btn) btn.textContent = dockCollapsed ? '展開控制台 (H)' : '收合控制台 (H)';
+    };
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'h' || e.key === 'H') {
+        const activeTag = document.activeElement?.tagName;
+        if (activeTag !== 'INPUT' && activeTag !== 'SELECT') {
+          window.toggleControlDock();
+        }
       }
     });
 
-    window.seekTo = (p) => scrubber.seekToProgress(p);
+    function init3DStage() {
+      if (stageBooted) return;
+      const stageEl = document.getElementById('scroll-3d-pin-stage');
+      const mountEl = document.getElementById('three-mount');
+      const fallbackEl = document.getElementById('webgl-fallback');
+      if (!stageEl || !mountEl) return;
+      stageBooted = true;
 
-    function updateCards(p) {
-      card1.style.opacity = p < 0.22 ? `${1 - p * 3.5}` : '0';
-      card2.style.opacity = p >= 0.20 && p < 0.48 ? `${Math.sin(((p - 0.20) / 0.28) * Math.PI)}` : '0';
-      card3.style.opacity = p >= 0.46 && p < 0.74 ? `${Math.sin(((p - 0.46) / 0.28) * Math.PI)}` : '0';
-      card4.style.opacity = p >= 0.72 ? `${Math.min((p - 0.72) * 4, 1)}` : '0';
-    }
-
-    // ==========================================
-    // 繪圖管線：場景 1 (Isometric Diorama)
-    // ==========================================
-    function renderDiorama(ctx, p, canvas, vel) {
-      const w = canvas.width;
-      const h = canvas.height;
-      const scale = 1 + p * 2.5; // 逐漸拉近
-      const cx = w * 0.5;
-      const cy = h * 0.52;
-
-      ctx.save();
-      ctx.fillStyle = '#060A12';
-      ctx.fillRect(0, 0, w, h);
-
-      // 背景漸層火山
-      const bgGrad = ctx.createRadialGradient(cx, cy * 0.7, 50, cx, cy * 0.7, w * 0.8);
-      bgGrad.addColorStop(0, '#1E293B');
-      bgGrad.addColorStop(0.5, '#0F172A');
-      bgGrad.addColorStop(1, '#05070A');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, w, h);
-
-      // 繪製等角微縮懸浮島 (Isometric Island Block)
-      ctx.translate(cx, cy);
-      ctx.scale(scale, scale);
-
-      // 頂層綠色草皮
-      ctx.beginPath();
-      ctx.moveTo(0, -120);
-      ctx.lineTo(240, 0);
-      ctx.lineTo(0, 120);
-      ctx.lineTo(-240, 0);
-      ctx.closePath();
-      const grassGrad = ctx.createLinearGradient(-240, -120, 240, 120);
-      grassGrad.addColorStop(0, '#15803D');
-      grassGrad.addColorStop(1, '#166534');
-      ctx.fillStyle = grassGrad;
-      ctx.fill();
-      ctx.strokeStyle = '#22C55E';
-      ctx.lineWidth = 3;
-      ctx.stroke();
-
-      // 島身側面岩石 (3D Cutaway Depth)
-      ctx.beginPath();
-      ctx.moveTo(-240, 0);
-      ctx.lineTo(0, 120);
-      ctx.lineTo(0, 240);
-      ctx.lineTo(-240, 120);
-      ctx.closePath();
-      ctx.fillStyle = '#1E1B18';
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(0, 120);
-      ctx.lineTo(240, 0);
-      ctx.lineTo(240, 120);
-      ctx.lineTo(0, 240);
-      ctx.closePath();
-      ctx.fillStyle = '#2B2621';
-      ctx.fill();
-
-      // 工坊微縮木屋建築 (Workshop)
-      ctx.fillStyle = '#B45309';
-      ctx.fillRect(-45, -80, 90, 70);
-      // 屋頂
-      ctx.beginPath();
-      ctx.moveTo(-60, -80);
-      ctx.lineTo(0, -135);
-      ctx.lineTo(60, -80);
-      ctx.closePath();
-      ctx.fillStyle = '#92400E';
-      ctx.fill();
-      // 亮燈窗戶 (Zoom in Target Window)
-      ctx.fillStyle = '#FBBF24';
-      ctx.shadowColor = '#F59E0B';
-      ctx.shadowBlur = 25;
-      ctx.fillRect(-15, -55, 30, 35);
-      ctx.shadowBlur = 0;
-
-      ctx.restore();
-
-      drawParticles(ctx, w, h, p, '#F59E0B');
-    }
-
-    // ==========================================
-    // 繪圖管線：場景 2 (Camera Dive into Grinder)
-    // ==========================================
-    function renderGrinderDive(ctx, p, canvas, vel) {
-      const w = canvas.width;
-      const h = canvas.height;
-      const cx = w * 0.5;
-      const cy = h * 0.5;
-      const scale = 1 + p * 3.2;
-
-      ctx.save();
-      ctx.fillStyle = '#0B0907';
-      ctx.fillRect(0, 0, w, h);
-
-      // 工坊木質氛圍光
-      const glow = ctx.createRadialGradient(cx, cy, 20, cx, cy, w * 0.7);
-      glow.addColorStop(0, '#78350F');
-      glow.addColorStop(0.6, '#1C1917');
-      glow.addColorStop(1, '#05070A');
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, w, h);
-
-      ctx.translate(cx, cy);
-      ctx.scale(scale, scale);
-
-      // 黃銅磨豆機料斗 (Brass Hopper Cone)
-      ctx.beginPath();
-      ctx.moveTo(-160, -220);
-      ctx.lineTo(160, -220);
-      ctx.lineTo(60, 60);
-      ctx.lineTo(-60, 60);
-      ctx.closePath();
-      const brassGrad = ctx.createLinearGradient(-160, -220, 160, 60);
-      brassGrad.addColorStop(0, '#F59E0B');
-      brassGrad.addColorStop(0.3, '#FDE68A');
-      brassGrad.addColorStop(0.7, '#D97706');
-      brassGrad.addColorStop(1, '#78350F');
-      ctx.fillStyle = brassGrad;
-      ctx.fill();
-
-      // 料斗內的旋轉咖啡豆
-      for (let i = 0; i < 18; i++) {
-        const angle = (i / 18) * Math.PI * 2 + p * 4;
-        const rad = 25 + (i % 4) * 22;
-        const bx = Math.cos(angle) * rad;
-        const by = -80 + Math.sin(angle) * (rad * 0.5);
-        drawCoffeeBean(ctx, bx, by, 12, angle);
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        if (fallbackEl) fallbackEl.classList.remove('hidden');
+        return;
       }
 
-      ctx.restore();
+      const isSoftwareGl = detectSoftwareGl();
 
-      drawParticles(ctx, w, h, p, '#D97706');
-    }
+      try {
+        const width = mountEl.clientWidth || window.innerWidth;
+        const height = mountEl.clientHeight || window.innerHeight;
 
-    // ==========================================
-    // 繪圖管線：場景 3 (Micro Titanium Burrs & Steam)
-    // ==========================================
-    function renderSteamExtraction(ctx, p, canvas, vel) {
-      const w = canvas.width;
-      const h = canvas.height;
-      const cx = w * 0.5;
-      const cy = h * 0.5;
+        const renderer = new THREE.WebGLRenderer({
+          antialias: !isSoftwareGl,
+          powerPreference: 'high-performance'
+        });
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.1;
+        renderer.setPixelRatio(isSoftwareGl ? 1 : Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(width, height);
+        renderer.shadowMap.enabled = !isSoftwareGl;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        mountEl.appendChild(renderer.domElement);
+        rendererInstance = renderer;
 
-      ctx.save();
-      ctx.fillStyle = '#070A0F';
-      ctx.fillRect(0, 0, w, h);
+        renderer.domElement.addEventListener('webglcontextlost', (e) => {
+          e.preventDefault();
+          cancelAnimationFrame(animationFrameId);
+          clearTimeout(animationFrameId);
+          if (fallbackEl) fallbackEl.classList.remove('hidden');
+        });
+        renderer.domElement.addEventListener('webglcontextrestored', () => {
+          if (fallbackEl) fallbackEl.classList.add('hidden');
+        });
 
-      ctx.translate(cx, cy);
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x141910);
+        scene.fog = new THREE.FogExp2(0x141910, 0.035);
+        sceneInstance = scene;
 
-      // 旋轉微距鈦合金刀盤 (Rotating Burrs)
-      const rotation = p * Math.PI * 4;
-      ctx.rotate(rotation);
+        // Mandatory Studio Environment Reflections (RoomEnvironment)
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+        pmremGenerator.dispose();
 
-      const burrGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, 320);
-      burrGrad.addColorStop(0, '#0F172A');
-      burrGrad.addColorStop(0.7, '#334155');
-      burrGrad.addColorStop(1, '#94A3B8');
-      ctx.strokeStyle = burrGrad;
-      ctx.lineWidth = 14;
+        const camera = new THREE.PerspectiveCamera(44, width / height, 0.1, 100);
+        camera.position.copy(_targetCamPos);
 
-      for (let i = 0; i < 24; i++) {
-        ctx.beginPath();
-        const a = (i / 24) * Math.PI * 2;
-        ctx.moveTo(Math.cos(a) * 40, Math.sin(a) * 40);
-        ctx.lineTo(Math.cos(a + 0.3) * 280, Math.sin(a + 0.3) * 280);
-        ctx.stroke();
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = !isSoftwareGl;
+        controls.dampingFactor = 0.06;
+        controls.enableZoom = false; // Never hijack page vertical scroll inside ScrollMagic stage!
+        controls.enablePan = false;
+        controls.addEventListener('start', () => {
+          userManualControlActive = true;
+        });
+
+        // 3-Point Warm/Cool Studio Lighting
+        const keyLight = new THREE.DirectionalLight(0xFFF3D6, 2.2);
+        keyLight.position.set(5, 7, 5);
+        keyLight.castShadow = !isSoftwareGl;
+        keyLight.shadow.mapSize.set(1024, 1024);
+        keyLight.shadow.bias = -0.0005;
+        keyLight.shadow.normalBias = 0.02;
+        scene.add(keyLight);
+
+        const hemiLight = new THREE.HemisphereLight(0xCBD5E1, 0x1F2418, 0.9);
+        scene.add(hemiLight);
+
+        const rimLight = new THREE.DirectionalLight(0xF59E0B, 1.4);
+        rimLight.position.set(-5, 3, -4);
+        scene.add(rimLight);
+
+        // Contact Grounding Shadow Disc
+        const groundPlane = new THREE.Mesh(
+          new THREE.CircleGeometry(4.2, 48),
+          new THREE.MeshBasicMaterial({
+            color: 0x090C07,
+            transparent: true,
+            opacity: 0.55,
+            depthWrite: false
+          })
+        );
+        groundPlane.rotation.x = -Math.PI / 2;
+        groundPlane.position.y = -2.25;
+        scene.add(groundPlane);
+
+        // Procedural Fruit Texture
+        const fruitTex = createProceduralFruitTexture();
+        fruitTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+        // COMPOSITE SUBJECT 1: Cutaway Monk Fruit Outer Vessel (Left Orbit)
+        const monkFruitGroup = new THREE.Group();
+        const shellMat = new THREE.MeshStandardMaterial({
+          map: fruitTex,
+          color: 0x6E4E32,
+          roughness: 0.85,
+          metalness: 0.05
+        });
+        const outerBowl = new THREE.Mesh(
+          new THREE.SphereGeometry(1.15, 28, 22, 0, Math.PI * 1.45),
+          shellMat
+        );
+        outerBowl.castShadow = !isSoftwareGl;
+        outerBowl.receiveShadow = !isSoftwareGl;
+        monkFruitGroup.add(outerBowl);
+
+        const pulpMat = new THREE.MeshStandardMaterial({
+          color: 0xC89B62,
+          roughness: 0.7,
+          metalness: 0.08
+        });
+        const pulpRim = new THREE.Mesh(new THREE.TorusGeometry(0.82, 0.14, 14, 32), pulpMat);
+        pulpRim.rotation.y = Math.PI * 0.28;
+        monkFruitGroup.add(pulpRim);
+
+        const seedMat = new THREE.MeshPhysicalMaterial({
+          color: 0x2A1A10,
+          roughness: 0.28,
+          metalness: 0.15,
+          clearcoat: 0.6
+        });
+        for (let s = 0; s < 6; s++) {
+          const seed = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.18, 6, 10), seedMat);
+          const angle = (s / 6) * Math.PI * 2;
+          seed.position.set(Math.cos(angle) * 0.45, Math.sin(angle) * 0.45, 0.15);
+          seed.rotation.z = angle;
+          monkFruitGroup.add(seed);
+        }
+        monkFruitGroup.position.set(-2.3, 0.1, -0.4);
+        scene.add(monkFruitGroup);
+
+        // COMPOSITE SUBJECT 2: Mogroside V Triterpene Core + 5 Glucose Units
+        const moleculeGroup = new THREE.Group();
+        const coreMat = new THREE.MeshPhysicalMaterial({
+          color: 0xF59E0B,
+          metalness: 0.78,
+          roughness: 0.22,
+          clearcoat: 0.9,
+          clearcoatRoughness: 0.12
+        });
+
+        // 4 Fused Triterpene Rings
+        const ringPositions = [
+          [-0.78, 0.05, 0],
+          [-0.22, 0.22, 0.08],
+          [0.35, -0.05, -0.05],
+          [0.92, -0.18, 0.06]
+        ];
+        ringPositions.forEach((pos, idx) => {
+          const ring = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.085, 16, 6), coreMat);
+          ring.position.set(pos[0], pos[1], pos[2]);
+          ring.rotation.x = idx % 2 === 0 ? 0.2 : -0.18;
+          ring.castShadow = !isSoftwareGl;
+          moleculeGroup.add(ring);
+        });
+
+        // 5 Glucose Moiety Clusters tethered around the Mogrol core
+        const glucoseMat = new THREE.MeshPhysicalMaterial({
+          color: 0x34D399,
+          metalness: 0.25,
+          roughness: 0.18,
+          transmission: isSoftwareGl ? 0 : 0.55,
+          transparent: true,
+          opacity: isSoftwareGl ? 0.78 : 0.95,
+          ior: 1.48,
+          thickness: 0.6,
+          clearcoat: 1.0
+        });
+        const bondMat = new THREE.MeshStandardMaterial({
+          color: 0xE2E8F0,
+          metalness: 0.6,
+          roughness: 0.3
+        });
+
+        const glucoseAnchors = [
+          new THREE.Vector3(-1.45, 0.95, 0.35),
+          new THREE.Vector3(-1.35, -0.95, -0.25),
+          new THREE.Vector3(0.05, 1.32, -0.35),
+          new THREE.Vector3(1.52, 0.88, 0.3),
+          new THREE.Vector3(1.58, -0.92, -0.2)
+        ];
+        const glucoseUnits = [];
+        glucoseAnchors.forEach((anchor) => {
+          const unitGroup = new THREE.Group();
+          const sugarRing = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.075, 12, 6), glucoseMat);
+          const centerAtom = new THREE.Mesh(new THREE.OctahedronGeometry(0.14, 1), coreMat);
+          const tether = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.72, 10), bondMat);
+          tether.position.set(-anchor.x * 0.24, -anchor.y * 0.24, 0);
+          tether.lookAt(anchor);
+          tether.rotateX(Math.PI / 2);
+
+          unitGroup.add(sugarRing);
+          unitGroup.add(centerAtom);
+          unitGroup.add(tether);
+          unitGroup.userData.basePos = anchor.clone();
+          unitGroup.position.copy(anchor);
+          moleculeGroup.add(unitGroup);
+          glucoseUnits.push(unitGroup);
+        });
+        moleculeGroup.position.set(0.45, 0.05, 0);
+        scene.add(moleculeGroup);
+
+        // COMPOSITE SUBJECT 3: Instanced Osmotic Erythritol Surge Particles (48 instances)
+        const particleCount = 48;
+        const osmoticGeom = new THREE.IcosahedronGeometry(0.11, 0);
+        const osmoticMat = new THREE.MeshStandardMaterial({
+          color: 0xF87171,
+          roughness: 0.25,
+          metalness: 0.45
+        });
+        const osmoticMesh = new THREE.InstancedMesh(osmoticGeom, osmoticMat, particleCount);
+        osmoticMesh.frustumCulled = false;
+        const dummy = new THREE.Object3D();
+        const particleSeeds = [];
+        for (let i = 0; i < particleCount; i++) {
+          const phi = Math.acos(1 - 2 * (i + 0.5) / particleCount);
+          const theta = Math.PI * (1 + Math.sqrt(5)) * i;
+          particleSeeds.push({
+            dir: new THREE.Vector3(
+              Math.sin(phi) * Math.cos(theta),
+              Math.sin(phi) * Math.sin(theta),
+              Math.cos(phi)
+            ),
+            radius: 2.1 + (i % 5) * 0.45,
+            scale: 0.8 + (i % 4) * 0.22
+          });
+          dummy.position.set(0, 0, 0);
+          dummy.scale.setScalar(0.001);
+          dummy.updateMatrix();
+          osmoticMesh.setMatrixAt(i, dummy.matrix);
+        }
+        osmoticMesh.instanceMatrix.needsUpdate = true;
+        scene.add(osmoticMesh);
+
+        // ScrollMagic Controller + Pinning Scene (Measured after vault reveal)
+        if (window.ScrollMagic) {
+          controller = new window.ScrollMagic.Controller();
+          pinSceneInstance = new window.ScrollMagic.Scene({
+            triggerElement: '#scroll-3d-pin-stage',
+            duration: '320%',
+            triggerHook: 0
+          })
+            .setPin('#scroll-3d-pin-stage')
+            .on('progress', (e) => {
+              scrollState.progress = e.progress;
+              const chIdx = e.progress < 0.25 ? 0 : e.progress < 0.52 ? 1 : e.progress < 0.78 ? 2 : 3;
+              scrollState.activeChapter = chIdx;
+              scrollState.targetExplosion = Math.min(1, 0.1 + e.progress * 0.9);
+
+              const slider = document.getElementById('explosion-slider');
+              const readout = document.getElementById('explosion-readout');
+              if (slider && document.activeElement !== slider) {
+                const pct = Math.round(scrollState.targetExplosion * 100);
+                slider.value = String(pct);
+                if (readout) readout.textContent = `${pct}%`;
+              }
+
+              updateChapterHud(chIdx, e.progress);
+            })
+            .addTo(controller);
+
+          const syncOffsets = () => {
+            if (!pinSceneInstance) return;
+            scrollState.sceneOffsetStart = pinSceneInstance.scrollOffset();
+            scrollState.sceneDurationPx = pinSceneInstance.duration();
+          };
+          syncOffsets();
+          window.addEventListener('resize', syncOffsets);
+        }
+
+        // Responsive ResizeObserver on dedicated canvas container
+        resizeObserver = new ResizeObserver((entries) => {
+          for (const entry of entries) {
+            const w = entry.contentRect.width;
+            const h = entry.contentRect.height;
+            if (w > 0 && h > 0) {
+              camera.aspect = w / h;
+              camera.updateProjectionMatrix();
+              renderer.setSize(w, h);
+            }
+          }
+        });
+        resizeObserver.observe(mountEl);
+
+        // Software WebGL fenceSync pacing helper (per threejs SKILL.md)
+        function afterDraw(cb) {
+          const gl = renderer.getContext();
+          const sync = gl.fenceSync && gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
+          if (!sync) {
+            animationFrameId = window.setTimeout(cb, 80);
+            return;
+          }
+          gl.flush();
+          const poll = () => {
+            const state = gl.getSyncParameter(sync, gl.SYNC_STATUS);
+            if (state === gl.UNSIGNALED) {
+              animationFrameId = window.setTimeout(poll, 5);
+            } else {
+              gl.deleteSync(sync);
+              animationFrameId = window.setTimeout(cb, 80);
+            }
+          };
+          animationFrameId = window.setTimeout(poll, 5);
+        }
+
+        const clock = new THREE.Clock();
+
+        function tick() {
+          const dt = Math.min(clock.getDelta(), 0.05);
+          const elapsed = clock.getElapsedTime();
+
+          // Smooth exponential damping
+          scrollState.currentExplosion = THREE.MathUtils.damp(
+            scrollState.currentExplosion,
+            scrollState.targetExplosion,
+            6,
+            dt
+          );
+
+          // Scrubbed Molecule Rotation & Exploded Glucose Separation
+          moleculeGroup.rotation.y = THREE.MathUtils.damp(
+            moleculeGroup.rotation.y,
+            scrollState.progress * Math.PI * 2.4 + elapsed * 0.14,
+            5,
+            dt
+          );
+          moleculeGroup.rotation.x = THREE.MathUtils.damp(
+            moleculeGroup.rotation.x,
+            Math.sin(scrollState.progress * Math.PI) * 0.45,
+            5,
+            dt
+          );
+
+          const explodeFactor = 1 + scrollState.currentExplosion * 0.95;
+          for (let i = 0; i < glucoseUnits.length; i++) {
+            const u = glucoseUnits[i];
+            const base = u.userData.basePos;
+            u.position.set(
+              base.x * explodeFactor,
+              base.y * explodeFactor + Math.sin(elapsed * 1.4 + i) * 0.06,
+              base.z * explodeFactor
+            );
+            u.rotation.y = elapsed * 0.6 + i;
+          }
+
+          // Monk Fruit vessel transitions gracefully out as camera dives into Chapter 2-4
+          const fruitVisibilityScale = Math.max(0.08, 1 - Math.max(0, scrollState.progress - 0.12) * 2.1);
+          monkFruitGroup.scale.setScalar(
+            THREE.MathUtils.damp(monkFruitGroup.scale.x, fruitVisibilityScale, 5, dt)
+          );
+          monkFruitGroup.rotation.y = elapsed * 0.25 + scrollState.progress * 1.8;
+
+          // Osmotic Erythritol Trap Surge activates in Chapter 4 (progress > 0.65)
+          const surge = Math.max(0, (scrollState.progress - 0.65) / 0.35);
+          for (let i = 0; i < particleCount; i++) {
+            const seed = particleSeeds[i];
+            const spread = seed.radius * (0.45 + surge * 0.95);
+            dummy.position.set(
+              seed.dir.x * spread,
+              seed.dir.y * spread + Math.sin(elapsed * 2 + i) * 0.12,
+              seed.dir.z * spread
+            );
+            dummy.rotation.set(elapsed + i, elapsed * 0.7, 0);
+            dummy.scale.setScalar(surge > 0.02 ? seed.scale * surge : 0.001);
+            dummy.updateMatrix();
+            osmoticMesh.setMatrixAt(i, dummy.matrix);
+          }
+          osmoticMesh.instanceMatrix.needsUpdate = true;
+
+          // Smooth camera preset damping unless user drags manually
+          if (!userManualControlActive) {
+            camera.position.x = THREE.MathUtils.damp(camera.position.x, _targetCamPos.x, 4, dt);
+            camera.position.y = THREE.MathUtils.damp(camera.position.y, _targetCamPos.y, 4, dt);
+            camera.position.z = THREE.MathUtils.damp(camera.position.z, _targetCamPos.z, 4, dt);
+            controls.target.copy(_targetLookAt);
+          }
+          controls.update();
+
+          renderer.render(scene, camera);
+
+          if (isSoftwareGl) {
+            afterDraw(tick);
+          } else {
+            animationFrameId = requestAnimationFrame(tick);
+          }
+        }
+
+        tick();
+      } catch (err) {
+        console.error('3D Stage fallback activated:', err);
+        if (fallbackEl) fallbackEl.classList.remove('hidden');
       }
-
-      ctx.restore();
-
-      // 高壓蒸汽霧氣層 (Steam Fog Overlay)
-      ctx.save();
-      const steamGrad = ctx.createRadialGradient(cx, cy, 50, cx, cy, w * 0.6);
-      steamGrad.addColorStop(0, `rgba(255, 255, 255, ${0.4 + p * 0.4})`);
-      steamGrad.addColorStop(0.5, `rgba(245, 158, 11, ${0.25 + p * 0.2})`);
-      steamGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = steamGrad;
-      ctx.fillRect(0, 0, w, h);
-      ctx.restore();
-
-      drawParticles(ctx, w, h, p * 2, '#FFFFFF');
     }
 
-    // ==========================================
-    // 繪圖管線：場景 4 (Double-Walled Glass Cup & Crema)
-    // ==========================================
-    function renderGlassCup(ctx, p, canvas, vel) {
-      const w = canvas.width;
-      const h = canvas.height;
-      const cx = w * 0.5;
-      const cy = h * 0.52;
-      const scale = 1.2 - (1 - p) * 0.3;
+    // Lifecycle Cleanup (zero duplicate scroll listeners or GPU leaks)
+    window.addEventListener('pagehide', () => {
+      cancelAnimationFrame(animationFrameId);
+      clearTimeout(animationFrameId);
+      if (resizeObserver) resizeObserver.disconnect();
+      if (controller) controller.destroy(true);
+      if (rendererInstance) rendererInstance.dispose();
+    });
 
-      ctx.save();
-      ctx.fillStyle = '#06080D';
-      ctx.fillRect(0, 0, w, h);
-
-      // 高級暗色展台聚光燈 (Spotlight)
-      const spot = ctx.createRadialGradient(cx, cy * 0.8, 40, cx, cy, w * 0.65);
-      spot.addColorStop(0, '#2D1B0A');
-      spot.addColorStop(0.5, '#120D08');
-      spot.addColorStop(1, '#05070A');
-      ctx.fillStyle = spot;
-      ctx.fillRect(0, 0, w, h);
-
-      ctx.translate(cx, cy);
-      ctx.scale(scale, scale);
-
-      // 雙層玻璃外壁 (Outer Borosilicate Glass)
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.roundRect(-140, -180, 280, 320, [15, 15, 60, 60]);
-      ctx.stroke();
-
-      // 雙層玻璃內壁 (Inner Chamber with Liquid)
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.roundRect(-110, -160, 220, 270, [10, 10, 45, 45]);
-      ctx.stroke();
-
-      // 濃縮黑咖啡液體 (Rich Espresso Body)
-      const coffeeGrad = ctx.createLinearGradient(0, -40, 0, 100);
-      coffeeGrad.addColorStop(0, '#381C06');
-      coffeeGrad.addColorStop(1, '#1A0B02');
-      ctx.fillStyle = coffeeGrad;
-      ctx.beginPath();
-      ctx.roundRect(-108, -60, 216, 168, [0, 0, 43, 43]);
-      ctx.fill();
-
-      // 頂部黃金 Crema 油沫層 (Golden Crema Layer)
-      const cremaGrad = ctx.createLinearGradient(-100, -80, 100, -50);
-      cremaGrad.addColorStop(0, '#D97706');
-      cremaGrad.addColorStop(0.5, '#F59E0B');
-      cremaGrad.addColorStop(1, '#B45309');
-      ctx.fillStyle = cremaGrad;
-      ctx.beginPath();
-      ctx.roundRect(-108, -80, 216, 26, [6, 6, 0, 0]);
-      ctx.fill();
-
-      // 玻璃高光反光 (Reflections)
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(-125, -160);
-      ctx.lineTo(-125, 90);
-      ctx.stroke();
-
-      ctx.restore();
-
-      drawParticles(ctx, w, h, 0.2, '#F59E0B');
-    }
-
-    function drawCoffeeBean(ctx, x, y, r, angle) {
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(angle);
-      ctx.fillStyle = '#26160B';
-      ctx.beginPath();
-      ctx.ellipse(0, 0, r * 1.3, r, 0, 0, Math.PI * 2);
-      ctx.fill();
-      // 中間裂紋
-      ctx.strokeStyle = '#D97706';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(-r * 0.9, 0);
-      ctx.quadraticCurveTo(0, 3, r * 0.9, 0);
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    function drawParticles(ctx, w, h, speedMult, baseColor) {
-      ctx.save();
-      for (let i = 0; i < particles.length; i++) {
-        const pt = particles[i];
-        pt.y -= (0.4 + speedMult * 2.5);
-        pt.x += pt.vx;
-        if (pt.y < 0) pt.y = h;
-        if (pt.x < 0) pt.x = w;
-        if (pt.x > w) pt.x = 0;
-
-        ctx.fillStyle = `${baseColor} 0.6)`;
-        ctx.beginPath();
-        ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
-        ctx.fill();
+    // Expose initializer for Passkey reveal hook
+    window.__boot3dScrollVault = init3DStage;
+    requestAnimationFrame(() => {
+      if (!document.getElementById('vault-content')?.classList.contains('hidden')) {
+        init3DStage();
       }
-      ctx.restore();
-    }
-
-    // ==========================================
-    // Web Audio 空間實時環境音效合成器
-    // ==========================================
-    let audioCtx = null;
-    let isAudioOn = false;
-    let windOsc = null;
-    let windGain = null;
-    let grinderOsc = null;
-    let grinderGain = null;
-
-    window.toggleAudio = function() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        setupAudioNodes();
-      }
-
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-
-      isAudioOn = !isAudioOn;
-      const soundIcon = document.getElementById('soundIcon');
-      const soundLabel = document.getElementById('soundLabel');
-      if (isAudioOn) {
-        soundIcon.textContent = '🔊';
-        soundLabel.textContent = '靜音';
-        windGain.gain.setTargetAtTime(0.08, audioCtx.currentTime, 0.2);
-      } else {
-        soundIcon.textContent = '🔇';
-        soundLabel.textContent = '開啟環境音效';
-        windGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.2);
-        grinderGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.2);
-      }
-    };
-
-    function setupAudioNodes() {
-      // 1. 低頻風聲與雲霧微風
-      windOsc = audioCtx.createOscillator();
-      windOsc.type = 'sine';
-      windOsc.frequency.setValueAtTime(110, audioCtx.currentTime);
-      windGain = audioCtx.createGain();
-      windGain.gain.setValueAtTime(0, audioCtx.currentTime);
-      windOsc.connect(windGain);
-      windGain.connect(audioCtx.destination);
-      windOsc.start();
-
-      // 2. 磨豆與高壓共鳴
-      grinderOsc = audioCtx.createOscillator();
-      grinderOsc.type = 'triangle';
-      grinderOsc.frequency.setValueAtTime(280, audioCtx.currentTime);
-      grinderGain = audioCtx.createGain();
-      grinderGain.gain.setValueAtTime(0, audioCtx.currentTime);
-      grinderOsc.connect(grinderGain);
-      grinderGain.connect(audioCtx.destination);
-      grinderOsc.start();
-    }
-
-    function updateAudioVelocity(vel, p) {
-      if (!isAudioOn || !audioCtx) return;
-      const targetPitch = 120 + p * 240 + vel * 3000;
-      windOsc.frequency.setTargetAtTime(targetPitch, audioCtx.currentTime, 0.1);
-
-      // 磨豆機階段音效拉高
-      if (p > 0.25 && p < 0.75) {
-        const grinderVol = Math.min(0.05 + vel * 8, 0.18);
-        grinderGain.gain.setTargetAtTime(grinderVol, audioCtx.currentTime, 0.08);
-      } else {
-        grinderGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.2);
-      }
-    }
-
-    // Modal
-    window.toggleDocModal = function() {
-      const modal = document.getElementById('docModal');
-      modal.classList.toggle('hidden');
-      modal.classList.toggle('flex');
-    };
+    });
   </script>
 </body>
 </html>
