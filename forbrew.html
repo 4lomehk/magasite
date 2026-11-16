@@ -1,0 +1,2477 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Forbrew · 咖啡落單</title>
+  <meta name="description" content="Forbrew 選擇不同咖啡杯：以互動 3D 挑選咖啡落單，100% 完整移植客人 4 步落單、轉數快 99KB 壓縮、Stripe Express 分賬、商戶控制台與平台後台風控系統。" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #faf7f2;
+      --paper: #f2ece1;
+      --surface: #ffffff;
+      --fg: #141413;
+      --mut: #6b6a66;
+      --line: #dcd3c4;
+      --acc: #d97757;
+      --ok: #2f8f5b;
+      --warn: #e8a317;
+      --bad: #c0392b;
+      --serif: "Fraunces", "Iowan Old Style", "Noto Serif TC", Georgia, serif;
+      --sans: "Plus Jakarta Sans", "Noto Sans TC", "PingFang HK", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+      color-scheme: light;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 48px;
+    }
+
+    /* Editorial Top Masthead */
+    .masthead {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+    }
+    .masthead-in {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 20px;
+      min-height: 60px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--fg);
+      text-decoration: none;
+    }
+    .brand-mark { width: 28px; height: 24px; display: inline-flex; align-items: center; }
+    .brand-name {
+      font-family: var(--serif);
+      font-weight: 800;
+      font-size: 21px;
+      letter-spacing: 0.02em;
+    }
+
+    /* Top Role Switcher (Customer /c/SHOP · Barista / · Platform /admin) */
+    .role-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .role-btn {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--mut);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 7px 13px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: border-color 0.15s, background-color 0.15s, color 0.15s;
+    }
+    .role-btn:hover { border-color: var(--fg); color: var(--fg); }
+    .role-btn.on {
+      background: var(--fg);
+      border-color: var(--fg);
+      color: var(--bg);
+    }
+    .role-count {
+      font-family: var(--mono);
+      font-size: 11px;
+      background: var(--warn);
+      color: #141413;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .util-nav { display: flex; align-items: center; gap: 8px; }
+    .mini-btn {
+      border: 1px solid var(--fg);
+      background: var(--surface);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 11px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .mini-btn:hover { background: var(--paper); }
+
+    .shell { max-width: 1320px; margin: 0 auto; padding: 0 20px; }
+
+    /* Compact Header Band */
+    .sub-band {
+      padding: 18px 0 14px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .kicker {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--acc);
+      margin-bottom: 4px;
+    }
+    .band-title {
+      font-family: var(--serif);
+      font-size: clamp(1.55rem, 2.8vw, 2.25rem);
+      font-weight: 800;
+      line-height: 1.15;
+    }
+    .shop-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      padding: 6px 12px;
+      border-radius: 4px;
+    }
+    .status-sq { width: 9px; height: 9px; border-radius: 2px; background: var(--mut); }
+    .status-sq.ok { background: var(--ok); }
+
+    /* 3D Bookshelf Coffee Selector Stage (Left 58% · Right 42%) */
+    .cust-stage {
+      display: grid;
+      grid-template-columns: 1.32fr 1fr;
+      gap: 22px;
+      padding: 20px 0 28px;
+      align-items: stretch;
+    }
+    .shelf-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 560px;
+    }
+    .shelf-top-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .grp-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+    .grp-btn {
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--mut);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .grp-btn.on { background: var(--acc); border-color: var(--acc); color: #fff; }
+    .canvas-wrap {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      min-height: 400px;
+      cursor: grab;
+    }
+    .canvas-wrap:active { cursor: grabbing; }
+    .canvas-wrap canvas { display: block; width: 100%; height: 100%; }
+
+    .shelf-fallback {
+      display: none;
+      padding: 24px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 12px;
+      flex: 1;
+    }
+    .shelf-fallback.on { display: flex; }
+
+    .shelf-foot {
+      background: var(--surface);
+      border-top: 1px solid var(--line);
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .drink-spine-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .spine-chip {
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--fg);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 9px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .spine-chip:hover { border-color: var(--fg); }
+    .spine-chip.on {
+      background: var(--fg);
+      border-color: var(--fg);
+      color: var(--bg);
+    }
+    .spine-chip small { font-family: var(--mono); opacity: 0.8; font-variant-numeric: tabular-nums; }
+    .shelf-hint { font-family: var(--mono); font-size: 11px; color: var(--mut); }
+
+    /* Right Synchronized Guest Order Desk */
+    .order-desk {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .prog { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .prog div {
+      border: 1px solid var(--line);
+      background: var(--bg);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--mut);
+      padding: 8px 4px;
+      border-radius: 4px;
+    }
+    .prog div b {
+      display: block;
+      font-family: var(--mono);
+      font-size: 16px;
+      margin-bottom: 2px;
+    }
+    .prog div.on { background: var(--acc); border-color: var(--acc); color: #fff; }
+
+    /* Merchant & Admin Full Workspace Panels */
+    .console-wrap { max-width: 960px; margin: 22px auto 0; }
+    .seg {
+      display: flex;
+      flex-wrap: wrap;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 3px;
+      margin-top: 12px;
+      gap: 3px;
+    }
+    .seg button {
+      flex: 1;
+      min-width: 78px;
+      border: 0;
+      background: none;
+      color: var(--mut);
+      font: inherit;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 7px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .seg button.on { background: var(--fg); color: var(--bg); }
+    .seg i {
+      font-style: normal;
+      background: var(--warn);
+      color: #141413;
+      border-radius: 3px;
+      padding: 0 5px;
+      margin-left: 4px;
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+    .panel-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+    .ord {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+    .ord.hot { border-color: var(--acc); border-width: 2px; }
+    .ord h4 {
+      font-size: 17px;
+      font-weight: 800;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .tag-st {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 3px;
+      padding: 2px 8px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--fg);
+    }
+    .tag-st.paid { background: var(--warn); border-color: var(--warn); color: #141413; }
+    .tag-st.making { background: var(--acc); border-color: var(--acc); color: #fff; }
+    .tag-st.ready { background: var(--ok); border-color: var(--ok); color: #fff; }
+
+    .lab {
+      font-size: 11px;
+      color: var(--mut);
+      margin: 10px 0 5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .row { display: flex; flex-wrap: wrap; gap: 7px; }
+    .chip {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--fg);
+      border-radius: 4px;
+      padding: 8px 12px;
+      font: inherit;
+      font-weight: 700;
+      font-size: 13px;
+      min-height: 40px;
+      cursor: pointer;
+      text-align: left;
+    }
+    .chip:hover { border-color: var(--fg); }
+    .chip.on { background: var(--acc); border-color: var(--acc); color: #fff; }
+    .chip small { display: block; font-family: var(--mono); font-size: 11px; opacity: 0.85; font-variant-numeric: tabular-nums; }
+    .chip.sm { padding: 6px 10px; min-height: 34px; font-size: 12px; }
+
+    .qty { display: flex; align-items: center; gap: 12px; }
+    .qty button {
+      width: 38px;
+      height: 38px;
+      border-radius: 4px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--fg);
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .qty b { font-family: var(--mono); font-size: 18px; min-width: 24px; text-align: center; }
+
+    input[type=text], input[type=tel], input[type=password], input[type=search], select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--fg);
+      border-radius: 4px;
+      padding: 10px 11px;
+      font: inherit;
+      font-size: 14px;
+      margin-top: 6px;
+    }
+    .pw { position: relative; margin-top: 6px; }
+    .pw input { margin-top: 0 !important; padding-right: 68px; }
+    .pw .eye {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--fg);
+      border-radius: 3px;
+      padding: 4px 9px;
+      font: inherit;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .kv {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 0;
+      border-top: 1px solid var(--line);
+    }
+    .kv:first-child { border-top: 0; }
+    .kv b { font-family: var(--mono); font-size: 17px; font-variant-numeric: tabular-nums; }
+
+    .btn {
+      width: 100%;
+      border: 0;
+      border-radius: 4px;
+      background: var(--acc);
+      color: #fff;
+      font: inherit;
+      font-weight: 800;
+      font-size: 15px;
+      min-height: 46px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 14px;
+      text-decoration: none;
+    }
+    .btn:disabled { background: var(--line); color: var(--mut); cursor: not-allowed; }
+    .btn.ok { background: var(--ok); }
+    .btn.warn { background: var(--warn); color: #141413; }
+    .btn.dark { background: var(--fg); color: var(--bg); }
+    .btn.inline { margin-top: 10px; }
+
+    .mini {
+      border: 1px solid var(--fg);
+      background: var(--surface);
+      color: var(--fg);
+      border-radius: 4px;
+      padding: 5px 10px;
+      font: inherit;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      min-height: 32px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .link {
+      background: none;
+      border: 0;
+      color: var(--mut);
+      text-decoration: underline;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 8px;
+      padding: 4px 0;
+      display: inline-block;
+    }
+
+    .st { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+    .st div { border: 1px solid var(--line); background: var(--surface); border-radius: 4px; padding: 11px; }
+    .st small { color: var(--mut); font-weight: 700; font-size: 11px; display: block; }
+    .st b { font-size: 20px; font-family: var(--mono); font-variant-numeric: tabular-nums; display: block; }
+    .st span { font-size: 11px; color: var(--mut); }
+    .st .g { background: rgba(47, 143, 91, 0.08); }
+    .st .w { background: rgba(232, 163, 23, 0.1); }
+    .st .r { background: rgba(192, 57, 43, 0.08); }
+
+    .bd { border: 1px solid var(--line); background: var(--surface); border-radius: 4px; padding: 12px; margin-top: 10px; }
+    .bd div { display: flex; justify-content: space-between; font-size: 13px; margin-top: 7px; font-variant-numeric: tabular-nums; }
+    .bd i { display: block; height: 6px; border-radius: 2px; background: var(--line); margin-top: 3px; overflow: hidden; }
+    .bd i u { display: block; height: 100%; background: var(--acc); }
+
+    .tw { overflow-x: auto; margin-top: 12px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+    table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+    th, td { padding: 8px 10px; text-align: left; border-top: 1px solid var(--line); white-space: nowrap; }
+    th { background: var(--paper); border-top: 0; font-weight: 800; font-size: 12px; }
+
+    .ar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 4px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      margin-top: 10px;
+      cursor: pointer;
+      font-weight: 800;
+      width: 100%;
+      color: var(--fg);
+      font: inherit;
+      text-align: left;
+    }
+    .ar small { font-weight: 600; color: var(--mut); display: block; font-size: 12px; }
+    .adet {
+      padding: 12px 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-top: 0;
+      border-radius: 0 0 4px 4px;
+      margin-top: -2px;
+    }
+
+    .qr { width: 190px; height: 190px; margin: 10px auto; border: 1px solid var(--line); background: #fff; padding: 6px; border-radius: 4px; }
+    .qr svg { width: 100%; height: 100%; display: block; }
+    .rcimg { max-width: 100%; max-height: 220px; border-radius: 4px; border: 1px solid var(--line); margin-top: 8px; display: block; }
+    .redstar { color: #e02424; font-weight: 900; }
+    .m { color: var(--mut); font-size: 13px; margin-top: 4px; }
+    .tr { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 13px; }
+    .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      background: var(--fg);
+      color: var(--bg);
+      padding: 9px 16px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s;
+      z-index: 60;
+    }
+    #toast.on { opacity: 1; }
+
+    :focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
+
+    @media (max-width: 960px) {
+      .cust-stage { grid-template-columns: 1fr; }
+      .shelf-card { min-height: 430px; }
+      .st { grid-template-columns: 1fr 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="masthead-in">
+      <a href="#top" class="brand" id="top" onclick="setMode('customer');return false">
+        <span class="brand-mark" id="brand-mascot"></span>
+        <span class="brand-name">Forbrew</span>
+      </a>
+
+      <nav class="role-nav" aria-label="Forbrew Mode Switcher">
+        <button type="button" class="role-btn on" id="nav-customer" onclick="setMode('customer')">客人落單 <span class="mono" id="nav-shop-slug" style="font-size:11px;opacity:.75">/c/TEAM-A</span></button>
+        <button type="button" class="role-btn" id="nav-merchant" onclick="setMode('merchant')">咖啡師控制台 <span class="role-count" id="paid-badge">0</span></button>
+        <button type="button" class="role-btn" id="nav-admin" onclick="setMode('admin')">平台後台 <span class="mono" style="font-size:11px;opacity:.75">/admin</span></button>
+      </nav>
+
+      <div class="util-nav">
+        <button type="button" class="mini-btn" id="lg" onclick="setLang()">EN</button>
+        <button type="button" class="mini-btn" onclick="resetDemoHub()" title="還原預設示範狀態">重設</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell" id="main-shell"></main>
+  <div id="toast" role="status"></div>
+
+  <script>
+    /* =====================================================================
+       FORBREW SHARED CORE (100% ported from shared.js & worker.js)
+       ===================================================================== */
+    const MASCOT = `<svg viewBox="0 0 16 14" aria-hidden="true"><ellipse cx="8" cy="13.2" rx="6" ry=".7" fill="currentColor" opacity=".12"/><g fill="var(--acc)"><rect x="3" y="1" width="10" height="7"/><rect x="1" y="3" width="2" height="3"/><rect x="13" y="3" width="2" height="3"/><rect x="4" y="8" width="2" height="3"/><rect x="10" y="8" width="2" height="3"/><rect x="7" y="8" width="2" height="2"/></g><g fill="none" stroke="#141413" stroke-width=".6" stroke-linecap="square"><polyline points="5,3.2 6.8,4.2 5,5.2"/><polyline points="11,3.2 9.2,4.2 11,5.2"/></g></svg>`;
+    document.getElementById("brand-mascot").innerHTML = MASCOT;
+
+    const T = {
+      bl_why:["原因（選填）","Reason (optional)"],
+      bl_rm:["移除黑名單","Remove from blacklist"],
+      bl_add:["加入黑名單 ★","Add to blacklist ★"],
+      bl_note:["紅星 ★ 會出現喺呢啲客人嘅訂單同客人記錄。客人、其他商戶同平台後台都睇唔到。以稱呼同電話尾 4 位配對。","A red star ★ marks these customers in your orders and CRM. Customers, other shops and the platform admin cannot see it. Matched by name and last 4 digits."],
+      bl_h:["黑名單（只有你間店睇到）","Blacklist (visible to your shop only)"],
+      sdash:["開 Stripe 後台（睇出款同收入）","Open Stripe dashboard (payouts and earnings)"],
+      dispute:["⚠ 爭議中（客人向銀行爭議咗呢單）","⚠ Disputed (the customer disputed this charge with their bank)"],
+      rfdone:["已退款","Refunded"],
+      rfconfirm:["再撳一次確認退款","Tap again to confirm the refund"],
+      rfund:["退款（信用卡訂單）","Refund (card order)"],
+      tip_wait:["高峰期撳「暫停接單」，或者精簡餐單、加人手；留意由過數到出杯嘅時間。","Pause orders at peak, trim the menu or add staff; watch the time from payment to serving."],
+      tip_hab:["常客習慣寫入備註，下次主動確認「照舊？」。","Note regulars' habits and ask 'the usual?' next time."],
+      tip_ord:["出杯前對單號同內容（飲品、杯量、奶類、豆），杯上寫單號。","Check order number and contents before serving; write the number on the cup."],
+      tip_swt:["將甜度、冰量定義成固定標準（例如少冰 = 幾多），出杯前對返備註。","Define sweetness and ice levels as fixed standards and re-read the note before serving."],
+      tip_str:["用固定克重同萃取時間；濃淡只提供固定選項（例如加一 shot），唔憑感覺調。","Fix dose and extraction time; offer fixed strength options (e.g. extra shot) instead of adjusting by feel."],
+      tip_hyg:["每日清潔蒸氣管同奶壺，奶同配料寫上開封日期，出杯前檢查杯同蓋。","Clean the steam wand and pitchers daily, date opened milk and ingredients, check cup and lid before serving."],
+      tip_tmp:["訂定標準出杯溫度，用溫度計校準蒸奶；熱飲預熱杯，凍飲出杯後即交。","Set a standard serving temperature and check milk with a thermometer; pre-warm hot cups and serve iced drinks at once."],
+      qwait2:["資料未夠比較","Not enough data to compare yet"],
+      qba:["跟進後出現率 {a}%（之前 {b}%）","After acting: {a}% (before: {b}%)"],
+      qlog:["改善紀錄","Improvement log"],
+      qfollowed:["已記錄跟進","Action recorded"],
+      qfollow:["我已跟進","I have acted on this"],
+      qnone:["暫時冇扣分記錄，保持住！","No deductions yet, keep it up!"],
+      qlost:["{c} 次（{p}%），共扣 {x} 分","{c} times ({p}%), {x} points lost"],
+      qpain:["痛點（扣分最多排頭）","Pain points (most points lost first)"],
+      qtrend:["近 7 日 / 前 7 日","Last 7 days / previous 7"],
+      qperfect:["零扣分比例","Zero-deduction rate"],
+      qlow:["資料未夠：最少要 5 個評分先顯示分數（而家 {n}）","Not enough data: 5+ ratings needed to show a score (now {n})"],
+      qn_:["{n} 個評分","{n} ratings"],
+      qrule:["滿分 100，每個核實到嘅問題先扣分。唔係星星、唔係感覺、唔係網紅評論","Start at 100; only verified faults deduct points. No stars, no vibes, no influencer opinions"],
+      qh:["出品穩定度（近 30 日）","Consistency (last 30 days)"],
+      dons:["評分只需要一撳","Rating takes one tap"],
+      donh:["已取貨","Picked up"],
+      q_skip:["唔評分，直接完成","Skip rating"],
+      q_thanks:["多謝你，已記錄","Thank you, recorded"],
+      q_submit:["提交","Submit"],
+      q_wait:["等候超過 15 分鐘（系統自動計）","Waited over 15 minutes (automatic)"],
+      q_hab:["唔符合我平時嘅習慣","Not how I usually have it"],
+      q_ord:["落單內容錯（飲品、杯量、奶類、豆）","Order content wrong (drink, size, milk, beans)"],
+      q_swt:["甜度、奶量或冰量同我要求唔同","Sweetness, milk or ice differs from what I asked"],
+      q_str:["濃淡同我要求唔同","Strength differs from what I asked"],
+      q_hyg:["有雜質、異味或唔乾淨","Foreign matter, off smell or unclean"],
+      q_tmp:["溫度唔啱（太燙／太凍）","Wrong temperature (too hot / too cold)"],
+      q_d3:["個人習慣","My habits"],
+      q_d2:["個人口味","My taste"],
+      q_d1:["適合飲用","Fit to drink"],
+      q_issue:["有問題？揀出問題，再提交（每項會扣分）","Something wrong? Pick the problem(s), then submit"],
+      q_ok:["✅ 全部啱，完成","✅ All good, done"],
+      q_h:["取咗杯嘢？一撳評分","Got your drink? Rate in one tap"],
+      tab_q:["品質","Quality"],
+      t_rf:["退款備註","Refund note"],
+      strpaid:["Card 信用卡已付款","Paid by card"],
+      m_str:["Card","Card"],
+      m_fps:["轉數快","FPS"],
+      f_pays:["已繳紀錄","Payments"],
+      f_owe:["待繳","To pay"],
+      f_col:["Card 自動扣","Auto (card)"],
+      fh_s:["結算","Settlement"],
+      fh_a:["費用","Fee"],
+      fh_m:["付款方式","Method"],
+      fh_n:["單號","Order"],
+      fh_t:["時間","Time"],
+      a_k:["費用","Fees"],
+      b_w:["要繳（轉數快單）","Owed (FPS orders)"],
+      b_c:["Card 已自動扣","Collected via card"],
+      fpsfee:["轉數快訂單平台費：每單 HK${a}；單價 HK${l} 或以下收 HK${f}。確認收款時計","FPS order fee: HK${a} per order; HK${f} for orders up to HK${l}. Charged when you accept"],
+      sfee:["Card 訂單費用 = 平台費 HK${a} + HK${c} + 比例（單價 HK${t} 或以下 {b}%，超過 {d}%），最低 HK${m}；付款時自動扣除","Card order fee = platform fee HK${a} + HK${c} + {b}% (orders up to HK${t}; {d}% above), minimum HK${m}; deducted automatically at payment"],
+      srefresh:["檢查狀態","Check status"],
+      sconn:["連結 Stripe 帳戶","Connect Stripe account"],
+      sr:["已啟用，客人可用信用卡付款","Active: customers can pay by card"],
+      sl:["已建立帳戶，未完成認證","Account created, setup not finished"],
+      sn:["未連結","Not connected"],
+      stripe_h:["Card 信用卡收款（經 Stripe）","Card payments (via Stripe)"],
+      wamsg:["{n} 網上落單，掃碼或開連結：","Order online from {n}: "],
+      sendwa:["分享去 WhatsApp","Share to WhatsApp"],
+      tab_k:["分享","Share"],
+      eyehide:["隱藏","Hide"],
+      eyeshow:["顯示","Show"],
+      paids:["等咖啡師確認，之後開始沖製","Waiting for the barista to confirm and start brewing"],
+      paidh:["已收到付款","Payment received"],
+      paystripe:["Card 信用卡付款","Pay by card"],
+      tail:["尾號","ending"],
+      refundhint:["稱呼同電話尾號會顯示俾咖啡師，作退款備註用","Your name and last 4 digits are shown to the barista as the refund note"],
+      refund:["退款備註","Refund note"],
+      ph4err:["請輸入電話尾 4 位數字","Please enter the last 4 digits of your phone"],
+      ph4:["電話尾 4 位數字（退款備註）","Last 4 digits of phone (refund note)"],
+      linkpv:["客人連結","Customer link"],
+      nameplace:["店名（會成為客人連結，例如 TEAM A）","Shop name (becomes your customer link, e.g. TEAM A)"],
+      e_taken:["呢個店名已有人用","This shop name is taken"],
+      e_key:["開店密碼唔啱","Wrong shop-opening password"],
+      openkey:["開店密碼（平台提供）","Shop-opening password (from the platform)"],
+      tab_m:["產品","Menu"],
+      m_h:["我嘅產品同價錢","My menu and prices"],
+      m_zh:["中文名","Name (Chinese)"],
+      m_en:["英文名","Name (English)"],
+      m_p:["價錢","Price"],
+      m_black:["齋啡免奶","Black"],
+      m_on:["上架","On sale"],
+      m_add:["新增產品","Add item"],
+      m_save:["儲存產品同價目","Save menu and prices"],
+      m_saved:["已儲存","Saved"],
+      m_ex:["加減價（HK$）","Surcharges (HK$)"],
+      m_L:["大杯加","Large"],
+      m_S:["細杯加減","Small"],
+      m_om:["燕麥奶加","Oat milk"],
+      m_so:["SOE 加","Single origin"],
+      m_del:["刪除","Delete"],
+      acct:["店鋪資料","Shop details"],
+      newpin:["新 PIN（8 位，留空 = 不改）","New PIN (8 digits, blank = keep)"],
+      savebtn:["儲存","Save"],
+      bill:["平台費用（按單收費）","Platform fees (pay per order)"],
+      b_o:["已確認單數","Accepted orders"],
+      b_f:["累計費用","Fees"],
+      b_p:["已繳","Paid"],
+      b_d:["未繳","Due"],
+      e_fee:["未繳費用已達上限，請先繳費","Fee limit reached, please settle first"],
+      e_susp:["呢個店已被平台暫停","This shop is suspended"],
+      loading:["載入中…","Loading…"],
+      cclosed:["咖啡師未開舖","Shop is closed"],
+      cclosed2:["咖啡師開始接單後會自動更新","Updates once the barista opens the shop"],
+      cmenu:["書架揀杯今日咖啡","Pick your drink from the shelf"],
+      cmenu2:["點擊 3D 書脊揀選飲品，填好備註去付款","Select a coffee book from the 3D shelf, customize, then pay"],
+      bean:["咖啡豆","Beans"],
+      house:["自家豆","House blend"],
+      soe:["SOE 單一產地","Single origin"],
+      plus5:["加 HK$5","+HK$5"],
+      drink:["飲品","Drink"],
+      hot:["熱飲","Hot"],
+      iced:["凍飲","Iced"],
+      spec:["特調","Specials"],
+      allg:["全部書籍","All Drinks"],
+      size:["杯量","Size"],
+      S:["細杯","Small"],
+      M:["中杯","Medium"],
+      L:["大杯","Large"],
+      std:["標準","Standard"],
+      milk:["奶類","Milk"],
+      FM:["全脂奶","Whole"],
+      SM:["脫脂奶","Skim"],
+      OM:["燕麥奶 +$4","Oat +$4"],
+      OMs:["燕麥奶","Oat"],
+      nomilk:["齋啡免奶","Black"],
+      qty:["數量","Quantity"],
+      name:["稱呼（選填）","Name (optional)"],
+      noteph:["備註，例如少冰","Note, e.g. less ice"],
+      total:["應付","Total"],
+      place:["落單，去付款","Order and pay"],
+      closedbtn:["未開始接單","Not open yet"],
+      payh:["去銀行 App 轉數快","Pay with FPS in your bank app"],
+      pays:["過數後上載收據，咖啡師即時收到","Upload the receipt after paying"],
+      num:["單號","Order"],
+      fps:["轉數快號碼","FPS number"],
+      amt:["金額","Amount"],
+      copy:["複製","Copy"],
+      copied:["已複製","Copied"],
+      s3:["3 步完成","3 steps"],
+      p1:["打開銀行 App，揀轉數快，貼上電話同金額","Open your bank app, choose FPS, paste the number and amount"],
+      p2:["備註填單號，確認過數","Put the order number in the remark"],
+      p3:["返嚟撳「上載轉數快收據」，揀截圖","Come back, tap Upload receipt and pick the screenshot"],
+      upload:["上載轉數快收據","Upload FPS receipt"],
+      sending:["傳送中…","Sending…"],
+      uperr:["上載失敗，請試細啲張圖","Upload failed, try a smaller image"],
+      cancel:["修改或取消張單","Edit or cancel order"],
+      waith:["收據已傳送","Receipt sent"],
+      waits:["等咖啡師核對，好快有回音","Waiting for the barista to check"],
+      mkh:["🟡 沖緊稍等","🟡 Brewing, please wait"],
+      mks:["咖啡師已確認，正在沖製","Payment confirmed, your drink is being made"],
+      rdh:["好咗！可以取貨","Ready for pickup!"],
+      rds:["取貨時報單號","Quote your order number"],
+      again:["再落一杯","Order again"],
+      st1:["落單","Order"],
+      st2:["過數","Pay"],
+      st3:["沖製","Brew"],
+      st4:["取貨","Pickup"],
+      newshop:["開新店","New shop"],
+      login:["登入","Log in"],
+      shopname:["店名","Shop name"],
+      fpsph:["轉數快電話號碼（8 位）","FPS phone (8 digits)"],
+      pin:["8 位數字 PIN","8-digit PIN"],
+      scode:["店名（例如 TEAM A）","Shop name (e.g. TEAM A)"],
+      regbtn:["開店","Create shop"],
+      loginbtn:["登入","Log in"],
+      regerr:["請填店名、8 位電話同 8 位數字 PIN","Enter shop name, 8-digit phone and an 8-digit PIN"],
+      logerr:["店名或 PIN 唔啱","Wrong shop name or PIN"],
+      tab_o:["訂單","Orders"],
+      tab_a:["核數","Audit"],
+      tab_s:["設定","Settings"],
+      a_s:["匯總","Summary"],
+      a_c:["客人","Customers"],
+      a_t:["明細","Details"],
+      openbtn:["開始接單","Start taking orders"],
+      pausebtn:["暫停接單","Pause orders"],
+      onl:["正常接單中","Taking orders"],
+      off:["未開始接單","Not taking orders"],
+      soeh:["今日 SOE 豆（選填）","Todays single origin (optional)"],
+      orders:["張訂單","orders"],
+      noord:["暫時未有訂單","No orders yet"],
+      st_unpaid:["等過數","Awaiting payment"],
+      st_paid:["已收據","Receipt in"],
+      st_making:["製作中","Brewing"],
+      st_ready:["可取貨","Ready"],
+      st_done:["已取","Picked up"],
+      st_cancel:["已取消","Cancelled"],
+      btnmk:["🟡 沖緊稍等","🟡 Brewing, please wait"],
+      btnrd:["好咗，通知取貨","Ready, notify customer"],
+      btndn:["客人已取走","Picked up"],
+      waitpay:["等客人過數","Waiting for payment"],
+      rcpt:["睇收據","View receipt"],
+      cxl:["取消單","Cancel order"],
+      day:["核數日期","Date"],
+      all:["全部日子","All days"],
+      csv:["匯出 CSV","Export CSV"],
+      k1:["總單數 / 總杯數","Orders / cups"],
+      k1b:["有效","valid"],
+      k1c:["取消","cancelled"],
+      k2:["已對數實收","Reconciled cash"],
+      k2b:["有效總額","Valid total"],
+      k3:["待對數金額","To reconcile"],
+      k4:["對數完成率","Reconciled %"],
+      k4b:["平均每單","Avg per order"],
+      k5:["取消率 / 取消金額","Cancel rate / amount"],
+      k6:["首單至尾單","First to last order"],
+      k6b:["高峰時段","Peak hour"],
+      bmilk:["奶類百分比","Milk"],
+      bbean:["咖啡豆百分比","Beans"],
+      per:["單","orders"],
+      d_date:["日期","Date"],
+      d_n:["總單(杯)","Orders (cups)"],
+      d_vs:["有效金額","Valid $"],
+      d_ks:["已對數","Reconciled"],
+      d_ps:["待對數","Pending"],
+      d_kr:["對數率","Rec. %"],
+      d_cr:["取消率","Cancel %"],
+      d_fl:["首尾單","First/last"],
+      c_name:["客人","Customer"],
+      c_ph:["電話尾 4 位","Phone last 4"],
+      c_n:["單數","Orders"],
+      c_sp:["累計消費","Spend"],
+      c_pc:["佔總額 %","Share %"],
+      c_ks:["已對數","Reconciled"],
+      c_last:["最近落單","Last order"],
+      t_no:["單號","No."],
+      t_dt:["日期時間","Date/time"],
+      t_c:["客人","Customer"],
+      t_it:["內容","Items"],
+      t_amt:["金額","Amount"],
+      t_pc:["佔當日 %","Day %"],
+      t_st:["狀態","Status"],
+      t_ck:["對數","Rec."],
+      sh1:["店鋪連結（客人掃 QR 或開連結落單）","Shop link (customers scan the QR or open it)"],
+      shq:["下載 QR","Download QR"],
+      logout:["登出呢部裝置","Log out of this device"],
+      cfgn:["商戶專用。客人唔使登入；你用店名加 8 位數字 PIN 登入。","For merchants. Customers need no login; you log in with shop name and 8-digit PIN."],
+      badlink:["呢條店鋪連結無效，或已停用","This shop link is invalid or inactive"],
+      note:["備註","Note"]
+    };
+
+    const $ = s => document.querySelector(s);
+    const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const escJs = s => esc(String(s == null ? "" : s).replace(/\\/g, "\\\\").replace(/'/g, "\\'"));
+    const ls = (k, v) => { try { if (v === undefined) return localStorage.getItem(k); v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} };
+    let lang = ls("fb_lang") || "zh";
+    window.lang = lang;
+    const t = k => (T[k] || [k, k])[lang === "en" ? 1 : 0];
+    const tf = (k, o) => t(k).replace(/\{(\w+)\}/g, (m, x) => o[x]);
+    const dk = ts => new Date(ts - new Date().getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+    const hm = ts => new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const no = n => "#" + n;
+    const r2 = x => Math.round(x * 100) / 100;
+    const slugOf = n => String(n || "").trim().toLowerCase().replace(/[\s-]+/g, "-");
+    const slugDisplay = n => String(n || "").trim().replace(/[\s-]+/g, "-");
+    const QTAGS = { tmp: [20, "drink"], hyg: [30, "drink"], str: [10, "taste"], swt: [10, "taste"], ord: [20, "habit"], hab: [10, "habit"], wait: [10, "auto"] };
+    const TIERS = { new: 200, normal: 500, trusted: 1000 };
+    const NEXT = { unpaid: ["cancel"], paid: ["making", "cancel"], making: ["ready"], ready: ["done"] };
+    const DEF_MENU = [
+      ["h1", "熱美式", "Hot Americano", 28, "hot", 1],
+      ["h2", "熱 Latte", "Hot Latte", 36, "hot", 0],
+      ["h3", "熱 Cappuccino", "Hot Cappuccino", 36, "hot", 0],
+      ["h4", "熱 Flat White", "Hot Flat White", 36, "hot", 0],
+      ["h5", "熱 Mocha", "Hot Mocha", 40, "hot", 0],
+      ["c1", "凍美式", "Iced Americano", 32, "iced", 1],
+      ["c2", "凍 Latte", "Iced Latte", 40, "iced", 0],
+      ["c3", "凍 Cappuccino", "Iced Cappuccino", 40, "iced", 0],
+      ["c4", "凍 Mocha", "Iced Mocha", 44, "iced", 0],
+      ["s1", "Dirty", "Dirty", 40, "spec", 0],
+      ["s2", "Espresso Tonic", "Espresso Tonic", 42, "spec", 1]
+    ].map(([id, z, e, p, g, b]) => ({ id, z, e, p, g, b: b ? 1 : 0, a: 1 }));
+
+    function toast(m) {
+      const e = $("#toast");
+      e.textContent = m;
+      e.classList.add("on");
+      clearTimeout(toast.t);
+      toast.t = setTimeout(() => e.classList.remove("on"), 2100);
+    }
+    function copy(x) {
+      (navigator.clipboard ? navigator.clipboard.writeText(x) : Promise.reject())
+        .then(() => toast(t("copied")), () => toast(String(x)));
+    }
+    function saveFile(name, text, type) {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([text], { type: type || "text/csv;charset=utf-8" }));
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    }
+    const qCsv = v => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`;
+    const csv = (n, rows) => saveFile(n, "\ufeff" + rows.map(r => r.map(qCsv).join(",")).join("\r\n"));
+
+    function buildQrSvg(urlText) {
+      const size = 25;
+      let hash = 2166136261;
+      for (let i = 0; i < urlText.length; i++) { hash ^= urlText.charCodeAt(i); hash = Math.imul(hash, 16777619); }
+      const finder = (ox, oy, x, y) => {
+        const dx = x - ox, dy = y - oy;
+        if (dx < 0 || dx > 6 || dy < 0 || dy > 6) return -1;
+        if (dx === 0 || dx === 6 || dy === 0 || dy === 6) return 1;
+        if (dx >= 2 && dx <= 4 && dy >= 2 && dy <= 4) return 1;
+        return 0;
+      };
+      let paths = "";
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          let f = finder(0, 0, x, y);
+          if (f === -1) f = finder(size - 7, 0, x, y);
+          if (f === -1) f = finder(0, size - 7, x, y);
+          let dark = false;
+          if (f !== -1) dark = f === 1;
+          else if ((x === 7 && y < 8) || (y === 7 && x < 8) || (x === size - 8 && y < 8) || (y === 7 && x >= size - 8) || (x === 7 && y >= size - 8) || (y === size - 8 && x < 8)) dark = false;
+          else dark = (((hash ^ (x * 73856093) ^ (y * 19349663)) >>> ((x + y) % 16)) & 1) === 1;
+          if (dark) paths += `M${x + 2} ${y + 2}h1v1h-1z`;
+        }
+      }
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size + 4} ${size + 4}" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="${paths}" fill="#141413"/></svg>`;
+    }
+
+    function eye(id, b) {
+      const i = document.getElementById(id), sh = i.type === "password";
+      i.type = sh ? "text" : "password";
+      b.textContent = t(sh ? "eyehide" : "eyeshow");
+    }
+    const pw = (id, ph, max = 8, num = 1, val = "") =>
+      `<div class="pw"><input id="${id}" type="password" ${num ? 'inputmode="numeric"' : ""} maxlength="${max}" value="${esc(val)}" placeholder="${esc(ph)}" autocomplete="off" autocapitalize="none"><button type="button" class="eye" onclick="eye('${id}',this)">${t("eyeshow")}</button></div>`;
+
+    /* =====================================================================
+       IN-MEMORY + LOCALSTORAGE FORBREW HUB ENGINE (Worker DO Hub logic 100%)
+       ===================================================================== */
+    const HUB_KEY = "fb_shelf_hub_v1";
+    function makeSeedHub() {
+      const now = Date.now(), D = 864e5;
+      return {
+        settings: {
+          fee: 2, pct: 3.7, pct2: 3.9, fix: 2, thr: 175, lowp: 18, lowf: 1, cmin: 5, lim: 0,
+          refund_fee: 0, open_key: "OpenSesame9", open_free: false, stripe_env: true
+        },
+        shops: [
+          {
+            code: "team-a", name: "TEAM A", fps: "91236789", pin: "12345678", open: 1, soe: "Ethiopia Yirgacheffe",
+            status: "active", created: now - 35 * D, fee: null, lim: 200, stripe: "acct_TEST_TEAMA", sready: 1,
+            note: "", rmts: null, cfg: { L: 4, S: -4, om: 4, so: 5 },
+            menu: JSON.parse(JSON.stringify(DEF_MENU)),
+            blacklist: [{ name: "Chan", phone: "1234", note: "試飲黑名單範例" }]
+          },
+          {
+            code: "beta-shop", name: "Beta Shop", fps: "98765432", pin: "87654321", open: 1, soe: "Colombia Huila",
+            status: "active", created: now - 12 * D, fee: null, lim: 200, stripe: null, sready: 0,
+            note: "", rmts: null, cfg: { L: 4, S: -4, om: 4, so: 5 },
+            menu: JSON.parse(JSON.stringify(DEF_MENU)),
+            blacklist: []
+          }
+        ],
+        orders: [
+          {
+            id: "o_seed_1", code: "team-a", ts: now - 25 * 60e3, n: 1, s: "paid", pm: "fps",
+            rc: 1, chk: 0, pt: now - 24 * 60e3, rt: null, rf: 0, dp: 0, pi: null,
+            receipt: "", tot: 98,
+            bean: "soe", bn: "Ethiopia Yirgacheffe", drink: "h2", dz: "熱 Latte", de: "Hot Latte", b: 0, sp: 0,
+            size: "L", milk: "OM", qty: 2, name: "Chan", phone: "1234", note: "熱啲"
+          },
+          {
+            id: "o_seed_2", code: "team-a", ts: now - 3 * 3600e3, n: 2, s: "done", pm: "stripe",
+            rc: 0, chk: 1, pt: now - 178 * 60e3, rt: now - 173 * 60e3, rf: 0, dp: 0, pi: "pi_seed_2",
+            receipt: "", tot: 40,
+            bean: "house", bn: "", drink: "s1", dz: "Dirty", de: "Dirty", b: 0, sp: 1,
+            size: "M", milk: "FM", qty: 1, name: "Lee", phone: "5678", note: ""
+          },
+          {
+            id: "o_seed_3", code: "team-a", ts: now - 2 * D, n: 1, s: "done", pm: "fps",
+            rc: 1, chk: 1, pt: now - 2 * D + 60e3, rt: now - 2 * D + 300e3, rf: 0, dp: 0, pi: null,
+            receipt: "", tot: 36,
+            bean: "house", bn: "", drink: "h3", dz: "熱 Cappuccino", de: "Hot Cappuccino", b: 0, sp: 0,
+            size: "M", milk: "FM", qty: 1, name: "Wong", phone: "8899", note: ""
+          }
+        ],
+        fees: [
+          { oid: "o_seed_2", code: "team-a", ts: now - 178 * 60e3, amt: 5.48, col: 1 },
+          { oid: "o_seed_3", code: "team-a", ts: now - 2 * D + 120e3, amt: 2, col: 0 }
+        ],
+        pays: [],
+        ratings: [
+          { oid: "o_seed_2", code: "team-a", ts: now - 170 * 60e3, score: 100, tags: [] },
+          { oid: "o_seed_3", code: "team-a", ts: now - 2 * D + 600e3, score: 80, tags: ["tmp"] },
+          { oid: "r_seed_3", code: "team-a", ts: now - 4 * D, score: 100, tags: [] },
+          { oid: "r_seed_4", code: "team-a", ts: now - 5 * D, score: 90, tags: ["str"] },
+          { oid: "r_seed_5", code: "team-a", ts: now - 6 * D, score: 100, tags: [] }
+        ],
+        actions: [{ code: "team-a", ts: now - 3 * D, tag: "tmp" }]
+      };
+    }
+
+    let HUB = (() => {
+      try {
+        const s = ls(HUB_KEY);
+        if (s) return JSON.parse(s);
+      } catch {}
+      return makeSeedHub();
+    })();
+    function saveHub() { ls(HUB_KEY, JSON.stringify(HUB)); }
+    function resetDemoHub() {
+      HUB = makeSeedHub();
+      saveHub();
+      myOrderId = null;
+      ls("fb_my_" + curShopCode, null);
+      render();
+      toast("已還原出廠示範資料");
+    }
+
+    function feeFps(shop, tot = 40) {
+      const st = HUB.settings;
+      const base = Math.min(4, Math.max(2, shop.fee != null ? shop.fee : st.fee));
+      if (tot <= st.lowp) return r2(Math.min(base, st.lowf));
+      return r2(base);
+    }
+    function feeStripe(shop, tot) {
+      const st = HUB.settings;
+      const base = Math.min(4, Math.max(2, shop.fee != null ? shop.fee : st.fee));
+      const pct = tot <= st.thr ? st.pct : st.pct2;
+      return r2(Math.max(st.cmin, base + st.fix + (pct / 100) * tot));
+    }
+    function billOf(code) {
+      const f = HUB.fees.filter(x => x.code === code);
+      const p = HUB.pays.filter(x => x.code === code);
+      const fees = r2(f.reduce((a, b) => a + b.amt, 0));
+      const col = r2(f.filter(x => x.col === 1).reduce((a, b) => a + b.amt, 0));
+      const paid = r2(p.reduce((a, b) => a + b.amt, 0));
+      return { orders: f.length, fees, collected: col, owed: r2(fees - col), paid, due: r2(fees - col - paid) };
+    }
+    function qualityOf(code) {
+      const now = Date.now(), D = 864e5, D30 = 30 * D;
+      const rows = HUB.ratings.filter(r => r.code === code && r.ts >= now - 90 * D).sort((a, b) => b.ts - a.ts);
+      const avg = a => a.length ? Math.round(a.reduce((x, y) => x + y.score, 0) / a.length * 10) / 10 : null;
+      const pc = (c, n) => n ? Math.round(c * 1000 / n) / 10 : null;
+      const w30 = rows.filter(r => r.ts >= now - D30);
+      const w7 = rows.filter(r => r.ts >= now - 7 * D);
+      const p7 = rows.filter(r => r.ts < now - 7 * D && r.ts >= now - 14 * D);
+      return {
+        n: w30.length, avg: avg(w30), min: 5,
+        perfect: pc(w30.filter(r => !r.tags.length).length, w30.length),
+        trend: { now: w7.length >= 3 ? avg(w7) : null, prev: p7.length >= 3 ? avg(p7) : null },
+        tags: Object.keys(QTAGS).map(tag => {
+          const c = w30.filter(r => r.tags.includes(tag)).length;
+          return { tag, pts: QTAGS[tag][0], dim: QTAGS[tag][1], count: c, pct: pc(c, w30.length) || 0, lost: c * QTAGS[tag][0] };
+        }),
+        actions: HUB.actions.filter(a => a.code === code).sort((a, b) => b.ts - a.ts).map(a => {
+          const bf = rows.filter(r => r.ts < a.ts && r.ts >= a.ts - D30);
+          const af = rows.filter(r => r.ts >= a.ts);
+          const rate = l => l.length >= 3 ? pc(l.filter(r => r.tags.includes(a.tag)).length, l.length) : null;
+          return { ts: a.ts, tag: a.tag, before: rate(bf), after: rate(af) };
+        })
+      };
+    }
+
+    function calcWith(it, x, cf) {
+      let p = it.p;
+      if (it.g !== "spec") p += x.size === "L" ? cf.L : x.size === "S" ? cf.S : 0;
+      if (!it.b && x.milk === "OM") p += cf.om;
+      if (x.bean === "soe") p += cf.so;
+      return Math.max(0, p) * x.qty;
+    }
+
+    /* =====================================================================
+       APP STATE (Customer / Merchant / Admin)
+       ===================================================================== */
+    let mode = "customer"; // 'customer' | 'merchant' | 'admin'
+    let curShopCode = "team-a";
+    let shelfFilter = "all"; // 'all' | 'hot' | 'iced' | 'spec'
+    let myOrderId = ls("fb_my_" + curShopCode);
+    const sel = { bean: "house", drink: "h2", size: "M", milk: "OM", qty: 1, name: "", phone: "", note: "" };
+    window.sel = sel;
+    let rt = [], busyUp = false;
+
+    // Merchant console state
+    let merchLoggedCode = "team-a"; // logged in by default for immediate interactive review; can logOut() & test login/open!
+    let mTab = "o", at = "s", fd = "all", lg = "l", rcShown = {}, md = null, mc = null, rfArm = null;
+
+    // Admin console state
+    let admUnlocked = true, admNote = "", sk = "last", qs = "", showRm = false, expd = {}, listOpen = true, recShop = null, srchRows = null, armRm = null, armReset = false, armOpenFree = false;
+
+    function curShop() { return HUB.shops.find(s => s.code === curShopCode && s.status !== "removed"); }
+    function activeMenu(shop) { return (shop ? shop.menu : DEF_MENU).filter(x => x.a); }
+    function filteredBooks(shop) {
+      const m = activeMenu(shop);
+      return shelfFilter === "all" ? m : m.filter(x => x.g === shelfFilter);
+    }
+    window.curShop = curShop;
+    window.filteredBooks = filteredBooks;
+    const dn = o => lang === "en" ? (o.de || o.dz) : (o.dz || o.de);
+    const itmName = x => lang === "en" ? (x.e || x.z) : (x.z || x.e);
+    const mk = o => o.b ? "-" : o.milk;
+    function desc(o) {
+      const a = [o.bean === "soe" ? "SOE" + (o.bn ? " " + o.bn : "") : t("house"), dn(o)];
+      if (!o.sp) a.push(t(o.size));
+      if (!o.b) a.push(t(o.milk === "OM" ? "OMs" : o.milk));
+      return a.join(" / ") + " × " + o.qty;
+    }
+
+    function setMode(m) {
+      mode = m;
+      document.getElementById("nav-customer").classList.toggle("on", m === "customer");
+      document.getElementById("nav-merchant").classList.toggle("on", m === "merchant");
+      document.getElementById("nav-admin").classList.toggle("on", m === "admin");
+      if (window.__shelfDispose) window.__shelfDispose();
+      render();
+    }
+
+    function setLang() {
+      lang = lang === "zh" ? "en" : "zh";
+      window.lang = lang;
+      ls("fb_lang", lang);
+      document.documentElement.lang = lang === "zh" ? "zh-HK" : "en";
+      $("#lg").textContent = lang === "zh" ? "EN" : "粵";
+      render();
+      if (mode === "customer" && window.__shelfRebuildBooks) {
+        window.__shelfRebuildBooks(filteredBooks(curShop()), sel.drink);
+      }
+    }
+
+    /* =====================================================================
+       CUSTOMER 3D BOOKSHELF ACTIONS (100% c.html flow)
+       ===================================================================== */
+    function pickDrinkFromShelf(id) {
+      sel.drink = id;
+      renderOrderDesk();
+      syncShelfSpines();
+      if (window.__shelfSelectDrink) window.__shelfSelectDrink(id);
+    }
+    function setShelfFilter(g) {
+      shelfFilter = g;
+      const shop = curShop();
+      const vis = filteredBooks(shop);
+      if (vis.length && !vis.some(x => x.id === sel.drink)) sel.drink = vis[0].id;
+      if (window.__shelfRebuildBooks) window.__shelfRebuildBooks(vis, sel.drink);
+      render();
+    }
+    function pick(k, v) { sel[k] = v; renderOrderDesk(); }
+    function stepQty(n) { sel.qty = Math.max(1, Math.min(10, sel.qty + n)); renderOrderDesk(); }
+    function switchCustomerShop(code) {
+      curShopCode = code;
+      myOrderId = ls("fb_my_" + curShopCode);
+      const shop = curShop();
+      const vis = activeMenu(shop);
+      if (vis.length) sel.drink = vis[0].id;
+      if (window.__shelfDispose) window.__shelfDispose();
+      render();
+    }
+
+    function placeOrder() {
+      const shop = curShop();
+      if (!shop || !shop.open || shop.status !== "active") return toast(t("closedbtn"));
+      if (!/^\d{4}$/.test(sel.phone)) return toast(t("ph4err"));
+      const it = activeMenu(shop).find(x => x.id === sel.drink) || activeMenu(shop)[0];
+      if (!it) return;
+      const ts = Date.now();
+      const todayOrders = HUB.orders.filter(o => o.code === shop.code && dk(o.ts) === dk(ts));
+      const n = todayOrders.reduce((m, o) => Math.max(m, o.n), 0) + 1;
+      const o = {
+        id: "o_" + ts.toString(36) + Math.random().toString(36).slice(2, 6),
+        code: shop.code, ts, n, s: "unpaid", pm: null, rc: 0, chk: 0, pt: null, rt: null, rf: 0, dp: 0, pi: null, receipt: "",
+        bean: sel.bean, bn: sel.bean === "soe" ? shop.soe : "",
+        drink: it.id, dz: it.z, de: it.e, b: it.b, sp: it.g === "spec" ? 1 : 0,
+        size: it.g === "spec" ? "M" : sel.size, milk: it.b ? "FM" : sel.milk,
+        qty: sel.qty, name: sel.name.trim(), phone: sel.phone, note: sel.note.trim(),
+        tot: calcWith(it, sel, shop.cfg)
+      };
+      HUB.orders.unshift(o);
+      saveHub();
+      myOrderId = o.id;
+      ls("fb_my_" + curShopCode, o.id);
+      renderOrderDesk();
+      updatePaidBadge();
+    }
+
+    function withdrawOrder() {
+      const idx = HUB.orders.findIndex(o => o.id === myOrderId);
+      if (idx >= 0 && HUB.orders[idx].s === "unpaid") {
+        HUB.orders.splice(idx, 1);
+        saveHub();
+      }
+      myOrderId = null;
+      ls("fb_my_" + curShopCode, null);
+      rt = [];
+      renderOrderDesk();
+      updatePaidBadge();
+    }
+
+    /* Authentic 99KB Canvas Shrink from c.html */
+    function shrink(f, max = 99 * 1024) {
+      return new Promise((ok, bad) => {
+        const r = new FileReader();
+        r.onerror = bad;
+        r.onload = () => {
+          const im = new Image();
+          im.onerror = bad;
+          im.onload = () => {
+            let w = Math.min(1000, im.width);
+            for (let i = 0; i < 8; i++) {
+              const c = document.createElement("canvas");
+              c.width = w;
+              c.height = Math.round(im.height * w / im.width);
+              const x = c.getContext("2d");
+              x.fillStyle = "#fff";
+              x.fillRect(0, 0, c.width, c.height);
+              x.drawImage(im, 0, 0, c.width, c.height);
+              for (let qy = 0.85; qy >= 0.35; qy -= 0.1) {
+                const d = c.toDataURL("image/jpeg", qy);
+                if ((d.length - 23) * 0.75 <= max) return ok(d);
+              }
+              w = Math.round(w * 0.8);
+            }
+            bad();
+          };
+          im.src = r.result;
+        };
+        r.readAsDataURL(f);
+      });
+    }
+
+    async function rcptUpload(inp) {
+      const f = inp.files && inp.files[0];
+      const ord = HUB.orders.find(o => o.id === myOrderId);
+      if (!f || !ord || busyUp) return;
+      busyUp = true;
+      toast(t("sending"));
+      try {
+        const d = await shrink(f);
+        ord.receipt = d;
+        ord.rc = 1;
+        ord.s = "paid";
+        ord.pm = "fps";
+        ord.pt = Date.now();
+        saveHub();
+        renderOrderDesk();
+        updatePaidBadge();
+      } catch {
+        toast(t("uperr"));
+      }
+      busyUp = false;
+      inp.value = "";
+    }
+
+    function simulateFpsReceipt() {
+      const ord = HUB.orders.find(o => o.id === myOrderId);
+      if (!ord || ord.s !== "unpaid") return;
+      const c = document.createElement("canvas");
+      c.width = 640; c.height = 420;
+      const g = c.getContext("2d");
+      g.fillStyle = "#faf7f2"; g.fillRect(0, 0, 640, 420);
+      g.fillStyle = "#141413"; g.fillRect(0, 0, 640, 76);
+      g.fillStyle = "#fff"; g.font = "bold 26px sans-serif"; g.fillText("FPS 轉數快收據憑證", 28, 48);
+      g.fillStyle = "#141413"; g.font = "bold 24px sans-serif";
+      g.fillText("單號：#" + ord.n + "   金額：HK$" + ord.tot, 28, 150);
+      g.fillText("收款電話：" + (curShop() ? curShop().fps : "91236789"), 28, 210);
+      ord.receipt = c.toDataURL("image/jpeg", 0.75);
+      ord.rc = 1; ord.s = "paid"; ord.pm = "fps"; ord.pt = Date.now();
+      saveHub();
+      renderOrderDesk();
+      updatePaidBadge();
+      toast(t("waith"));
+    }
+
+    function payStripeDemo() {
+      const ord = HUB.orders.find(o => o.id === myOrderId);
+      const shop = curShop();
+      if (!ord || !shop || !shop.sready) return;
+      ord.s = "paid";
+      ord.pm = "stripe";
+      ord.pt = Date.now();
+      ord.pi = "pi_demo_" + Date.now().toString(36);
+      HUB.fees.push({ oid: ord.id, code: shop.code, ts: Date.now(), amt: feeStripe(shop, ord.tot), col: 1 });
+      saveHub();
+      renderOrderDesk();
+      updatePaidBadge();
+      toast(t("paidh"));
+    }
+
+    function rtog(x) { rt = rt.includes(x) ? rt.filter(y => y !== x) : rt.concat(x); renderOrderDesk(); }
+    function submitRate(tags) {
+      const ord = HUB.orders.find(o => o.id === myOrderId);
+      if (!ord || ord.rated) return;
+      const finalTags = [...new Set(tags)].filter(k => QTAGS[k] && k !== "wait");
+      if (ord.pt && ord.rt && ord.rt - ord.pt > 15 * 60000) finalTags.push("wait");
+      const score = Math.max(0, 100 - finalTags.reduce((a, k) => a + QTAGS[k][0], 0));
+      HUB.ratings.push({ oid: ord.id, code: ord.code, ts: Date.now(), score, tags: finalTags });
+      ord.rated = true;
+      rt = [];
+      saveHub();
+      renderOrderDesk();
+      toast(t("q_thanks"));
+    }
+    function skipRate() {
+      myOrderId = null;
+      ls("fb_my_" + curShopCode, null);
+      rt = [];
+      renderOrderDesk();
+    }
+
+    function syncShelfSpines() {
+      const strip = $("#drink-spine-strip");
+      const shop = curShop();
+      if (!strip || !shop) return;
+      const books = filteredBooks(shop);
+      strip.innerHTML = books.map((x, idx) =>
+        `<button type="button" class="spine-chip${sel.drink === x.id ? " on" : ""}" onclick="pickDrinkFromShelf('${x.id}')"><span>${idx + 1}.</span> ${esc(itmName(x))} <small>$${x.p}</small></button>`
+      ).join("");
+    }
+
+    function renderOrderDesk() {
+      const desk = $("#order-desk");
+      const shop = curShop();
+      if (!desk) return;
+      if (!shop) { desk.innerHTML = `<p class="m">${t("badlink")}</p>`; return; }
+
+      const ord = myOrderId ? HUB.orders.find(o => o.id === myOrderId) : null;
+      const st = ord ? ord.s : "menu";
+      const stepN = st === "menu" ? 1 : st === "unpaid" ? 2 : (st === "ready" || st === "done") ? 4 : 3;
+      const stepBar = `<div class="prog">${[1, 2, 3, 4].map(i => `<div class="${i <= stepN ? "on" : ""}"><b>${i}</b>${t("st" + i)}</div>`).join("")}</div>`;
+
+      if (st === "menu") {
+        const list = activeMenu(shop);
+        let c = list.find(x => x.id === sel.drink);
+        if (!c) { c = list[0]; if (c) sel.drink = c.id; }
+        const cf = shop.cfg;
+        const tot = c ? calcWith(c, sel, cf) : 0;
+        const ad = n => n === 0 ? t("std") : (n > 0 ? "+$" : "-$") + Math.abs(n);
+
+        desk.innerHTML = `
+          <div>
+            ${stepBar}
+            <div style="border-bottom:1px solid var(--line);padding:10px 0;margin-top:6px;display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+              <div>
+                <div class="kicker">${t(c ? c.g : "hot")} · ${t("drink")}</div>
+                <h2 style="font-family:var(--serif);font-size:24px;font-weight:800">${c ? esc(itmName(c)) : "--"}</h2>
+              </div>
+              <b class="mono" style="font-size:22px;color:var(--acc)">HK$${c ? c.p : 0}</b>
+            </div>
+
+            <div class="lab">${t("bean")}</div>
+            <div class="g2">
+              <button type="button" class="chip${sel.bean === "house" ? " on" : ""}" onclick="pick('bean','house')">${t("house")}</button>
+              <button type="button" class="chip${sel.bean === "soe" ? " on" : ""}" onclick="pick('bean','soe')">${t("soe")}<small>${shop.soe ? esc(shop.soe) + " · " : ""}+HK$${cf.so}</small></button>
+            </div>
+
+            ${c && c.g !== "spec" ? `
+              <div class="lab">${t("size")}</div>
+              <div class="row">
+                ${["S", "M", "L"].map(k => `<button type="button" class="chip${sel.size === k ? " on" : ""}" onclick="pick('size','${k}')">${t(k)}<small>${k === "S" ? ad(cf.S) : k === "L" ? ad(cf.L) : t("std")}</small></button>`).join("")}
+              </div>` : ""}
+
+            ${c && !c.b ? `
+              <div class="lab">${t("milk")}</div>
+              <div class="row">
+                ${["FM", "SM", "OM"].map(k => `<button type="button" class="chip${sel.milk === k ? " on" : ""}" onclick="pick('milk','${k}')">${k === "OM" ? t("OMs") + " +$" + cf.om : t(k)}</button>`).join("")}
+              </div>` : `<div class="lab">${t("nomilk")}</div>`}
+
+            <div class="kv" style="margin-top:8px">
+              <span style="font-size:13px;font-weight:700">${t("qty")}</span>
+              <div class="qty">
+                <button type="button" onclick="stepQty(-1)" aria-label="-">−</button>
+                <b>${sel.qty}</b>
+                <button type="button" onclick="stepQty(1)" aria-label="+">+</button>
+              </div>
+            </div>
+
+            <div class="lab">${t("refund")}</div>
+            <div class="g2">
+              <input type="text" style="margin:0" value="${esc(sel.name)}" placeholder="${t("name")}" oninput="sel.name=this.value">
+              <input type="tel" style="margin:0" inputmode="numeric" maxlength="4" value="${esc(sel.phone)}" placeholder="${t("ph4")}" oninput="this.value=this.value.replace(/\\D/g,'').slice(0,4);sel.phone=this.value">
+            </div>
+            <input type="text" value="${esc(sel.note)}" placeholder="${t("noteph")}" oninput="sel.note=this.value">
+            <p class="m">${t("refundhint")}</p>
+          </div>
+
+          <div style="border-top:1px solid var(--line);padding-top:12px;display:flex;align-items:center;gap:14px">
+            <div><span class="m">${t("total")}</span><br><b class="mono" style="font-size:26px">HK$${tot}</b></div>
+            <button type="button" class="btn" ${shop.open && shop.status === "active" ? "" : "disabled"} onclick="placeOrder()">${shop.open ? t("place") : t("closedbtn")}</button>
+          </div>`;
+      } else if (st === "unpaid") {
+        desk.innerHTML = `
+          <div>
+            ${stepBar}
+            <h2 style="font-family:var(--serif);font-size:22px;font-weight:800;margin-top:10px">${t("payh")}</h2>
+            <p class="m">${t("pays")}</p>
+            <div class="card">
+              <div class="kv"><span>${t("num")}</span><b>${no(ord.n)}</b></div>
+              <div class="kv"><span>${esc(desc(ord))}</span><b>HK$${ord.tot}</b></div>
+              <div class="kv"><span>${t("refund")}</span><span class="mono" style="font-weight:700">${esc(ord.name || "-")} ${t("tail")} ${esc(ord.phone)}</span></div>
+              <div class="kv"><span>${t("fps")}<br><b>${esc(shop.fps)}</b></span><button type="button" class="mini" onclick="copy('${esc(shop.fps)}')">${t("copy")}</button></div>
+              <div class="kv"><span>${t("amt")}<br><b>HK$${ord.tot}</b></span><button type="button" class="mini" onclick="copy('${ord.tot}')">${t("copy")}</button></div>
+            </div>
+            <div class="card">
+              <h3 style="font-size:14px">${t("s3")}</h3>
+              <ol style="padding-left:18px;font-size:13px;margin-top:6px">
+                <li>${t("p1")}</li>
+                <li>${t("p2")} <b>${no(ord.n)}</b></li>
+                <li>${t("p3")}</li>
+              </ol>
+            </div>
+          </div>
+          <div>
+            <label class="btn ok" style="cursor:pointer">${t("upload")}<input type="file" accept="image/*" hidden onchange="rcptUpload(this)"></label>
+            <button type="button" class="btn inline" onclick="simulateFpsReceipt()">模擬 99KB 截圖即時過數</button>
+            ${shop.sready ? `<button type="button" class="btn dark inline" onclick="payStripeDemo()">${t("paystripe")}（HK$${ord.tot}）</button>` : ""}
+            <button type="button" class="link" onclick="withdrawOrder()">${t("cancel")}</button>
+          </div>`;
+      } else {
+        const mapMsg = {
+          paid: ord.pm === "stripe" ? [t("paidh"), t("paids")] : [t("waith"), t("waits")],
+          making: [t("mkh"), t("mks")],
+          ready: [t("rdh"), t("rds") + " " + no(ord.n)],
+          done: [t("donh"), t("dons")]
+        }[st] || [t("waith"), ""];
+
+        const grpRate = (k, tags) => `<div class="lab">${t(k)}</div><div class="row">${tags.map(x => `<button type="button" class="chip sm${rt.includes(x) ? " on" : ""}" onclick="rtog('${x}')">${t("q_" + x)}</button>`).join("")}</div>`;
+        const rateHtml = (st === "ready" || st === "done") ? (ord.rated
+          ? `<div class="card" style="text-align:center"><b>${t("q_thanks")}</b></div>`
+          : `<div class="card"><h3 style="font-size:15px">${t("q_h")}</h3><button type="button" class="btn ok inline" onclick="submitRate([])">${t("q_ok")}</button><p class="m" style="margin-top:10px">${t("q_issue")}</p>${grpRate("q_d1", ["tmp", "hyg"])}${grpRate("q_d2", ["str", "swt"])}${grpRate("q_d3", ["ord", "hab"])}<button type="button" class="btn dark inline" ${rt.length ? "" : "disabled"} onclick="submitRate(rt)">${t("q_submit")}</button><button type="button" class="link" onclick="skipRate()">${t("q_skip")}</button></div>`)
+          : "";
+
+        desk.innerHTML = `
+          <div>
+            ${stepBar}
+            <h2 style="font-family:var(--serif);font-size:24px;font-weight:800;margin-top:12px">${mapMsg[0]}</h2>
+            <p class="m">${mapMsg[1]}</p>
+            <div class="card">
+              <div class="kv"><span>${t("num")}</span><b>${no(ord.n)}</b></div>
+              <div class="kv"><span>${esc(desc(ord))}</span><b>HK$${ord.tot}</b></div>
+            </div>
+            ${rateHtml}
+          </div>
+          <div>
+            ${(st === "paid" || st === "making") ? `<button type="button" class="btn dark" onclick="setMode('merchant')">切換至「咖啡師控制台」推進此單狀態 →</button>` : ""}
+            ${(st === "ready" || st === "done") ? `<button type="button" class="btn ok" onclick="skipRate()">${t("again")}</button>` : ""}
+          </div>`;
+      }
+    }
+
+    function renderCustomerPage() {
+      const shop = curShop();
+      const allShops = HUB.shops.filter(s => s.status !== "removed");
+      const shopSelHtml = `<select style="width:auto;margin:0;padding:6px 10px;font-size:13px;font-weight:700" onchange="switchCustomerShop(this.value)">${allShops.map(s => `<option value="${esc(s.code)}" ${s.code === curShopCode ? "selected" : ""}>/c/${esc(slugDisplay(s.name))}</option>`).join("")}</select>`;
+
+      return `
+        <section class="sub-band">
+          <div>
+            <div class="kicker">FORBREW · 3D WORKING VOLUMES COFFEE MENU</div>
+            <h1 class="band-title">${shop ? esc(shop.name) : "Forbrew"} · ${t("cmenu")}</h1>
+            <p class="m">${t("cmenu2")}</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            ${shopSelHtml}
+            <span class="shop-status"><span class="status-sq ${shop && shop.open ? "ok" : ""}"></span>${shop && shop.open ? t("onl") : t("off")}</span>
+          </div>
+        </section>
+
+        <section class="cust-stage" aria-label="3D Coffee Bookshelf & Ordering">
+          <div class="shelf-card">
+            <div class="shelf-top-bar">
+              <div class="grp-tabs">
+                ${[["all", t("allg")], ["hot", t("hot")], ["iced", t("iced")], ["spec", t("spec")]].map(([g, lb]) =>
+                  `<button type="button" class="grp-btn${shelfFilter === g ? " on" : ""}" onclick="setShelfFilter('${g}')">${lb}</button>`
+                ).join("")}
+              </div>
+              <span class="mono" style="font-size:11px;color:var(--mut)">${filteredBooks(shop).length} 款上架飲品書籍</span>
+            </div>
+
+            <div class="canvas-wrap" id="canvas-wrap" role="region" aria-label="Three.js r165 Interactive Coffee Bookshelf">
+              <div class="shelf-fallback" id="webgl-fallback">
+                <p class="m">目前瀏覽器未啟用 WebGL 加速，請使用下方書脊索引按鈕直接點選咖啡。</p>
+              </div>
+            </div>
+
+            <div class="shelf-foot">
+              <div class="drink-spine-strip" id="drink-spine-strip"></div>
+              <div class="shelf-hint">點擊書架咖啡書脊抽書落單 · 鍵盤 1–9 / ← → · Esc 收回</div>
+            </div>
+          </div>
+
+          <aside class="order-desk" id="order-desk"></aside>
+        </section>`;
+    }
+
+    /* =====================================================================
+       MERCHANT CONSOLE (100% index.html functionality)
+       ===================================================================== */
+    const PAID = o => ["paid", "making", "ready", "done"].includes(o.s) && !o.rf;
+    const ACT = { paid: ["making", "btnmk", "warn"], making: ["ready", "btnrd", "ok"], ready: ["done", "btndn", "dark"] };
+    const pc = (a, b) => b ? (a * 100 / b).toFixed(1) : "0.0";
+
+    function merchReg() {
+      const n = $("#rn").value.trim().replace(/\s+/g, " ");
+      const f = $("#rf").value.replace(/\D/g, "");
+      const p = $("#rp").value;
+      const k = ($("#rk") || {}).value || "";
+      if (!n || f.length < 8 || !/^\d{8}$/.test(p)) return toast(t("regerr"));
+      if (!HUB.settings.open_free && HUB.settings.open_key && k !== HUB.settings.open_key) return toast(t("e_key"));
+      const code = slugOf(n);
+      if (HUB.shops.some(s => s.code === code)) return toast(t("e_taken"));
+      HUB.shops.unshift({
+        code, name: n, fps: f, pin: p, open: 0, soe: "", status: "active",
+        created: Date.now(), fee: null, lim: TIERS.new, stripe: null, sready: 0,
+        note: "", rmts: null, cfg: { L: 4, S: -4, om: 4, so: 5 },
+        menu: JSON.parse(JSON.stringify(DEF_MENU)), blacklist: []
+      });
+      merchLoggedCode = code;
+      curShopCode = code;
+      saveHub();
+      render();
+      toast("新店已建立：" + n);
+    }
+    function merchLogIn() {
+      const code = slugOf($("#lc").value.trim()), pin = $("#lp").value;
+      const s = HUB.shops.find(x => x.code === code && x.status !== "removed" && x.pin === pin);
+      if (!s) return toast(t("logerr"));
+      merchLoggedCode = s.code;
+      render();
+    }
+    function merchLogOut() { merchLoggedCode = null; render(); }
+
+    function setOrderState(id, nextS) {
+      const o = HUB.orders.find(x => x.id === id);
+      const s = HUB.shops.find(x => x.code === merchLoggedCode);
+      if (!o || !s) return;
+      if (!(NEXT[o.s] || []).includes(nextS)) return;
+      o.s = nextS;
+      if (nextS === "ready") o.rt = Date.now();
+      if (nextS === "making" && o.pm !== "stripe" && !HUB.fees.some(f => f.oid === o.id)) {
+        HUB.fees.push({ oid: o.id, code: s.code, ts: Date.now(), amt: feeFps(s, o.tot), col: 0 });
+      }
+      saveHub();
+      render();
+    }
+    function toggleChk(id) {
+      const o = HUB.orders.find(x => x.id === id);
+      if (o) { o.chk = o.chk ? 0 : 1; saveHub(); render(); }
+    }
+    function shopToggleOpen() {
+      const s = HUB.shops.find(x => x.code === merchLoggedCode);
+      if (!s) return;
+      if (!s.open) {
+        if (s.status !== "active") return toast(t("e_susp"));
+        const lim = s.lim != null ? s.lim : HUB.settings.lim;
+        if (lim > 0 && billOf(s.code).due >= lim) return toast(t("e_fee"));
+      }
+      s.open = s.open ? 0 : 1;
+      saveHub();
+      render();
+    }
+    function saveMenuChanges(s) {
+      s.menu = md.map(x => ({ ...x, p: Math.max(0, Math.round(+x.p) || 0) })).filter(x => x.z || x.e);
+      for (const k of ["L", "S", "om", "so"]) s.cfg[k] = Math.round(+mc[k]) || 0;
+      md = null;
+      saveHub();
+      toast(t("m_saved") + "（切返客人頁即更新 3D 書架！）");
+      render();
+    }
+    function blAdd(name, phone, note = "") {
+      const s = HUB.shops.find(x => x.code === merchLoggedCode);
+      if (!s || (!name && !phone)) return;
+      const p4 = String(phone || "").replace(/\D/g, "").slice(-4);
+      if (!s.blacklist.some(x => x.name.toLowerCase() === String(name).toLowerCase() && x.phone === p4)) {
+        s.blacklist.push({ name: String(name).trim(), phone: p4, note });
+        saveHub();
+        render();
+      }
+    }
+    function blRemove(name, phone) {
+      const s = HUB.shops.find(x => x.code === merchLoggedCode);
+      if (!s) return;
+      const p4 = String(phone || "").replace(/\D/g, "").slice(-4);
+      s.blacklist = s.blacklist.filter(x => !(x.name.toLowerCase() === String(name).toLowerCase() && x.phone === p4));
+      saveHub();
+      render();
+    }
+    function refundCardOrder(id) {
+      if (rfArm !== id) {
+        rfArm = id; toast(t("rfconfirm"));
+        setTimeout(() => { if (rfArm === id) rfArm = null; }, 4000);
+        return;
+      }
+      rfArm = null;
+      const o = HUB.orders.find(x => x.id === id);
+      if (!o || o.pm !== "stripe" || o.rf) return;
+      o.rf = 1;
+      if (["paid", "making"].includes(o.s)) o.s = "cancel";
+      if (HUB.settings.refund_fee) {
+        const f = HUB.fees.find(x => x.oid === id);
+        if (f) f.amt = 0;
+      }
+      saveHub();
+      toast(t("rfdone"));
+      render();
+    }
+
+    function renderMerchantPage() {
+      const s = merchLoggedCode ? HUB.shops.find(x => x.code === merchLoggedCode && x.status !== "removed") : null;
+      if (!s) {
+        const op = lg === "o";
+        return `
+          <div class="console-wrap">
+            <div class="panel-box" style="text-align:center">
+              <div style="width:70px;margin:0 auto">${MASCOT}</div>
+              <h1 class="band-title" style="margin-top:8px">Forbrew ${t("login")}</h1>
+              <p class="m">${t("cfgn")}（示範店名 TEAM A · PIN 12345678）</p>
+              <div class="seg"><button class="${op ? "on" : ""}" onclick="lg='o';render()">${t("newshop")}</button><button class="${op ? "" : "on"}" onclick="lg='l';render()">${t("login")}</button></div>
+              ${op
+                ? `<input id="rn" type="text" maxlength="30" placeholder="${t("nameplace")}"><input id="rf" type="tel" inputmode="numeric" placeholder="${t("fpsph")}">${pw("rp", t("pin"))}${HUB.settings.open_free ? "" : pw("rk", t("openkey"), 64, 0)}<button type="button" class="btn inline" onclick="merchReg()">${t("regbtn")}</button>`
+                : `<input id="lc" type="text" maxlength="30" placeholder="${t("scode")}" value="TEAM A">${pw("lp", t("pin"), 8, 1, "12345678")}<button type="button" class="btn inline" onclick="merchLogIn()">${t("loginbtn")}</button>`}
+            </div>
+          </div>`;
+      }
+
+      const shopOrds = HUB.orders.filter(o => o.code === s.code);
+      const np = shopOrds.filter(o => o.s === "paid").length;
+      const linkUrl = location.origin + "/c/" + slugDisplay(s.name);
+      const isBL = o => s.blacklist.some(x => x.name.toLowerCase() === (o.name || "").toLowerCase() && x.phone === (o.phone || ""));
+      let body = "";
+
+      if (mTab === "o") {
+        const liveOrds = shopOrds.filter(o => !["done", "cancel"].includes(o.s)).sort((a, b) => a.ts - b.ts);
+        body = `
+          <button type="button" class="btn ${s.open ? "dark" : "ok"} inline" onclick="shopToggleOpen()">${s.open ? t("pausebtn") : t("openbtn")}</button>
+          <div class="panel-box">
+            <div class="lab" style="margin-top:0">${t("soeh")}</div>
+            <input type="text" value="${esc(s.soe)}" placeholder="Ethiopia Yirgacheffe" onchange="HUB.shops.find(x=>x.code===merchLoggedCode).soe=this.value;saveHub();render()">
+          </div>
+          <h3 style="margin-top:16px">${liveOrds.length} ${t("orders")}</h3>
+          ${liveOrds.length ? liveOrds.map(o => {
+            const act = ACT[o.s];
+            const bl = isBL(o);
+            return `<div class="ord ${o.s === "paid" ? "hot" : ""}">
+              <h4><span>${no(o.n)} ${bl ? '<span class="redstar">★</span> ' : ""}${esc(o.name || "客人")}</span><span class="tag-st ${o.s}">${t("st_" + o.s)}</span></h4>
+              <p class="m">${hm(o.ts)} · ${esc(desc(o))} · <b class="mono">HK$${o.tot}</b></p>
+              <p class="m">${t("refund")}：${esc(o.name || "-")}${o.phone ? " " + t("tail") + " " + esc(o.phone) : ""}</p>
+              ${o.pm === "stripe" ? `<p class="m"><b>${t("strpaid")}</b></p>` : ""}
+              ${o.dp ? `<p class="m" style="color:var(--bad)"><b>${t("dispute")}</b></p>` : ""}
+              ${o.rf ? `<p class="m"><b>${t("rfdone")}</b></p>` : ""}
+              ${o.note ? `<p class="m">${t("note")}：${esc(o.note)}</p>` : ""}
+              ${o.rc ? `<button type="button" class="mini" style="margin-top:8px" onclick="rcShown['${o.id}']=!rcShown['${o.id}'];render()">${t("rcpt")}</button>${rcShown[o.id] && o.receipt ? `<img class="rcimg" src="${o.receipt}" alt="Receipt">` : ""}` : ""}
+              ${act ? `<button type="button" class="btn ${act[2]} inline" onclick="setOrderState('${o.id}','${act[0]}')">${t(act[1])}</button>` : `<button type="button" class="btn inline" disabled>${t("waitpay")}</button>`}
+              <div class="row" style="margin-top:8px">
+                ${(o.name || o.phone) ? (bl ? `<button type="button" class="link" onclick="blRemove('${escJs(o.name)}','${escJs(o.phone)}')">${t("bl_rm")}</button>` : `<button type="button" class="link" onclick="blAdd('${escJs(o.name)}','${escJs(o.phone)}')">${t("bl_add")}</button>`) : ""}
+                ${o.pm === "stripe" && !o.rf && ["paid", "making", "ready", "done"].includes(o.s) ? `<button type="button" class="link" onclick="refundCardOrder('${o.id}')">${t("rfund")}</button>` : ""}
+                ${(o.s === "unpaid" || o.s === "paid") ? `<button type="button" class="link" onclick="setOrderState('${o.id}','cancel')">${t("cxl")}</button>` : ""}
+              </div>
+            </div>`;
+          }).join("") : `<p class="m">${t("noord")}</p>`}`;
+      } else if (mTab === "a") {
+        const days = [...new Set(shopOrds.map(o => dk(o.ts)))].sort().reverse();
+        const l = shopOrds.filter(o => fd === "all" || dk(o.ts) === fd).sort((a, b) => b.ts - a.ts);
+        const v = l.filter(PAID);
+        const sm = arr => {
+          const vl = arr.filter(PAID), cl = arr.filter(o => o.s === "cancel"), sum = a => a.reduce((x, y) => x + y.tot, 0), k = vl.filter(o => o.chk);
+          return { n: arr.length, cups: arr.reduce((x, o) => x + o.qty, 0), vn: vl.length, cn: cl.length, vs: sum(vl), cs: sum(cl), ks: sum(k), ps: sum(vl) - sum(k) };
+        };
+        const k = sm(l);
+        const hrCounts = {};
+        v.forEach(o => { const h = new Date(o.ts).getHours(); hrCounts[h] = (hrCounts[h] || 0) + 1; });
+        const peakHr = Object.entries(hrCounts).sort((a, b) => b[1] - a[1])[0];
+        const firstTs = v.length ? Math.min(...v.map(o => o.ts)) : null;
+        const lastTs = v.length ? Math.max(...v.map(o => o.ts)) : null;
+
+        let subBody = "";
+        if (at === "k") {
+          const b = billOf(s.code);
+          const fRows = HUB.fees.filter(f => f.code === s.code).map(f => {
+            const ord = shopOrds.find(o => o.id === f.oid) || { n: "-", tot: 0, pm: "fps" };
+            return [dk(f.ts) + " " + hm(f.ts), no(ord.n), ord.pm === "stripe" ? t("m_str") : t("m_fps"), "$" + ord.tot, "$" + f.amt, f.col ? t("f_col") : t("f_owe")];
+          });
+          subBody = `<div class="st"><div><small>${t("b_f")}</small><b>HK$${b.fees}</b><span>${b.orders} ${t("per")}</span></div><div class="g"><small>${t("b_c")}</small><b>HK$${b.collected}</b></div><div class="w"><small>${t("b_w")}</small><b>HK$${b.owed}</b></div><div class="r"><small>${t("b_d")}</small><b>HK$${b.due}</b><span>${t("b_p")} HK$${b.paid}</span></div></div>
+            <div class="tw"><table><tr><th>${t("fh_t")}</th><th>${t("fh_n")}</th><th>${t("fh_m")}</th><th>${t("t_amt")}</th><th>${t("fh_a")}</th><th>${t("fh_s")}</th></tr>${fRows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</table></div>`;
+        } else if (at === "c") {
+          const mapC = {};
+          v.forEach(o => {
+            const key = (o.name || "?") + "|" + (o.phone || ""), c = mapC[key] || (mapC[key] = { name: o.name || "?", phone: o.phone || "", n: 0, sp: 0, ks: 0, last: 0, bl: isBL(o) });
+            c.n++; c.sp += o.tot; if (o.chk) c.ks += o.tot; if (o.ts > c.last) c.last = o.ts; if (isBL(o)) c.bl = 1;
+          });
+          const crmRows = Object.values(mapC).sort((a, b) => b.sp - a.sp);
+          subBody = `<div class="tw"><table><tr><th>${t("c_name")}</th><th>${t("c_ph")}</th><th>${t("c_n")}</th><th>${t("c_sp")}</th><th>${t("c_pc")}</th><th>${t("c_ks")}</th><th>${t("c_last")}</th></tr>
+            ${crmRows.map(c => `<tr><td>${c.bl ? '<span class="redstar">★</span> ' : ""}${esc(c.name)}</td><td>${esc(c.phone)}</td><td>${c.n}</td><td>$${c.sp}</td><td>${pc(c.sp, k.vs)}%</td><td>$${c.ks}</td><td>${c.last ? dk(c.last) + " " + hm(c.last) : "-"}</td></tr>`).join("")}</table></div>
+            <div class="panel-box"><h3>${t("bl_h")}</h3><p class="m">${t("bl_note")}</p>
+            ${s.blacklist.map(x => `<div class="tr"><span><span class="redstar">★</span> ${esc(x.name || "-")} ${t("tail")} ${esc(x.phone || "-")} ${x.note ? "(" + esc(x.note) + ")" : ""}</span><button type="button" class="mini" onclick="blRemove('${escJs(x.name)}','${escJs(x.phone)}')">${t("bl_rm")}</button></div>`).join("")}
+            <div class="g2" style="margin-top:8px"><input id="bn" type="text" placeholder="${t("name")}"><input id="bp" type="tel" maxlength="4" placeholder="${t("ph4")}"></div>
+            <button type="button" class="btn inline" onclick="blAdd($('#bn').value,$('#bp').value,'手動加入')">${t("bl_add")}</button></div>`;
+        } else if (at === "t") {
+          const headT = [t("t_no"), t("t_dt"), t("t_rf"), t("t_it"), t("t_amt"), t("t_st"), t("t_ck")];
+          const rowsT = l.map(o => [no(o.n), dk(o.ts) + " " + hm(o.ts), esc((o.name || "-") + (o.phone ? " " + t("tail") + " " + o.phone : "")), esc(desc(o)), "$" + o.tot, t("st_" + o.s), PAID(o) ? `<button type="button" class="mini" onclick="toggleChk('${o.id}')">${o.chk ? "☑" : "☐"}</button>` : "-"]);
+          window._expOrd = () => csv(`forbrew-orders-${fd}.csv`, [headT].concat(rowsT.map(r => r.map(x => String(x).replace(/<[^>]*>/g, "")))));
+          subBody = `<div class="tw"><table><tr>${headT.map(h => `<th>${h}</th>`).join("")}</tr>${rowsT.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</table></div><button type="button" class="btn dark inline" onclick="_expOrd()">${t("csv")}</button>`;
+        } else {
+          const barGrp = (title, items) => {
+            const tot = v.length || 1;
+            return `<div class="bd"><b>${title}</b>${items.map(([lb, fn]) => { const lst = v.filter(fn), sum = lst.reduce((a, b) => a + b.tot, 0); return `<div><span>${lb}</span><span>${lst.length} ${t("per")} · $${sum} (${pc(lst.length, tot)}%)</span></div><i><u style="width:${pc(lst.length, tot)}%"></u></i>`; }).join("")}</div>`;
+          };
+          const avgOrd = k.vn ? "$" + Math.round(k.vs / k.vn) : "-";
+          subBody = `<div class="st">
+              <div><small>${t("k1")}</small><b>${k.n} / ${k.cups}</b><span>${t("k1b")} ${k.vn} · ${t("k1c")} ${k.cn}</span></div>
+              <div class="g"><small>${t("k2")}</small><b>$${k.ks}</b><span>${t("k2b")} $${k.vs}</span></div>
+              <div class="w"><small>${t("k3")}</small><b>$${k.ps}</b></div>
+              <div><small>${t("k4")}</small><b>${pc(k.ks, k.vs)}%</b><span>${t("k4b")} ${avgOrd}</span></div>
+              <div class="r"><small>${t("k5")}</small><b>${pc(k.cn, k.n)}%</b><span>$${k.cs}</span></div>
+              <div><small>${t("k6")}</small><b>${firstTs ? hm(firstTs) + "–" + hm(lastTs) : "-"}</b><span>${t("k6b")} ${peakHr ? String(peakHr[0]).padStart(2, "0") + ":00" : "-"}</span></div>
+            </div>
+            ${barGrp(t("bmilk"), [["OM " + t("OMs"), o => mk(o) === "OM"], ["SM " + t("SM"), o => mk(o) === "SM"], ["FM " + t("FM"), o => mk(o) === "FM"], [t("nomilk"), o => mk(o) === "-"]])}
+            ${barGrp(t("bbean"), [["SOE " + t("soe"), o => o.bean === "soe"], ["House " + t("house"), o => o.bean !== "soe"]])}`;
+        }
+        body = `<div class="panel-box"><div class="lab" style="margin-top:0">${t("day")}</div><select onchange="fd=this.value;render()"><option value="all">${t("all")}</option>${days.map(d => `<option ${d === fd ? "selected" : ""}>${d}</option>`).join("")}</select><div class="seg">${["s", "c", "t", "k"].map(x => `<button class="${at === x ? "on" : ""}" onclick="at='${x}';render()">${t("a_" + x)}</button>`).join("")}</div></div>${subBody}`;
+      } else if (mTab === "q") {
+        const d = qualityOf(s.code);
+        const pain = d.tags.filter(x => x.count > 0).sort((a, b) => b.lost - a.lost);
+        const tr = d.trend.now != null && d.trend.prev != null ? `${d.trend.now} / ${d.trend.prev}` : "-";
+        body = `<div class="card" style="text-align:center"><h3>${t("qh")}</h3>${d.n >= d.min ? `<b class="mono" style="font-size:48px">${d.avg}</b>` : `<p class="m">${tf("qlow", { n: d.n })}</p>`}<p class="m">${tf("qn_", { n: d.n })} · ${t("qrule")}</p></div>
+          <div class="st"><div class="g"><small>${t("qperfect")}</small><b>${d.perfect == null ? "-" : d.perfect + "%"}</b></div><div><small>${t("qtrend")}</small><b>${tr}</b></div></div>
+          <h3 style="margin-top:16px">${t("qpain")}</h3>
+          ${pain.length ? pain.map(x => `<div class="ord"><h4><span>${t("q_" + x.tag)}</span><span class="tag-st">-${x.pts}</span></h4><p class="m">${tf("qlost", { c: x.count, p: x.pct, x: x.lost })}</p><p class="m">${t("tip_" + x.tag)}</p><button type="button" class="mini" style="margin-top:8px" onclick="HUB.actions.push({code:'${s.code}',ts:Date.now(),tag:'${x.tag}'});saveHub();toast(t('qfollowed'));render()">${t("qfollow")}</button></div>`).join("") : `<p class="m">${t("qnone")}</p>`}
+          ${d.actions.length ? `<div class="panel-box"><h3>${t("qlog")}</h3>${d.actions.map(a => `<div class="tr"><span>${dk(a.ts)} ${t("q_" + a.tag)}</span><span>${a.before != null && a.after != null ? tf("qba", { a: a.after, b: a.before }) : t("qwait2")}</span></div>`).join("")}</div>` : ""}`;
+      } else if (mTab === "m") {
+        if (!md) md = JSON.parse(JSON.stringify(s.menu));
+        if (!mc) mc = { ...s.cfg };
+        body = `<h3>${t("m_h")}</h3>
+          ${md.map((x, i) => `<div class="ord"><div class="g2"><input type="text" value="${esc(x.z)}" placeholder="${t("m_zh")}" oninput="md[${i}].z=this.value"><input type="text" value="${esc(x.e)}" placeholder="${t("m_en")}" oninput="md[${i}].e=this.value"></div>
+            <div class="row" style="margin-top:8px;align-items:center">
+              <input type="text" inputmode="numeric" value="${x.p}" style="width:90px;margin:0" oninput="md[${i}].p=this.value">
+              <select style="width:auto;margin:0" onchange="md[${i}].g=this.value">${["hot", "iced", "spec"].map(g => `<option value="${g}" ${x.g === g ? "selected" : ""}>${t(g)}</option>`).join("")}</select>
+              <label style="font-size:13px"><input type="checkbox" ${x.b ? "checked" : ""} onchange="md[${i}].b=this.checked?1:0"> ${t("m_black")}</label>
+              <label style="font-size:13px"><input type="checkbox" ${x.a ? "checked" : ""} onchange="md[${i}].a=this.checked?1:0"> ${t("m_on")}</label>
+              <button type="button" class="mini" onclick="md.splice(${i},1);render()">${t("m_del")}</button>
+            </div></div>`).join("")}
+          <button type="button" class="mini" style="margin-top:10px" onclick="md.push({id:'x'+Date.now().toString(36).slice(-5),z:'桂花拿鐵',e:'Osmanthus Latte',p:48,g:'hot',b:0,a:1});render()">${t("m_add")}</button>
+          <div class="panel-box"><h3>${t("m_ex")}</h3><div class="g2">${[["L", "m_L"], ["S", "m_S"], ["om", "m_om"], ["so", "m_so"]].map(([k, l]) => `<div><small class="m">${t(l)}</small><input type="text" value="${mc[k]}" oninput="mc['${k}']=this.value"></div>`).join("")}</div></div>
+          <button type="button" class="btn inline" onclick="saveMenuChanges(HUB.shops.find(x=>x.code===merchLoggedCode))">${t("m_save")}</button>`;
+      } else if (mTab === "k") {
+        const qsvg = buildQrSvg(linkUrl), wa = "https://wa.me/?text=" + encodeURIComponent(tf("wamsg", { n: s.name }) + " " + linkUrl);
+        body = `<div class="panel-box" style="text-align:center"><h3>${t("sh1")}</h3><div class="qr">${qsvg}</div><p class="mono" style="font-size:14px"><b>${esc(linkUrl)}</b></p><div class="row" style="justify-content:center;margin-top:10px"><button type="button" class="mini" onclick="copy('${escJs(linkUrl)}')">${t("copy")}</button><a class="mini" target="_blank" rel="noopener" href="${esc(wa)}">${t("sendwa")}</a><button type="button" class="mini" onclick="saveFile('forbrew-qr-${escJs(slugDisplay(s.name))}.svg',buildQrSvg('${escJs(linkUrl)}'),'image/svg+xml')">${t("shq")}</button></div></div>`;
+      } else if (mTab === "s") {
+        const b = billOf(s.code), st = HUB.settings;
+        body = `<div class="panel-box"><h3>${t("acct")}</h3><b style="font-size:19px">${esc(s.name)}</b><input id="af" type="tel" value="${esc(s.fps)}" placeholder="${t("fpsph")}">${pw("ap", t("newpin"))}<button type="button" class="btn inline" onclick="const sh=HUB.shops.find(x=>x.code===merchLoggedCode);sh.fps=$('#af').value.replace(/\\D/g,'');const np=$('#ap').value;if(/^\\d{8}$/.test(np))sh.pin=np;saveHub();toast(t('m_saved'));render()">${t("savebtn")}</button></div>
+          <div class="panel-box"><h3>${t("stripe_h")}</h3><p class="m"><b>${s.sready ? "✅ " + t("sr") : s.stripe ? t("sl") : t("sn")}</b></p><p class="m">${tf("sfee", { a: feeFps(s), b: st.pct, c: st.fix, d: st.pct2, t: st.thr, m: st.cmin })}</p><button type="button" class="btn dark inline" onclick="const sh=HUB.shops.find(x=>x.code===merchLoggedCode);sh.stripe='acct_TEST';sh.sready=1;saveHub();toast(t('sr'));render()">${s.sready ? t("sdash") : t("sconn")}</button></div>
+          <div class="card"><h3>${t("bill")}</h3><p class="m">${tf("fpsfee", { a: feeFps(s), l: st.lowp, f: st.lowf })}</p><div class="kv"><span>${t("b_o")}</span><b>${b.orders}</b></div><div class="kv"><span>${t("b_f")}</span><b>HK$${b.fees}</b></div><div class="kv"><span>${t("b_c")}</span><b>HK$${b.collected}</b></div><div class="kv"><span>${t("b_w")}</span><b>HK$${b.owed}</b></div><div class="kv"><span>${t("b_p")}</span><b>HK$${b.paid}</b></div><div class="kv"><span>${t("b_d")}</span><b>HK$${b.due}</b></div></div>
+          <button type="button" class="link" onclick="merchLogOut()">${t("logout")}</button>`;
+      }
+
+      return `
+        <section class="sub-band">
+          <div>
+            <div class="kicker">FORBREW MERCHANT CONSOLE (/)</div>
+            <h1 class="band-title">${esc(s.name)}</h1>
+            <p class="m">${esc(linkUrl)}</p>
+          </div>
+          <span class="shop-status"><span class="status-sq ${s.open ? "ok" : ""}"></span>${s.status === "suspended" ? t("e_susp") : s.open ? t("onl") : t("off")}</span>
+        </section>
+        <div class="console-wrap">
+          <div class="seg">
+            ${[["o", t("tab_o") + (np ? `<i>${np}</i>` : "")], ["a", t("tab_a")], ["q", t("tab_q")], ["m", t("tab_m")], ["k", t("tab_k")], ["s", t("tab_s")]].map(([k, lb]) =>
+              `<button class="${mTab === k ? "on" : ""}" onclick="mTab='${k}';md=null;render()">${lb}</button>`
+            ).join("")}
+          </div>
+          ${body}
+        </div>`;
+    }
+
+    /* =====================================================================
+       PLATFORM ADMIN CONSOLE (100% admin.html functionality)
+       ===================================================================== */
+    function renderAdminPage() {
+      if (!admUnlocked) {
+        return `
+          <div class="console-wrap">
+            <div class="panel-box" style="text-align:center">
+              <div style="width:70px;margin:0 auto">${MASCOT}</div>
+              <h1 class="band-title" style="margin-top:8px">平台後台</h1>
+              <p class="m">只限平台管理員。示範密鑰：<code class="mono">adm-secret</code></p>
+              ${pw("ak", "管理員密鑰（ADMIN_KEY）", 64, 0, "adm-secret")}
+              <p class="m" style="color:var(--bad)">${esc(admNote)}</p>
+              <button type="button" class="btn inline" onclick="if($('#ak').value.trim()==='adm-secret'){admUnlocked=true;admNote='';render();}else{admNote='管理員密鑰唔啱';render();}">登入</button>
+            </div>
+          </div>`;
+      }
+
+      const cfg = HUB.settings;
+      const tierOf = l => l === 200 ? "new" : l === 500 ? "normal" : l === 1000 ? "trusted" : l == null ? "def" : "custom";
+      const stl = s => s === "removed" ? "已移除" : s === "suspended" ? "已暫停" : "運作中";
+      const hint = s => {
+        const days = (Date.now() - s.created) / 864e5, b = billOf(s.code), q = qualityOf(s.code);
+        if (s.lim === 200 && days >= 28 && b.due === 0 && q.n >= 30 && q.avg >= 85) return `<p class="m"><b>可考慮升二級</b>：開店滿 4 週、冇欠費、${q.n} 個評分、品質分 ${q.avg}</p>`;
+        if (s.lim === 500 && days >= 84 && b.due === 0 && q.n >= 60 && q.avg >= 90) return `<p class="m"><b>可考慮升三級</b>：開店滿 12 週、冇欠費、${q.n} 個評分、品質分 ${q.avg}</p>`;
+        return "";
+      };
+
+      const SORTS = {
+        last: ["最近活動", (a, b) => (b._la || 0) - (a._la || 0)],
+        today: ["今日單數", (a, b) => b._td - a._td],
+        due: ["未繳費用", (a, b) => b._due - a._due],
+        name: ["名稱", (a, b) => a.name.localeCompare(b.name, "zh")],
+        new: ["最新開店", (a, b) => b.created - a.created],
+        old: ["最早開店", (a, b) => a.created - b.created],
+        qual: ["品質分", (a, b) => (b._qs == null ? -1 : b._qs) - (a._qs == null ? -1 : a._qs)]
+      };
+
+      const enriched = HUB.shops.map(s => {
+        const b = billOf(s.code), q = qualityOf(s.code), o = HUB.orders.filter(x => x.code === s.code);
+        const la = o.reduce((m, x) => Math.max(m, x.ts), 0);
+        const td = o.filter(x => x.s !== "cancel" && x.s !== "unpaid" && dk(x.ts) === dk(Date.now())).length;
+        return { ...s, _b: b, _due: b.due, _q: q, _qs: q.n >= 5 ? q.avg : null, _la: la, _td: td, _dpn: o.filter(x => x.dp).length, _vn: o.filter(x => x.s !== "cancel" && x.s !== "unpaid").length };
+      });
+      const rmN = enriched.filter(x => x.status === "removed").length;
+      const list = enriched.filter(s => (showRm || s.status !== "removed") && (!qs || (s.name + " " + s.code).toLowerCase().includes(qs.toLowerCase()))).sort(SORTS[sk][1]);
+
+      return `
+        <section class="sub-band">
+          <div>
+            <div class="kicker">FORBREW PLATFORM ADMIN (/admin · 自含不共用代碼)</div>
+            <h1 class="band-title">平台收費設定、三級欠款風控與商戶稽核</h1>
+          </div>
+          <button type="button" class="mini-btn" onclick="admUnlocked=false;render()">鎖定登出</button>
+        </section>
+
+        <div class="console-wrap">
+          <div class="panel-box">
+            <h3>收費設定（全部商戶預設）</h3>
+            <div class="g2">
+              <div><small class="m">每單平台費 HKD（只可以 1 至 5）</small><input id="sf" type="text" value="${cfg.fee}"></div>
+              <div><small class="m">Card 固定費 HKD</small><input id="sx" type="text" value="${cfg.fix}"></div>
+              <div><small class="m">Card 比例 %（單價 HK$${cfg.thr} 或以下）</small><input id="sp" type="text" value="${cfg.pct}"></div>
+              <div><small class="m">Card 比例 %（超過分界）</small><input id="sp2" type="text" value="${cfg.pct2}"></div>
+              <div><small class="m">比例分界單價 HKD</small><input id="st" type="text" value="${cfg.thr}"></div>
+              <div><small class="m">最低價檔單價 HKD 或以下</small><input id="slp" type="text" value="${cfg.lowp}"></div>
+              <div><small class="m">最低價檔轉數快費 HKD</small><input id="slf" type="text" value="${cfg.lowf}"></div>
+              <div><small class="m">Card 費用下限 HKD</small><input id="scm" type="text" value="${cfg.cmin}"></div>
+              <div><small class="m">全局預設欠款上限 HKD（0 = 不設）</small><input id="sl" type="text" value="${cfg.lim}"></div>
+              <div><small class="m">信用卡退款是否連平台費退（0=唔退 / 1=退）</small><input id="srf" type="text" value="${cfg.refund_fee ? 1 : 0}"></div>
+            </div>
+
+            <div class="tw">
+              <table>
+                <tr><th>單價</th><th>轉數快 FPS</th><th>Card（平台費 + 固定 + 比例，最低 HK$${cfg.cmin}）</th></tr>
+                ${[18, 45, 100, 175, 176, 200].map(x => {
+                  const f = x <= cfg.lowp ? Math.min(cfg.fee, cfg.lowf) : +cfg.fee;
+                  const c = Math.max(cfg.cmin, f + cfg.fix + (x <= cfg.thr ? cfg.pct : cfg.pct2) / 100 * x);
+                  return `<tr><td class="mono">HK$${x}</td><td class="mono">HK$${f.toFixed(2)}</td><td class="mono">HK$${c.toFixed(2)}</td></tr>`;
+                }).join("")}
+              </table>
+            </div>
+            <p class="m">註：單價一過分界，整張單用較高比例計，所以 HK$175 同 HK$176 之間會跳一級。</p>
+
+            <div style="margin-top:12px">
+              <small class="m">商戶開店密碼。目前：<b>${cfg.open_free ? "唔需要密碼，任何人都可以開店" : "需要密碼（可撳「顯示」）"}</b></small>
+              ${pw("sk", "開店密碼（最少 6 字；留空再儲存 = 唔需要密碼）", 64, 0, cfg.open_key || "")}
+              <button type="button" class="mini" style="margin-top:8px" onclick="const v=$('#sk').value;if(!v){if(!armOpenFree){armOpenFree=true;toast('留空 = 唔需要密碼，再撳一次確認');return;}armOpenFree=false;HUB.settings.open_free=true;HUB.settings.open_key='';saveHub();render();return;}HUB.settings.open_free=false;HUB.settings.open_key=v;saveHub();toast('已儲存開店密碼');render()">儲存開店密碼</button>
+            </div>
+
+            <div class="g2" style="margin-top:12px">
+              <button type="button" class="btn" onclick="HUB.settings={...HUB.settings,fee:Math.min(5,Math.max(1,+$('#sf').value||2)),fix:+$('#sx').value||0,pct:+$('#sp').value||3.7,pct2:+$('#sp2').value||3.9,thr:+$('#st').value||175,lowp:+$('#slp').value||18,lowf:+$('#slf').value||1,cmin:+$('#scm').value||5,lim:+$('#sl').value||0,refund_fee:+$('#srf').value?1:0};saveHub();toast('已儲存設定');render()">儲存設定</button>
+              <button type="button" class="btn dark" onclick="if(!armReset){armReset=true;toast('再撳一次確認重設');return;}armReset=false;HUB.settings={fee:2,pct:3.7,pct2:3.9,fix:2,thr:175,lowp:18,lowf:1,cmin:5,lim:0,refund_fee:0,open_key:HUB.settings.open_key,open_free:HUB.settings.open_free,stripe_env:true};saveHub();toast('已重設預設');render()">全部重設為預設</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>欠款上限三級制（用意同目的）</h3>
+            <p class="m"><b>一級 新店 HK$200</b>（約 3 日費用）：新店未有交易同繳費紀錄，先限制風險；萬一唔繳，損失細。</p>
+            <p class="m"><b>二級 一般 HK$500</b>（約 4 日費用）：已有穩定單量同準時繳費紀錄，減少頻密繳費麻煩。</p>
+            <p class="m"><b>三級 信任 HK$1,000</b>（約 5 日費用）：長期準時繳費而且品質分高，獎勵優質商戶。建議升級：二級（4 週、零欠費、30 評、85 分）；三級（12 週、零欠費、60 評、90 分）。</p>
+          </div>
+
+          <div style="margin-top:16px">
+            <button type="button" class="ar" onclick="listOpen=!listOpen;render()"><span>咖啡師 ${enriched.length - rmN} 間${rmN ? "（已移除 " + rmN + "）" : ""}</span><i>${listOpen ? "▾" : "▸"}</i></button>
+            ${listOpen ? `
+              <div class="panel-box">
+                <label style="font-size:13px;display:flex;align-items:center;gap:6px"><input type="checkbox" ${showRm ? "checked" : ""} onchange="showRm=this.checked;render()"> 顯示已移除嘅店（紀錄保留）</label>
+                <input id="adm-q" type="search" placeholder="搜尋店名" value="${esc(qs)}" oninput="qs=this.value;renderAdminListRows()">
+                <div class="row" style="margin-top:8px">${Object.entries(SORTS).map(([k, v]) => `<button type="button" class="chip sm${sk === k ? " on" : ""}" onclick="sk='${k}';render()">${v[0]}</button>`).join("")}</div>
+                <div id="adm-list-rows">${buildAdminListRowsHtml(list, cfg, tierOf, stl, hint)}</div>
+              </div>` : ""}
+          </div>
+
+          ${recShop ? (() => {
+            const rs = HUB.shops.find(x => x.code === recShop), ro = HUB.orders.filter(x => x.code === recShop);
+            return `<div class="panel-box"><h3>${esc(rs.name)} 完整保留紀錄（${ro.length} 單 · ${stl(rs.status)}）</h3><div class="tw"><table><tr><th>時間</th><th>單號</th><th>稱呼</th><th>電話尾 4</th><th>金額</th><th>狀態</th></tr>${ro.map(o => `<tr><td>${dk(o.ts)}</td><td>#${o.n}</td><td>${esc(o.name || "-")}</td><td>${esc(o.phone || "-")}</td><td>$${o.tot}</td><td>${o.s}</td></tr>`).join("")}</table></div></div>`;
+          })() : ""}
+
+          <div class="panel-box">
+            <h3>查客戶／商戶紀錄（跨所有店，包括已移除）</h3>
+            <div class="g2"><input id="q2" type="text" style="margin:0" placeholder="稱呼 或 電話尾 4 位"><button type="button" class="btn dark" onclick="const q=$('#q2').value.trim().toLowerCase();srchRows=q.length>=2?HUB.orders.filter(o=>(o.phone||'').includes(q)||(o.name||'').toLowerCase().includes(q)):[];render()">查詢</button></div>
+            ${srchRows ? `<div class="tw"><table><tr><th>店鋪</th><th>單號</th><th>稱呼</th><th>尾號</th><th>金額</th><th>狀態</th></tr>${srchRows.map(o => `<tr><td>${esc(o.code)}</td><td>#${o.n}</td><td>${esc(o.name || "-")}</td><td>${esc(o.phone || "-")}</td><td>$${o.tot}</td><td>${o.s}</td></tr>`).join("")}</table></div>` : ""}
+          </div>
+
+          <div class="panel-box">
+            <h3>按月結單 CSV</h3>
+            <div class="g2">
+              <input id="sm" type="text" style="margin:0" value="${new Date().toISOString().slice(0, 7)}">
+              <button type="button" class="btn dark" onclick="csv('forbrew-statement-'+$('#sm').value+'.csv',[['店鋪','代碼','確認單數','平台費用 HKD']].concat(HUB.shops.map(sh=>[sh.name,sh.code,HUB.fees.filter(f=>f.code===sh.code).length,billOf(sh.code).fees])))">匯出結單 CSV</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function buildAdminListRowsHtml(list, cfg, tierOf, stl, hint) {
+      return list.map(s => {
+        const o = !!expd[s.code], on = s.status === "active";
+        return `<button type="button" class="ar" onclick="expd['${s.code}']=!expd['${s.code}'];render()"><span>${esc(s.name)}<small>${stl(s.status)} · 今日 ${s._td} 單 · 未繳 HK$${s._due} · 品質 ${s._q.n >= 5 ? s._q.avg : "–"}（${s._q.n}）${s._dpn ? " · ⚠ 爭議 " + s._dpn : ""}</small></span><i>${o ? "▾" : "▸"}</i></button>
+          ${o ? `<div class="adet">
+            <p class="m">客人連結：/c/${esc(slugDisplay(s.name))} · 轉數快 ${esc(s.fps)} · 累積費用 HK$${s._b.fees.toFixed(2)}（未繳 <b>HK$${s._due}</b>）</p>
+            ${hint(s)}
+            <small class="m">欠款上限級別</small>
+            <select onchange="const sh=HUB.shops.find(x=>x.code==='${s.code}');const v=this.value;if(v==='def')sh.lim=null;else if(TIERS[v])sh.lim=TIERS[v];saveHub();render()">
+              <option value="new" ${tierOf(s.lim) === "new" ? "selected" : ""}>一級 新店 HK$200</option>
+              <option value="normal" ${tierOf(s.lim) === "normal" ? "selected" : ""}>二級 一般 HK$500</option>
+              <option value="trusted" ${tierOf(s.lim) === "trusted" ? "selected" : ""}>三級 信任 HK$1,000</option>
+              <option value="def" ${tierOf(s.lim) === "def" ? "selected" : ""}>用全局預設（HK$${cfg.lim}）</option>
+            </select>
+            <div class="g2" style="margin-top:8px">
+              <input id="pa_${s.code}" type="text" style="margin:0" placeholder="記錄收款 HKD">
+              <button type="button" class="mini" onclick="const amt=+$('#pa_${s.code}').value;if(amt>0){HUB.pays.push({code:'${s.code}',ts:Date.now(),amt,note:'手動記錄'});saveHub();toast('已記錄收款');render();}">記錄收款</button>
+            </div>
+            <div class="row" style="margin-top:10px">
+              <button type="button" class="mini" onclick="recShop='${s.code}';render()">睇紀錄</button>
+              <button type="button" class="mini" onclick="const sh=HUB.shops.find(x=>x.code==='${s.code}');sh.status='${on ? "suspended" : "active"}';if(sh.status!=='active')sh.open=0;saveHub();render()">${on ? "暫停呢間店" : "恢復呢間店"}</button>
+              ${s.status === "removed"
+                ? `<button type="button" class="mini" onclick="const sh=HUB.shops.find(x=>x.code==='${s.code}');sh.status='active';saveHub();toast('已還原');render()">還原</button>`
+                : `<button type="button" class="mini" onclick="if(armRm!=='${s.code}'){armRm='${s.code}';toast('再撳一次確認移除封存，紀錄保留');return;}armRm=null;const sh=HUB.shops.find(x=>x.code==='${s.code}');sh.status='removed';sh.open=0;sh.rmts=Date.now();saveHub();toast('已移除（紀錄保留）');render()">移除（封存）</button>`}
+            </div>
+          </div>` : ""}`;
+      }).join("");
+    }
+
+    function renderAdminListRows() {
+      const box = $("#adm-list-rows");
+      if (!box) return;
+      const cfg = HUB.settings;
+      const tierOf = l => l === 200 ? "new" : l === 500 ? "normal" : l === 1000 ? "trusted" : l == null ? "def" : "custom";
+      const stl = s => s === "removed" ? "已移除" : s === "suspended" ? "已暫停" : "運作中";
+      const hint = s => {
+        const days = (Date.now() - s.created) / 864e5, b = billOf(s.code), q = qualityOf(s.code);
+        if (s.lim === 200 && days >= 28 && b.due === 0 && q.n >= 30 && q.avg >= 85) return `<p class="m"><b>可考慮升二級</b>：開店滿 4 週、冇欠費、${q.n} 個評分、品質分 ${q.avg}</p>`;
+        if (s.lim === 500 && days >= 84 && b.due === 0 && q.n >= 60 && q.avg >= 90) return `<p class="m"><b>可考慮升三級</b>：開店滿 12 週、冇欠費、${q.n} 個評分、品質分 ${q.avg}</p>`;
+        return "";
+      };
+      const SORTS = {
+        last: (a, b) => (b._la || 0) - (a._la || 0),
+        today: (a, b) => b._td - a._td,
+        due: (a, b) => b._due - a._due,
+        name: (a, b) => a.name.localeCompare(b.name, "zh"),
+        new: (a, b) => b.created - a.created,
+        old: (a, b) => a.created - b.created,
+        qual: (a, b) => (b._qs == null ? -1 : b._qs) - (a._qs == null ? -1 : a._qs)
+      };
+      const enriched = HUB.shops.map(s => {
+        const b = billOf(s.code), q = qualityOf(s.code), o = HUB.orders.filter(x => x.code === s.code);
+        const la = o.reduce((m, x) => Math.max(m, x.ts), 0);
+        const td = o.filter(x => x.s !== "cancel" && x.s !== "unpaid" && dk(x.ts) === dk(Date.now())).length;
+        return { ...s, _b: b, _due: b.due, _q: q, _qs: q.n >= 5 ? q.avg : null, _la: la, _td: td, _dpn: o.filter(x => x.dp).length };
+      });
+      const list = enriched.filter(s => (showRm || s.status !== "removed") && (!qs || (s.name + " " + s.code).toLowerCase().includes(qs.toLowerCase()))).sort(SORTS[sk] || SORTS.last);
+      box.innerHTML = buildAdminListRowsHtml(list, cfg, tierOf, stl, hint);
+    }
+
+    function updatePaidBadge() {
+      const s = merchLoggedCode ? HUB.shops.find(x => x.code === merchLoggedCode) : null;
+      const np = s ? HUB.orders.filter(o => o.code === s.code && o.s === "paid").length : 0;
+      const b = $("#paid-badge");
+      if (b) b.textContent = String(np);
+      const ns = $("#nav-shop-slug");
+      const cs = curShop();
+      if (ns && cs) ns.textContent = "/c/" + slugDisplay(cs.name);
+    }
+
+    function render() {
+      updatePaidBadge();
+      const main = $("#main-shell");
+      if (mode === "customer") {
+        main.innerHTML = renderCustomerPage();
+        syncShelfSpines();
+        renderOrderDesk();
+        if (window.__shelfMount) window.__shelfMount(filteredBooks(curShop()), sel.drink);
+      } else if (mode === "merchant") {
+        main.innerHTML = renderMerchantPage();
+      } else {
+        main.innerHTML = renderAdminPage();
+      }
+    }
+
+    window.addEventListener("keydown", e => {
+      if (mode !== "customer") return;
+      if (e.target && ["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) return;
+      const books = filteredBooks(curShop());
+      if (!books.length) return;
+      const curIdx = Math.max(0, books.findIndex(x => x.id === sel.drink));
+      if (e.key >= "1" && e.key <= "9") {
+        const i = Number(e.key) - 1;
+        if (books[i]) pickDrinkFromShelf(books[i].id);
+      } else if (e.key === "ArrowRight") {
+        pickDrinkFromShelf(books[(curIdx + 1) % books.length].id);
+      } else if (e.key === "ArrowLeft") {
+        pickDrinkFromShelf(books[(curIdx - 1 + books.length) % books.length].id);
+      } else if (e.key === "Escape" && window.__shelfRelax) {
+        window.__shelfRelax();
+      }
+    });
+
+    render();
+  </script>
+
+  <!-- =====================================================================
+       THREE.JS r165 INTERACTIVE COFFEE BOOKSHELF ENGINE
+       Every coffee drink on the Forbrew menu is rendered as a selectable 3D book!
+       ===================================================================== -->
+  <script type="module">
+    import * as THREE from "three";
+    import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+    const GROUP_PALETTES = {
+      hot: ["#D97757", "#B85C3E", "#8C4A32", "#A65336", "#703824"],
+      iced: ["#2F8F5B", "#266D53", "#3D736E", "#465362"],
+      spec: ["#272624", "#7A5C3E"]
+    };
+
+    let renderer, scene, camera, envRT, pmrem, ro;
+    let rafId = 0, alive = false, focused = true;
+    let selectedDrinkId = "", hoveredIdx = -1;
+    let booksGroup = null;
+    const bookNodes = [];
+    const hitMeshes = [];
+    const sceneDisposables = [];
+    const bookDisposables = [];
+    let currentWrap = null;
+
+    function detectSoftwareGl(gl) {
+      try {
+        const dbg = gl.getExtension("WEBGL_debug_renderer_info");
+        if (!dbg) return false;
+        return /swiftshader|llvmpipe|software/i.test(String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || ""));
+      } catch {
+        return false;
+      }
+    }
+
+    function makeCoffeeBookTex(drink, idx, colorHex, isCover) {
+      const cvs = document.createElement("canvas");
+      cvs.width = isCover ? 480 : 144;
+      cvs.height = 720;
+      const g = cvs.getContext("2d");
+
+      g.fillStyle = colorHex;
+      g.fillRect(0, 0, cvs.width, cvs.height);
+
+      // Subtle bookcloth grain
+      g.fillStyle = "rgba(255,255,255,0.04)";
+      for (let y = 0; y < cvs.height; y += 5) g.fillRect(0, y, cvs.width, 1);
+
+      const accent = "#FAF7F2";
+      g.strokeStyle = accent;
+      g.lineWidth = isCover ? 4 : 3;
+      g.strokeRect(isCover ? 22 : 12, 22, cvs.width - (isCover ? 44 : 24), cvs.height - 44);
+
+      const grpName = drink.g === "hot" ? "HOT" : drink.g === "iced" ? "ICED" : "SPECIAL";
+      const labelTitle = window.lang === "en" ? (drink.e || drink.z) : (drink.z || drink.e);
+      const labelSub = window.lang === "en" ? (drink.z || "") : (drink.e || "");
+
+      if (isCover) {
+        g.fillStyle = accent;
+        g.font = "bold 24px monospace";
+        g.fillText("FORBREW · NO." + String(idx + 1).padStart(2, "0") + " · " + grpName, 40, 76);
+
+        g.font = "bold 46px 'Noto Serif TC', Georgia, serif";
+        g.fillText(labelTitle, 40, 158, 400);
+
+        g.globalAlpha = 0.85;
+        g.font = "bold 22px Georgia, serif";
+        g.fillText(labelSub, 40, 204, 400);
+        g.globalAlpha = 1;
+
+        // Price frame
+        g.strokeStyle = accent;
+        g.lineWidth = 3;
+        g.strokeRect(40, 290, 400, 250);
+        g.textAlign = "center";
+        g.font = "bold 88px Georgia, serif";
+        g.fillText("$" + drink.p, 240, 435);
+        g.font = "bold 22px monospace";
+        g.fillText(drink.b ? "BLACK COFFEE" : "MILK OPTIONAL", 240, 495);
+        g.textAlign = "left";
+      } else {
+        g.fillStyle = accent;
+        g.textAlign = "center";
+        g.font = "bold 28px monospace";
+        g.fillText(String(idx + 1).padStart(2, "0"), cvs.width / 2, 74);
+
+        g.save();
+        g.translate(cvs.width / 2, 360);
+        g.rotate(-Math.PI / 2);
+        g.font = "bold 28px 'Noto Sans TC', sans-serif";
+        g.fillText(labelTitle + "  $" + drink.p, 0, 10, 440);
+        g.restore();
+
+        g.font = "bold 18px monospace";
+        g.fillText(grpName, cvs.width / 2, 672);
+      }
+
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 4;
+      bookDisposables.push(tex);
+      return tex;
+    }
+
+    function clearBooks() {
+      if (!booksGroup) return;
+      while (booksGroup.children.length) booksGroup.remove(booksGroup.children[0]);
+      bookNodes.length = 0;
+      hitMeshes.length = 0;
+      bookDisposables.forEach(d => d && typeof d.dispose === "function" && d.dispose());
+      bookDisposables.length = 0;
+    }
+
+    let endLMesh = null, endRMesh = null, shelfHalfSpan = 2.9;
+
+    function buildBooksOnShelf(drinks, activeId) {
+      if (!booksGroup) return;
+      clearBooks();
+      const list = Array.isArray(drinks) ? drinks : [];
+      selectedDrinkId = activeId || (list[0] && list[0].id) || "";
+      if (!list.length) {
+        if (window.__shelfRequest) window.__shelfRequest();
+        return;
+      }
+
+      const paperMat = new THREE.MeshStandardMaterial({ color: 0xF5EFE2, roughness: 0.9, metalness: 0 });
+      const hitMat = new THREE.MeshBasicMaterial({ visible: false });
+      bookDisposables.push(paperMat, hitMat);
+
+      const n = list.length;
+      const bookW = n > 8 ? 0.36 : 0.44;
+      const gap = n > 8 ? 0.08 : 0.14;
+      const totalW = n * bookW + (n - 1) * gap;
+      shelfHalfSpan = Math.max(2.9, totalW / 2 + 0.34);
+      if (endLMesh) endLMesh.position.x = -shelfHalfSpan;
+      if (endRMesh) endRMesh.position.x = shelfHalfSpan;
+      let cursorX = -totalW / 2 + bookW / 2;
+
+      const counters = { hot: 0, iced: 0, spec: 0 };
+      list.forEach((drink, idx) => {
+        const pal = GROUP_PALETTES[drink.g] || GROUP_PALETTES.hot;
+        const cIdx = counters[drink.g] || 0;
+        counters[drink.g] = cIdx + 1;
+        const colorHex = pal[cIdx % pal.length];
+
+        const hBook = 2.25 + ((idx % 3) * 0.08);
+        const depth = 1.42;
+
+        const coverTex = makeCoffeeBookTex(drink, idx, colorHex, true);
+        const spineTex = makeCoffeeBookTex(drink, idx, colorHex, false);
+
+        const coverMat = new THREE.MeshStandardMaterial({ map: coverTex, roughness: 0.78, metalness: 0.06 });
+        const spineMat = new THREE.MeshStandardMaterial({ map: spineTex, roughness: 0.72, metalness: 0.08 });
+        const clothMat = new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.82, metalness: 0.04 });
+        bookDisposables.push(coverMat, spineMat, clothMat);
+
+        const boardGeo = new THREE.BoxGeometry(0.04, hBook, depth);
+        const spineGeo = new THREE.BoxGeometry(bookW, hBook, 0.045);
+        const pageGeo = new THREE.BoxGeometry(bookW - 0.075, hBook - 0.08, depth - 0.06);
+        const hitGeo = new THREE.BoxGeometry(bookW + gap * 0.9, hBook + 0.14, depth + 0.14);
+        bookDisposables.push(boardGeo, spineGeo, pageGeo, hitGeo);
+
+        const gBook = new THREE.Group();
+        const front = new THREE.Mesh(boardGeo, coverMat);
+        front.position.set(bookW / 2 - 0.02, hBook / 2, 0);
+        front.castShadow = true;
+
+        const back = new THREE.Mesh(boardGeo, clothMat);
+        back.position.set(-bookW / 2 + 0.02, hBook / 2, 0);
+        back.castShadow = true;
+
+        const spine = new THREE.Mesh(spineGeo, spineMat);
+        spine.position.set(0, hBook / 2, depth / 2 - 0.022);
+        spine.castShadow = true;
+
+        const pages = new THREE.Mesh(pageGeo, paperMat);
+        pages.position.set(0, hBook / 2, -0.02);
+
+        const hit = new THREE.Mesh(hitGeo, hitMat);
+        hit.position.set(0, hBook / 2, 0);
+        hit.userData = { idx, drinkId: drink.id };
+
+        gBook.add(front, back, spine, pages, hit);
+        gBook.position.set(cursorX, 0, 0);
+        gBook.userData = { baseX: cursorX, drinkId: drink.id, curZ: 0, curY: 0, curRotY: 0 };
+
+        cursorX += bookW + gap;
+        booksGroup.add(gBook);
+        bookNodes.push(gBook);
+        hitMeshes.push(hit);
+      });
+
+      if (window.__shelfRequest) window.__shelfRequest();
+    }
+
+    function disposeEngine() {
+      alive = false;
+      if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+      if (ro) { ro.disconnect(); ro = null; }
+      clearBooks();
+      sceneDisposables.forEach(d => d && typeof d.dispose === "function" && d.dispose());
+      sceneDisposables.length = 0;
+      if (envRT) { envRT.dispose(); envRT = null; }
+      if (renderer) { renderer.dispose(); if (renderer.domElement && renderer.domElement.parentNode) renderer.domElement.remove(); renderer = null; }
+      booksGroup = null;
+      currentWrap = null;
+    }
+
+    window.__shelfDispose = disposeEngine;
+
+    window.__shelfMount = (drinks, activeId) => {
+      const wrap = document.getElementById("canvas-wrap");
+      const fallbackEl = document.getElementById("webgl-fallback");
+      if (!wrap) return;
+      if (currentWrap === wrap && renderer) {
+        buildBooksOnShelf(drinks, activeId);
+        return;
+      }
+      disposeEngine();
+      currentWrap = wrap;
+      const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      try {
+        renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+      } catch {
+        if (fallbackEl) fallbackEl.classList.add("on");
+        return;
+      }
+
+      const sw = detectSoftwareGl(renderer.getContext());
+      const w = wrap.clientWidth || 640, h = wrap.clientHeight || 420;
+      renderer.setPixelRatio(sw ? 1 : Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(w, h);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.04;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      wrap.appendChild(renderer.domElement);
+
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xF2ECE1);
+      scene.fog = new THREE.FogExp2(0xF2ECE1, 0.032);
+
+      camera = new THREE.PerspectiveCamera(38, w / h, 0.1, 40);
+      camera.position.set(0.25, 1.9, 8.2);
+      camera.lookAt(0, 1.05, 0);
+
+      pmrem = new THREE.PMREMGenerator(renderer);
+      envRT = pmrem.fromScene(new RoomEnvironment(), 0.04);
+      scene.environment = envRT.texture;
+      scene.environmentIntensity = 0.72;
+      pmrem.dispose();
+
+      scene.add(new THREE.HemisphereLight(0xF4F7FA, 0xA89B8C, 0.68));
+      const key = new THREE.DirectionalLight(0xFFF3E2, 2.05);
+      key.position.set(4.5, 6.5, 5.8);
+      key.castShadow = true;
+      key.shadow.mapSize.set(sw ? 512 : 1024, sw ? 512 : 1024);
+      key.shadow.camera.near = 1; key.shadow.camera.far = 22;
+      key.shadow.camera.left = -6; key.shadow.camera.right = 6;
+      key.shadow.camera.top = 5; key.shadow.camera.bottom = -2;
+      key.shadow.bias = -0.0005; key.shadow.normalBias = 0.02;
+      scene.add(key);
+
+      const rim = new THREE.DirectionalLight(0xFFE6D0, 0.85);
+      rim.position.set(-4.5, 3.8, -4.2);
+      scene.add(rim);
+
+      // Walnut Shelf + Backplate + Sculpted Brass Bookends
+      const shelfGrp = new THREE.Group();
+      const walMat = new THREE.MeshStandardMaterial({ color: 0x4A3628, roughness: 0.68, metalness: 0.04 });
+      const plankGeo = new THREE.BoxGeometry(10.2, 0.24, 2.6);
+      const plank = new THREE.Mesh(plankGeo, walMat);
+      plank.position.set(0, -0.12, 0.25);
+      plank.receiveShadow = true;
+
+      const brassMat = new THREE.MeshStandardMaterial({ color: 0xC6A267, roughness: 0.28, metalness: 0.8 });
+      const railGeo = new THREE.BoxGeometry(10.2, 0.035, 0.04);
+      const rail = new THREE.Mesh(railGeo, brassMat);
+      rail.position.set(0, 0.018, 1.5);
+
+      const backGeo = new THREE.BoxGeometry(10.2, 3.8, 0.16);
+      const backMat = new THREE.MeshStandardMaterial({ color: 0xEAE1D2, roughness: 0.88, metalness: 0 });
+      const back = new THREE.Mesh(backGeo, backMat);
+      back.position.set(0, 1.65, -1.05);
+      back.receiveShadow = true;
+
+      const endGeo = new THREE.BoxGeometry(0.11, 1.5, 1.25);
+      const endL = new THREE.Mesh(endGeo, brassMat); endL.position.set(-2.9, 0.75, 0); endL.castShadow = true;
+      const endR = new THREE.Mesh(endGeo, brassMat); endR.position.set(2.9, 0.75, 0); endR.castShadow = true;
+      endLMesh = endL; endRMesh = endR;
+
+      shelfGrp.add(plank, rail, back, endL, endR);
+      sceneDisposables.push(walMat, plankGeo, brassMat, railGeo, backGeo, backMat, endGeo);
+      scene.add(shelfGrp);
+
+      booksGroup = new THREE.Group();
+      scene.add(booksGroup);
+
+      alive = true;
+      focused = true;
+      const raycaster = new THREE.Raycaster(), ptr = new THREE.Vector2();
+      let lastTs = performance.now();
+
+      function requestRender() {
+        if (!alive || rafId) return;
+        rafId = requestAnimationFrame(tick);
+      }
+      window.__shelfRequest = requestRender;
+      window.__shelfSelectDrink = id => { selectedDrinkId = id; focused = true; requestRender(); };
+      window.__shelfRelax = () => { focused = false; requestRender(); };
+      window.__shelfRebuildBooks = (nextDrinks, nextId) => { buildBooksOnShelf(nextDrinks, nextId); };
+
+      function tick(now) {
+        rafId = 0;
+        if (!alive || !renderer) return;
+        const dt = Math.min(0.05, (now - lastTs) / 1000);
+        lastTs = now;
+        let settled = true;
+        const rate = prefersReducedMotion ? 1 : 9.5;
+
+        let targetCamX = 0.18, targetLookX = 0;
+        bookNodes.forEach((g, idx) => {
+          const isSel = focused && g.userData.drinkId === selectedDrinkId;
+          const isHov = idx === hoveredIdx && !isSel;
+          if (isSel) {
+            targetCamX = g.userData.baseX * 0.45;
+            targetLookX = g.userData.baseX * 0.55;
+          }
+          const tZ = isSel ? 1.28 : isHov ? 0.22 : 0;
+          const tY = isSel ? 0.14 : isHov ? 0.04 : 0;
+          const tRot = isSel ? -0.42 : isHov ? -0.05 : 0;
+
+          if (prefersReducedMotion) {
+            g.userData.curZ = tZ; g.userData.curY = tY; g.userData.curRotY = tRot;
+          } else {
+            g.userData.curZ = THREE.MathUtils.damp(g.userData.curZ, tZ, rate, dt);
+            g.userData.curY = THREE.MathUtils.damp(g.userData.curY, tY, rate, dt);
+            g.userData.curRotY = THREE.MathUtils.damp(g.userData.curRotY, tRot, rate, dt);
+          }
+          g.position.z = g.userData.curZ;
+          g.position.y = g.userData.curY;
+          g.rotation.y = g.userData.curRotY;
+
+          if (Math.abs(g.userData.curZ - tZ) > 0.0005 || Math.abs(g.userData.curY - tY) > 0.0005 || Math.abs(g.userData.curRotY - tRot) > 0.0005) {
+            settled = false;
+          }
+        });
+
+        const baseZ = Math.max(8.2, shelfHalfSpan * 2.5);
+        const targetCamZ = focused ? Math.max(7.35, baseZ - 0.85) : baseZ;
+        if (!prefersReducedMotion) {
+          camera.position.x = THREE.MathUtils.damp(camera.position.x, targetCamX, 7.5, dt);
+          camera.position.z = THREE.MathUtils.damp(camera.position.z, targetCamZ, 7.5, dt);
+        } else {
+          camera.position.x = targetCamX; camera.position.z = targetCamZ;
+        }
+        camera.lookAt(targetLookX, 1.05, 0);
+
+        if (Math.abs(camera.position.x - targetCamX) > 0.0006 || Math.abs(camera.position.z - targetCamZ) > 0.0006) settled = false;
+
+        renderer.render(scene, camera);
+        if (!settled && !prefersReducedMotion) requestRender();
+      }
+
+      const pickAt = e => {
+        const rect = renderer.domElement.getBoundingClientRect();
+        ptr.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        ptr.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(ptr, camera);
+        const hits = raycaster.intersectObjects(hitMeshes, false);
+        return hits.length ? hits[0].object.userData : null;
+      };
+
+      renderer.domElement.addEventListener("pointermove", e => {
+        const h = pickAt(e), ni = h ? h.idx : -1;
+        if (ni !== hoveredIdx) {
+          hoveredIdx = ni;
+          wrap.style.cursor = ni >= 0 ? "pointer" : "grab";
+          requestRender();
+        }
+      });
+      renderer.domElement.addEventListener("click", e => {
+        const h = pickAt(e);
+        if (h && window.pickDrinkFromShelf) window.pickDrinkFromShelf(h.drinkId);
+      });
+      renderer.domElement.addEventListener("webglcontextlost", e => {
+        e.preventDefault();
+        if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+        if (fallbackEl) fallbackEl.classList.add("on");
+      });
+      renderer.domElement.addEventListener("webglcontextrestored", () => {
+        if (fallbackEl) fallbackEl.classList.remove("on");
+        requestRender();
+      });
+
+      ro = new ResizeObserver(entries => {
+        const cr = entries[0] && entries[0].contentRect;
+        if (!cr || cr.width < 10 || cr.height < 10 || !renderer) return;
+        camera.aspect = cr.width / cr.height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(cr.width, cr.height);
+        requestRender();
+      });
+      ro.observe(wrap);
+
+      buildBooksOnShelf(drinks, activeId);
+    };
+
+    window.addEventListener("pagehide", disposeEngine);
+
+    // Mount immediately on first load if customer page is active
+    if (document.getElementById("canvas-wrap") && window.filteredBooks && window.curShop) {
+      window.__shelfMount(window.filteredBooks(window.curShop()), window.sel.drink);
+    }
+  </script>
+</body>
+</html>
