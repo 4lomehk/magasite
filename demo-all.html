@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e0e10">
+<title>forbrew · system</title>
+<style>
+:root{
+  --bg:#0e0e10; --panel:#16161a; --panel2:#1c1c22; --line:#2a2a32;
+  --fg:#f2f0ea; --mut:#9a968c; --acc:#e07040; --ok:#3ecf8e; --warn:#f0b429;
+  --bad:#ef6b5a; --chip:#22222a;
+  font-family:Inter,-apple-system,"PingFang HK","Noto Sans TC",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--fg);min-height:100%;-webkit-font-smoothing:antialiased}
+body{padding-bottom:100px}
+/* teardown-style top bar */
+.tb{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:10px 14px;background:rgba(14,14,16,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.logo{font-weight:800;letter-spacing:.04em;font-size:15px}
+.logo i{color:var(--acc);font-style:normal}
+.tourchip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 11px;border:1px solid var(--line);
+  background:var(--panel);color:var(--fg);font:600 10px/1 Inter,sans-serif;letter-spacing:1.2px;cursor:pointer}
+.tourchip b{display:block;width:6px;height:6px;border-radius:50%;background:var(--mut)}
+.tourchip.on b{background:var(--ok);animation:blink 1.2s steps(2) infinite}
+@keyframes blink{50%{opacity:.2}}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.tabs button,.mini{
+  border:1px solid var(--line);background:var(--chip);color:var(--fg);border-radius:0;
+  padding:7px 12px;font:600 11px Inter,sans-serif;letter-spacing:.6px;cursor:pointer;text-transform:uppercase}
+.tabs button.on{background:var(--acc);color:#111;border-color:var(--acc)}
+.shell{max-width:520px;margin:0 auto;padding:14px 14px 20px}
+/* panel cards */
+.panel{background:var(--panel);border:1px solid var(--line);margin-bottom:10px}
+.panel .hd{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line);
+  font:600 10px/1 Inter,sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut);cursor:pointer}
+.panel .hd span{color:var(--fg)}
+.panel .bd{padding:12px}
+.panel.collapsed .bd{display:none}
+h1{font-size:1.45rem;font-weight:700;letter-spacing:-.02em;margin:8px 0 4px}
+.sub{color:var(--mut);font-size:.9rem;margin-bottom:12px}
+.shopname{font-size:1.6rem;font-weight:800;text-align:center;margin:8px 0 4px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mut);margin-right:6px}
+.dot.ok{background:var(--ok)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt,.chip{border:1px solid var(--line);background:var(--panel2);color:var(--fg);padding:11px;cursor:pointer;text-align:left;font:inherit}
+.opt.on,.chip.on{border-color:var(--acc);background:rgba(224,112,64,.14)}
+.opt b{display:block;color:#fff}
+.opt small,.chip small{display:block;color:var(--mut);font-size:.75rem;margin-top:3px}
+.chip{border-radius:0;padding:8px 12px;font-size:.85rem}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+label.f{display:block;font-size:.78rem;color:var(--mut);margin-bottom:10px}
+input,select,textarea{width:100%;margin-top:5px;background:#0a0a0c;border:1px solid var(--line);color:var(--fg);padding:11px;font:inherit;border-radius:0}
+.qty{display:flex;align-items:center;gap:12px;margin:8px 0}
+.qty button{width:36px;height:36px;border:1px solid var(--line);background:var(--panel2);color:#fff;font-size:1.1rem;cursor:pointer}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(14,14,16,.96);border-top:1px solid var(--line);
+  padding:12px 14px calc(12px + env(safe-area-inset-bottom))}
+.bar .in{max-width:520px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.bar .sum{flex:1;font-size:.8rem;color:var(--mut)}.bar .sum b{display:block;color:#fff;font-size:1.15rem}
+.btn{border:0;padding:13px 18px;font:700 14px Inter,sans-serif;cursor:pointer;background:var(--acc);color:#111;letter-spacing:.3px}
+.btn.dark{background:#fff;color:#111}
+.btn.ghost{background:transparent;color:#fff;border:1px solid var(--line)}
+.btn.ok{background:var(--ok);color:#111}
+.btn.block{width:100%;display:block}
+.btn:disabled{opacity:.4}
+.kv{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.kv:last-child{border:0}
+.pay-card{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border:0;background:#fff;color:#111;font-weight:700;cursor:pointer;margin-bottom:8px}
+.pay-card .logos{display:flex;gap:6px;flex-wrap:wrap}
+.pay-card .logos i{font-style:normal;font-size:10px;font-weight:800;padding:3px 6px;background:#111;color:#fff}
+.pay-note{font-size:12px;color:var(--mut);margin:0 0 12px;line-height:1.45}
+.fps-box{border:1px solid var(--line);padding:12px;margin-bottom:12px;background:var(--panel2)}
+.bank-tog{background:none;border:0;color:var(--acc);font:700 12px Inter,sans-serif;cursor:pointer;padding:8px 0 0}
+.banks{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);grid-template-columns:1fr 1fr;gap:6px}
+.banks.open{display:grid}
+.banks a{font-size:12px;color:var(--fg);text-decoration:none;padding:8px;background:var(--panel)}
+.tag{display:inline-block;padding:3px 9px;font:700 10px/1.4 Inter,sans-serif;letter-spacing:.5px;text-transform:uppercase}
+.tag.paid{background:rgba(240,180,41,.2);color:var(--warn)}
+.tag.making{background:rgba(224,112,64,.2);color:var(--acc)}
+.tag.ready{background:rgba(62,207,142,.2);color:var(--ok)}
+.tag.done{background:rgba(255,255,255,.1);color:var(--mut)}
+.prog{display:flex;gap:4px;margin:12px 0}
+.prog i{flex:1;height:2px;background:var(--line)}.prog i.on{background:var(--acc)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#222;color:#fff;border:1px solid var(--line);
+  padding:10px 14px;font-size:13px;opacity:0;transition:.2s;z-index:60;pointer-events:none;max-width:90%}
+.toast.on{opacity:1}
+.ord{border:1px solid var(--line);padding:12px;margin-bottom:8px;background:var(--panel2)}
+.fee{display:inline-block;border:1px solid var(--line);padding:3px 8px;font:700 11px Inter,sans-serif}
+.loc{font-size:.85rem;color:var(--mut);margin:6px 0 10px}
+.loc a{color:var(--acc);font-weight:700;text-decoration:none}
+.muted{color:var(--mut);font-size:.82rem}
+.center{text-align:center}
+.link{background:none;border:0;color:var(--acc);font:600 13px Inter,sans-serif;cursor:pointer;margin-top:8px}
+.gauge{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.gauge div{border:1px solid var(--line);padding:10px;background:var(--panel2)}
+.gauge small{display:block;color:var(--mut);font:600 9px Inter,sans-serif;letter-spacing:1px;text-transform:uppercase}
+.gauge b{display:block;font-size:1.25rem;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="tb">
+  <div class="logo">for<i>brew</i></div>
+  <span class="tourchip on" id="livechip"><b></b> LIVE · OFFLINE HUB</span>
+  <div class="tabs">
+    <button type="button" class="on" id="tC" onclick="setRole('c')">客人</button>
+    <button type="button" id="tM" onclick="setRole('m')">商戶</button>
+    <button type="button" id="tA" onclick="setRole('a')">後台</button>
+    <button type="button" id="tL" onclick="toggleLang()">EN</button>
+  </div>
+</div>
+<div class="shell" id="app"></div>
+<div class="bar" id="bar" style="display:none"></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ===== i18n (地道廣東話 / EN) — aligned with shared.js ===== */
+const I={
+zh:{cust:"客人",merch:"商戶",admin:"後台",lang:"EN",
+open:"正常接單中",closed:"未開始接單",map:"地圖",
+menu:"今日飲乜？",menu2:"揀好撳底部掣，下一步教你付款",
+drinks:"飲品",bean:"咖啡豆",house:"自家豆",soe:"SOE 單一產地",
+size:"杯量",milk:"奶類",qty:"數量",
+name:"稱呼（選填）",phone:"電話尾 4 位（退款備註）",note:"備註，例如少冰",
+total:"應付",place:"落單，去付款",phErr:"請輸入電話尾 4 位數字",
+pay:"去付款",pay2:"過完數咖啡師即刻收到",
+card:"Card 信用卡付款",cardNote:"Card 手續費由商戶承擔，你付嘅金額同訂單一樣。",
+fps:"轉數快",banksOn:"常用銀行 App（撳開）",banksOff:"收起銀行列表",
+fpsDone:"模擬：已上載轉數快收據",cancel:"修改或取消張單",
+paid:"已收到付款",making:"🟡 沖緊稍等",ready:"好咗！可以取貨",done:"已取貨",
+rate:"✅ 全部啱，完成",thanks:"多謝你，已記錄",again:"再落一杯",
+fee:"平台費",locked:"不可改",loc:"今日檔位",orders:"今日訂單",noord:"暫時未有訂單",
+start:"🟡 沖緊稍等",readyBtn:"好咗，通知取貨",picked:"客人已取走",
+soeSet:"SOE 加價（商戶可改）",save:"已儲存",
+adminT:"平台後台",feeRange:"每單平台費（只可 1–5）",shopList:"咖啡師列表",
+refund:"退款備註",tail:"尾號",num:"單號"},
+en:{cust:"Customer",merch:"Merchant",admin:"Admin",lang:"粵",
+open:"Taking orders",closed:"Not open",map:"Map",
+menu:"What are you having?",menu2:"Pick, then tap below to pay",
+drinks:"Drinks",bean:"Beans",house:"House blend",soe:"Single origin",
+size:"Size",milk:"Milk",qty:"Qty",
+name:"Name (optional)",phone:"Phone last 4 (refund note)",note:"Note e.g. less ice",
+total:"Total",place:"Order and pay",phErr:"Enter last 4 digits",
+pay:"Pay",pay2:"Barista is notified after payment",
+card:"Pay by card",cardNote:"Card fees covered by the shop; you pay the order total.",
+fps:"FPS",banksOn:"Bank apps (expand)",banksOff:"Hide banks",
+fpsDone:"Simulate: FPS receipt uploaded",cancel:"Edit or cancel",
+paid:"Payment received",making:"🟡 Brewing",ready:"Ready for pickup!",done:"Picked up",
+rate:"✅ All good, done",thanks:"Thank you, recorded",again:"Order again",
+fee:"Platform fee",locked:"Locked",loc:"Location today",orders:"Orders",noord:"No orders yet",
+start:"Start brewing",readyBtn:"Ready — notify",picked:"Picked up",
+soeSet:"SOE surcharge (editable)",save:"Saved",
+adminT:"Platform admin",feeRange:"Per-order fee (HK$1–5)",shopList:"Shops",
+refund:"Refund note",tail:"ending",num:"Order"}
+};
+let lang="zh"; const t=k=>I[lang][k]||k;
+function toggleLang(){lang=lang==="zh"?"en":"zh";render()}
+
+/* ===== GitHub-aligned data ===== */
+let CF={L:4,S:-4,om:4,so:5};
+const MENU=[
+  {id:"h1",z:"熱美式",e:"Hot Americano",p:28,ic:"☕",g:"hot"},
+  {id:"h2",z:"熱 Latte",e:"Hot Latte",p:36,ic:"🥛",g:"hot"},
+  {id:"h4",z:"Flat White",e:"Flat White",p:36,ic:"🥛",g:"hot"},
+  {id:"c1",z:"凍美式",e:"Iced Americano",p:32,ic:"🧊",g:"iced"},
+  {id:"c2",z:"凍 Latte",e:"Iced Latte",p:40,ic:"🧊",g:"iced"},
+  {id:"s1",z:"Dirty",e:"Dirty",p:40,ic:"✨",g:"spec"}
+];
+const BANKS=[["HSBC","https://www.hsbc.com.hk/"],["恒生","https://www.hangseng.com/"],["中銀","https://www.bochk.com/"],["渣打","https://www.sc.com/hk/"],["工銀亞洲","https://www.icbcasia.com/"],["建行亞洲","https://asia.ccb.com/"],["信興","https://www.cncbinternational.com/"],["富邦","https://www.fubonbank.com.hk/"],["天星","https://www.paobank.com.hk/"],["眾安","https://bank.za.group/hk/"]];
+
+let role="c";
+let shop={name:"TEAM A",open:true,fps:"91236789",stripe:true,fee:2,
+  addr:"中環雲咸街 12 號（今日快閃）",map:"https://maps.google.com/?q=Wyndham+Street+Central+Hong+Kong",soe:"Yirgacheffe"};
+let sel={drink:"h2",bean:"house",size:"M",milk:"OM",qty:1,note:"",name:"",phone:""};
+let order=null,banksOpen=false,merchantOrders=[],rated=false;
+let openPanels={menu:true,pay:true,orders:true,fee:true,admin:true};
+
+function toast(m){const e=document.getElementById("toast");e.textContent=m;e.classList.add("on");clearTimeout(toast._t);toast._t=setTimeout(()=>e.classList.remove("on"),1800)}
+function setRole(r){role=r;render()}
+function dn(d){return lang==="en"?d.e:d.z}
+function price(){
+  const d=MENU.find(x=>x.id===sel.drink)||{p:0,g:"hot"};
+  let p=d.p;
+  if(d.g!=="spec"){if(sel.size==="L")p+=CF.L;if(sel.size==="S")p+=CF.S}
+  if(sel.milk==="OM")p+=CF.om;
+  if(sel.bean==="soe")p+=CF.so;
+  return Math.max(0,p)*sel.qty;
+}
+function desc(){
+  const d=MENU.find(x=>x.id===sel.drink);
+  return [sel.bean==="soe"?"SOE"+(shop.soe?" "+shop.soe:""):t("house"),d?dn(d):"",sel.size,sel.milk==="OM"?(lang==="zh"?"燕麥":"Oat"):sel.milk].join(" / ")+" ×"+sel.qty;
+}
+function pick(k,v){sel[k]=v;render()}
+function qty(n){sel.qty=Math.max(1,Math.min(10,sel.qty+n));render()}
+function place(){
+  if(!/^\d{4}$/.test(sel.phone))return toast(t("phErr"));
+  order={id:"o"+Math.random().toString(36).slice(2,8),n:Math.floor(10+Math.random()*89),s:"unpaid",tot:price(),desc:desc(),phone:sel.phone,name:sel.name,note:sel.note,pm:null};
+  rated=false;render();
+}
+function syncM(){const i=merchantOrders.findIndex(x=>x.id===order.id);if(i<0)merchantOrders.unshift({...order});else merchantOrders[i]={...order}}
+function payCard(){order.s="paid";order.pm="stripe";syncM();render();toast(lang==="zh"?"Card 已過數":"Card paid")}
+function payFps(){order.s="paid";order.pm="fps";syncM();render();toast(lang==="zh"?"收據已傳送":"Receipt sent")}
+function adv(id,s){const o=merchantOrders.find(x=>x.id===id);if(!o)return;o.s=s;if(order&&order.id===id)order.s=s;render()}
+function panel(id,title,body,open=true){
+  return `<div class="panel ${open?"":"collapsed"}" id="p_${id}">
+    <div class="hd" onclick="this.parentElement.classList.toggle('collapsed')"><span>${title}</span><i>${open?"▾":"▸"}</i></div>
+    <div class="bd">${body}</div></div>`;
+}
+
+function viewC(){
+  const bar=document.getElementById("bar");bar.style.display="none";
+  const app=document.getElementById("app");
+  if(order&&order.s==="unpaid"){
+    app.innerHTML=`
+      <div class="prog"><i class="on"></i><i class="on"></i><i></i><i></i></div>
+      <p class="muted">${shop.name}</p>
+      <h1>${t("pay")}</h1><p class="sub">${t("pay2")} · #${order.n}</p>
+      ${panel("pay","PAYMENT",[
+        `<div class="kv"><span>${order.desc}</span><b>HK$${order.tot}</b></div>`,
+        `<div class="kv"><span>${t("refund")}</span><b>${order.name||"—"} ${t("tail")} ${order.phone}</b></div>`,
+        `<button type="button" class="pay-card" onclick="payCard()"><span>${t("card")}</span><span class="logos"><i>VISA</i><i>MC</i><i>Pay</i><i>G Pay</i></span></button>`,
+        `<p class="pay-note">${t("cardNote")}</p>`,
+        `<div class="fps-box"><b>${t("fps")}</b>
+          <div class="kv"><span>FPS</span><b>${shop.fps}</b></div>
+          <div class="kv"><span>HK$</span><b>${order.tot}</b></div>
+          <button type="button" class="bank-tog" onclick="banksOpen=!banksOpen;render()">${banksOpen?t("banksOff"):t("banksOn")}</button>
+          <div class="banks${banksOpen?" open":""}">${BANKS.map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${n}</a>`).join("")}</div>
+          <button type="button" class="btn block" style="margin-top:12px" onclick="payFps()">${t("fpsDone")}</button>
+        </div>`,
+        `<button type="button" class="btn ghost block" onclick="order=null;render()">${t("cancel")}</button>`
+      ].join(""))}`;
+    return;
+  }
+  if(order&&order.s!=="unpaid"){
+    const label={paid:t("paid"),making:t("making"),ready:t("ready"),done:t("done")}[order.s];
+    app.innerHTML=`
+      <div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="${order.s==="ready"||order.s==="done"?"on":""}"></i></div>
+      ${panel("st","STATUS",`
+        <div class="center" style="padding:12px 0">
+          <span class="tag ${order.s}">${order.s}</span>
+          <h1 style="margin-top:10px">${label}</h1>
+          <p class="sub">#${order.n} · ${order.desc}</p>
+          <p>HK$${order.tot} · ${order.pm==="stripe"?"Card":"FPS"}</p>
+          ${(order.s==="ready"||order.s==="done")&&!rated?`<button class="btn ok" style="margin-top:14px" onclick="rated=true;toast(t('thanks'));render()">${t("rate")}</button>`:""}
+          ${rated||order.s==="done"?`<button class="btn dark" style="margin-top:12px" onclick="order=null;rated=false;render()">${t("again")}</button>`:""}
+        </div>`)}
+      <p class="muted center">${lang==="zh"?"去「商戶」推進沖製／可取":"Use Merchant tab to advance"}</p>`;
+    return;
+  }
+  app.innerHTML=`
+    <div class="shopname">${shop.name}</div>
+    <p class="center"><span class="dot ${shop.open?"ok":""}"></span>${shop.open?t("open"):t("closed")}</p>
+    <div class="loc center">📍 ${shop.addr} · <a href="${shop.map}" target="_blank">${t("map")}</a></div>
+    <div class="prog"><i class="on"></i><i></i><i></i><i></i></div>
+    <h1>${t("menu")}</h1><p class="sub">${t("menu2")}</p>
+    ${panel("menu",t("drinks"),`
+      <div class="grid2">${MENU.map(d=>`<button type="button" class="opt ${sel.drink===d.id?"on":""}" onclick="pick('drink','${d.id}')">
+        <div style="font-size:1.2rem">${d.ic}</div><b>${dn(d)}</b><small>HK$${d.p}</small></button>`).join("")}</div>
+      <div style="margin-top:12px">
+        <div class="muted" style="margin-bottom:6px">${t("bean")} / ${t("size")} / ${t("milk")}</div>
+        <div class="row">
+          <button type="button" class="chip ${sel.bean==="house"?"on":""}" onclick="pick('bean','house')">${t("house")}</button>
+          <button type="button" class="chip ${sel.bean==="soe"?"on":""}" onclick="pick('bean','soe')">${t("soe")} +$${CF.so}</button>
+          <button type="button" class="chip ${sel.size==="S"?"on":""}" onclick="pick('size','S')">S</button>
+          <button type="button" class="chip ${sel.size==="M"?"on":""}" onclick="pick('size','M')">M</button>
+          <button type="button" class="chip ${sel.size==="L"?"on":""}" onclick="pick('size','L')">L +$${CF.L}</button>
+          <button type="button" class="chip ${sel.milk==="OM"?"on":""}" onclick="pick('milk','OM')">${lang==="zh"?"燕麥":"Oat"} +$${CF.om}</button>
+          <button type="button" class="chip ${sel.milk==="FM"?"on":""}" onclick="pick('milk','FM')">${lang==="zh"?"全脂":"Whole"}</button>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="muted">${t("qty")}</div>
+        <div class="qty"><button type="button" onclick="qty(-1)">−</button><span>${sel.qty}</span><button type="button" onclick="qty(1)">+</button></div>
+        <label class="f">${t("name")}<input value="${sel.name}" oninput="sel.name=this.value"></label>
+        <label class="f">${t("phone")}<input inputmode="numeric" maxlength="4" value="${sel.phone}" oninput="sel.phone=this.value.replace(/\\D/g,'').slice(0,4)"></label>
+        <label class="f">${t("note")}<input value="${sel.note}" oninput="sel.note=this.value"></label>
+      </div>
+    `)}`;
+  bar.style.display="block";
+  bar.innerHTML=`<div class="in"><div class="sum">${t("total")}<b>HK$${price()}</b></div><button class="btn" onclick="place()">${t("place")}</button></div>`;
+}
+
+function viewM(){
+  document.getElementById("bar").style.display="none";
+  const list=merchantOrders.length?merchantOrders.map(o=>`
+    <div class="ord">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <b>#${o.n}</b><span class="tag ${o.s}">${o.s}</span>
+      </div>
+      <p style="margin:8px 0">${o.desc}</p>
+      <p class="muted">HK$${o.tot} · ${o.pm||"—"} · ${t("tail")} ${o.phone}${o.note?" · "+o.note:""}</p>
+      <div class="row" style="margin-top:10px">
+        ${o.s==="paid"?`<button class="btn" onclick="adv('${o.id}','making')">${t("start")}</button>`:""}
+        ${o.s==="making"?`<button class="btn ok" onclick="adv('${o.id}','ready')">${t("readyBtn")}</button>`:""}
+        ${o.s==="ready"?`<button class="btn dark" onclick="adv('${o.id}','done')">${t("picked")}</button>`:""}
+      </div>
+    </div>`).join(""):`<p class="muted">${t("noord")}</p>`;
+  document.getElementById("app").innerHTML=`
+    <div class="shopname">${shop.name}</div>
+    <p class="center"><span class="dot ${shop.open?"ok":""}"></span>${shop.open?t("open"):t("closed")}
+      · <span class="fee">${t("fee")} HK$${shop.fee}（${t("locked")}）</span></p>
+    ${panel("loc",t("loc"),`<p>📍 ${shop.addr}</p><p class="loc"><a href="${shop.map}" target="_blank">${t("map")}</a></p>`)}
+    ${panel("cfg",t("soeSet"),`
+      <label class="f">SOE + HK$
+        <input type="number" min="0" max="30" value="${CF.so}" onchange="CF.so=Math.max(0,+this.value||0);toast(t('save'))">
+      </label>
+      <p class="muted">${lang==="zh"?"預設同 GitHub：HK$5。改完客人即見。":"Default HK$5 as in GitHub."}</p>
+      <label class="f">今日 SOE 豆名
+        <input value="${shop.soe}" onchange="shop.soe=this.value">
+      </label>`)}
+    ${panel("ord",t("orders"),list)}
+    <div class="gauge">
+      <div><small>ORDERS</small><b>${merchantOrders.length}</b></div>
+      <div><small>PLATFORM FEE</small><b>HK$${shop.fee}</b></div>
+    </div>`;
+}
+
+function viewA(){
+  document.getElementById("bar").style.display="none";
+  document.getElementById("app").innerHTML=`
+    <h1>${t("adminT")}</h1>
+    <p class="sub">Admin · ${lang==="zh"?"商戶只見平台費數字，唔見 1–5 範圍":"Merchant sees fee number only"}</p>
+    ${panel("adm",t("feeRange"),`
+      <label class="f">HK$
+        <input type="number" min="1" max="5" value="${shop.fee}" onchange="shop.fee=Math.min(5,Math.max(1,+this.value||1));toast(t('save'))">
+      </label>
+      <label class="f">SOE ${lang==="zh"?"全局預設":"default"}
+        <input type="number" value="${CF.so}" onchange="CF.so=+this.value||5">
+      </label>
+      <div class="gauge" style="margin-top:12px">
+        <div><small>CARD FIXED</small><b>HK$2</b></div>
+        <div><small>CARD %</small><b>3.7 / 3.9</b></div>
+      </div>
+    `)}
+    ${panel("shops",t("shopList"),`
+      <div class="ord">
+        <b>${shop.name}</b>
+        <p class="muted">${t("fee")} HK$${shop.fee} · FPS ${shop.fps} · Card ON</p>
+        <p class="muted">${shop.addr}</p>
+        <p class="muted">欠款上限級別：一級 新店 HK$200</p>
+      </div>
+    `)}`;
+}
+
+function render(){
+  document.getElementById("tC").textContent=t("cust");
+  document.getElementById("tM").textContent=t("merch");
+  document.getElementById("tA").textContent=t("admin");
+  document.getElementById("tL").textContent=t("lang");
+  document.getElementById("tC").classList.toggle("on",role==="c");
+  document.getElementById("tM").classList.toggle("on",role==="m");
+  document.getElementById("tA").classList.toggle("on",role==="a");
+  if(role==="m")viewM(); else if(role==="a")viewA(); else viewC();
+}
+render();
+</script>
+</body>
+</html>
