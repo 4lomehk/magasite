@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Forbrew · Ink & 3D Layer Experience</title>
+<style>
+  :root {
+    --bg: #070606;
+    --surface: #110f0d;
+    --line: rgba(229, 154, 76, 0.24);
+    --fg: #f5f2eb;
+    --mut: #9c9488;
+    --amber: #e59a4c;
+    --amber-hot: #ffae52;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, "PingFang HK", "Noto Sans TC", sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 頂部極簡導航 */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 28px;
+    background: linear-gradient(to bottom, rgba(7,6,6,0.92), transparent);
+    pointer-events: none;
+  }
+  .brand { font-weight: 900; font-size: 18px; letter-spacing: 0.14em; pointer-events: auto; }
+  .brand b { color: var(--amber); }
+  .hud-pill {
+    pointer-events: auto;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.12em;
+    color: var(--amber); border: 1px solid var(--line);
+    background: rgba(17,15,13,0.75); backdrop-filter: blur(10px);
+    padding: 6px 14px; border-radius: 99px;
+  }
+
+  /* =========================================================
+     第一部分：Ink Experience 連續滾動墨水＋3D分層引擎 (500vh)
+     ========================================================= */
+  .ink-scrolly {
+    position: relative;
+    height: 480vh;
+  }
+  .ink-sticky {
+    position: sticky; top: 0; width: 100vw; height: 100vh;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* SVG 墨水有機流動濾鏡 (Ink Turbulence & Displacement) */
+  .ink-canvas-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    transform-style: preserve-3d;
+    perspective: 1200px;
+  }
+
+  /* 四層獨立全幅視覺舞台，隨滾動進度無縫墨水擴散過渡 */
+  .ink-slide {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    will-change: clip-path, transform, opacity;
+  }
+  .ink-slide img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: brightness(0.78) contrast(1.08);
+    transform: scale(1.06);
+    transition: transform 0.2s linear;
+  }
+  /* 炭黑暖琥珀暗角漸層，令文字與 3D 標籤極度清晰 */
+  .ink-slide::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 50% 50%, transparent 25%, rgba(7,6,6,0.86) 88%),
+      linear-gradient(to top, #070606 0%, transparent 28%, transparent 75%, #070606 100%);
+  }
+
+  /* 疊加於 3D 畫面上的極簡大字標題與 ThreeUI 空間座標線 */
+  .ink-hud {
+    position: relative; z-index: 20;
+    width: 100%; max-width: 1180px; height: 100%;
+    padding: 90px 32px 48px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    pointer-events: none;
+  }
+
+  .step-caption {
+    max-width: 520px;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .step-num {
+    font-size: 12px; font-weight: 900; letter-spacing: 0.22em;
+    color: var(--amber); display: block; margin-bottom: 8px;
+  }
+  .step-title {
+    font-size: clamp(34px, 5.5vw, 64px);
+    font-weight: 900; line-height: 1.05; letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  .step-sub {
+    margin-top: 12px; font-size: 15px; color: var(--mut); max-width: 400px;
+  }
+
+  /* ThreeUI 空間懸浮標註 (隨第 3 步三層解剖出現) */
+  .anatomy-pins {
+    position: absolute; inset: 0; pointer-events: none;
+    opacity: 0; transform: scale(0.96);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+  }
+  .anatomy-pins.visible { opacity: 1; transform: scale(1); }
+
+  .pin {
+    position: absolute;
+    background: rgba(12, 10, 9, 0.82); backdrop-filter: blur(12px);
+    border-left: 3px solid var(--amber);
+    padding: 10px 16px; border-radius: 4px 12px 12px 4px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.75);
+  }
+  .pin small { color: var(--amber); font-weight: 900; font-size: 10px; letter-spacing: 0.14em; display: block; }
+  .pin strong { font-size: 14px; font-weight: 800; color: var(--fg); }
+  .pin span { display: block; font-size: 12px; color: var(--mut); }
+
+  .pin-1 { top: 26%; right: 10%; }
+  .pin-2 { top: 48%; left: 8%; }
+  .pin-3 { bottom: 24%; right: 12%; }
+  @media (max-width: 768px) {
+    .pin-1 { top: 22%; right: 5%; }
+    .pin-2 { top: 46%; left: 5%; }
+    .pin-3 { bottom: 22%; right: 5%; }
+  }
+
+  /* 底部捲動進度刻尺 */
+  .scrub-footer {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px;
+  }
+  .scrub-steps { display: flex; gap: 24px; pointer-events: auto; }
+  .scrub-tab {
+    background: none; border: 0; color: var(--mut); font: inherit;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.1em; cursor: pointer;
+    padding: 4px 0; border-bottom: 2px solid transparent; transition: all 0.25s;
+  }
+  .scrub-tab.active { color: var(--amber); border-bottom-color: var(--amber); }
+  .scrub-pct { font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 800; color: var(--amber); }
+
+  /* =========================================================
+     第二部分：Pick Your Usual · Latte 互動選購與即場換圖工作台
+     ========================================================= */
+  .order-section {
+    position: relative; z-index: 30;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+    padding: 80px 24px 120px;
+  }
+  .order-wrap {
+    max-width: 1060px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center;
+  }
+  @media (max-width: 840px) { .order-wrap { grid-template-columns: 1fr; } }
+
+  .drink-stage {
+    position: relative; border-radius: 24px; overflow: hidden;
+    aspect-ratio: 3 / 4; max-height: 540px; width: 100%;
+    border: 1px solid var(--line); background: var(--surface);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+  }
+  .drink-stage img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: opacity 0.35s ease, transform 0.5s ease;
+  }
+  .drink-overlay {
+    position: absolute; inset: auto 0 0 0; padding: 24px;
+    background: linear-gradient(to top, rgba(7,6,6,0.95) 20%, transparent);
+  }
+  .drink-overlay h3 { font-size: 26px; font-weight: 900; }
+  .drink-overlay p { font-size: 13px; color: var(--mut); margin-top: 4px; }
+
+  .menu-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .menu-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; border-radius: 14px;
+    background: var(--surface); border: 1px solid rgba(255,255,255,0.07);
+    color: var(--fg); cursor: pointer; text-align: left;
+    transition: all 0.2s;
+  }
+  .menu-row:hover { border-color: var(--amber); }
+  .menu-row.active {
+    background: rgba(229, 154, 76, 0.14);
+    border-color: var(--amber);
+  }
+  .menu-row strong { font-size: 18px; font-weight: 900; letter-spacing: 0.02em; }
+  .menu-row span { font-size: 14px; font-weight: 800; color: var(--amber); }
+
+  .opt-group { margin-bottom: 18px; }
+  .opt-label { font-size: 12px; font-weight: 800; color: var(--mut); margin-bottom: 8px; display: block; letter-spacing: 0.08em; }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
+    background: var(--surface); border: 1px solid rgba(255,255,255,0.1); color: var(--fg); cursor: pointer;
+  }
+  .pill.on { background: var(--amber); color: #070606; border-color: var(--amber); }
+
+  .inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  input {
+    width: 100%; padding: 12px 14px; border-radius: 12px;
+    background: var(--surface); border: 1px solid rgba(255,255,255,0.12);
+    color: var(--fg); font-size: 14px;
+  }
+  input:focus { outline: 2px solid var(--amber); border-color: transparent; }
+
+  .upload-btn {
+    display: inline-block; margin-top: 12px; font-size: 12px; color: var(--amber);
+    text-decoration: underline; cursor: pointer;
+  }
+
+  .pay-bar {
+    margin-top: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .pay-bar b { font-size: 28px; color: var(--amber); }
+  .order-btn {
+    flex: 1; padding: 15px 22px; border-radius: 14px; border: 0;
+    background: var(--amber); color: #070606; font-size: 16px; font-weight: 900; cursor: pointer;
+  }
+  .order-btn:hover { background: var(--amber-hot); }
+
+  #toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--amber); color: #070606; font-weight: 900; font-size: 14px;
+    padding: 10px 22px; border-radius: 99px; opacity: 0; pointer-events: none; transition: opacity 0.25s; z-index: 99;
+  }
+  #toast.on { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- SVG 墨水有機擴散濾鏡定義 -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="ink-morph">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="38" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+
+<header>
+  <div class="brand">FORBREW <b>INK·3D</b></div>
+  <div class="hud-pill" id="hudStatus">STEP 01 / 04 · ORIGIN</div>
+</header>
+
+<!-- 連續滾動墨水擴散舞台 (1-4 步不同相片無縫暈開) -->
+<section class="ink-scrolly" id="scrolly">
+  <div class="ink-sticky" id="stickyStage">
+    <div class="ink-canvas-wrap" id="canvas3d">
+      <!--
+        【4 步獨立相片替換區】
+        你可以直接將下面 4 個 src 換成你剛下載的 4 張新圖檔名（例如 step1.jpg ~ step4.jpg）：
+      -->
+      <!-- Step 1: 懸浮單品咖啡豆 (100% 底層常駐) -->
+      <div class="ink-slide" id="slide0" style="z-index:1;">
+        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=1400&q=85" alt="Step 1 咖啡豆">
+      </div>
+      <!-- Step 2: 93°C 咖啡機萃取 (隨滾動由中心墨水圓形擴散開來) -->
+      <div class="ink-slide" id="slide1" style="z-index:2; clip-path: circle(0% at 50% 50%);">
+        <img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=1400&q=85" alt="Step 2 萃取">
+      </div>
+      <!-- Step 3: 三層結構解剖 (Foam / Milk / Espresso) -->
+      <div class="ink-slide" id="slide2" style="z-index:3; clip-path: circle(0% at 50% 50%);">
+        <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=1400&q=85" alt="Step 3 三層解剖">
+      </div>
+      <!-- Step 4: 雙層玻璃杯 Latte 成品 -->
+      <div class="ink-slide" id="slide3" style="z-index:4; clip-path: circle(0% at 50% 50%);">
+        <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=1400&q=85" alt="Step 4 Latte 成品">
+      </div>
+    </div>
+
+    <!-- ThreeUI 空間解剖懸浮標籤 (第 3 步自動浮現) -->
+    <div class="anatomy-pins" id="anatomyPins">
+      <div class="pin pin-1"><small>LAYER 01 · FOAM</small><strong>天鵝絨微奶泡</strong><span>3mm 綿密拉花表層</span></div>
+      <div class="pin pin-2"><small>LAYER 02 · MILK</small><strong>60°C 絲滑鮮奶</strong><span>乳糖甜感黃金溫區</span></div>
+      <div class="pin pin-3"><small>LAYER 03 · ESPRESSO</small><strong>93°C 雙份濃縮</strong><span>9 Bar 10 秒黃金油脂</span></div>
+    </div>
+
+    <!-- 畫面資訊疊加層 -->
+    <div class="ink-hud">
+      <div class="step-caption" id="captionBox">
+        <span class="step-num" id="capNum">01 · SINGLE ORIGIN ROAST</span>
+        <h1 class="step-title" id="capTitle">DARK ROAST.<br>PURE AROMA.</h1>
+        <p class="step-sub" id="capSub">炭黑深焙鎖住單品豆油脂香氣，向下滾動以墨水擴散節奏拆解一杯拿鐵的誕生。</p>
+      </div>
+
+      <div class="scrub-footer">
+        <div class="scrub-steps">
+          <button class="scrub-tab active" onclick="scrollToStep(0)">01 豆源</button>
+          <button class="scrub-tab" onclick="scrollToStep(1)">02 萃取</button>
+          <button class="scrub-tab" onclick="scrollToStep(2)">03 解剖</button>
+          <button class="scrub-tab" onclick="scrollToStep(3)">04 成品</button>
+        </div>
+        <div class="scrub-pct" id="pctText">0%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 互動點餐區：Latte 配 Latte 圖片 -->
+<section class="order-section" id="order">
+  <div class="order-wrap">
+    <div class="drink-stage">
+      <img id="previewImg" src="https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=1000&q=85" alt="Latte">
+      <div class="drink-overlay">
+        <h3 id="previewTitle">LATTE · 經典熱拿鐵</h3>
+        <p id="previewDesc">雙份濃縮、60°C 絲滑鮮奶與薄層天鵝絨微奶泡，每一口皆是標準比例。</p>
+      </div>
+    </div>
+
+    <div>
+      <span class="step-num">PICK YOUR USUAL</span>
+      <h2 style="font-size:32px;font-weight:900;margin-bottom:18px;">選擇咖啡 · 自動配對專屬視覺</h2>
+
+      <div class="menu-list" id="menuList"></div>
+
+      <div class="opt-group">
+        <span class="opt-label">BEAN · 豆種</span>
+        <div class="pills">
+          <button class="pill on" onclick="pickOpt('bean','house',this)">House 拼配</button>
+          <button class="pill" onclick="pickOpt('bean','soe',this)">SOE 單品豆 (+$5)</button>
+        </div>
+      </div>
+
+      <div class="opt-group">
+        <span class="opt-label">SIZE & MILK · 杯量與奶類</span>
+        <div class="pills">
+          <button class="pill" onclick="pickOpt('size','S',this)">S (-$4)</button>
+          <button class="pill on" onclick="pickOpt('size','M',this)">M 標準</button>
+          <button class="pill" onclick="pickOpt('size','L',this)">L (+$4)</button>
+          <button class="pill on" onclick="pickOpt('milk','FM',this)">全脂鮮奶</button>
+          <button class="pill" onclick="pickOpt('milk','OM',this)">燕麥奶 (+$4)</button>
+        </div>
+      </div>
+
+      <div class="inputs">
+        <input type="text" id="uName" placeholder="稱呼（如：Chan）">
+        <input type="tel" id="uPhone" maxlength="4" inputmode="numeric" placeholder="電話尾 4 位數字">
+      </div>
+
+      <label class="upload-btn">
+        📷 上載你的本地相片即時替換左側飲品圖
+        <input type="file" accept="image/*" hidden onchange="swapPhoto(this)">
+      </label>
+
+      <div class="pay-bar">
+        <div><small style="color:var(--mut);display:block;font-size:12px;">TOTAL</small><b id="totPrice">HK$36</b></div>
+        <button class="order-btn" onclick="placeOrder()">確認落單 · ORDER</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="toast"></div>
+
+<script>
+  const STEPS = [
+    {
+      hud: "STEP 01 / 04 · ORIGIN",
+      num: "01 · SINGLE ORIGIN ROAST",
+      title: "DARK ROAST.<br>PURE AROMA.",
+      sub: "炭黑深焙鎖住單品豆油脂香氣，向下滾動以墨水擴散節奏拆解一杯拿鐵的誕生。"
+    },
+    {
+      hud: "STEP 02 / 04 · 9 BAR EXTRACTION",
+      num: "02 · 93°C / 10 SEC EXTRACTION",
+      title: "93°C PRESSURE.<br>GOLDEN CREMA.",
+      sub: "9 Bar 穩定高壓穿透咖啡粉餅，10 秒凝練出厚實榛果色濃縮油脂。"
+    },
+    {
+      hud: "STEP 03 / 04 · ANATOMY",
+      num: "03 · THREE LAYERS. ZERO SECRETS.",
+      title: "THREE LAYERS.<br>ZERO SECRETS.",
+      sub: "頂層微奶泡、中層蒸氣鮮奶、底層雙份濃縮——三層懸浮解剖結構清晰可見。"
+    },
+    {
+      hud: "STEP 04 / 04 · YOUR LATTE",
+      num: "04 · HANDCRAFTED LATTE",
+      title: "VELVET POUR.<br>READY TO SIP.",
+      sub: "綿密微奶泡與深焙濃縮在雙層玻璃杯交融拉花，繼續向下選擇你的專屬配方。"
+    }
+  ];
+
+  const MENU = [
+    {
+      id: "latte", name: "LATTE · 經典熱拿鐵", price: 36,
+      desc: "雙份濃縮、60°C 絲滑鮮奶與薄層天鵝絨微奶泡，每一口皆是標準比例。",
+      img: "https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=1000&q=85"
+    },
+    {
+      id: "layered", name: "LAYERED LATTE · 三層分層拿鐵", price: 40,
+      desc: "濃縮、鮮奶與微奶泡三層懸浮分明，視覺與口感雙重層次。",
+      img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=1000&q=85"
+    },
+    {
+      id: "espresso", name: "ESPRESSO · 93°C 單品濃縮", price: 28,
+      desc: "9 Bar 高壓萃取 10 秒精華，濃厚榛果 Crema 與可可回甘。",
+      img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=1000&q=85"
+    },
+    {
+      id: "americano", name: "AMERICANO · 炭焙黑咖啡", price: 30,
+      desc: "深焙單品豆萃取注入純淨熱水，香氣乾淨俐落。",
+      img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=1000&q=85"
+    }
+  ];
+
+  const sel = { item: MENU[0], bean: "house", size: "M", milk: "FM" };
+
+  function renderMenu() {
+    document.getElementById("menuList").innerHTML = MENU.map(m => `
+      <button class="menu-row ${sel.item.id === m.id ? "active" : ""}" onclick="chooseDrink('${m.id}')">
+        <strong>${m.name}</strong>
+        <span>HK$${m.price}</span>
+      </button>
+    `).join("");
+  }
+
+  function chooseDrink(id) {
+    const m = MENU.find(x => x.id === id);
+    if (!m) return;
+    sel.item = m;
+    document.getElementById("previewImg").src = m.img;
+    document.getElementById("previewTitle").textContent = m.name;
+    document.getElementById("previewDesc").textContent = m.desc;
+    renderMenu();
+    calcPrice();
+  }
+
+  function pickOpt(k, v, el) {
+    sel[k] = v;
+    el.parentElement.querySelectorAll(".pill").forEach(b => b.classList.remove("on"));
+    el.classList.add("on");
+    calcPrice();
+  }
+
+  function calcPrice() {
+    let p = sel.item.price;
+    if (sel.bean === "soe") p += 5;
+    if (sel.size === "L") p += 4;
+    if (sel.size === "S") p -= 4;
+    if (sel.milk === "OM") p += 4;
+    document.getElementById("totPrice").textContent = "HK$" + Math.max(0, p);
+  }
+
+  function swapPhoto(inp) {
+    const f = inp.files && inp.files[0];
+    if (!f) return;
+    const u = URL.createObjectURL(f);
+    document.getElementById("previewImg").src = u;
+    sel.item.img = u;
+    toast("已替換為你的本地相片");
+  }
+
+  function toast(m) {
+    const t = document.getElementById("toast");
+    t.textContent = m; t.classList.add("on");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => t.classList.remove("on"), 2400);
+  }
+
+  function placeOrder() {
+    const ph = document.getElementById("uPhone").value.trim();
+    const nm = document.getElementById("uName").value.trim() || "客人";
+    if (!/^\d{4}$/.test(ph)) return toast("請輸入電話尾 4 位數字");
+    toast(`已落單：${nm} (${ph}) · ${sel.item.name}`);
+  }
+
+  // 連續滾動墨水擴散計算 (Continuous Scroll Scrubbing)
+  const scrolly = document.getElementById("scrolly");
+  const slides = [
+    document.getElementById("slide0"),
+    document.getElementById("slide1"),
+    document.getElementById("slide2"),
+    document.getElementById("slide3")
+  ];
+  const tabs = document.querySelectorAll(".scrub-tab");
+  const pins = document.getElementById("anatomyPins");
+  let activeIdx = 0;
+
+  function scrollToStep(idx) {
+    const top = window.scrollY + scrolly.getBoundingClientRect().top;
+    const max = scrolly.offsetHeight - window.innerHeight;
+    window.scrollTo({ top: top + (idx / 3) * max, behavior: "smooth" });
+  }
+
+  function updateScrub() {
+    const rect = scrolly.getBoundingClientRect();
+    const max = scrolly.offsetHeight - window.innerHeight;
+    const p = max > 0 ? Math.min(Math.max(-rect.top / max, 0), 1) : 0;
+
+    document.getElementById("pctText").textContent = Math.round(p * 100) + "%";
+
+    // 將 0~1 進度拆成 3 段連續墨水擴散過渡 (0->0.33, 0.33->0.66, 0.66->1.0)
+    const seg1 = Math.min(Math.max(p / 0.33, 0), 1);
+    const seg2 = Math.min(Math.max((p - 0.33) / 0.33, 0), 1);
+    const seg3 = Math.min(Math.max((p - 0.66) / 0.34, 0), 1);
+
+    // 隨滾動進度放大圓形墨水遮罩 (0% -> 145% 覆蓋全畫面)
+    slides[1].style.clipPath = `circle(${(seg1 * 145).toFixed(1)}% at 50% 50%)`;
+    slides[2].style.clipPath = `circle(${(seg2 * 145).toFixed(1)}% at 50% 50%)`;
+    slides[3].style.clipPath = `circle(${(seg3 * 145).toFixed(1)}% at 50% 50%)`;
+
+    // 細微 3D 推鏡縮放感
+    slides[0].querySelector("img").style.transform = `scale(${1.05 + seg1 * 0.08})`;
+    slides[1].querySelector("img").style.transform = `scale(${1.12 - seg1 * 0.07 + seg2 * 0.06})`;
+    slides[2].querySelector("img").style.transform = `scale(${1.12 - seg2 * 0.07 + seg3 * 0.06})`;
+    slides[3].querySelector("img").style.transform = `scale(${1.10 - seg3 * 0.06})`;
+
+    // 判斷當前主幕 (0, 1, 2, 3)
+    const idx = p < 0.25 ? 0 : p < 0.55 ? 1 : p < 0.85 ? 2 : 3;
+    if (idx !== activeIdx) {
+      activeIdx = idx;
+      document.getElementById("hudStatus").textContent = STEPS[idx].hud;
+      document.getElementById("capNum").textContent = STEPS[idx].num;
+      document.getElementById("capTitle").innerHTML = STEPS[idx].title;
+      document.getElementById("capSub").textContent = STEPS[idx].sub;
+      tabs.forEach((t, i) => t.classList.toggle("active", i === idx));
+    }
+
+    // 第 3 幕（三層解剖）自動顯示 ThreeUI 空間標籤
+    pins.classList.toggle("visible", idx === 2);
+  }
+
+  window.addEventListener("scroll", updateScrub, { passive: true });
+  renderMenu();
+  calcPrice();
+  updateScrub();
+</script>
+</body>
+</html>
