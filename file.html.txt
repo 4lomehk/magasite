@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Daily Grind — City Diorama</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #e9e7df; }
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    canvas { display: block; width: 100%; height: 100%; }
+    .hud {
+      position: fixed; z-index: 2; top: 4.5%; left: 6%; width: min(88%, 470px);
+      padding: 20px 22px; color: #153339; border: 1px solid rgba(255,255,255,.78);
+      border-radius: 20px; background: rgba(250,252,249,.70);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 12px 36px rgba(24,46,48,.13);
+    }
+    .title { font-size: clamp(17px, 4.2vw, 25px); font-weight: 750; letter-spacing: -.04em; }
+    .live { display: inline-flex; align-items: center; gap: 7px; margin-left: 7px; color: #50807a; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #f2783f; box-shadow: 0 0 0 4px rgba(242,120,63,.15); }
+    .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 17px; }
+    .stat { padding-left: 11px; border-left: 1px solid rgba(21,51,57,.15); }
+    .stat:first-child { padding-left: 0; border: 0; }
+    .label { color: #64807d; font-size: 10px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; }
+    .value { margin-top: 4px; font-size: clamp(17px, 4.5vw, 24px); font-weight: 760; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+  <aside class="hud" aria-label="Live sales statistics">
+    <div class="title">Daily Grind <span class="live"><i class="dot"></i>Live Sales</span></div>
+    <div class="stats">
+      <div class="stat"><div class="label">Orders</div><div class="value" id="orders">128</div></div>
+      <div class="stat"><div class="label">Revenue</div><div class="value" id="revenue">$842</div></div>
+      <div class="stat"><div class="label">Cups served</div><div class="value" id="cups">96</div></div>
+    </div>
+  </aside>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from "three";
+    import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+    import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+    import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+    import { GTAOPass } from "three/addons/postprocessing/GTAOPass.js";
+    import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color("#e9e7df");
+    const camera = new THREE.PerspectiveCamera(32, innerWidth / innerHeight, .1, 100);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    document.body.appendChild(renderer.domElement);
+
+    scene.add(new THREE.HemisphereLight(0xfff8e9, 0x829b99, 2.0));
+    const sun = new THREE.DirectionalLight(0xffedcf, 3.2);
+    sun.position.set(-7, 12, 8);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.camera.left = -11; sun.shadow.camera.right = 11;
+    sun.shadow.camera.top = 11; sun.shadow.camera.bottom = -11;
+    sun.shadow.bias = -0.00025;
+    sun.shadow.radius = 5;
+    scene.add(sun);
+
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    const gtao = new GTAOPass(scene, camera, innerWidth, innerHeight);
+    gtao.output = GTAOPass.OUTPUT.Default;
+    gtao.blendIntensity = 1.25;
+    composer.addPass(gtao);
+    composer.addPass(new OutputPass());
+
+    const mat = (color, roughness = .8) => new THREE.MeshStandardMaterial({ color, roughness });
+    const M = {
+      cream: mat("#f1eee4"), slab: mat("#f8f5ec"), road: mat("#596c70"),
+      sidewalk: mat("#d7d5cb"), blue: mat("#3158bd"), blue2: mat("#5477d2"),
+      teal: mat("#3c9790"), green: mat("#53876c"), leaf: mat("#6fa17b"),
+      orange: mat("#f27b3f"), dark: mat("#203d43"), glass: mat("#a9d3d0", .35),
+      white: mat("#fffaf0"), skin: mat("#d7a47d"), tire: mat("#263238"),
+      metal: mat("#7b8987"), coffee: mat("#705143")
+    };
+
+    const buildables = [];
+    function block(parent, x, y, z, w, h, d, material, radius = .08) {
+      const mesh = new THREE.Mesh(
+        new RoundedBoxGeometry(w, h, d, 3, Math.min(radius, w/2-.001, h/2-.001, d/2-.001)),
+        material
+      );
+      mesh.position.set(x, y, z);
+      mesh.castShadow = true; mesh.receiveShadow = true;
+      parent.add(mesh);
+      buildables.push({ mesh, y, delay: Math.random() * .68, duration: .34 + Math.random() * .2 });
+      return mesh;
+    }
+    function cylinder(parent, x,y,z, rt,rb,h,material, sides=12) {
+      const o = new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,sides), material);
+      o.position.set(x,y,z); o.castShadow=true; o.receiveShadow=true; parent.add(o); return o;
+    }
+    function sphere(parent,x,y,z,r,material) {
+      const o = new THREE.Mesh(new THREE.SphereGeometry(r,12,10),material);
+      o.position.set(x,y,z); o.castShadow=true; o.receiveShadow=true; parent.add(o); return o;
+    }
+    function group(parent,x=0,y=0,z=0) {
+      const g=new THREE.Group(); g.position.set(x,y,z); parent.add(g); return g;
+    }
+
+    const world = group(scene);
+    block(world,0,-.22,0,10.5,.48,9.2,M.slab,.32);
+    block(world,0,.04,0,9.9,.12,8.6,M.sidewalk,.18);
+    block(world,0,.12,0,9.25,.12,5.25,M.road,.18);
+    // Crosswalk stripes and lane markings
+    for(let i=0;i<5;i++) block(world,-4.25+i*.38,.195,-2.3,.22,.025,.72,M.white,.025);
+    for(let i=0;i<4;i++) block(world,2.2+i*.48,.195,2.25,.28,.025,.08,M.white,.02);
+
+    // Corner café: two street-facing walls, roof, awning, windows and door
+    const shop=group(world,-1.3,.25,-1.25);
+    block(shop,0,.82,0,3.25,1.5,2.25,M.cream,.08);
+    block(shop,0,1.65,0,3.45,.18,2.45,M.blue,.08);
+    block(shop,0,1.42,1.18,3.5,.36,.22,M.orange,.06);
+    for(let i=0;i<7;i++) block(shop,-1.42+i*.47,1.42,1.32,.32,.24,.035,i%2?M.white:M.orange,.025);
+    block(shop,-.78,.87,1.15,.78,.82,.055,M.glass,.035);
+    block(shop,.36,.87,1.15,.78,.82,.055,M.glass,.035);
+    block(shop,1.23,.77,1.16,.42,1.04,.1,M.teal,.035);
+    block(shop,-.2,1.22,1.2,1.7,.12,.13,M.dark,.035);
+    // Side windows
+    for(let i=0;i<3;i++) block(shop,1.66,.85,-.72+i*.65,.055,.72,.46,M.glass,.035);
+    block(shop,-.02,1.84,0,1.8,.12,.45,M.orange,.05);
+    // Tiny rooftop vent
+    block(shop,-1.1,1.88,-.5,.28,.35,.28,M.metal,.06);
+
+    // Nearby city buildings, window grids
+    for(const b of [
+      {x:-3.9,z:.1,w:1.35,d:2.05,h:2.6,c:M.teal},
+      {x:3.75,z:.15,w:1.45,d:2.1,h:3.2,c:M.blue},
+      {x:2.7,z:-3.25,w:2.2,d:1.15,h:2.45,c:M.cream},
+      {x:-3.6,z:-3.2,w:1.8,d:1.2,h:2.1,c:M.blue2}
+    ]) {
+      const g=group(world,b.x,.2,b.z);
+      block(g,0,b.h/2,0,b.w,b.h,b.d,b.c,.08);
+      block(g,0,b.h+.08,0,b.w+.12,.16,b.d+.12,M.dark,.05);
+      const rows=Math.floor((b.h-.5)/.48);
+      for(let r=0;r<rows;r++) for(let c=0;c<Math.max(2,Math.floor(b.w/.42));c++){
+        const xx=-b.w/2+.23+c*.42, yy=.42+r*.48;
+        block(g,xx,yy,b.d/2+.025,.22,.28,.045,M.glass,.025);
+      }
+    }
+
+    // Trees, planters, street lamps
+    for(const [x,z] of [[-4,2.65],[4.1,2.6],[-4.15,-1.4],[3.95,-1.45]]) {
+      block(world,x,.28,z,.62,.3,.62,M.green,.08);
+      cylinder(world,x,.82,z,.09,.12,.85,M.dark);
+      sphere(world,x,.82,z,.4,M.leaf);
+      sphere(world,x-.2,1.08,z+.05,.28,M.green);
+      sphere(world,x+.2,1.05,z-.04,.3,M.leaf);
+    }
+    for(const [x,z] of [[-2.8,2.2],[2.9,2.1],[-2.8,-2.4],[2.5,-1.8]]) {
+      cylinder(world,x,.84,z,.035,.045,1.45,M.dark);
+      block(world,x,1.56,z,.34,.09,.3,M.orange,.045);
+    }
+
+    // People: rounded blocks for bodies, spheres for heads; grouped for gentle movement
+    const people=[];
+    function person(x,z,color,scale=1) {
+      const g=group(world,x,.22,z); g.scale.setScalar(scale);
+      block(g,0,.45,0,.25,.48,.2,color,.07);
+      sphere(g,0,.79,0,.14,M.skin);
+      block(g,-.07,.1,.02,.09,.23,.11,M.dark,.035);
+      block(g,.07,.1,.02,.09,.23,.11,M.dark,.035);
+      people.push(g); return g;
+    }
+    for(const [x,z,c] of [[-.3,1.65,M.teal],[.35,1.85,M.orange],[.95,2.0,M.blue],[-.85,2.1,M.green],[1.55,1.55,M.blue2]]) person(x,z,c,.82);
+    person(-1.8,1.15,M.orange,.9);
+    person(.8,-2.0,M.teal,.86);
+
+    // Cars drive along a rounded rectangular block route
+    const cars=[];
+    function car(color,phase) {
+      const g=group(world); 
+      block(g,0,.42,0,.95,.34,.52,color,.13);
+      block(g,-.04,.66,0,.48,.24,.43,M.glass,.08);
+      for(const x of [-.3,.3]) for(const z of [-.3,.3]) {
+        const w=cylinder(g,x,.25,z,.12,.12,.08,M.tire,12); w.rotation.x=Math.PI/2;
+      }
+      cars.push({g,phase});
+    }
+    car(M.orange,.02); car(M.blue2,.52);
+    function route(t) {
+      const p=(t%1)*4;
+      if(p<1) return [-3.7+p*7.4,-2.85,0];
+      if(p<2) return [3.7,-2.85+(p-1)*5.7,Math.PI/2];
+      if(p<3) return [3.7-(p-2)*7.4,2.85,Math.PI];
+      return [-3.7,2.85-(p-3)*5.7,-Math.PI/2];
+    }
+
+    // Delivery scooters with spinning wheels and rider
+    const scooters=[];
+    function scooter(color,phase) {
+      const g=group(world);
+      block(g,0,.34,0,.52,.2,.28,color,.07);
+      cylinder(g,-.22,.19,0,.12,.12,.08,M.tire,12).rotation.x=Math.PI/2;
+      cylinder(g,.23,.19,0,.12,.12,.08,M.tire,12).rotation.x=Math.PI/2;
+      block(g,.04,.61,0,.2,.35,.18,M.teal,.06);
+      sphere(g,.04,.85,0,.12,M.skin);
+      block(g,.04,.9,-.02,.27,.07,.22,M.dark,.04);
+      block(g,-.12,.53,0,.25,.18,.22,M.orange,.04);
+      scooters.push({g,phase});
+    }
+    scooter(M.orange,.1); scooter(M.blue2,.58);
+
+    const start=performance.now();
+    const duration=10000;
+    const easeOut=t=>1-Math.pow(1-t,3);
+    function animate(now) {
+      const elapsed=(now-start)/1000;
+      const loop=elapsed%10, phase=loop/10;
+      // Pieces rise into place, overshoot slightly, and settle by 1 second.
+      for(const o of buildables) {
+        const t=THREE.MathUtils.clamp((loop-o.delay*.8)/o.duration,0,1);
+        const e=easeOut(t);
+        const pop=t<1 ? e + .12*Math.sin(t*Math.PI) : 1;
+        o.mesh.position.y=o.y*pop-.7*(1-e);
+      }
+      // Orbit and push-in are periodic, so the camera meets itself at loop end.
+      const a=phase*Math.PI*2;
+      const radius=14.7-.55*(.5-.5*Math.cos(a));
+      camera.position.set(Math.sin(a)*radius, 10.4+.25*Math.sin(a), Math.cos(a)*radius);
+      camera.lookAt(0,.75,0);
+
+      for(const p of people) {
+        p.position.y=.22+.035*Math.sin(loop*2.2+p.position.x*3);
+        p.rotation.y=.08*Math.sin(loop*1.4+p.position.z);
+      }
+      cars.forEach(c=>{
+        const [x,z,yaw]=route(phase+c.phase);
+        c.g.position.set(x,.12,z); c.g.rotation.y=yaw;
+      });
+      scooters.forEach((s,i)=>{
+        const t=(phase*1.55+s.phase)%1;
+        s.g.position.set(-1.8+t*4.8,.15,1.5+(i*.35));
+        s.g.rotation.y=-Math.PI/2;
+        s.g.position.y=.15+.025*Math.sin(loop*8+i);
+      });
+
+      document.getElementById("orders").textContent=String(128+Math.floor(loop*1.7));
+      document.getElementById("revenue").textContent="$"+(842+Math.floor(loop*12.4));
+      document.getElementById("cups").textContent=String(96+Math.floor(loop*1.2));
+      composer.render();
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+
+    addEventListener("resize",()=>{
+      camera.aspect=innerWidth/innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth,innerHeight);
+      composer.setSize(innerWidth,innerHeight);
+      gtao.setSize(innerWidth,innerHeight);
+    });
+  </script>
+</body>
+</html>
