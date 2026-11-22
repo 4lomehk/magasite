@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111110">
+<title>墨鋒紋身 Poong Ink · 太平山</title>
+<style>
+:root{
+  --bg:#111110;--surface:#191917;--card:#21211e;--line:#32312c;
+  --fg:#f2efe9;--mut:#a39e93;--acc:#c85a32;--acc2:#e07a52;--ok:#2f8f5b;--bad:#d9534f;
+}
+*{box-sizing:border-box;margin:0}
+body{
+  background:var(--bg);color:var(--fg);
+  font:15px/1.55 -apple-system,"PingFang HK","Noto Sans TC",system-ui,sans-serif;
+  padding-bottom:96px;
+}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+
+/* Top bar */
+.top{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);background:rgba(17,17,16,.88);border-bottom:1px solid var(--line)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;gap:12px}
+.brand{display:flex;align-items:baseline;gap:10px;font-weight:900;letter-spacing:.08em}
+.brand span{font-size:12px;color:var(--mut);font-weight:600;letter-spacing:.02em}
+.nav{display:flex;gap:18px;font-size:13px;color:var(--mut)}
+.nav a:hover{color:var(--fg)}
+.pill-btn{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer}
+.pill-btn.pri{background:var(--acc);border-color:var(--acc);color:#fff}
+
+/* Hero banner */
+.hero{padding:36px 0 24px;border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:1.3fr .9fr;gap:24px;align-items:end}
+.kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);font-weight:800}
+h1{font-size:clamp(30px,5vw,48px);line-height:1.08;font-weight:900;margin-top:8px}
+.lead{color:var(--mut);margin-top:12px;max-width:56ch}
+.meta-box{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:8px;font-size:13px}
+.meta-row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+.meta-row:last-child{border-bottom:0;padding-bottom:0}
+.meta-row b{color:var(--mut);font-weight:600}
+
+/* Main 2-column layout (rearranged vs single-column templates) */
+.main-grid{display:grid;grid-template-columns:1.35fr .95fr;gap:28px;margin-top:28px;align-items:start}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.sec-head h2{font-size:18px;font-weight:900}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--surface);color:var(--mut);border-radius:10px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
+.tab.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+/* Flash / Works cards */
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.wcard{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;transition:border-color .15s,transform .12s;display:flex;flex-direction:column}
+.wcard:hover{border-color:var(--mut)}
+.wcard.on{border-color:var(--acc2);box-shadow:0 0 0 1px var(--acc2)}
+.art{height:150px;display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--line)}
+.art svg{width:92px;height:92px;opacity:.92}
+.tag{position:absolute;top:10px;left:10px;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;background:rgba(17,17,16,.78);border:1px solid var(--line)}
+.wbody{padding:12px 14px;display:grid;gap:6px;flex:1}
+.wtop{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.wtop b{font-size:15px}
+.price{color:var(--acc2);font-weight:900;font-variant-numeric:tabular-nums}
+.wdesc{font-size:12.5px;color:var(--mut)}
+.wfoot{font-size:12px;color:var(--mut);margin-top:auto;padding-top:4px}
+
+/* Booking / Deposit drawer card */
+.panel{position:sticky;top:74px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px}
+.panel h3{font-size:17px;font-weight:900;margin-bottom:12px}
+.field{margin-top:12px}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--mut);margin-bottom:5px}
+.field input,.field select,.field textarea{
+  width:100%;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:10px 12px;font-size:14px;
+}
+.field textarea{min-height:70px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sum{margin-top:14px;background:var(--card);border-radius:12px;padding:12px;font-size:13px;display:grid;gap:6px}
+.sum div{display:flex;justify-content:space-between}
+.sum .big{font-size:16px;font-weight:900;border-top:1px solid var(--line);padding-top:8px;margin-top:2px}
+.submit-btn{
+  width:100%;margin-top:14px;border:0;border-radius:13px;background:var(--acc);color:#fff;
+  font-weight:900;font-size:15px;padding:13px;cursor:pointer;
+}
+.submit-btn:hover{background:var(--acc2)}
+.notice{margin-top:10px;font-size:12px;color:var(--mut)}
+
+/* Info / Studio rules section */
+.rules{margin-top:36px;padding-top:24px;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.rule{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.rule b{display:block;font-size:14px;margin-bottom:6px}
+.rule p{font-size:13px;color:var(--mut)}
+
+/* Receipt / confirmation modal box */
+.out-box{margin-top:14px;background:#14221a;border:1px solid var(--ok);border-radius:12px;padding:12px;font-size:13px;display:none}
+.out-box.show{display:block}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:10px;font-weight:800;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+.toast.on{opacity:1}
+
+@media(max-width:820px){
+  .hero-grid,.main-grid,.rules{grid-template-columns:1fr}
+  .panel{position:static}
+}
+@media(max-width:520px){
+  .cards,.row2{grid-template-columns:1fr}
+  .nav{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">POONG INK <span>太平山 · 預約與作品</span></a>
+    <nav class="nav">
+      <a href="#works">Flash 與項目</a>
+      <a href="#rules">預約須知</a>
+      <a href="#book">預約按金</a>
+    </nav>
+    <button class="pill-btn pri" onclick="document.getElementById('book').scrollIntoView({behavior:'smooth'})">立即預約</button>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="kicker">TAI PING SHAN STUDIO · HK</div>
+      <h1>一針一筆定型，<br>太平山獨立紋身空間。</h1>
+      <p class="lead">專注黑灰寫實、細線圖騰與客製小圖。先揀款或預約時段，核對按金再落單，一對一獨立房間施作。</p>
+    </div>
+    <div class="meta-box">
+      <div class="meta-row"><b>地點</b><span>香港太平山（預約後提供詳細門牌）</span></div>
+      <div class="meta-row"><b>營業時間</b><span>13:00 – 21:00（需預約）</span></div>
+      <div class="meta-row"><b>按金安排</b><span>預約確認需付按金，尾數當日結算</span></div>
+    </div>
+  </div>
+</section>
+
+<main class="wrap main-grid">
+  <section id="works">
+    <div class="sec-head">
+      <h2>作品與預約項目</h2>
+      <div class="tabs" id="tabs">
+        <button class="tab on" data-cat="all">全部</button>
+        <button class="tab" data-cat="flash">現成 Flash</button>
+        <button class="tab" data-cat="custom">客製設計</button>
+        <button class="tab" data-cat="touchup">修補／改圖</button>
+      </div>
+    </div>
+    <div class="cards" id="cards"></div>
+
+    <div class="rules" id="rules">
+      <div class="rule">
+        <b>01 · 衛生與針具</b>
+        <p>全套即棄針嘴、色料杯與獨立包裝耗材，每次施作前後全面消毒工作檯。</p>
+      </div>
+      <div class="rule">
+        <b>02 · 改期與按金</b>
+        <p>開工前 48 小時可免費改期一次；臨時甩底或當日取消，按金作畫稿與檔期損失處理。</p>
+      </div>
+      <div class="rule">
+        <b>03 · 紋前準備</b>
+        <p>前晚充足睡眠、勿飲酒，落單前 24 小時勿暴曬或刮傷擬紋身位置。</p>
+      </div>
+    </div>
+  </section>
+
+  <aside class="panel" id="book">
+    <h3>預約與按金單</h3>
+    <div class="field">
+      <label>已揀項目</label>
+      <select id="itemSel"></select>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>紋身師</label>
+        <select id="artistSel">
+          <option value="阿鋒 Poong">阿鋒 Poong</option>
+          <option value="Miko">Miko</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>期望日期</label>
+        <input id="dateInp" type="date">
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>施作部位</label>
+        <input id="partInp" type="text" maxlength="30" placeholder="例如：前臂外側、鎖骨">
+      </div>
+      <div class="field">
+        <label>大概尺寸（cm）</label>
+        <input id="sizeInp" type="text" maxlength="20" placeholder="例如：8 × 6 cm">
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>稱呼</label>
+        <input id="nameInp" type="text" maxlength="30" placeholder="點稱呼你">
+      </div>
+      <div class="field">
+        <label>電話尾 4 位</label>
+        <input id="phoneInp" type="tel" inputmode="numeric" maxlength="4" placeholder="例如：5821">
+      </div>
+    </div>
+    <div class="field">
+      <label>設計想法／備註</label>
+      <textarea id="noteInp" maxlength="120" placeholder="寫低參考風格、想避開嘅元素或時段偏好"></textarea>
+    </div>
+
+    <div class="sum">
+      <div><span>預估項目價</span><b id="estPrice">HK$0</b></div>
+      <div><span>今次應付按金（30%）</span><b id="depPrice">HK$0</b></div>
+      <div class="big"><span>落單金額</span><span id="payAmt">HK$0</span></div>
+    </div>
+
+    <button class="submit-btn" onclick="submitBooking()">確認預約並產生按金單</button>
+    <p class="notice">提交後會生成預約編號；如已駁通 POS 後端，可直接轉去 FPS 或信用卡付款。</p>
+
+    <div class="out-box" id="outBox"></div>
+  </aside>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ITEMS = [
+  {id:"f1",cat:"flash",title:"黑灰玫瑰匕首",artist:"阿鋒 Poong",price:1800,size:"約 9 cm",desc:"現成 Flash，只紋一次，適合手臂或小腿。",bg:"#1f1b18",svg:'<path d="M50 14 L54 68 L62 72 L52 78 L52 88 L48 88 L48 78 L38 72 L46 68 Z" fill="none" stroke="#e07a52" stroke-width="2.2"/><circle cx="50" cy="42" r="11" fill="none" stroke="#f2efe9" stroke-width="1.8"/>'},
+  {id:"f2",cat:"flash",title:"太平山霧影線稿",artist:"Miko",price:1500,size:"約 8 cm",desc:"細線極簡風，適合手腕、腳踝或鎖骨下方。",bg:"#181c1f",svg:'<path d="M16 68 Q36 32 54 52 T84 36" fill="none" stroke="#f2efe9" stroke-width="2"/><circle cx="70" cy="24" r="8" fill="none" stroke="#e07a52" stroke-width="1.8"/>'},
+  {id:"c1",cat:"custom",title:"客製半甲／大圖起稿",artist:"阿鋒 Poong",price:4200,size:"視乎範圍",desc:"包一次設計溝通與草圖微調，按實際工時報價。",bg:"#201918",svg:'<rect x="24" y="22" width="52" height="56" rx="10" fill="none" stroke="#e07a52" stroke-width="2"/><path d="M34 56 L46 38 L58 52 L66 42" fill="none" stroke="#f2efe9" stroke-width="2"/>'},
+  {id:"c2",cat:"custom",title:"客製小品圖騰",artist:"Miko",price:1600,size:"約 6–10 cm",desc:"提供關鍵字或圖片方向，先排期再睇稿。",bg:"#191d19",svg:'<polygon points="50,16 78,50 50,84 22,50" fill="none" stroke="#e07a52" stroke-width="2"/><circle cx="50" cy="50" r="10" fill="none" stroke="#f2efe9" stroke-width="1.8"/>'},
+  {id:"t1",cat:"touchup",title:"舊圖補色／修邊",artist:"阿鋒 Poong",price:1200,size:"需先傳相",desc:"適用於本室或外來舊作補墨、線條加固。",bg:"#1c1a1d",svg:'<path d="M26 66 L74 26" stroke="#e07a52" stroke-width="2.2"/><circle cx="74" cy="26" r="6" fill="none" stroke="#f2efe9" stroke-width="1.8"/>'}
+];
+
+let activeCat = "all";
+let selectedId = ITEMS[0].id;
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const depositOf = p => Math.max(300, Math.round(p * 0.3));
+
+function toast(m){
+  const e = $("#toast"); e.textContent = m; e.classList.add("on");
+  clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove("on"), 2000);
+}
+
+function renderCards(){
+  const list = activeCat === "all" ? ITEMS : ITEMS.filter(x => x.cat === activeCat);
+  $("#cards").innerHTML = list.map(x => `
+    <article class="wcard ${x.id === selectedId ? "on" : ""}" onclick="selectItem('${x.id}')">
+      <div class="art" style="background:${x.bg}">
+        <span class="tag">${x.cat === "flash" ? "FLASH" : x.cat === "custom" ? "客製" : "修補"}</span>
+        <svg viewBox="0 0 100 100" aria-hidden="true">${x.svg}</svg>
+      </div>
+      <div class="wbody">
+        <div class="wtop"><b>${esc(x.title)}</b><span class="price">HK$${x.price}</span></div>
+        <p class="wdesc">${esc(x.desc)}</p>
+        <div class="wfoot">${esc(x.artist)} · ${esc(x.size)}</div>
+      </div>
+    </article>
+  `).join("");
+}
+
+function renderSelect(){
+  $("#itemSel").innerHTML = ITEMS.map(x =>
+    `<option value="${x.id}" ${x.id === selectedId ? "selected" : ""}>${esc(x.title)}（HK$${x.price}）</option>`
+  ).join("");
+  const cur = ITEMS.find(x => x.id === selectedId) || ITEMS[0];
+  $("#artistSel").value = cur.artist;
+  const dep = depositOf(cur.price);
+  $("#estPrice").textContent = "HK$" + cur.price;
+  $("#depPrice").textContent = "HK$" + dep;
+  $("#payAmt").textContent = "HK$" + dep;
+}
+
+function selectItem(id){
+  selectedId = id;
+  renderCards();
+  renderSelect();
+}
+
+document.querySelectorAll("#tabs .tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#tabs .tab").forEach(b => b.classList.remove("on"));
+    btn.classList.add("on");
+    activeCat = btn.dataset.cat;
+    renderCards();
+  });
+});
+
+$("#itemSel").addEventListener("change", e => selectItem(e.target.value));
+
+async function submitBooking(){
+  const ph = $("#phoneInp").value.replace(/\D/g, "").slice(-4);
+  if (ph.length !== 4) return toast("請填寫電話尾 4 位數字");
+  const cur = ITEMS.find(x => x.id === selectedId) || ITEMS[0];
+  const dep = depositOf(cur.price);
+  const payload = {
+    item: cur.title,
+    artist: $("#artistSel").value,
+    date: $("#dateInp").value,
+    part: $("#partInp").value.trim(),
+    size: $("#sizeInp").value.trim(),
+    name: $("#nameInp").value.trim(),
+    phone: ph,
+    note: $("#noteInp").value.trim(),
+    deposit: dep
+  };
+
+  /* 如要直接寫入 Forbrew 後端（/api/s/poong-ink-taipingshan/o），可改用你現有菜單 id 呼叫 POST /api/s/poong-ink-taipingshan/o */
+  const refCode = "PI-" + Date.now().toString(36).toUpperCase().slice(-6);
+  const box = $("#outBox");
+  box.classList.add("show");
+  box.innerHTML = `
+    <b>已建立預約單：${esc(refCode)}</b><br>
+    項目：${esc(payload.item)}（${esc(payload.artist)}）<br>
+    日期／部位：${esc(payload.date || "待定")} · ${esc(payload.part || "待定")}（${esc(payload.size || cur.size)}）<br>
+    客人：${esc(payload.name || "-")}（尾號 ${esc(payload.phone)}）<br>
+    <b>應付按金：HK$${payload.deposit}</b>
+  `;
+  toast("已產生預約單 " + refCode);
+}
+
+$("#dateInp").valueAsDate = new Date(Date.now() + 86400000);
+renderCards();
+renderSelect();
+</script>
+</body>
+</html>
