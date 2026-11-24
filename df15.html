@@ -168,8 +168,6 @@
     
     <!-- Lucide Icons -->    
     <script src="https://unpkg.com/lucide@latest"></script>    
-    <!-- GSAP for physical UI animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>    
     
     <!-- Custom Authentic Newspaper Styles -->    
     <style>    
@@ -705,72 +703,7 @@
                                 <h3 class="text-base sm:text-lg font-black text-news-ink">A1: 純羅漢果萃取甜味劑係「減糖工具」！Mogroside V 解剖 × 咖啡減糖避坑</h3>
                                 <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>純羅漢果甜苷唔係果糖、非能抗炎或幫腸！踢爆超市 95–99% 混充赤藻糖醇導致腸道滲透壓拉水脹氣，附 PREM_24 解剖室傳送門。</p>
                             </li>
-                            <!-- B1 存檔項目：第12日 A1 「健康嘢」營銷陷阱 -->
-                            <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(11);" class="p-3.5 bg-red-50/50 border-2 border-red-800 rounded-sm cursor-pointer hover:bg-red-100/80 transition shadow-xs">
-                                <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
-                                    <span class="font-mono text-xs font-black bg-slate-900 text-white px-2 py-0.5 rounded">【#11】</span>
-                                    <span class="font-mono text-xs font-black bg-amber-200 text-slate-950 border border-slate-900 px-2 py-0.5 rounded">原 A1 存檔 · 第12日</span>
-                                </div>
-                                <h3 class="text-base sm:text-lg font-black text-news-ink">A1: 點解而家嘅人比以前更容易病？答案就喺你以為食緊嘅「健康嘢」</h3>
-                                <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>「天然」、「Organic」、「低脂」、「植物奶」營銷包裝大揭秘！燕麥奶菜籽油乳化劑、咖啡假能量、加工食品化學毒素大對照，Control the controllables！</p>
-                            </li>
-                            <!-- B1 特別焦點：更新 EVOO ericwongkhk -->
-                            <li class="p-3.5 bg-amber-50/80 border-2 border-amber-800 rounded-sm shadow-xs transition hover:bg-amber-100/90">
-                                <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
-                                    <div class="flex items-center gap-2">
-                                        <span class="font-mono text-xs font-black bg-amber-800 text-white px-2 py-0.5 rounded">【B1 特別焦點】</span>
-                                        <h3 class="text-base sm:text-lg font-black text-news-ink">更新 EVOO ericwongkhk</h3>
-                                    </div>
-                                    <a href="https://threads.com/ericwongkhk" target="_blank" class="font-mono text-xs font-black bg-news-winered hover:bg-black text-white px-2.5 py-1 rounded transition flex items-center gap-1">
-                                        <span>@ericwongkhk ↗</span>
-                                    </a>
-                                </div>
-                                <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed">
-                                    <strong>實彈內容：</strong>特級初榨橄欖油王最新實戰品油筆記（1 ➔ 7 款最新排序存檔）！涵蓋意大利特倫托 Casaliva（10小時萃取奇蹟）、普利亞 PDO、日本小豆島及阿根廷門多薩 Arauco 稀有品種深度分析，消滅體內發炎地圖！
-                                    <a href="/evoo-guide.html" target="_blank" class="text-news-winered font-black underline ml-1">閱讀《EVOO 1-7 款品油指南全文》↗</a>
-                                </p>
-                            </li>
                         </ul>
-
-                        <!-- GSAP 物理動效即時 HUD (附件圖 1：渲染時間線與代謝比率) -->
-                        <div id="gsapHudContainer" class="mb-5 bg-[#070B14] text-white border-2 border-[#1E293B] rounded-xl p-4 sm:p-5 shadow-xl font-mono relative overflow-hidden select-none cursor-pointer group" onclick="triggerGsapHudBounce()" title="點擊觸發 GSAP 物理彈跳動效">
-                            <div class="flex items-center justify-between text-xs sm:text-sm border-b border-slate-800 pb-2 mb-3">
-                                <div class="flex items-center gap-2 text-slate-300">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
-                                    <span class="w-2.5 h-2.5 rounded-full bg-rose-600 -ml-4.5"></span>
-                                    <span class="font-black tracking-widest text-slate-200">REC · RENDERING TIMELINE</span>
-                                </div>
-                                <div class="text-cyan-400 font-bold tracking-wider" id="gsapFpsTimer">
-                                    00:04:12 / 60 FPS
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <!-- Metric 1: ATP -->
-                                <div>
-                                    <div class="flex justify-between text-xs sm:text-sm mb-1.5">
-                                        <span class="text-emerald-400 font-bold flex items-center gap-1.5">
-                                            <span>⚡</span> 粒線體 ATP 生成比率 (Mitochondria)
-                                        </span>
-                                        <span id="atpValText" class="text-emerald-300 font-black text-sm tracking-wider">+185%</span>
-                                    </div>
-                                    <div class="w-full bg-[#111827] rounded-full h-3 overflow-hidden p-0.5 border border-slate-800">
-                                        <div id="atpProgressBar" class="bg-gradient-to-r from-emerald-500 to-teal-300 h-2 rounded-full w-0 shadow-[0_0_12px_rgba(52,211,153,0.5)]"></div>
-                                    </div>
-                                </div>
-                                <!-- Metric 2: CRP/CEA -->
-                                <div>
-                                    <div class="flex justify-between text-xs sm:text-sm mb-1.5">
-                                        <span class="text-rose-400 font-bold flex items-center gap-1.5">
-                                            <span>🛡️</span> 全身慢性發炎指數 (CRP / CEA 降幅)
-                                        </span>
-                                        <span id="crpValText" class="text-rose-300 font-black text-sm tracking-wider">-78%</span>
-                                    </div>
-                                    <div class="w-full bg-[#111827] rounded-full h-3 overflow-hidden p-0.5 border border-slate-800">
-                                        <div id="crpProgressBar" class="bg-gradient-to-r from-rose-500 to-pink-500 h-2 rounded-full w-0 shadow-[0_0_12px_rgba(244,63,94,0.5)]"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <!-- B1 Switcher Tabs (不同深淺色區分) -->
                         <div class="flex flex-wrap gap-2 mb-4 no-print border-b border-slate-300 pb-2.5 font-mono text-xs sm:text-sm">
@@ -2032,78 +1965,6 @@
         window.openB1Topic = openB1Topic;
 
 
-        // GSAP Physical Animation for HUD (附件圖 1: 渲染時間線與代謝進度條)
-        function initGsapHud() {
-            const hasGsap = typeof gsap !== 'undefined';
-            if (hasGsap) {
-                // Animate ATP progress bar with elastic spring
-                gsap.to('#atpProgressBar', {
-                    width: '85%',
-                    duration: 1.8,
-                    ease: 'elastic.out(1, 0.4)',
-                    delay: 0.3
-                });
-                // Animate CRP progress bar
-                gsap.to('#crpProgressBar', {
-                    width: '25%',
-                    duration: 1.5,
-                    ease: 'elastic.out(1, 0.4)',
-                    delay: 0.5
-                });
-                // Number counter for ATP (+185%)
-                const atpObj = { val: 0 };
-                gsap.to(atpObj, {
-                    val: 185,
-                    duration: 1.6,
-                    ease: 'power2.out',
-                    onUpdate: function () {
-                        const el = document.getElementById('atpValText');
-                        if (el) el.textContent = `+${Math.round(atpObj.val)}%`;
-                    }
-                });
-                // Number counter for CRP (-78%)
-                const crpObj = { val: 0 };
-                gsap.to(crpObj, {
-                    val: -78,
-                    duration: 1.4,
-                    ease: 'power2.out',
-                    onUpdate: function () {
-                        const el = document.getElementById('crpValText');
-                        if (el) el.textContent = `${Math.round(crpObj.val)}%`;
-                    }
-                });
-            } else {
-                // Fallback if GSAP script is still loading
-                const atp = document.getElementById('atpProgressBar');
-                const crp = document.getElementById('crpProgressBar');
-                if (atp) atp.style.width = '85%';
-                if (crp) crp.style.width = '25%';
-            }
-        }
-
-        // Interactive GSAP Bounce for HUD
-        function triggerGsapHudBounce() {
-            if (typeof gsap !== 'undefined') {
-                gsap.timeline()
-                    .to('#gsapHudContainer', { scale: 0.96, duration: 0.1, ease: 'power1.in' })
-                    .to('#gsapHudContainer', { scale: 1.03, duration: 0.3, ease: 'elastic.out(1.2, 0.4)' })
-                    .to('#gsapHudContainer', { scale: 1, duration: 0.2, ease: 'power1.out' });
-            }
-        }
-        window.triggerGsapHudBounce = triggerGsapHudBounce;
-
-        // HUD Timeline Clock running smoothly
-        let hudSeconds = 252; // 00:04:12
-        setInterval(() => {
-            hudSeconds++;
-            const m = String(Math.floor(hudSeconds / 60)).padStart(2, '0');
-            const s = String(hudSeconds % 60).padStart(2, '0');
-            const timerEl = document.getElementById('gsapFpsTimer');
-            if (timerEl) {
-                timerEl.textContent = `00:${m}:${s} / 60 FPS`;
-            }
-        }, 1000);
-
         // Clipboard Copy Helper
         function copyToClipboard(elementId, toastId) {
             const el = document.getElementById(elementId);
@@ -2169,7 +2030,6 @@
         // Initialize on load    
         renderCarousel();    
         initB2DailyUpdate();    
-        initGsapHud();
 
         // A1 羅漢果區塊滾動視差動效 (Scroll-Driven Parallax)
         window.addEventListener('scroll', function () {
