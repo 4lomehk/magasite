@@ -3,19 +3,19 @@
 <head>    
     <meta charset="UTF-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <title>抗炎日報 DAILY FLOW - Make Anti-inflammatory Great Again</title>    
-    <meta name="description" content="抗炎日報 DAILY FLOW：每日抗炎生活指南。" />
+    <title>抗炎日報 DAILY FLOW 第15日 - 脾虛寒濕塞 × 慢性低度發炎四大元兇</title>    
+    <meta name="description" content="抗炎日報 DAILY FLOW 第15日：2026 香港人原聲節奏拆解慢性低度發炎、脾虛寒弱濕塞演變鏈、四大發炎元兇與 HSCRP 減法攻略（完整 80% 收錄於 PREM_25）。" />
 
 <!-- thumbnail -->
   <head>
-  <meta property="og:title" content="抗炎日報 DAILY FLOW - Make Anti-inflammatory Great Again">
-  <meta property="og:description" content="抗炎日報 DAILY FLOW：每日抗炎生活指南。">
+  <meta property="og:title" content="抗炎日報 DAILY FLOW 第15日 - 慢性低度發炎四大元兇">
+  <meta property="og:description" content="由脾虛寒濕塞到慢性低度發炎：講人話拆解 NOVA 超加工、久坐、內臟脂肪與熬夜四大元兇。">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://magasite.pages.dev/df14">
+  <meta property="og:url" content="https://magasite.pages.dev/df15">
   <meta property="og:image" content="https://magasite.pages.dev/images/df14.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="抗炎日報 DAILY FLOW 封面圖">
+  <meta property="og:image:alt" content="抗炎日報 DAILY FLOW 第15日封面圖">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://magasite.pages.dev/images/df14.png">
   </head>    
@@ -122,6 +122,16 @@
       })();
     </script>
         
+    <!-- Three.js r165 CDN Import Map -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+        }
+      }
+    </script>
+
     <!-- Tailwind CSS CDN -->    
     <script src="https://cdn.tailwindcss.com"></script>    
     <script>    
@@ -295,9 +305,319 @@
             80% { transform: scale(0.98, 1.02) translateY(-3px); }
             100% { transform: scale(1) translateY(0); }
         }
+
+        /* 3D HK Street Newsstand Scrollytelling Stage */
+        #df-explainer-shell {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 620px;
+            background-color: #101318;
+            color: #F8FAFC;
+            overflow: hidden;
+            border-bottom: 4px double #121212;
+            font-family: 'Inter', 'PingFang HK', 'Helvetica Neue', Arial, sans-serif;
+        }
+        #df-explainer-scroller {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+        .df-act-section {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 66px 20px 108px;
+            pointer-events: none;
+        }
+        .df-parallax-bg {
+            position: absolute;
+            inset: -120px 0 0 0;
+            height: 180%;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 64px 64px;
+            pointer-events: none;
+            will-change: transform;
+        }
+        .df-parallax-mid {
+            position: absolute;
+            inset: -80px 0 0 0;
+            height: 160%;
+            background-image: repeating-linear-gradient(
+                90deg,
+                transparent 0,
+                transparent 136px,
+                rgba(217, 119, 6, 0.06) 136px,
+                rgba(217, 119, 6, 0.06) 139px
+            );
+            pointer-events: none;
+            will-change: transform;
+        }
+        .df-sticky-pin {
+            position: sticky;
+            top: 66px;
+            z-index: 15;
+        }
+        .df-horiz-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+            scrollbar-color: #D97706 rgba(255,255,255,0.08);
+        }
+        .df-act-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.22);
+            background: rgba(16, 19, 24, 0.92);
+            color: #94A3B8;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+        }
+        .df-act-dot-active {
+            background: #D97706;
+            color: #111827;
+            border-color: #FDE047;
+            transform: scale(1.08);
+        }
+        #df-explainer-dock {
+            position: absolute;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(940px, 95vw);
+            z-index: 35;
+            transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        #df-explainer-dock.dock-collapsed {
+            transform: translate(-50%, calc(100% - 28px));
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #df-explainer-scroller {
+                scroll-behavior: auto;
+            }
+        }
     </style>    
 </head>    
-<body class="min-h-screen py-4 sm:py-8 px-2 sm:px-4 antialiased">    
+<body class="min-h-screen antialiased m-0 p-0">
+
+    <!-- 0. 3D 香港街邊報紙檔 (HK Street Newsstand) 12-Second Three.js Explainer -->
+    <section id="df-explainer-shell" class="no-print" aria-label="Three.js 3D Hong Kong Street Newsstand 12-Second Explainer">
+        <!-- Clean 3-Zone Top Bar (Zero backdrop-filter over WebGL, zero pulsing dots) -->
+        <div class="absolute top-0 left-0 right-0 z-30 flex items-center justify-between gap-3 px-4 sm:px-6 py-2.5 bg-[#101318]/94 border-b border-white/10">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <span class="inline-flex items-center justify-center px-2 py-0.5 rounded bg-[#8B0000] text-white font-mono font-black text-xs shrink-0">第15日報紙檔</span>
+                <span class="text-xs sm:text-sm font-black tracking-tight text-white truncate">抗炎日報 DAILY FLOW 第15日 · 3D 香港街邊報紙檔 12S</span>
+            </div>
+            <div id="df-top-act-label" class="hidden md:block text-[11px] font-mono font-bold text-[#FBBF24] tracking-wider truncate">
+                01 · SCROLL-TRIGGERED 碌到嗰個位先播
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <button id="df-btn-toggle-snap" type="button" class="px-2.5 py-1 rounded border border-white/20 bg-[#1A1F29] hover:bg-[#232A38] text-[11px] font-mono font-bold text-slate-200 cursor-pointer">
+                    SNAP: ON 一碌成版過
+                </button>
+                <button type="button" onclick="document.getElementById('df-broadsheet-archive').scrollIntoView({behavior:'smooth'})" class="px-2.5 py-1 rounded bg-[#D97706] hover:bg-[#F59E0B] text-[#111827] text-[11px] font-black cursor-pointer">
+                    閱讀報紙全文 ↓
+                </button>
+            </div>
+        </div>
+
+        <!-- Right-Edge Compact Chapter Dots -->
+        <nav class="hidden sm:flex flex-col gap-1.5 absolute right-3 top-1/2 -translate-y-1/2 z-30" aria-label="Scroll Mechanic Acts">
+            <button type="button" class="df-act-dot df-act-dot-active" data-df-act="0" title="01 Scroll-Triggered 碌到嗰個位先播">01</button>
+            <button type="button" class="df-act-dot" data-df-act="1" title="02 Scroll-Linked 郁幾多就碌幾多">02</button>
+            <button type="button" class="df-act-dot" data-df-act="2" title="03 Parallax 背景行得慢過前景">03</button>
+            <button type="button" class="df-act-dot" data-df-act="3" title="04 Sticky 碌到頂就會黐住">04</button>
+            <button type="button" class="df-act-dot" data-df-act="4" title="05 Scroll Snap 一碌就會成版過">05</button>
+            <button type="button" class="df-act-dot" data-df-act="5" title="06 Horizontal Scroll 內容向横行">06</button>
+        </nav>
+
+        <!-- Vertical Snap-Scroll Container -->
+        <div id="df-explainer-scroller">
+            <!-- Sticky 3D WebGL Stage -->
+            <div id="df-sticky-stage" class="sticky top-0 left-0 w-full h-full z-0 overflow-hidden bg-[#101318]">
+                <div id="df-parallax-bg" class="df-parallax-bg"></div>
+                <div id="df-parallax-mid" class="df-parallax-mid"></div>
+                <div id="df-three-mount" class="relative w-full h-full z-10"></div>
+                <div id="df-webgl-fallback" class="hidden absolute inset-0 z-20 flex items-center justify-center p-6 text-center bg-[#101318]">
+                    <div class="max-w-md p-5 rounded-xl border border-amber-500/40 bg-[#1A1F29] text-slate-100">
+                        <div class="font-mono text-xs text-amber-400 font-bold mb-1">3D NEWSSTAND FALLBACK</div>
+                        <p class="text-sm font-bold">裝置暫時未能啟用 WebGL，請向下滾動閱讀《抗炎日報 DAILY FLOW》完整報紙內容。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6 Full-Viewport Scroll-Snap Chapters -->
+            <div class="relative z-20 pointer-events-none" style="margin-top: -100vh;">
+
+                <!-- ACT 01: Scroll-Triggered (碌到嗰個位先播) -->
+                <article data-df-act-idx="0" class="df-act-section">
+                    <div class="max-w-lg bg-[#101318]/88 border border-white/15 rounded-xl p-4 pointer-events-auto">
+                        <div class="text-[11px] font-mono font-bold text-[#F59E0B] tracking-wider">01 · SCROLL-TRIGGERED · 碌到嗰個位先播</div>
+                        <h2 class="text-xl sm:text-2xl font-black text-white mt-1 leading-tight">香港街邊報紙檔 · 12 秒立體網站導覽</h2>
+                        <p class="text-xs sm:text-sm text-slate-300 font-medium mt-1.5 leading-relaxed">
+                            碌入視區即時觸發 12 秒街邊鐵皮報紙檔開檔動畫：綠鐵頂篷、霓虹招牌同 6 份《抗炎日報》逐份彈出。可拖曳轉視角，或直接點擊報紙檔上面任何一份報紙轉動及播報！
+                        </p>
+                        <div class="mt-3 flex flex-wrap items-center gap-2">
+                            <button id="df-btn-retrigger" type="button" class="px-3 py-1.5 rounded bg-[#D97706] hover:bg-[#F59E0B] text-[#111827] text-xs font-black cursor-pointer">
+                                由 0.0s 重播開檔 12 秒 ↻
+                            </button>
+                            <span class="text-[11px] font-mono text-slate-400">點選任何 3D 報紙即可 Spin + Play</span>
+                        </div>
+                    </div>
+                    <div class="text-center text-[11px] font-mono text-slate-400 tracking-widest">SCROLL DOWN · 往下滾動示範 6 種動態滾動特效 ↓</div>
+                </article>
+
+                <!-- ACT 02: Scroll-Linked (郁幾多就碌幾多) -->
+                <article data-df-act-idx="1" class="df-act-section">
+                    <div class="max-w-lg bg-[#101318]/90 border border-amber-500/35 rounded-xl p-4 pointer-events-auto">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-[11px] font-mono font-bold text-[#F59E0B] tracking-wider">02 · SCROLL-LINKED · 郁幾多就碌幾多</span>
+                            <span id="df-link-pct" class="text-xs font-mono font-black text-white">0%</span>
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-black text-white mt-1">1:1 報紙檔結構拆解：郁幾多就轉幾多</h2>
+                        <p class="text-xs sm:text-sm text-slate-300 font-medium mt-1.5">
+                            滾動距離直接 1:1 驅動報紙檔鐵篷掀開幅度、印刷齒輪角度同 6 份報紙扇形展開，可拖拉刻度條實測同步耦合。
+                        </p>
+                        <div class="mt-3 flex items-center gap-3">
+                            <span class="text-[11px] font-mono text-slate-400 shrink-0">0%</span>
+                            <input id="df-link-scrub" type="range" min="0" max="1" step="0.005" value="0" class="w-full accent-[#D97706] cursor-pointer" aria-label="Scroll-linked 1:1 progress" />
+                            <span class="text-[11px] font-mono text-slate-400 shrink-0">100%</span>
+                        </div>
+                    </div>
+                    <div></div>
+                </article>
+
+                <!-- ACT 03: Parallax (背景行得慢過前景) -->
+                <article data-df-act-idx="2" class="df-act-section">
+                    <div class="max-w-lg bg-[#101318]/90 border border-sky-400/35 rounded-xl p-4 pointer-events-auto">
+                        <div class="text-[11px] font-mono font-bold text-sky-400 tracking-wider">03 · PARALLAX · 背景行得慢過前景</div>
+                        <h2 class="text-xl sm:text-2xl font-black text-white mt-1">街景三層視差：後巷唐樓行得慢過前景報架</h2>
+                        <p class="text-xs sm:text-sm text-slate-300 font-medium mt-1.5">
+                            背景霓虹燈箱與唐樓輪廓以 0.22× 慢速移動、鐵閘直紋以 0.52× 跟進，前景街邊報紙檔以 1.00× 主軸推進。
+                        </p>
+                        <div id="df-parallax-readout" class="mt-2.5 pt-2 border-t border-white/10 text-[11px] font-mono font-bold text-sky-300">
+                            BG 0px (0.22×) · MID 0px (0.52×) · FG 0px (1.00×)
+                        </div>
+                    </div>
+                    <div></div>
+                </article>
+
+                <!-- ACT 04: Sticky (碌到頂就會黐住) -->
+                <article data-df-act-idx="3" class="df-act-section">
+                    <div class="df-sticky-pin max-w-lg bg-[#101318]/94 border border-emerald-400/40 rounded-xl p-4 pointer-events-auto">
+                        <div class="text-[11px] font-mono font-bold text-emerald-400 tracking-wider">04 · STICKY · 碌到頂就會黐住</div>
+                        <h2 class="text-xl sm:text-2xl font-black text-white mt-1">頂部黏滯鎖定：報紙頭條欄頂置黐實唔走位</h2>
+                        <p class="text-xs sm:text-sm text-slate-300 font-medium mt-1.5">
+                            3D 報紙檔舞台及此報頭專欄均設定 Sticky 頂置，當你繼續向下捲動瀏覽內文時依然穩穩黐住頂部。
+                        </p>
+                    </div>
+                    <div class="self-end max-w-sm bg-[#1A1F29]/92 border border-white/15 rounded-xl p-3.5 text-xs text-slate-200 font-semibold pointer-events-auto">
+                        STICKY CHECK · 上方《抗炎日報》報紙檔主視窗與規格卡會一直黐住頂部，直至跨入下一幕。
+                    </div>
+                </article>
+
+                <!-- ACT 05: Scroll Snap (一碌就會成版過) -->
+                <article data-df-act-idx="4" class="df-act-section">
+                    <div class="max-w-lg bg-[#101318]/90 border border-violet-400/40 rounded-xl p-4 pointer-events-auto">
+                        <div class="text-[11px] font-mono font-bold text-violet-300 tracking-wider">05 · SCROLL SNAP · 一碌就會成版過</div>
+                        <h2 class="text-xl sm:text-2xl font-black text-white mt-1">一碌成版翻頁：整份大報齊齊對位鎖實</h2>
+                        <p class="text-xs sm:text-sm text-slate-300 font-medium mt-1.5">
+                            採用 <span class="font-mono text-violet-300">scroll-snap-type: y mandatory</span> 與 <span class="font-mono text-violet-300">scroll-snap-stop: always</span>，每滾動一次精準翻完一整版，絕不卡半截。
+                        </p>
+                    </div>
+                    <div></div>
+                </article>
+
+                <!-- ACT 06: Horizontal Scroll (內容向横行 · 每次不同 + 只能用一款) -->
+                <article data-df-act-idx="5" class="df-act-section">
+                    <div class="max-w-xl bg-[#101318]/94 border border-amber-400/45 rounded-xl p-4 pointer-events-auto">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="text-[11px] font-mono font-bold text-amber-400 tracking-wider">06 · HORIZONTAL SCROLL · 內容向横行</span>
+                            <span id="df-active-edition-badge" class="text-[11px] font-mono font-bold text-white bg-[#1F2533] px-2 py-0.5 rounded border border-white/20">
+                                單一款式 · 只能用一款
+                            </span>
+                        </div>
+                        <h2 class="text-lg sm:text-xl font-black text-white mt-1">橫向報架瀏覽：每次不同 + 只能用一款</h2>
+                        <p class="text-xs text-slate-300 font-medium mt-1">
+                            每次載入或撳換款只會嚴格鎖定「單一報紙檔版式」，絕不重疊混款；橫向滾動下方《抗炎日報》專題卡，上方 3D 報架會同步橫移對焦！
+                        </p>
+                        <div class="mt-2.5 flex items-center gap-2">
+                            <button id="df-btn-switch-edition" type="button" class="px-3 py-1.5 rounded bg-[#D97706] hover:bg-[#F59E0B] text-[#111827] text-xs font-black cursor-pointer">
+                                換另一款版式 (每次不同 · 只能用一款) ⇄
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Horizontal Scroll Shelf Track (1:1 synced with 3D HK Newsstand X pan) -->
+                    <div id="df-horiz-container" class="df-horiz-container w-full max-w-5xl mx-auto pb-3 pt-2 pointer-events-auto">
+                        <div id="df-horiz-track" class="flex items-stretch gap-4 w-max px-2"></div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+
+        <!-- Unified Collapsible Bottom Control Dock (Zero backdrop-filter over WebGL) -->
+        <div id="df-explainer-dock">
+            <div class="flex justify-center">
+                <button id="df-btn-toggle-dock" type="button" class="px-3.5 py-1 rounded-t-lg bg-[#161A24] border border-b-0 border-white/15 text-[11px] font-mono font-bold text-slate-200 hover:text-amber-300 cursor-pointer">
+                    ▾ 隱藏控制列 (H)
+                </button>
+            </div>
+            <div class="rounded-xl bg-[#12151E]/95 border border-white/15 px-3.5 py-2.5 shadow-2xl flex flex-col gap-2">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <button id="df-btn-play" type="button" aria-pressed="true" class="px-3 py-1.5 rounded bg-[#D97706] hover:bg-[#F59E0B] text-[#111827] text-xs font-black cursor-pointer">
+                            <span id="df-btn-play-label">暫停 PAUSE</span>
+                        </button>
+                        <button id="df-btn-replay" type="button" class="px-2.5 py-1.5 rounded bg-[#1F2533] hover:bg-[#2A3244] border border-white/15 text-xs font-bold text-white cursor-pointer">
+                            重播 0s
+                        </button>
+                        <button id="df-btn-spin" type="button" class="px-2.5 py-1.5 rounded bg-[#1F2533] hover:bg-[#2A3244] border border-white/15 text-xs font-bold text-amber-300 cursor-pointer">
+                            Spin 報紙 ↻
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-2 text-[11px] font-mono">
+                        <span id="df-beat-label" class="hidden sm:inline text-slate-300 font-bold">01 / 04 · 報紙檔開檔搭建</span>
+                        <span id="df-time-label" class="text-amber-400 font-black">0.0s / 12.0s</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button id="df-btn-audio" type="button" class="px-2.5 py-1.5 rounded bg-[#1F2533] hover:bg-[#2A3244] border border-white/15 text-[11px] font-bold text-slate-200 cursor-pointer">
+                            🔇 靜音
+                        </button>
+                        <button id="df-btn-reset-cam" type="button" class="px-2.5 py-1.5 rounded bg-[#1F2533] hover:bg-[#2A3244] border border-white/15 text-[11px] font-bold text-slate-200 cursor-pointer">
+                            重置視角
+                        </button>
+                    </div>
+                </div>
+                <input id="df-scrubber" type="range" min="0" max="12" step="0.02" value="0" class="w-full h-1.5 accent-[#D97706] cursor-pointer" aria-label="12-second timeline scrubber" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Preserved DAILY FLOW Broadsheet Newspaper Archive -->
+    <main id="df-broadsheet-archive" class="py-4 sm:py-8 px-2 sm:px-4">
+        <div class="no-print max-w-6xl mx-auto mb-2 flex justify-end">
+            <button type="button" onclick="document.getElementById('df-explainer-shell').scrollIntoView({behavior:'smooth'})" class="bg-[#121212] hover:bg-[#8B0000] text-white font-mono text-xs font-bold px-3 py-1.5 rounded cursor-pointer transition">
+                ↑ 回到 3D 香港街邊報紙檔舞台
+            </button>
+        </div>    
     
     <!-- Top Action Bar (Non-Print Control) -->    
     <div class="no-print max-w-6xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-3 bg-news-ink text-white p-3 rounded-lg shadow-md font-sans text-xs sm:text-sm">    
@@ -323,9 +643,9 @@
             <!-- Ticker / Top Bar -->    
             <div class="flex flex-wrap justify-between items-center text-xs sm:text-sm font-mono border-b border-news-ink pb-1 mb-2 tracking-tight text-news-subtle">    
                 <div class="flex items-center gap-3">    
-                    <span class="font-bold text-news-ink">2026 年 11月12日</span>    
-                    <span class="font-bold text-news-winered bg-red-50 border border-red-200 px-1.5 py-0.5 rounded">第14日</span>    
-                    <span class="hidden sm:inline">天氣：羅漢果分子解剖 ✕ 咖啡減糖避坑</span>    
+                    <span class="font-bold text-news-ink">2026 年 11月15日</span>    
+                    <span class="font-bold text-news-winered bg-red-50 border border-red-200 px-1.5 py-0.5 rounded">第15日</span>    
+                    <span class="hidden sm:inline">天氣：脾虛寒濕塞 ✕ 慢性低度發炎四大元兇 ✕ PREM_25 減法攻略</span>    
                 </div>    
                 <div class="font-bold text-news-winered flex items-center gap-1">    
                     <i data-lucide="flame" class="w-3.5 h-3.5"></i>    
@@ -356,115 +676,107 @@
                 </h1>    
             </div>      
     
-        <!-- NEWSPAPER SECTION TABS / NAVIGATION (對齊截圖樣式) -->    
+        <!-- NEWSPAPER SECTION TABS / NAVIGATION -->    
         <nav class="no-print my-4 border-b border-news-ink pb-2">    
             <div class="flex flex-wrap items-center gap-2 font-mono text-xs sm:text-sm font-bold">    
-                <button onclick="scrollToSection('sec-a1-d14')" class="bg-news-winered text-white px-3 py-1.5 hover:bg-black transition">🔥 A1 (第14日): 羅漢果甜苷減糖真相</button>    
+                <button onclick="scrollToSection('sec-a1-d15')" class="bg-news-winered text-white px-3 py-1.5 hover:bg-black transition">🔥 A1 (第15日 · 20%實彈): 脾虛寒濕塞 × 慢性發炎四大元兇</button>    
                 <button onclick="scrollToSection('sec-tongue-game')" class="bg-[#9A3412] text-white px-3 py-1.5 hover:bg-amber-900 transition">👅 舌診「漏電」儀（2款檢測）</button>    
-                <button onclick="scrollToSection('sec-b1')" class="bg-black text-white px-3 py-1.5 hover:bg-news-red transition">B1: 舊 A1 實彈檔案 (1-11) & 12大戰術</button>    
+                <button onclick="scrollToSection('sec-b1')" class="bg-black text-white px-3 py-1.5 hover:bg-news-red transition">B1: 舊 A1 實彈檔案 (1-12) & 12大戰術</button>    
                 <button onclick="scrollToSection('sec-b2')" class="bg-black text-white px-3 py-1.5 hover:bg-news-red transition">B2: 逆轉食物金字塔</button>    
                 <button onclick="scrollToSection('sec-c1')" class="bg-slate-600 text-white px-3 py-1.5 hover:bg-slate-700 transition">資源庫 MAGASite 首頁</button>    
-                <span class="text-slate-400 hidden sm:inline">|</span>
+                <a href="/prem-25.html" class="bg-amber-500 text-slate-950 px-3 py-1.5 hover:bg-amber-400 transition">🔬 PREM_25 完整 80% 戰情室 ↗</a>
             </div>    
         </nav>    
 
-        <!-- SECTION A1 (第14日)：純羅漢果萃取係「減糖工具」！ -->
-        <section id="sec-a1-d14" class="my-6 border-2 border-news-ink p-4 sm:p-5 bg-white shadow-sm font-serif">
+        <!-- SECTION A1 (第15日 · 20% 濃縮原聲實彈)：脾虛寒濕塞 × 慢性低度發炎四大元兇 -->
+        <section id="sec-a1-d15" class="my-6 border-2 border-news-ink p-4 sm:p-5 bg-white shadow-sm font-serif">
             <div class="border-b-2 border-news-ink pb-2.5 mb-3">
                 <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
                     <div class="flex items-center gap-2 flex-wrap">
-                        <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">A1 今日頭條 · 第14日</span>
-                        <span class="bg-amber-400 text-slate-950 font-mono text-xs font-black px-2 py-0.5 rounded border border-slate-900">最新特別焦點</span>
+                        <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">A1 今日頭條 · 第15日 (20% 原聲實彈)</span>
+                        <span class="bg-amber-400 text-slate-950 font-mono text-xs font-black px-2 py-0.5 rounded border border-slate-900">2026 香港人原聲節奏</span>
                     </div>
-                    <span class="text-xs font-mono font-bold text-slate-500">2026年11月10日 (第14日) ‧ Mogroside V Anatomy & Sugar Truth</span>
+                    <span class="text-xs font-mono font-bold text-slate-500">2026年11月15日 (第15日) ‧ Voice Card Locked · 剩餘 80% 收錄於 PREM_25</span>
                 </div>
                 <h2 class="text-xl sm:text-2xl md:text-3xl font-black font-lemon text-[#1F2937] leading-tight winered-underline mt-1">
-                    純羅漢果萃取甜味劑係「減糖工具」！
+                    病係你自己親手養成！由「脾虛寒濕塞」燒成 24 小時暗火：慢性低度發炎
                 </h2>
                 <p class="font-mono text-xs sm:text-sm font-bold text-news-winered mt-1.5">
-                    先講重點：純羅漢果苷唔係果糖，亦唔等於水果天然糖。只係「非」能抗炎或「幫腸」！
+                    講人話：副偈暗中燒咗好幾年，普通驗血照唔出（必特登叫醫生加驗 CRP / HSCRP）；食極薑黃素、維他命都唔好，只因你犯咗「只補唔清」同「吸收錯配」！
                 </p>
 
-                <!-- A1 羅漢果主題視覺與滾動視差展示盒 (Scroll-Parallax Monk Fruit Showcase) -->
-                <div id="monk-fruit-stage" class="my-4 border-2 border-news-ink bg-[#FAF8F5] p-3.5 sm:p-5 shadow-sm overflow-hidden transition-transform duration-300">
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                        
-                        <!-- 左側：上載羅漢果實物圖片 + 3D 滾動景深容器 (圖片顯示縮小一半) -->
-                        <div class="md:col-span-3 relative group flex justify-center">
-                            <div class="w-1/2 md:w-full max-w-[210px] border-2 border-news-ink bg-white p-1.5 shadow-[3px_3px_0px_#121212] overflow-hidden">
-                                <div id="monk-fruit-parallax-wrapper" class="overflow-hidden bg-white transition-transform duration-200 ease-out will-change-transform">
-                                    <img 
-                                        src="https://magasite.pages.dev/images/monk-fruit.jpeg" 
-                                        alt="羅漢果實物與內部乾燥果瓤結構" 
-                                        class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                </div>
-                                <div class="mt-1.5 pt-1 border-t border-slate-300 flex items-center justify-between font-mono text-[10px] text-news-subtle">
-                                    <span class="font-black text-news-winered">FIG 14.1 // 羅漢果結構</span>
-                                    <span>MOGROSIDE V</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 右側：羅漢果分子結構與減糖實戰拆解 -->
-                        <div class="md:col-span-9 space-y-2.5 font-serif">
-                            <div class="inline-flex items-center gap-1.5 bg-news-ink text-white font-mono text-xs font-bold px-2.5 py-0.5">
-                                <span>🔍 視覺解剖：真．羅漢果 vs 商業代糖</span>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-black text-news-ink leading-snug">
-                                人體酵素「拆唔開」嘅三萜分子
-                            </h3>
-                            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                                從圖中乾燥羅漢果剖面可見其海綿狀果瓤與種子，天然甜味源自<strong>羅漢果甜苷（Mogrosides）</strong>。由於分子體積龐大且結構特殊，不會被小腸吸收轉化為血糖，直接隨代謝排出，真正做到<strong>零升糖負荷</strong>。
-                            </p>
-                            <div class="grid grid-cols-2 gap-2 pt-1 font-mono text-xs">
-                                <div class="p-2 bg-emerald-50 border border-emerald-700 text-emerald-950">
-                                    <strong class="block text-emerald-800">✅ 純萃取液 / 乾果</strong>
-                                    <span>無赤藻糖醇填充，不拉水、不引致腸道脹氣</span>
-                                </div>
-                                <div class="p-2 bg-red-50 border border-red-700 text-red-950">
-                                    <strong class="block text-red-800">❌ 市售 99% 混充粉</strong>
-                                    <span>高滲透壓糖醇填充，易致腹脹腹瀉</span>
-                                </div>
-                            </div>
-                        </div>
-
+                <!-- Voice Card 惡化鏈條圖譜 -->
+                <div class="my-4 border-2 border-news-ink bg-[#FAF8F5] p-3.5 sm:p-4 shadow-sm">
+                    <div class="flex items-center justify-between flex-wrap gap-2 mb-2.5">
+                        <span class="inline-flex items-center gap-1.5 bg-news-ink text-white font-mono text-xs font-black px-2.5 py-0.5">
+                            🎙️ 體內由好變壞 8 步原聲節奏（中醫經絡 ➔ 細胞免疫）
+                        </span>
+                        <span class="font-mono text-[11px] font-bold text-red-900">幕後黑手：慢性低度發炎</span>
                     </div>
-                </div>
-                
-                <!-- Core Truth Box -->
-                <div class="mt-3 p-3.5 bg-amber-50 border-l-4 border-amber-600 text-slate-800 text-xs sm:text-sm leading-relaxed space-y-2">
-                    <p>
-                        <strong>🔬 先分清「羅漢果糖」係乜嘢：</strong>羅漢果甜味來自<strong>羅漢果甜苷 (Mogrosides)</strong>，特別係三萜骨架連住多個葡萄糖基嘅 Mogroside V，分子極大，人體酵素拆唔開，唔係游離葡萄糖或果糖，所以<strong>唔會像砂糖那樣引致血糖飆升</strong>。
-                    </p>
-                    <p>
-                        <strong>⚠️ 踢爆市面商業混充陷阱：</strong>市面上賣嘅，<strong>95% 到 99% 都係赤藻糖醇 (Erythritol)</strong>、葡萄糖或麥芽糊精！赤藻糖醇喺腸道產生極高滲透壓拉水，導致大量胃脹氣、放屁甚至腹瀉。</strong>
-                    </p>
-                    <p>
-                        <strong>☕ 其實市面上好多所謂「代糖」都係陷阱，但有一樣嘢係真係同糖無關。</strong>一般人想戒糖，最簡單係用微量（大約平時用糖嘅 1/4）嘅「純羅漢果萃取液或粉」嚟代替白砂糖同果糖。咁樣做確實可以斬斷添加糖同熱量，對血糖冇壓力。不過，經驗之談：如果你唔飲開咖啡，或者脾胃虛寒、容易瀉嘅人，千祈唔好空腹狂飲濃羅漢果水，因為佢會刺激胃酸分泌同腸道蠕動，搞到胃酸倒流或者肚屙。最近我發現市面唯一一款（記憶中一直都有）真正過到口癮、用純羅漢果提取物，最重要係加咗「天然活酵素」嘅產品。呢個活酵素就係關鍵，（更新只係減低）羅漢果對腸道嘅刺激，令你飲得舒服啲。<strong>除咗嗰啲追求「精品咖啡人設」、飲開淺炒日曬埃塞俄比亞豆嘅老饕之外，邊款就 DM 我。</strong>
+                    <div class="flex flex-wrap items-center gap-1.5 font-mono text-xs font-black">
+                        <span class="px-2.5 py-1 bg-white border border-slate-900">1. 脾虛</span>
+                        <span class="text-red-700">➔</span>
+                        <span class="px-2.5 py-1 bg-white border border-slate-900">2. 寒弱</span>
+                        <span class="text-red-700">➔</span>
+                        <span class="px-2.5 py-1 bg-amber-100 border border-slate-900">3. 濕</span>
+                        <span class="text-red-700">➔</span>
+                        <span class="px-2.5 py-1 bg-amber-200 border border-slate-900">4. 凝結</span>
+                        <span class="text-red-700">➔</span>
+                        <span class="px-2.5 py-1 bg-orange-200 border border-red-800 text-red-950">5. 塞</span>
+                        <span class="text-red-700">➔</span>
+                        <span class="px-2.5 py-1 bg-red-100 border border-red-800 text-red-950">6. 毒素垃圾困死</span>
+                        <span class="text-red-700">➔</span>
+                        <span class="px-2.5 py-1 bg-red-800 text-white border border-black">7. 免疫菌群唔夠應付跌落去</span>
+                        <span class="text-red-700">➔</span>
+                        <span class="px-2.5 py-1 bg-[#111827] text-amber-300 border border-black">8. 腫瘤適應環境改變</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-800 leading-relaxed mt-3 font-medium">
+                        喺人嘅身體上邊嚟講，全部都係一步步由好變到最壞呢個過程：<strong>由脾虛變寒弱，寒變成濕，濕耐咗凝結，結埋一嚿就塞</strong>。一塞唔通，毒素困死喺入面；免疫力同有益菌群唔夠應付一路跌，腫瘤細胞就識得適應改變。講人話就係：<strong>全部都係你自己親手養成</strong>，搞到最後連你自己嘅免疫力都畀佢吞噬埋（分唔到好定壞），去到嗰步就唔係自己話事，而係要靠醫治去救命、去博個生存期。
                     </p>
                 </div>
 
-                <!-- Link to PREM_24 Full Lab -->
-                <div class="mt-4 p-3.5 bg-[#0A0F1D] border-2 border-amber-500 text-white rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-mono">
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-amber-400 font-black text-sm">PREM_24 專屬解剖實驗室</span>
-                            <span class="text-[10px] px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded border border-amber-500/40 font-bold">80% 核心實彈</span>
-                        </div>
-                        <p class="text-xs text-slate-300 font-sans mt-0.5">
-                            簡單講：你可以進入一個專屬的分析空間，用視覺化模型睇清楚羅漢果甜味係點樣刺激味覺受體（T1R2/T1R3）、赤藻糖醇點樣透過滲透壓導致腸道脹氣
+                <!-- 20% 濃縮四大元兇 + 兩個角度底層拆局 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-3 font-sans text-xs sm:text-sm">
+                    <div class="p-3 bg-red-50/70 border-l-4 border-[#8B0000]">
+                        <strong class="font-mono text-[#8B0000] block mb-1">🚨 四大發炎元兇速覽（撳掣前起碼中兩樣）</strong>
+                        <ul class="space-y-1 text-slate-800 font-medium leading-relaxed">
+                            <li><strong>① 偽健康超加工 (NOVA 4)：</strong>紙包豆漿、高糖益生菌飲品、全麥方包 ➔ 24–48 小時改寫腸菌，LPS 漏入血。</li>
+                            <li><strong>② 張凳毒害你：</strong>做 Gym 都救唔返坐 8 個鐘！臀肌失憶 + 清血脂酵素 LPL 即刻停工。</li>
+                            <li><strong>③ 瘦胖子內臟脂肪：</strong>BMI 唔準，隱形內臟脂肪 24 小時狂噴 IL-6、TNF-α，膠原流失變殘樣。</li>
+                            <li><strong>④ 瞓唔夠 6 粒鐘：</strong>腸道褪黑激素係大腦 400 倍；一亂即腸漏，第二朝 CRP 直接飆升。</li>
+                        </ul>
+                    </div>
+                    <div class="p-3 bg-amber-50 border-l-4 border-amber-600">
+                        <strong class="font-mono text-amber-950 block mb-1">🧭 兩個角度拆解：點解吞極維他命 / 薑黃素 CRP 仲咁高？</strong>
+                        <p class="text-slate-800 leading-relaxed mb-2">
+                            <strong>底層邏輯拆局：</strong>你犯咗<strong>「只補唔清」</strong>同<strong>「吸收錯配」</strong>兩個盲點！四條死路一齊漏電，食粒薑黃素頂盡擋一條。
+                        </p>
+                        <p class="text-slate-800 leading-relaxed font-bold">
+                            唔好再信超市「低脂」、「健康」商業陷阱。你要行<strong>「減法」</strong>，狠心戒走精製種子油同加工糖，並特登叫醫生驗 <span class="text-[#8B0000] font-mono">HSCRP（>1mg/L 已入低度發炎區）</span>！
                         </p>
                     </div>
-                    <a href="https://magasite.pages.dev/index" target="_blank" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded transition flex items-center gap-1.5 shrink-0 shadow-md">
-                        <span>開啟 PREM_24 解剖室</span>
+                </div>
+
+                <!-- Link to PREM_25 Full 80% Lab -->
+                <div class="mt-4 p-3.5 bg-[#0A0F1D] border-2 border-amber-500 text-white rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-mono">
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-amber-400 font-black text-sm">PREM_25 慢性發炎戰情室 × 3D 四路徑沙盤</span>
+                            <span class="text-[10px] px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded border border-amber-500/40 font-bold">其餘 80% 完整實彈內容</span>
+                        </div>
+                        <p class="text-xs text-slate-300 font-sans mt-1">
+                            進入 PREM_25 解鎖全部 80% 實戰內容：四大元兇逐件化學/生理拆局、38 兆腸菌與 400× 腸道褪黑激素 3D 攔截沙盤、HSCRP 1/3/10 驗血自保表，及 12 星期跌 20–30% 減法模擬器！
+                        </p>
+                    </div>
+                    <a href="/prem-25.html" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded transition flex items-center gap-1.5 shrink-0 shadow-md">
+                        <span>開啟 PREM_25 戰情室 (80%)</span>
                         <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
                     </a>
                 </div>
             </div>
 
             <div class="p-2.5 bg-[#FFFDF8] border border-slate-900 text-xs font-mono text-slate-800">
-                <strong class="text-red-900">⚡ 第14日 24HR 行動：</strong>簡單講：先睇「羅漢果代糖」成分表。如果排第一位係赤藻糖醇，留意食用後有冇脹氣等不適。飲咖啡時，可以用少量純羅漢果萃取物代替白砂糖；一次只改呢一樣，連續記錄 3 日感受。
+                <strong class="text-red-900">⚡ 第15日 24HR 減法行動：</strong>反轉手邊包裝嘢睇成分表（廚房無嘅化學名即放低）、每坐 30 分鐘起身郁 2 分鐘、戒精製種子油＋加工糖，下次驗血主動加驗 <strong>HSCRP</strong>！
             </div>
         </section>
 
@@ -548,24 +860,33 @@
                     <div>    
                         <div class="flex items-center gap-2 mb-2">    
                             <span class="bg-news-red text-white text-xs sm:text-sm font-black font-mono px-2 py-0.5 uppercase">B1 今日焦點</span>    
-                            <span class="text-xs sm:text-sm font-mono font-bold text-news-winered">舊 A1 實彈檔案 (最新排序 1 ➔ 11) ‧ 12大抗炎戰術輪播</span>    
+                            <span class="text-xs sm:text-sm font-mono font-bold text-news-winered">舊 A1 實彈檔案 (最新排序 1 ➔ 12) ‧ 12大抗炎戰術輪播</span>    
                         </div>    
                             
                         <h2 class="text-2xl sm:text-4xl font-black text-news-ink font-lemon leading-tight mb-2">    
-                            B1: 舊 A1 實彈檔案 (最新排序 1 ➔ 11)    
+                            B1: 舊 A1 實彈檔案 (最新排序 1 ➔ 12)    
                         </h2>    
                             
                         <p class="text-base font-serif italic border-l-4 border-news-red pl-3 py-1 text-news-subtle mb-4 font-bold">    
                             每日輪換執行，徹底阻斷細胞「漏電」，重塑個人生物主權。    
                         </p>    
 
-                        <!-- 最新排序 1 ➔ 11 實彈總覽列表 -->
+                        <!-- 最新排序 1 ➔ 12 實彈總覽列表 -->
                         <ul class="space-y-2.5 mb-5 font-serif">
-                            <!-- B1 新移入項目：第12日 A1 「健康嘢」營銷陷阱 -->
-                            <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(11);" class="p-3.5 bg-red-50/70 border-2 border-red-800 rounded-sm cursor-pointer hover:bg-red-100/80 transition shadow-xs">
+                            <!-- B1 新移入項目：第14日 A1 純羅漢果萃取減糖真相 -->
+                            <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(12);" class="p-3.5 bg-red-50/80 border-2 border-red-900 rounded-sm cursor-pointer hover:bg-red-100/90 transition shadow-xs">
                                 <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
-                                    <span class="font-mono text-xs font-black bg-red-900 text-white px-2 py-0.5 rounded">【#11 剛移入】</span>
-                                    <span class="font-mono text-xs font-black bg-amber-300 text-slate-950 border border-slate-900 px-2 py-0.5 rounded">原 A1 存檔 · 第12日</span>
+                                    <span class="font-mono text-xs font-black bg-red-900 text-white px-2 py-0.5 rounded">【#12 剛移入】</span>
+                                    <span class="font-mono text-xs font-black bg-amber-300 text-slate-950 border border-slate-900 px-2 py-0.5 rounded">原 A1 存檔 · 第14日</span>
+                                </div>
+                                <h3 class="text-base sm:text-lg font-black text-news-ink">A1: 純羅漢果萃取甜味劑係「減糖工具」！Mogroside V 解剖 × 咖啡減糖避坑</h3>
+                                <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>純羅漢果甜苷唔係果糖、非能抗炎或幫腸！踢爆超市 95–99% 混充赤藻糖醇導致腸道滲透壓拉水脹氣，附 PREM_24 解剖室傳送門。</p>
+                            </li>
+                            <!-- B1 存檔項目：第12日 A1 「健康嘢」營銷陷阱 -->
+                            <li onclick="showB1FeatureCard(2); switchOldA1SubTopic(11);" class="p-3.5 bg-red-50/50 border-2 border-red-800 rounded-sm cursor-pointer hover:bg-red-100/80 transition shadow-xs">
+                                <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
+                                    <span class="font-mono text-xs font-black bg-slate-900 text-white px-2 py-0.5 rounded">【#11】</span>
+                                    <span class="font-mono text-xs font-black bg-amber-200 text-slate-950 border border-slate-900 px-2 py-0.5 rounded">原 A1 存檔 · 第12日</span>
                                 </div>
                                 <h3 class="text-base sm:text-lg font-black text-news-ink">A1: 點解而家嘅人比以前更容易病？答案就喺你以為食緊嘅「健康嘢」</h3>
                                 <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed"><strong>實彈內容：</strong>「天然」、「Organic」、「低脂」、「植物奶」營銷包裝大揭秘！燕麥奶菜籽油乳化劑、咖啡假能量、加工食品化學毒素大對照，Control the controllables！</p>
@@ -677,19 +998,20 @@
                                 </div>    
                             </div>
 
-                            <!-- B1 TAB 2: 舊 A1 專題大調查 (最新排序 1 ➔ 11) -->
+                            <!-- B1 TAB 2: 舊 A1 專題大調查 (最新排序 1 ➔ 12) -->
                             <div id="b1-feature-card-2" class="border-2 border-[#121212] p-5 sm:p-6 bg-white shadow-sm hidden">
                                 <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
                                     <div class="flex items-center gap-2">
                                         <span class="font-mono text-xs sm:text-sm font-black bg-slate-900 text-white px-2 py-0.5 rounded">舊 A1 實彈</span>
-                                        <span class="font-mono text-xs font-bold text-news-winered">最新排序 1 ➔ 11</span>
+                                        <span class="font-mono text-xs font-bold text-news-winered">最新排序 1 ➔ 12</span>
                                     </div>
                                     <span class="text-xs font-mono font-bold text-emerald-700 hidden sm:inline">實彈檔案存檔</span>
                                 </div>
 
-                                <!-- Sub-tabs for the 11 sub topics (最新排序 11 ➔ 1) -->
+                                <!-- Sub-tabs for the 12 sub topics (最新排序 12 ➔ 1) -->
                                 <div class="flex flex-wrap gap-1.5 mb-4 font-mono text-xs">
-                                    <button onclick="switchOldA1SubTopic(11)" id="sub-a1-btn-11" class="px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400">11. 「健康嘢」營銷陷阱 (原第12日 A1)</button>
+                                    <button onclick="switchOldA1SubTopic(12)" id="sub-a1-btn-12" class="px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400">12. 羅漢果減糖工具真相 (原第14日 A1)</button>
+                                    <button onclick="switchOldA1SubTopic(11)" id="sub-a1-btn-11" class="px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition">11. 「健康嘢」營銷陷阱 (原第12日 A1)</button>
                                     <button onclick="switchOldA1SubTopic(10)" id="sub-a1-btn-10" class="px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition">10. 創作者變現 × 補劑 Timing (原 A1)</button>
                                     <button onclick="switchOldA1SubTopic(9)" id="sub-a1-btn-9" class="px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition">9. 多系統病徵對照表 (原 A1)</button>
                                     <button onclick="switchOldA1SubTopic(8)" id="sub-a1-btn-8" class="px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition">8. 切斷 6 大化學毒素 (最新)</button>
@@ -702,10 +1024,49 @@
                                     <button onclick="switchOldA1SubTopic(1)" id="sub-a1-btn-1" class="px-2.5 py-1 font-bold rounded bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100 transition">1. 古法發酵轉化</button>
                                 </div>
 
-                                <!-- Sub 11: 原 A1（第12日）點解而家嘅人比以前更容易病？答案就喺你以為食緊嘅「健康嘢」 -->
-                                <div id="sub-a1-topic-11" class="space-y-3">
+                                <!-- Sub 12: 原 A1（第14日）純羅漢果萃取甜味劑係「減糖工具」！ -->
+                                <div id="sub-a1-topic-12" class="space-y-3">
                                     <div class="flex items-center gap-2 flex-wrap">
-                                        <span class="bg-red-900 text-white font-mono text-xs font-black px-2 py-0.5 rounded">【#11 剛移入】</span>
+                                        <span class="bg-red-900 text-white font-mono text-xs font-black px-2 py-0.5 rounded">【#12 剛移入】</span>
+                                        <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">原 A1 · 第14日 羅漢果減糖真相</span>
+                                        <span class="bg-amber-300 text-slate-950 font-mono text-xs font-black px-2 py-0.5 rounded border border-slate-900">舊 A1 存檔</span>
+                                    </div>
+                                    <h3 class="text-xl sm:text-2xl md:text-3xl font-black font-lemon text-[#1F2937] leading-tight winered-underline mt-1">
+                                        純羅漢果萃取甜味劑係「減糖工具」！
+                                    </h3>
+                                    <p class="font-mono text-xs sm:text-sm font-bold text-news-winered mb-1">
+                                        先講重點：純羅漢果苷唔係果糖，亦唔等於水果天然糖。只係「非」能抗炎或「幫腸」！
+                                    </p>
+                                    <div id="monk-fruit-stage" class="my-3 border-2 border-news-ink bg-[#FAF8F5] p-3.5 sm:p-4 shadow-sm overflow-hidden">
+                                        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                                            <div class="md:col-span-3 flex justify-center">
+                                                <div class="w-1/2 md:w-full max-w-[180px] border-2 border-news-ink bg-white p-1.5 shadow-[3px_3px_0px_#121212] overflow-hidden">
+                                                    <div id="monk-fruit-parallax-wrapper" class="overflow-hidden bg-white">
+                                                        <img src="https://magasite.pages.dev/images/monk-fruit.jpeg" alt="羅漢果實物與內部乾燥果瓤結構" class="w-full h-auto object-cover" />
+                                                    </div>
+                                                    <div class="mt-1 pt-1 border-t border-slate-300 flex items-center justify-between font-mono text-[10px] text-news-subtle">
+                                                        <span class="font-black text-news-winered">FIG 14.1</span>
+                                                        <span>MOGROSIDE V</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="md:col-span-9 space-y-2 font-serif">
+                                                <h4 class="text-base sm:text-lg font-black text-news-ink">人體酵素「拆唔開」嘅三萜分子</h4>
+                                                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                                                    天然甜味源自<strong>羅漢果甜苷 (Mogrosides)</strong>，三萜骨架連住葡萄糖基，分子量極大，唔會被小腸吸收轉化成血糖。但超市賣嘅 <strong>95%–99% 都混充赤藻糖醇 (Erythritol)</strong>、葡萄糖或麥芽糊精，喺腸道產生高滲透壓拉水引致肚脹腹瀉！
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 bg-amber-50 border-l-4 border-amber-600 text-xs sm:text-sm text-slate-800 leading-relaxed">
+                                        <strong>☕ 咖啡實戰：</strong>想戒糖可用平時用糖 1/4 嘅純羅漢果萃取液或粉；脾胃虛寒易瀉者忌空腹狂飲濃羅漢果水。配搭「天然活酵素」配方可減輕腸胃刺激。<a href="/prem-24.html" class="text-news-winered font-black underline ml-1">開啟 PREM_24 羅漢果解剖室 ↗</a>
+                                    </div>
+                                </div>
+
+                                <!-- Sub 11: 原 A1（第12日）點解而家嘅人比以前更容易病？答案就喺你以為食緊嘅「健康嘢」 -->
+                                <div id="sub-a1-topic-11" class="space-y-3 hidden">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <span class="bg-slate-900 text-white font-mono text-xs font-black px-2 py-0.5 rounded">【#11】</span>
                                         <span class="bg-news-winered text-white font-mono text-xs sm:text-sm font-black px-2.5 py-0.5 uppercase tracking-wider">原 A1 · 第12日 踢爆「健康嘢」營銷陷阱</span>
                                         <span class="bg-amber-300 text-slate-950 font-mono text-xs font-black px-2 py-0.5 rounded border border-slate-900">舊 A1 存檔</span>
                                     </div>
@@ -1811,6 +2172,7 @@
             5: { active: "px-2.5 py-1 font-bold rounded bg-sky-800 text-white border border-sky-900 shadow-sm ring-2 ring-sky-400", inactive: "px-2.5 py-1 font-bold rounded bg-sky-50 text-sky-950 border border-sky-300 hover:bg-sky-100 transition" },
             6: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" },
             7: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-cyan-400", inactive: "px-2.5 py-1 font-bold rounded bg-cyan-50 text-cyan-950 border border-cyan-300 hover:bg-cyan-100 transition" },
+            12: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" },
             11: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" },
             10: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" },
             9: { active: "px-2.5 py-1 font-bold rounded bg-[#8B0000] text-white border border-red-900 shadow-sm ring-2 ring-red-400", inactive: "px-2.5 py-1 font-bold rounded bg-red-50 text-red-950 border border-red-300 hover:bg-red-100 transition" },
@@ -1818,7 +2180,7 @@
         };
 
         function switchOldA1SubTopic(topicNum) {
-            for (let i = 1; i <= 11; i++) {
+            for (let i = 1; i <= 12; i++) {
                 const topic = document.getElementById(`sub-a1-topic-${i}`);
                 const btn = document.getElementById(`sub-a1-btn-${i}`);
                 if (topic) {
@@ -2002,6 +2364,1248 @@
                 wrapper.style.transform = `translateY(${translateY.toFixed(1)}px) scale(${scale.toFixed(3)})`;
             }
         }, { passive: true });
-    </script>    
+    </script>
+    </main>
+
+    <!-- Three.js 12-Second HK Street Newsstand Explainer Module (Loaded via CDN) -->
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+        import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+
+        const DURATION_SEC = 12.0;
+
+        // 4 Single-Active Editions (每次不同 + 只能用一款 · 第15日實彈焦點)
+        const NEWSSTAND_EDITIONS = [
+            {
+                id: 'classic-ink-red',
+                zhName: '經典油墨紅 · 第15日頭條版',
+                badge: 'D15 · 經典紅',
+                paperBg: '#F8F4EC',
+                inkColor: '#121212',
+                accentColor: '#8B0000',
+                stallAccent: '#1B4332',
+                cardBg: '#F8F6F0',
+                cardText: '#121212',
+                cardBorder: '#121212',
+                papers: [
+                    { code: 'A1', en: 'TRIGGERED', title: '脾虛寒濕塞➔慢性發炎', zh: '碌到嗰個位先播', actDesc: '進入視區啟動12秒報紙檔：自己親手養成慢性低度發炎', sectionId: 'sec-a1-d15' },
+                    { code: 'A2', en: 'LINKED', title: '舌診漏電×四大元兇', zh: '郁幾多就碌幾多', actDesc: '滾動距離1:1連動報紙檔結構，對照脾虛齒痕厚苔', sectionId: 'sec-tongue-game' },
+                    { code: 'B1', en: 'PARALLAX', title: '舊A1羅漢果×12大戰術', zh: '背景行得慢過前景', actDesc: '街景視差襯托B1舊A1存檔（第14日羅漢果＋1-11）', sectionId: 'sec-b1' },
+                    { code: 'B2', en: 'STICKY', title: '逆轉食物金字塔行減法', zh: '碌到頂就會黐住', actDesc: '戒精製種子油同加工糖，修復單細胞腸壁防LPS', sectionId: 'sec-b2' },
+                    { code: 'P25', en: 'SNAP', title: 'PREM_25 完整80%實彈', zh: '一碌就會成版過', actDesc: '深入解剖NOVA4、久坐LPL、瘦胖子IL-6與400×褪黑激素', sectionId: 'sec-a1-d15' },
+                    { code: 'CHK', en: 'HORIZONTAL', title: 'HSCRP自保指標1/3/10', zh: '內容向横行', actDesc: '每次不同＋只能用一款，12星期四開關減法跌20–30%', sectionId: 'sec-a1-d15' },
+                ],
+            },
+            {
+                id: 'midnight-extra-gold',
+                zhName: '午夜號外金 · 深宵特刊版',
+                badge: 'D15 · 號外金',
+                paperBg: '#EFE7D6',
+                inkColor: '#0F172A',
+                accentColor: '#B45309',
+                stallAccent: '#92400E',
+                cardBg: '#171B24',
+                cardText: '#F8FAFC',
+                cardBorder: '#F59E0B',
+                papers: [
+                    { code: 'EX-01', en: 'IGNITE', title: '號外：24小時體內暗燒', zh: '碌到嗰個位先播', actDesc: '普通驗血照唔出，必主動加驗CRP／HSCRP先知燒咗幾年', sectionId: 'sec-a1-d15' },
+                    { code: 'EX-02', en: 'SCRUB', title: '號外：張凳LPL停工', zh: '郁幾多就碌幾多', actDesc: '朝早跑5K都救唔返坐8粒鐘，每30分鐘起身郁2分鐘', sectionId: 'sec-a1-d15' },
+                    { code: 'EX-03', en: 'DEPTH', title: '號外：NOVA4改寫38兆菌', zh: '背景行得慢過前景', actDesc: '紙包豆漿全麥包24–48小時穿腸漏LPS搞散血清素', sectionId: 'sec-b1' },
+                    { code: 'EX-04', en: 'PINNED', title: '號外：瘦胖子IL-6工廠', zh: '碌到頂就會黐住', actDesc: '內臟脂肪狂噴TNF-α令膠原流失、眼底凹陷變殘樣', sectionId: 'sec-b2' },
+                    { code: 'EX-05', en: 'FLIP', title: '號外：只補唔清雙盲點', zh: '一碌就會成版過', actDesc: '食極薑黃素綜合維他命CRP仲高？因吸收錯配要行減法', sectionId: 'sec-a1-d15' },
+                    { code: 'EX-06', en: 'SLIDE', title: '號外：腸道400×褪黑激素', zh: '內容向横行', actDesc: '一晚瞓唔夠6粒鐘CRP即飆，固定作息先救到腸壁維修', sectionId: 'sec-b1' },
+                ],
+            },
+            {
+                id: 'hk-green-stall',
+                zhName: '鐵皮排檔綠 · 懷舊旺角版',
+                badge: 'D15 · 鐵皮綠',
+                paperBg: '#FAF6E8',
+                inkColor: '#14241B',
+                accentColor: '#15803D',
+                stallAccent: '#14532D',
+                cardBg: '#0E2419',
+                cardText: '#ECFDF5',
+                cardBorder: '#22C55E',
+                papers: [
+                    { code: 'HK-01', en: 'CUE', title: '排檔頭條：脾虛寒濕塞', zh: '碌到嗰個位先播', actDesc: '踏入視區播足12秒：毒素困死免疫力畀腫瘤吞噬', sectionId: 'sec-a1-d15' },
+                    { code: 'HK-02', en: 'SYNC', title: '排檔二條：脷苔濕重測', zh: '郁幾多就碌幾多', actDesc: '齒痕厚苔對照副偈漏電指數，即時鎖定身體警報', sectionId: 'sec-tongue-game' },
+                    { code: 'HK-03', en: 'DRIFT', title: '排檔三條：舊A1羅漢果', zh: '背景行得慢過前景', actDesc: '第14日純羅漢果減糖檔案完整移入B1第12條目存檔', sectionId: 'sec-b1' },
+                    { code: 'HK-04', en: 'HOLD', title: '排檔四條：抗炎金字塔', zh: '碌到頂就會黐住', actDesc: 'Sticky鎖定LAYER 02發酵菜修補Tight Junction', sectionId: 'sec-b2' },
+                    { code: 'HK-05', en: 'LOCK', title: '排檔五條：反轉成分表', zh: '一碌就會成版過', actDesc: '見到屋企廚房無嘅乳化劑膠類化學名即刻放低唔好買', sectionId: 'sec-b1' },
+                    { code: 'HK-06', en: 'PAN', title: '排檔六條：負重阻力練', zh: '內容向横行', actDesc: '減內臟脂肪靠負重阻力訓練，遠勝單純帶氧跑步', sectionId: 'sec-a1-d15' },
+                ],
+            },
+            {
+                id: 'cobalt-tactical-press',
+                zhName: '靛藍實彈報 · 晨報早鳥版',
+                badge: 'D15 · 靛藍版',
+                paperBg: '#F4F7FB',
+                inkColor: '#0F172A',
+                accentColor: '#1D4ED8',
+                stallAccent: '#1E3A8A',
+                cardBg: '#172554',
+                cardText: '#F8FAFC',
+                cardBorder: '#FACC15',
+                papers: [
+                    { code: 'PR-01', en: 'START', title: '晨報：行減法戒種子油', zh: '碌到嗰個位先播', actDesc: '停信低脂健康商業包裝，由源頭切斷精製油加工糖', sectionId: 'sec-a1-d15' },
+                    { code: 'PR-02', en: 'DRIVE', title: '晨報：四條死路齊爆發', zh: '郁幾多就碌幾多', actDesc: 'LPS漏電＋LPL停工＋內臟噴射＋皮質醇失控全面攔截', sectionId: 'sec-a1-d15' },
+                    { code: 'PR-03', en: 'DEPTH', title: '晨報：5萬人睡眠實證', zh: '背景行得慢過前景', actDesc: '週末補眠補唔返，睡眠失調同所有發炎指標直接掛鉤', sectionId: 'sec-b1' },
+                    { code: 'PR-04', en: 'STICK', title: '晨報：B1歷代A1檔案庫', zh: '碌到頂就會黐住', actDesc: '一站查閱第14日羅漢果至第1日古法發酵12篇實彈', sectionId: 'sec-b1' },
+                    { code: 'PR-05', en: 'SNAP', title: '晨報：12週HSCRP跌30%', zh: '一碌就會成版過', actDesc: '同時扭轉飲食起身訓練作息四開關，三個月見分曉', sectionId: 'sec-a1-d15' },
+                    { code: 'PR-06', en: 'CROSS', title: '晨報：PREM_25解鎖全庫', zh: '內容向横行', actDesc: '嚴守單一款式橫向對焦，即入PREM_25看80%全文', sectionId: 'sec-a1-d15' },
+                ],
+            },
+        ];
+
+        function detectSoftwareGl() {
+            try {
+                const probe = document.createElement('canvas');
+                const gl = probe.getContext('webgl2') || probe.getContext('webgl');
+                if (!gl) return true;
+                const ext = gl.getExtension('WEBGL_debug_renderer_info');
+                const gpu = String(gl.getParameter(ext ? ext.UNMASKED_RENDERER_WEBGL : gl.RENDERER) || '');
+                gl.getExtension('WEBGL_lose_context')?.loseContext();
+                return /SwiftShader|llvmpipe|softpipe|Software|Basic Render/i.test(gpu);
+            } catch {
+                return true;
+            }
+        }
+
+        function pickDistinctEditionIndex() {
+            const key = 'df_hk_newsstand_last_edition';
+            let prev = -1;
+            try {
+                const raw = localStorage.getItem(key);
+                if (raw !== null && !Number.isNaN(Number(raw))) prev = Number(raw);
+            } catch {}
+            const choices = NEWSSTAND_EDITIONS.map((_, i) => i).filter((i) => i !== prev);
+            const next = choices[Math.floor(Math.random() * choices.length)] ?? 0;
+            try {
+                localStorage.setItem(key, String(next));
+            } catch {}
+            return next;
+        }
+
+        // Procedural Web Audio (Paper rustle & HK newsstand chime — zero external audio files)
+        class NewsstandAudio {
+            constructor() {
+                this.ctx = null;
+                this.enabled = false;
+            }
+            ensure() {
+                if (!this.ctx) {
+                    const AC = window.AudioContext || window.webkitAudioContext;
+                    if (!AC) return null;
+                    this.ctx = new AC();
+                }
+                if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
+                return this.ctx;
+            }
+            playFlip(freq = 540) {
+                if (!this.enabled) return;
+                const ctx = this.ensure();
+                if (!ctx) return;
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, now);
+                osc.frequency.exponentialRampToValueAtTime(180, now + 0.08);
+                gain.gain.setValueAtTime(0.11, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            }
+            playPaperRustle() {
+                if (!this.enabled) return;
+                const ctx = this.ensure();
+                if (!ctx) return;
+                const len = Math.floor(ctx.sampleRate * 0.14);
+                const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+                const data = buf.getChannelData(0);
+                for (let i = 0; i < len; i++) {
+                    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * 0.45));
+                }
+                const src = ctx.createBufferSource();
+                src.buffer = buf;
+                const filter = ctx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 1800;
+                const gain = ctx.createGain();
+                gain.gain.value = 0.09;
+                src.connect(filter);
+                filter.connect(gain);
+                gain.connect(ctx.destination);
+                src.start();
+            }
+        }
+
+        function createShadowTexture() {
+            const c = document.createElement('canvas');
+            c.width = 512;
+            c.height = 512;
+            const ctx = c.getContext('2d');
+            const g = ctx.createRadialGradient(256, 256, 20, 256, 256, 240);
+            g.addColorStop(0, 'rgba(0,0,0,0.75)');
+            g.addColorStop(0.6, 'rgba(0,0,0,0.28)');
+            g.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, 512, 512);
+            const t = new THREE.CanvasTexture(c);
+            t.colorSpace = THREE.SRGBColorSpace;
+            return t;
+        }
+
+        function createPavementTexture() {
+            const c = document.createElement('canvas');
+            c.width = 512;
+            c.height = 512;
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#12151C';
+            ctx.fillRect(0, 0, 512, 512);
+            ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+            ctx.lineWidth = 2;
+            for (let i = 0; i <= 512; i += 64) {
+                ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, 512); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(512, i); ctx.stroke();
+            }
+            const t = new THREE.CanvasTexture(c);
+            t.colorSpace = THREE.SRGBColorSpace;
+            t.wrapS = THREE.RepeatWrapping;
+            t.wrapT = THREE.RepeatWrapping;
+            t.repeat.set(12, 12);
+            return t;
+        }
+
+        function createSignboardTexture(maxAnisotropy) {
+            const c = document.createElement('canvas');
+            c.width = 1024;
+            c.height = 256;
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#143326';
+            ctx.fillRect(0, 0, 1024, 256);
+
+            ctx.strokeStyle = '#F59E0B';
+            ctx.lineWidth = 10;
+            ctx.strokeRect(14, 14, 996, 228);
+
+            ctx.fillStyle = '#F59E0B';
+            ctx.font = '800 30px "Courier New", monospace';
+            ctx.fillText('HONG KONG STREET NEWSSTAND · 12S 3D EXPLAINER', 44, 72);
+
+            ctx.fillStyle = '#FFFDF7';
+            ctx.font = '900 68px "PingFang HK", Georgia, serif';
+            ctx.fillText('抗炎日報第15日  香港報紙檔', 44, 168);
+
+            ctx.fillStyle = '#FDE047';
+            ctx.font = '800 26px "Courier New", monospace';
+            ctx.fillText('DAILY FLOW DAY 15 · 脾虛寒濕塞 × 四大元兇', 44, 218);
+
+            const t = new THREE.CanvasTexture(c);
+            t.colorSpace = THREE.SRGBColorSpace;
+            t.anisotropy = maxAnisotropy;
+            return t;
+        }
+
+        function createFrontPageTexture(paper, edition, maxAnisotropy) {
+            const c = document.createElement('canvas');
+            c.width = 1024;
+            c.height = 1280;
+            const ctx = c.getContext('2d');
+
+            // Newsprint sheet background
+            ctx.fillStyle = edition.paperBg;
+            ctx.fillRect(0, 0, 1024, 1280);
+
+            // Outer double border
+            ctx.strokeStyle = edition.inkColor;
+            ctx.lineWidth = 8;
+            ctx.strokeRect(24, 24, 976, 1232);
+            ctx.lineWidth = 2;
+            ctx.strokeRect(36, 36, 952, 1208);
+
+            // Top masthead banner
+            ctx.fillStyle = edition.accentColor;
+            ctx.fillRect(44, 48, 936, 148);
+
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '900 66px "PingFang HK", Georgia, serif';
+            ctx.fillText('抗炎日報 DAILY FLOW', 68, 134);
+
+            ctx.font = '800 28px "Courier New", monospace';
+            ctx.fillText(`${paper.code}  //  ${edition.badge}`, 68, 178);
+
+            // Main kinetic keyword box
+            ctx.fillStyle = edition.inkColor;
+            ctx.fillRect(44, 224, 936, 120);
+            ctx.fillStyle = '#FDE047';
+            ctx.font = '900 74px Montserrat, Arial, sans-serif';
+            ctx.fillText(paper.en, 68, 308);
+
+            // Cantonese Scroll Mechanic headline
+            ctx.fillStyle = edition.accentColor;
+            ctx.font = '900 64px "PingFang HK", serif';
+            ctx.fillText(paper.zh, 48, 444);
+
+            // Divider rule
+            ctx.fillStyle = edition.inkColor;
+            ctx.fillRect(48, 474, 928, 6);
+
+            // Dailyflow article headline
+            ctx.fillStyle = edition.inkColor;
+            ctx.font = '900 54px "PingFang HK", serif';
+            ctx.fillText(paper.title, 48, 560);
+
+            // Broadsheet simulated editorial columns
+            ctx.fillStyle = 'rgba(18, 18, 18, 0.12)';
+            ctx.fillRect(48, 608, 444, 260);
+            ctx.fillStyle = edition.accentColor;
+            ctx.font = '800 30px "Courier New", monospace';
+            ctx.fillText('HK$ 12  //  A1 實彈', 72, 668);
+            ctx.fillStyle = edition.inkColor;
+            ctx.font = '700 32px "PingFang HK", sans-serif';
+            const line1 = paper.actDesc.slice(0, 14);
+            const line2 = paper.actDesc.slice(14);
+            ctx.fillText(line1, 72, 742);
+            ctx.fillText(line2, 72, 796);
+
+            // Right newsprint ruled lines
+            ctx.strokeStyle = 'rgba(18, 18, 18, 0.25)';
+            ctx.lineWidth = 4;
+            for (let y = 620; y <= 1180; y += 54) {
+                const startX = y < 900 ? 520 : 48;
+                ctx.beginPath();
+                ctx.moveTo(startX, y);
+                ctx.lineTo(968, y);
+                ctx.stroke();
+            }
+
+            // Bottom footer tag
+            ctx.fillStyle = edition.inkColor;
+            ctx.font = '800 28px "Courier New", monospace';
+            ctx.fillText('點擊報紙 SPIN 360° ✕ PLAY 12S EXPLAINER', 48, 1222);
+
+            const t = new THREE.CanvasTexture(c);
+            t.colorSpace = THREE.SRGBColorSpace;
+            t.anisotropy = maxAnisotropy;
+            return t;
+        }
+
+        // Composite Hong Kong Street Newsstand Booth + Signboard (7+ procedural parts)
+        function buildHKNewsstandBooth(isSoftwareGl, maxAnisotropy) {
+            const booth = new THREE.Group();
+
+            // 1. Slanted Wooden Newspaper Rack Deck (seasoned teakwood matte roughness)
+            const woodMat = new THREE.MeshStandardMaterial({
+                color: 0x6b4423,
+                roughness: 0.78,
+                metalness: 0.05,
+            });
+            const counterDeck = new THREE.Mesh(new THREE.BoxGeometry(14.8, 0.34, 2.3), woodMat);
+            counterDeck.position.set(0, -0.15, 0.05);
+            counterDeck.rotation.x = 0.14;
+            counterDeck.receiveShadow = true;
+            counterDeck.castShadow = true;
+            booth.add(counterDeck);
+
+            // 2. Galvanized Steel Retaining Rail & Brass Price Clips (metalness contrast)
+            const steelMat = new THREE.MeshStandardMaterial({
+                color: 0x94a3b8,
+                metalness: 0.88,
+                roughness: 0.26,
+            });
+            const frontLip = new THREE.Mesh(new THREE.BoxGeometry(14.86, 0.1, 0.08), steelMat);
+            frontLip.position.set(0, -0.24, 1.18);
+            booth.add(frontLip);
+
+            const backRack = new THREE.Mesh(new THREE.BoxGeometry(14.8, 0.85, 0.18), woodMat);
+            backRack.position.set(0, 0.34, -0.96);
+            backRack.receiveShadow = true;
+            booth.add(backRack);
+
+            // 3. Classic HK Iron-Green Corrugated Stall Awning Canopy (ExtrudeGeometry + ribs)
+            const canopyGroup = new THREE.Group();
+            const greenIronMat = new THREE.MeshStandardMaterial({
+                color: 0x1b4332,
+                roughness: 0.45,
+                metalness: 0.58,
+            });
+            const awning = new THREE.Mesh(new THREE.BoxGeometry(15.2, 0.14, 3.2), greenIronMat);
+            awning.position.set(0, 3.35, 0.15);
+            awning.rotation.x = 0.16;
+            awning.castShadow = true;
+            canopyGroup.add(awning);
+
+            // Corrugated steel roof ribs via InstancedMesh
+            const ribGeo = new THREE.CylinderGeometry(0.055, 0.055, 3.24, 8);
+            ribGeo.rotateX(Math.PI / 2 + 0.16);
+            const ribCount = 24;
+            const ribs = new THREE.InstancedMesh(ribGeo, greenIronMat, ribCount);
+            const dummy = new THREE.Object3D();
+            for (let i = 0; i < ribCount; i++) {
+                dummy.position.set((i - (ribCount - 1) / 2) * 0.62, 3.42, 0.15);
+                dummy.updateMatrix();
+                ribs.setMatrixAt(i, dummy.matrix);
+            }
+            ribs.instanceMatrix.needsUpdate = true;
+            ribs.computeBoundingSphere();
+            canopyGroup.add(ribs);
+            canopyGroup.userData.explodeVec = new THREE.Vector3(0, 0.85, 0);
+            booth.add(canopyGroup);
+
+            // 4. Vertical Wrought-Iron Stall Posts
+            const ironPostMat = new THREE.MeshStandardMaterial({
+                color: 0x1e2430,
+                roughness: 0.65,
+                metalness: 0.4,
+            });
+            [-7.1, 7.1].forEach((px) => {
+                const post = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.1, 4.9, 12), ironPostMat);
+                post.position.set(px, 0.85, -0.88);
+                post.castShadow = true;
+                booth.add(post);
+            });
+
+            // 5. 3D Illuminated Newsstand Signboard Assembly (Hero 3D Website Masthead)
+            const signGroup = new THREE.Group();
+            const signFrameMat = new THREE.MeshPhysicalMaterial({
+                color: 0xf59e0b,
+                metalness: 0.9,
+                roughness: 0.2,
+                clearcoat: 0.5,
+            });
+            const signBox = new THREE.Mesh(new THREE.BoxGeometry(5.6, 1.38, 0.26), ironPostMat);
+            signGroup.add(signBox);
+
+            const signTrim = new THREE.Mesh(new THREE.BoxGeometry(5.74, 1.5, 0.16), signFrameMat);
+            signTrim.position.z = -0.02;
+            signGroup.add(signTrim);
+
+            const signTex = createSignboardTexture(maxAnisotropy);
+            const signFace = new THREE.Mesh(
+                new THREE.PlaneGeometry(5.36, 1.24),
+                new THREE.MeshStandardMaterial({
+                    map: signTex,
+                    roughness: 0.35,
+                    metalness: 0.1,
+                    polygonOffset: true,
+                    polygonOffsetFactor: -1,
+                })
+            );
+            signFace.position.z = 0.14;
+            signGroup.add(signFace);
+
+            // Twin Press-Roller Gears beside signboard
+            const pressGears = [];
+            [-3.35, 3.35].forEach((gx) => {
+                const gear = new THREE.Group();
+                const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.14, 18), steelMat);
+                hub.rotation.x = Math.PI / 2;
+                gear.add(hub);
+                for (let s = 0; s < 4; s++) {
+                    const spoke = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.08, 0.1), signFrameMat);
+                    spoke.rotation.z = (s * Math.PI) / 4;
+                    gear.add(spoke);
+                }
+                gear.position.set(gx, 0, 0.05);
+                signGroup.add(gear);
+                pressGears.push(gear);
+            });
+
+            // 12-Second Timeline Beacon orbiting signboard
+            const beacon = new THREE.Mesh(
+                new THREE.SphereGeometry(0.11, 14, 14),
+                new THREE.MeshStandardMaterial({
+                    color: 0xfef08a,
+                    emissive: 0xf59e0b,
+                    emissiveIntensity: 1.8,
+                })
+            );
+            beacon.position.set(-2.8, 0.88, 0.16);
+            signGroup.add(beacon);
+
+            signGroup.position.set(0, 2.38, -0.32);
+            signGroup.userData.explodeVec = new THREE.Vector3(0, 0.45, 0.72);
+            booth.add(signGroup);
+
+            // 6. Warm Hanging Tungsten Stall Bulb
+            const bulbShade = new THREE.Mesh(
+                new THREE.ConeGeometry(0.36, 0.24, 18, 1, true),
+                greenIronMat
+            );
+            bulbShade.position.set(0, 2.98, 0.85);
+            booth.add(bulbShade);
+
+            const bulbGlow = new THREE.Mesh(
+                new THREE.SphereGeometry(0.12, 16, 16),
+                new THREE.MeshStandardMaterial({
+                    color: 0xfff7d6,
+                    emissive: 0xfbbf24,
+                    emissiveIntensity: 2.0,
+                })
+            );
+            bulbGlow.position.set(0, 2.86, 0.85);
+            booth.add(bulbGlow);
+
+            // 7. Parallax Street Background Layers (Far HK Neon / Mid Stall Shutters)
+            const farBgGroup = new THREE.Group();
+            const neonMat = new THREE.MeshStandardMaterial({
+                color: 0x8b0000,
+                emissive: 0x991b1b,
+                emissiveIntensity: 0.7,
+                roughness: 0.4,
+            });
+            const frameMat = new THREE.MeshStandardMaterial({ color: 0x1c2331, roughness: 0.7, metalness: 0.3 });
+            for (let b = 0; b < 5; b++) {
+                const bx = (b - 2) * 3.4;
+                const col = new THREE.Mesh(new THREE.BoxGeometry(1.6, 5.2, 0.4), frameMat);
+                col.position.set(bx, 1.4, -5.6);
+                farBgGroup.add(col);
+                const neon = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.28, 0.08), neonMat);
+                neon.position.set(bx, 2.5 + (b % 2) * 0.6, -5.32);
+                farBgGroup.add(neon);
+            }
+
+            const midBgGroup = new THREE.Group();
+            const slatGeo = new THREE.BoxGeometry(0.22, 4.4, 0.14);
+            const slatCount = 14;
+            const slats = new THREE.InstancedMesh(slatGeo, frameMat, slatCount);
+            for (let i = 0; i < slatCount; i++) {
+                dummy.position.set((i - (slatCount - 1) / 2) * 1.45, 1.25, -2.9);
+                dummy.updateMatrix();
+                slats.setMatrixAt(i, dummy.matrix);
+            }
+            slats.instanceMatrix.needsUpdate = true;
+            slats.computeBoundingSphere();
+            midBgGroup.add(slats);
+
+            // Grounded HK Pavement + Contact Shadow
+            const floorTex = createPavementTexture();
+            const floor = new THREE.Mesh(
+                new THREE.PlaneGeometry(54, 54),
+                new THREE.MeshStandardMaterial({
+                    map: floorTex,
+                    roughness: 0.86,
+                    metalness: 0.08,
+                    polygonOffset: true,
+                    polygonOffsetFactor: 1,
+                })
+            );
+            floor.rotation.x = -Math.PI / 2;
+            floor.position.y = -1.65;
+            floor.receiveShadow = !isSoftwareGl;
+
+            const shadowTex = createShadowTexture();
+            const contactShadow = new THREE.Mesh(
+                new THREE.PlaneGeometry(15.5, 5.5),
+                new THREE.MeshBasicMaterial({
+                    map: shadowTex,
+                    transparent: true,
+                    opacity: 0.52,
+                    depthWrite: false,
+                })
+            );
+            contactShadow.rotation.x = -Math.PI / 2;
+            contactShadow.position.y = -1.62;
+
+            return {
+                booth,
+                canopyGroup,
+                signGroup,
+                pressGears,
+                beacon,
+                farBgGroup,
+                midBgGroup,
+                floor,
+                contactShadow,
+                signTex,
+                floorTex,
+                shadowTex,
+            };
+        }
+
+        // Composite 6-Part Folded Broadsheet Newspaper Stack on Slanted Rack
+        function build3DNewspaper(paper, idx, edition, maxAnisotropy) {
+            const root = new THREE.Group();
+
+            // 1. Folded Broadsheet Stack Block (beveled newsprint pages)
+            const stackGeo = new THREE.BoxGeometry(1.74, 2.18, 0.18);
+            const newsprintMat = new THREE.MeshStandardMaterial({
+                color: new THREE.Color(edition.paperBg),
+                roughness: 0.9,
+                metalness: 0.02,
+            });
+            const stackMesh = new THREE.Mesh(stackGeo, newsprintMat);
+            stackMesh.position.set(0, 1.12, 0);
+            stackMesh.castShadow = true;
+            stackMesh.receiveShadow = true;
+            root.add(stackMesh);
+
+            // 2. Crisp Front Page Broadsheet Texture
+            const pageTex = createFrontPageTexture(paper, edition, maxAnisotropy);
+            const pageMat = new THREE.MeshStandardMaterial({
+                map: pageTex,
+                roughness: 0.78,
+                metalness: 0.03,
+                polygonOffset: true,
+                polygonOffsetFactor: -1,
+            });
+            const frontPage = new THREE.Mesh(new THREE.PlaneGeometry(1.66, 2.08), pageMat);
+            frontPage.position.set(0, 1.12, 0.095);
+            root.add(frontPage);
+
+            // 3. Back Folded Page Detail (visible when spinning 360°)
+            const backPage = new THREE.Mesh(new THREE.PlaneGeometry(1.66, 2.08), pageMat);
+            backPage.rotation.y = Math.PI;
+            backPage.position.set(0, 1.12, -0.095);
+            root.add(backPage);
+
+            // 4. Layered Side Page Edges + Top Spine Fold
+            const spineMat = new THREE.MeshStandardMaterial({
+                color: 0xd6cfc2,
+                roughness: 0.92,
+                metalness: 0.01,
+            });
+            const topFold = new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.095, 1.74, 12), spineMat);
+            topFold.rotation.z = Math.PI / 2;
+            topFold.position.set(0, 2.21, 0);
+            root.add(topFold);
+
+            // 5. Brass Newsstand Retaining Clip at Top
+            const clipMat = new THREE.MeshStandardMaterial({
+                color: 0xf59e0b,
+                metalness: 0.92,
+                roughness: 0.18,
+            });
+            const clip = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.18, 0.25), clipMat);
+            clip.position.set(0, 2.24, 0.02);
+            root.add(clip);
+
+            // 6. Raycast Proxy Box (Layer 1)
+            const proxy = new THREE.Mesh(
+                new THREE.BoxGeometry(1.86, 2.35, 0.36),
+                new THREE.MeshBasicMaterial({ visible: false })
+            );
+            proxy.position.set(0, 1.14, 0);
+            proxy.layers.set(1);
+            proxy.userData.paperIdx = idx;
+            root.add(proxy);
+
+            // Rest leaning back naturally on slanted HK rack
+            root.rotation.x = -0.14;
+
+            return {
+                root,
+                idx,
+                stackGeo,
+                newsprintMat,
+                pageTex,
+                pageMat,
+                proxy,
+                spinAngle: 0,
+                spinVelocity: 0,
+                popZ: 0,
+                liftY: 0,
+            };
+        }
+
+        function initDailyFlow3DNewsstand() {
+            const mountEl = document.getElementById('df-three-mount');
+            const scrollerEl = document.getElementById('df-explainer-scroller');
+            if (!mountEl || !scrollerEl) return;
+
+            const isSoftwareGl = detectSoftwareGl();
+            let renderer;
+            try {
+                renderer = new THREE.WebGLRenderer({
+                    antialias: !isSoftwareGl,
+                    powerPreference: 'high-performance',
+                    alpha: false,
+                });
+            } catch {
+                document.getElementById('df-webgl-fallback')?.classList.remove('hidden');
+                return;
+            }
+
+            renderer.setSize(mountEl.clientWidth || window.innerWidth, mountEl.clientHeight || window.innerHeight);
+            renderer.setPixelRatio(isSoftwareGl ? 1 : Math.min(window.devicePixelRatio || 1, 2));
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.12;
+            renderer.shadowMap.enabled = !isSoftwareGl;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            mountEl.appendChild(renderer.domElement);
+
+            const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x101318);
+            scene.fog = new THREE.FogExp2(0x101318, 0.038);
+
+            const pmrem = new THREE.PMREMGenerator(renderer);
+            const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+            scene.environment = envTex;
+            pmrem.dispose();
+
+            const camera = new THREE.PerspectiveCamera(
+                42,
+                (mountEl.clientWidth || window.innerWidth) / (mountEl.clientHeight || window.innerHeight),
+                0.1,
+                100
+            );
+            camera.position.set(0, 1.95, 9.1);
+
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = !isSoftwareGl;
+            controls.dampingFactor = 0.06;
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.minPolarAngle = Math.PI * 0.22;
+            controls.maxPolarAngle = Math.PI * 0.56;
+            controls.minAzimuthAngle = -Math.PI * 0.34;
+            controls.maxAzimuthAngle = Math.PI * 0.34;
+            controls.target.set(0, 1.05, 0);
+
+            // Warm HK Street Stall Bulb + Cool Night Street Fill + Rim
+            scene.add(new THREE.HemisphereLight(0xcbd5e1, 0x1c1917, 0.72));
+
+            const keyLight = new THREE.DirectionalLight(0xffedd5, 2.3);
+            keyLight.position.set(5.2, 7.2, 6.5);
+            keyLight.castShadow = !isSoftwareGl;
+            keyLight.shadow.mapSize.set(1024, 1024);
+            keyLight.shadow.camera.near = 1;
+            keyLight.shadow.camera.far = 26;
+            keyLight.shadow.camera.left = -9;
+            keyLight.shadow.camera.right = 9;
+            keyLight.shadow.camera.top = 6;
+            keyLight.shadow.camera.bottom = -6;
+            keyLight.shadow.bias = -0.0005;
+            keyLight.shadow.normalBias = 0.02;
+            scene.add(keyLight);
+
+            const rimLight = new THREE.DirectionalLight(0x60a5fa, 1.15);
+            rimLight.position.set(-6.5, 4.2, -5.0);
+            scene.add(rimLight);
+
+            if (!isSoftwareGl) {
+                RectAreaLightUniformsLib.init();
+                const stallLight = new THREE.RectAreaLight(0xffe8b3, 3.0, 9.0, 2.2);
+                stallLight.position.set(0, 3.1, 2.2);
+                stallLight.lookAt(0, 0.8, 0);
+                scene.add(stallLight);
+            }
+
+            const boothObj = buildHKNewsstandBooth(isSoftwareGl, maxAnisotropy);
+            scene.add(boothObj.booth);
+            scene.add(boothObj.farBgGroup);
+            scene.add(boothObj.midBgGroup);
+            scene.add(boothObj.floor);
+            scene.add(boothObj.contactShadow);
+
+            let currentEditionIdx = pickDistinctEditionIndex();
+            const rackGroup = new THREE.Group();
+            rackGroup.position.set(0, -0.08, 0.12);
+            scene.add(rackGroup);
+
+            const papers = [];
+            const proxies = [];
+
+            function rebuildNewspaperRack(edition) {
+                while (papers.length) {
+                    const old = papers.pop();
+                    old.pageTex.dispose();
+                    old.stackGeo.dispose();
+                    old.newsprintMat.dispose();
+                    old.pageMat.dispose();
+                    rackGroup.remove(old.root);
+                }
+                proxies.length = 0;
+
+                const spacing = 2.28;
+                edition.papers.forEach((pItem, idx) => {
+                    const pObj = build3DNewspaper(pItem, idx, edition, maxAnisotropy);
+                    pObj.baseX = (idx - (edition.papers.length - 1) / 2) * spacing;
+                    pObj.root.position.set(pObj.baseX, 0, 0);
+                    rackGroup.add(pObj.root);
+                    papers.push(pObj);
+                    proxies.push(pObj.proxy);
+                });
+            }
+
+            rebuildNewspaperRack(NEWSSTAND_EDITIONS[currentEditionIdx]);
+
+            if (!isSoftwareGl) {
+                renderer.compile(scene, camera);
+            }
+
+            const audio = new NewsstandAudio();
+            const state = {
+                isPlaying: false,
+                playhead: 0,
+                triggeredOnce: false,
+                activeAct: 0,
+                activePaperIdx: 0,
+                scrollProgress: 0,
+                linkedScrub: 0,
+                horizRatio: 0,
+                snapMandatory: true,
+                userOrbit: false,
+                dockCollapsed: false,
+                rackPanX: 0,
+                contextLost: false,
+            };
+
+            const _v3 = new THREE.Vector3();
+            const _camTarget = new THREE.Vector3(0, 1.95, 9.1);
+            const _lookTarget = new THREE.Vector3(0, 1.05, 0);
+            const _mouse = new THREE.Vector2();
+            const _raycaster = new THREE.Raycaster();
+            _raycaster.layers.set(1);
+
+            // DOM Elements
+            const scrubberEl = document.getElementById('df-scrubber');
+            const timeEl = document.getElementById('df-time-label');
+            const beatEl = document.getElementById('df-beat-label');
+            const playBtn = document.getElementById('df-btn-play');
+            const playLabel = document.getElementById('df-btn-play-label');
+            const replayBtn = document.getElementById('df-btn-replay');
+            const spinBtn = document.getElementById('df-btn-spin');
+            const audioBtn = document.getElementById('df-btn-audio');
+            const resetCamBtn = document.getElementById('df-btn-reset-cam');
+            const switchEdBtn = document.getElementById('df-btn-switch-edition');
+            const edBadgeEl = document.getElementById('df-active-edition-badge');
+            const horizTrackEl = document.getElementById('df-horiz-track');
+            const horizContEl = document.getElementById('df-horiz-container');
+            const linkRangeEl = document.getElementById('df-link-scrub');
+            const linkPctEl = document.getElementById('df-link-pct');
+            const paraBgEl = document.getElementById('df-parallax-bg');
+            const paraMidEl = document.getElementById('df-parallax-mid');
+            const paraReadEl = document.getElementById('df-parallax-readout');
+            const snapBtn = document.getElementById('df-btn-toggle-snap');
+            const dockEl = document.getElementById('df-explainer-dock');
+            const dockToggleBtn = document.getElementById('df-btn-toggle-dock');
+            const topActEl = document.getElementById('df-top-act-label');
+            const actDots = Array.from(document.querySelectorAll('[data-df-act]'));
+            const actSections = Array.from(document.querySelectorAll('[data-df-act-idx]'));
+
+            function renderSingleEditionDeck() {
+                const ed = NEWSSTAND_EDITIONS[currentEditionIdx];
+                if (edBadgeEl) edBadgeEl.textContent = `${ed.zhName} · 只能用一款`;
+                if (!horizTrackEl) return;
+                horizTrackEl.innerHTML = '';
+
+                ed.papers.forEach((p, idx) => {
+                    const card = document.createElement('button');
+                    card.type = 'button';
+                    card.className = 'snap-center shrink-0 w-[236px] sm:w-[258px] text-left rounded-xl p-4 cursor-pointer transition-transform duration-150 focus:outline-none';
+                    card.style.backgroundColor = ed.cardBg;
+                    card.style.color = ed.cardText;
+                    card.style.border = `2.5px solid ${ed.cardBorder}`;
+                    card.style.boxShadow = `4px 4px 0px ${ed.accentColor}`;
+
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between text-[11px] font-mono font-bold mb-1.5" style="color:${ed.accentColor};">
+                            <span>${p.code} · ${p.en}</span>
+                            <span>${ed.badge}</span>
+                        </div>
+                        <div class="text-base font-black leading-snug">${p.title}</div>
+                        <div class="text-xs font-black mt-1" style="color:${ed.accentColor};">${p.zh}</div>
+                        <p class="text-[11px] opacity-80 font-medium mt-1.5 leading-snug">${p.actDesc}</p>
+                        <div class="mt-3 pt-2 border-t border-current/15 flex items-center justify-between text-[11px] font-mono font-bold">
+                            <span>SPIN 報紙 & PLAY ↻</span>
+                            <span>#${idx + 1}/06</span>
+                        </div>
+                    `;
+                    card.addEventListener('click', () => {
+                        triggerSpinAndPlay(idx);
+                        card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    });
+                    horizTrackEl.appendChild(card);
+                });
+
+                if (horizContEl) {
+                    horizContEl.scrollLeft = 0;
+                    state.horizRatio = 0;
+                }
+            }
+
+            function switchEdition() {
+                const others = NEWSSTAND_EDITIONS.map((_, i) => i).filter((i) => i !== currentEditionIdx);
+                currentEditionIdx = others[Math.floor(Math.random() * others.length)] ?? 0;
+                try { localStorage.setItem('df_hk_newsstand_last_edition', String(currentEditionIdx)); } catch {}
+                rebuildNewspaperRack(NEWSSTAND_EDITIONS[currentEditionIdx]);
+                renderSingleEditionDeck();
+                audio.playPaperRustle();
+                papers.forEach((p, i) => { p.spinVelocity = 7.2 + i * 1.0; });
+            }
+
+            function updateTimelineUI() {
+                const t = THREE.MathUtils.clamp(state.playhead, 0, DURATION_SEC);
+                if (scrubberEl) scrubberEl.value = t.toFixed(2);
+                if (timeEl) timeEl.textContent = `${t.toFixed(1)}s / 12.0s`;
+                if (beatEl) {
+                    if (t < 3.0) beatEl.textContent = '01 / 04 · 報紙檔開檔搭建';
+                    else if (t < 6.0) beatEl.textContent = '02 / 04 · 六份《抗炎日報》上架';
+                    else if (t < 9.0) beatEl.textContent = '03 / 04 · 頭條報紙 SPIN & PLAY';
+                    else beatEl.textContent = '04 / 04 · 街邊報紙檔全景巡禮';
+                }
+                if (playLabel) playLabel.textContent = state.isPlaying ? '暫停 PAUSE' : '播放 12s PLAY';
+                if (playBtn) playBtn.setAttribute('aria-pressed', String(state.isPlaying));
+            }
+
+            function start12s(fromZero = false) {
+                if (fromZero || state.playhead >= DURATION_SEC - 0.05) state.playhead = 0;
+                state.isPlaying = true;
+                state.userOrbit = false;
+                audio.playFlip(600);
+                updateTimelineUI();
+            }
+
+            function triggerSpinAndPlay(idx) {
+                const target = THREE.MathUtils.clamp(idx, 0, papers.length - 1);
+                state.activePaperIdx = target;
+                const p = papers[target];
+                if (p) {
+                    p.spinVelocity = 11.2;
+                    p.popZ = 0.92;
+                    p.liftY = 0.34;
+                }
+                if (!state.isPlaying && (state.playhead === 0 || state.playhead >= DURATION_SEC - 0.1)) {
+                    state.playhead = 6.0;
+                    state.isPlaying = true;
+                }
+                state.userOrbit = false;
+                audio.playPaperRustle();
+                updateTimelineUI();
+            }
+
+            playBtn?.addEventListener('click', () => {
+                if (state.isPlaying) {
+                    state.isPlaying = false;
+                    audio.playFlip(420);
+                } else {
+                    start12s(state.playhead >= DURATION_SEC - 0.05);
+                }
+                updateTimelineUI();
+            });
+            replayBtn?.addEventListener('click', () => start12s(true));
+            document.getElementById('df-btn-retrigger')?.addEventListener('click', () => start12s(true));
+            spinBtn?.addEventListener('click', () => triggerSpinAndPlay((state.activePaperIdx + 1) % papers.length));
+            scrubberEl?.addEventListener('input', (e) => {
+                state.playhead = parseFloat(e.target.value) || 0;
+                state.isPlaying = false;
+                state.userOrbit = false;
+                updateTimelineUI();
+            });
+            switchEdBtn?.addEventListener('click', switchEdition);
+            audioBtn?.addEventListener('click', () => {
+                audio.enabled = !audio.enabled;
+                audioBtn.textContent = audio.enabled ? '🔊 音效開' : '🔇 靜音';
+                if (audio.enabled) audio.playFlip(680);
+            });
+            resetCamBtn?.addEventListener('click', () => {
+                state.userOrbit = false;
+                controls.reset();
+                audio.playFlip(500);
+            });
+            if (dockToggleBtn && dockEl) {
+                const setDock = (c) => {
+                    state.dockCollapsed = c;
+                    dockEl.classList.toggle('dock-collapsed', c);
+                    dockToggleBtn.textContent = c ? '▴ 顯示控制列 (H)' : '▾ 隱藏控制列 (H)';
+                };
+                dockToggleBtn.addEventListener('click', () => setDock(!state.dockCollapsed));
+                window.addEventListener('keydown', (e) => {
+                    if ((e.key === 'h' || e.key === 'H') && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+                        setDock(!state.dockCollapsed);
+                    }
+                });
+            }
+            snapBtn?.addEventListener('click', () => {
+                state.snapMandatory = !state.snapMandatory;
+                scrollerEl.style.scrollSnapType = state.snapMandatory ? 'y mandatory' : 'none';
+                snapBtn.textContent = state.snapMandatory ? 'SNAP: ON 一碌成版過' : 'SNAP: OFF 自由連貫';
+                audio.playFlip(560);
+            });
+            linkRangeEl?.addEventListener('input', (e) => {
+                const v = parseFloat(e.target.value) || 0;
+                state.linkedScrub = THREE.MathUtils.clamp(v, 0, 1);
+                if (linkPctEl) linkPctEl.textContent = `${Math.round(state.linkedScrub * 100)}%`;
+                state.playhead = state.linkedScrub * DURATION_SEC;
+                state.isPlaying = false;
+                updateTimelineUI();
+            });
+
+            if (horizContEl) {
+                horizContEl.addEventListener('wheel', (e) => {
+                    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                        const maxH = horizContEl.scrollWidth - horizContEl.clientWidth;
+                        const atStart = horizContEl.scrollLeft <= 1 && e.deltaY < 0;
+                        const atEnd = horizContEl.scrollLeft >= maxH - 1 && e.deltaY > 0;
+                        if (!atStart && !atEnd) {
+                            e.preventDefault();
+                            horizContEl.scrollLeft += e.deltaY;
+                        }
+                    }
+                }, { passive: false });
+                horizContEl.addEventListener('scroll', () => {
+                    const maxH = Math.max(1, horizContEl.scrollWidth - horizContEl.clientWidth);
+                    state.horizRatio = THREE.MathUtils.clamp(horizContEl.scrollLeft / maxH, 0, 1);
+                    state.activePaperIdx = Math.round(state.horizRatio * (papers.length - 1));
+                });
+            }
+
+            const ACT_LABELS = [
+                '01 · SCROLL-TRIGGERED 碌到嗰個位先播',
+                '02 · SCROLL-LINKED 郁幾多就碌幾多',
+                '03 · PARALLAX 背景行得慢過前景',
+                '04 · STICKY 碌到頂就會黐住',
+                '05 · SCROLL SNAP 一碌就會成版過',
+                '06 · HORIZONTAL SCROLL 內容向横行',
+            ];
+
+            scrollerEl.addEventListener('scroll', () => {
+                const maxScroll = Math.max(1, scrollerEl.scrollHeight - scrollerEl.clientHeight);
+                const top = scrollerEl.scrollTop;
+                state.scrollProgress = THREE.MathUtils.clamp(top / maxScroll, 0, 1);
+
+                if (paraBgEl) paraBgEl.style.transform = `translate3d(0, ${(-top * 0.16).toFixed(1)}px, 0)`;
+                if (paraMidEl) paraMidEl.style.transform = `translate3d(0, ${(-top * 0.36).toFixed(1)}px, 0)`;
+                if (paraReadEl) {
+                    paraReadEl.textContent = `BG ${(-top * 0.16).toFixed(0)}px (0.22×) · MID ${(-top * 0.36).toFixed(0)}px (0.52×) · FG ${(-top).toFixed(0)}px (1.00×)`;
+                }
+
+                if (state.activeAct === 1 && actSections[1]) {
+                    const lp = THREE.MathUtils.clamp((top - actSections[1].offsetTop + scrollerEl.clientHeight * 0.4) / Math.max(1, actSections[1].offsetHeight), 0, 1);
+                    state.linkedScrub = lp;
+                    if (linkRangeEl) linkRangeEl.value = lp.toFixed(3);
+                    if (linkPctEl) linkPctEl.textContent = `${Math.round(lp * 100)}%`;
+                }
+            }, { passive: true });
+
+            const actObs = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+                    const idx = Number(entry.target.getAttribute('data-df-act-idx'));
+                    state.activeAct = idx;
+                    if (topActEl) topActEl.textContent = ACT_LABELS[idx] || ACT_LABELS[0];
+                    actDots.forEach((btn) => btn.classList.toggle('df-act-dot-active', Number(btn.getAttribute('data-df-act')) === idx));
+                    if (idx === 0 && !state.triggeredOnce) {
+                        state.triggeredOnce = true;
+                        start12s(true);
+                    }
+                });
+            }, { root: scrollerEl, threshold: 0.55 });
+            actSections.forEach((s) => actObs.observe(s));
+
+            actDots.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const idx = Number(btn.getAttribute('data-df-act'));
+                    actSections[idx]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    audio.playFlip(520 + idx * 35);
+                });
+            });
+
+            controls.addEventListener('start', () => { state.userOrbit = true; });
+
+            let downPos = { x: 0, y: 0 };
+            renderer.domElement.addEventListener('pointerdown', (e) => { downPos = { x: e.clientX, y: e.clientY }; });
+            renderer.domElement.addEventListener('pointerup', (e) => {
+                if (Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y) > 7) return;
+                const rect = renderer.domElement.getBoundingClientRect();
+                _mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                _mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                _raycaster.setFromCamera(_mouse, camera);
+                const hits = _raycaster.intersectObjects(proxies, false);
+                if (hits.length > 0 && typeof hits[0].object.userData.paperIdx === 'number') {
+                    triggerSpinAndPlay(hits[0].object.userData.paperIdx);
+                }
+            });
+
+            let lastHover = 0;
+            renderer.domElement.addEventListener('pointermove', (e) => {
+                const now = performance.now();
+                if (now - lastHover < 50) return;
+                lastHover = now;
+                const rect = renderer.domElement.getBoundingClientRect();
+                _mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                _mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                _raycaster.setFromCamera(_mouse, camera);
+                const hits = _raycaster.intersectObjects(proxies, false);
+                renderer.domElement.style.cursor = hits.length > 0 ? 'pointer' : 'grab';
+            });
+
+            renderer.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); state.contextLost = true; });
+            renderer.domElement.addEventListener('webglcontextrestored', () => { state.contextLost = false; });
+
+            window.addEventListener('resize', () => {
+                const w = mountEl.clientWidth || window.innerWidth;
+                const h = mountEl.clientHeight || window.innerHeight;
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h);
+                renderer.setPixelRatio(isSoftwareGl ? 1 : Math.min(window.devicePixelRatio || 1, 2));
+            });
+
+            renderSingleEditionDeck();
+            updateTimelineUI();
+
+            if (!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+                state.triggeredOnce = true;
+                state.isPlaying = true;
+            }
+
+            let frameId = 0;
+            let lastTime = performance.now();
+
+            function afterDraw(cb) {
+                const gl = renderer.getContext();
+                if (!gl || typeof gl.fenceSync !== 'function') {
+                    frameId = window.setTimeout(cb, 80);
+                    return;
+                }
+                const sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
+                gl.flush();
+                const poll = () => {
+                    const st = sync && gl.getSyncParameter(sync, gl.SYNC_STATUS);
+                    if (st === gl.UNSIGNALED) frameId = window.setTimeout(poll, 5);
+                    else {
+                        if (sync) gl.deleteSync(sync);
+                        frameId = window.setTimeout(cb, 80);
+                    }
+                };
+                frameId = window.setTimeout(poll, 5);
+            }
+
+            function tick() {
+                const now = performance.now();
+                const dt = Math.min((now - lastTime) / 1000, 0.1);
+                lastTime = now;
+
+                if (!state.contextLost) {
+                    if (state.isPlaying) {
+                        state.playhead += dt;
+                        if (state.playhead >= DURATION_SEC) {
+                            state.playhead = DURATION_SEC;
+                            state.isPlaying = false;
+                        }
+                        updateTimelineUI();
+                    }
+
+                    const t = state.playhead;
+                    const normT = t / DURATION_SEC;
+
+                    // Exploded assembly during 0..2.2s intro OR Act 2 Scroll-Linked scrubbing
+                    let explode = t < 2.3 ? Math.max(0, 1 - t / 2.3) * 1.15 : 0;
+                    if (state.activeAct === 1) explode = Math.sin(state.linkedScrub * Math.PI) * 1.25;
+
+                    [boothObj.canopyGroup, boothObj.signGroup].forEach((part) => {
+                        if (!part.userData.basePos) part.userData.basePos = part.position.clone();
+                        _v3.copy(part.userData.basePos).addScaledVector(part.userData.explodeVec, explode);
+                        part.position.x = THREE.MathUtils.damp(part.position.x, _v3.x, 7, dt);
+                        part.position.y = THREE.MathUtils.damp(part.position.y, _v3.y, 7, dt);
+                        part.position.z = THREE.MathUtils.damp(part.position.z, _v3.z, 7, dt);
+                    });
+
+                    // Press gears synced to 12s timeline & scroll-linked scrub
+                    const gearSpin = t * 2.4 + state.scrollProgress * Math.PI * 3.0 + state.linkedScrub * Math.PI * 3.0;
+                    boothObj.pressGears.forEach((g, i) => {
+                        g.rotation.z = (i === 0 ? 1 : -1) * gearSpin;
+                    });
+                    boothObj.beacon.position.x = -2.8 + normT * 5.6;
+
+                    // Horizontal Rack Pan in Act 6
+                    const spacing = 2.28;
+                    const targetPanX = state.activeAct === 5
+                        ? -((state.horizRatio - 0.5) * (papers.length - 1) * spacing)
+                        : (t >= 6.0 && t <= 10.5 && state.isPlaying)
+                            ? -(state.activePaperIdx - (papers.length - 1) / 2) * spacing * 0.5
+                            : 0;
+                    state.rackPanX = THREE.MathUtils.damp(state.rackPanX, targetPanX, 5.5, dt);
+                    rackGroup.position.x = state.rackPanX;
+
+                    // Animate 6 Newspapers (cascade 3..6s, spin & play 6..9s, user clicks)
+                    papers.forEach((p, idx) => {
+                        const waveStart = 3.0 + idx * 0.35;
+                        const inWave = t >= waveStart && t <= waveStart + 1.1;
+                        const featured = idx === state.activePaperIdx && (state.activeAct === 5 || (t >= 6.0 && t < 9.5));
+
+                        const targetZ = inWave ? 0.55 : featured ? 0.85 : 0;
+                        const targetY = inWave ? 0.14 : featured ? 0.25 : 0;
+
+                        p.popZ = THREE.MathUtils.damp(p.popZ, targetZ, 6.5, dt);
+                        p.liftY = THREE.MathUtils.damp(p.liftY, targetY, 6.5, dt);
+                        p.root.position.z = p.popZ;
+                        p.root.position.y = p.liftY;
+
+                        if (t >= 6.0 && t <= 6.25 && state.isPlaying && idx === state.activePaperIdx && Math.abs(p.spinVelocity) < 1) {
+                            p.spinVelocity = 9.0;
+                        }
+                        if (Math.abs(p.spinVelocity) > 0.01) {
+                            p.spinAngle += p.spinVelocity * dt;
+                            p.spinVelocity *= Math.exp(-3.1 * dt);
+                        } else {
+                            const nearest = Math.round(p.spinAngle / (Math.PI * 2)) * (Math.PI * 2);
+                            p.spinAngle = THREE.MathUtils.damp(p.spinAngle, nearest, 6, dt);
+                        }
+                        p.root.rotation.y = p.spinAngle;
+                    });
+
+                    // 3D Parallax layers (background slower than foreground)
+                    const pDriver = state.scrollProgress * 2.4 + Math.sin(now * 0.0004) * 0.1;
+                    boothObj.midBgGroup.position.x = THREE.MathUtils.damp(boothObj.midBgGroup.position.x, -pDriver * 0.65, 5, dt);
+                    boothObj.farBgGroup.position.x = THREE.MathUtils.damp(boothObj.farBgGroup.position.x, -pDriver * 0.24, 5, dt);
+
+                    if (!state.userOrbit) {
+                        if (state.activeAct === 2) {
+                            _camTarget.set(2.4, 2.0, 9.2);
+                            _lookTarget.set(0, 1.15, -0.8);
+                        } else if (state.activeAct === 3) {
+                            _camTarget.set(-1.35, 1.8, 7.9);
+                            _lookTarget.set(0, 1.18, 0);
+                        } else if (state.activeAct === 5) {
+                            _camTarget.set(0, 1.35, 7.3);
+                            _lookTarget.set(0, 0.9, 0.25);
+                        } else if (t < 3.0 && state.isPlaying) {
+                            _camTarget.set(Math.sin(t * 0.7) * 1.1, 2.5, 7.4);
+                            _lookTarget.set(0, 2.1, -0.2);
+                        } else if (t >= 6.0 && t < 9.0 && state.isPlaying) {
+                            _camTarget.set(0.6, 1.45, 7.6);
+                            _lookTarget.set(0, 1.05, 0.28);
+                        } else {
+                            _camTarget.set(Math.sin(normT * Math.PI * 2) * 0.75, 1.95, 9.1);
+                            _lookTarget.set(0, 1.08, 0);
+                        }
+
+                        camera.position.x = THREE.MathUtils.damp(camera.position.x, _camTarget.x, 4.2, dt);
+                        camera.position.y = THREE.MathUtils.damp(camera.position.y, _camTarget.y, 4.2, dt);
+                        camera.position.z = THREE.MathUtils.damp(camera.position.z, _camTarget.z, 4.2, dt);
+                        controls.target.x = THREE.MathUtils.damp(controls.target.x, _lookTarget.x, 4.5, dt);
+                        controls.target.y = THREE.MathUtils.damp(controls.target.y, _lookTarget.y, 4.5, dt);
+                        controls.target.z = THREE.MathUtils.damp(controls.target.z, _lookTarget.z, 4.5, dt);
+                    }
+
+                    controls.update();
+                    renderer.render(scene, camera);
+                }
+
+                if (isSoftwareGl) afterDraw(tick);
+                else frameId = requestAnimationFrame(tick);
+            }
+
+            tick();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initDailyFlow3DNewsstand);
+        } else {
+            initDailyFlow3DNewsstand();
+        }
+    </script>
 </body>    
 </html>
