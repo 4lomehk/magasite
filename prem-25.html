@@ -308,10 +308,10 @@
     </section>
 
     <!-- ================================================================ -->
-    <!-- BAND B (CHARCOAL WARROOM): THREE.JS CDN 3D STRATEGY SANDBOX      -->
+    <!-- BAND B (CHARCOAL WARROOM): 3D ONLINE HEALING STORE & 虛變癌 WORLD -->
     <!-- ================================================================ -->
-    <section id="band-3d-warroom" class="bg-[#111419] text-[#F8FAFC] relative">
-      <div class="relative w-full h-[88vh] min-h-[640px] max-h-[860px] overflow-hidden select-none">
+    <section id="band-3d-warroom" class="bg-[#111419] text-[#F8FAFC] relative border-b border-white/10">
+      <div class="relative w-full h-[90vh] min-h-[680px] max-h-[880px] overflow-hidden select-none">
 
         <!-- Empty Three.js Canvas Mount (Zero backdrop-filter over WebGL!) -->
         <div id="warroom-three-mount" class="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing"></div>
@@ -319,56 +319,147 @@
         <!-- Static WebGL Fallback -->
         <div id="warroom-webgl-fallback" class="hidden absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#111419]">
           <div class="max-w-md p-6 rounded-2xl border border-amber-500/40 bg-[#1B2029]">
-            <div class="font-mono text-xs font-bold text-amber-400 mb-1">3D INFLAMMATION SANDBOX FALLBACK</div>
+            <div class="font-mono text-xs font-bold text-amber-400 mb-1">3D HEALING STORE FALLBACK</div>
             <h2 class="font-serif text-xl font-bold text-white mb-2">系統已切換為靜態模式</h2>
-            <p class="text-sm text-slate-300">可繼續瀏覽下方四大元兇逐件解剖同 HSCRP 12 星期減法模擬器。</p>
+            <p class="text-sm text-slate-300">可繼續瀏覽下方「虛變癌 8 步寫照」與四大發炎元兇拆局。</p>
           </div>
         </div>
 
-        <!-- Top-Left Solid Telemetry HUD (No backdrop-blur over WebGL) -->
-        <div class="pointer-events-none absolute top-5 left-4 sm:left-8 right-4 sm:right-auto max-w-md z-10 space-y-2.5">
-          <div class="flex items-center gap-2 text-xs font-mono font-bold text-[#F59E0B]">
-            <span>3D 體內發炎四路徑攔截沙盤</span>
-            <span>·</span>
-            <span id="wr-mode-label">漏電爆發中 (未行減法)</span>
+        <!-- Top-Left Solid HUD Readout (No backdrop-blur, static typography) -->
+        <div class="pointer-events-none absolute top-4 left-4 sm:left-8 right-4 sm:right-auto max-w-lg z-10 space-y-2">
+          <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-mono font-bold text-[#F59E0B]">
+            <span>3D 療癒雜貨店 × 發炎元兇速覽（撳掣前起碼中兩樣）</span>
+            <span aria-hidden="true">·</span>
+            <span id="wr-mode-label" class="text-rose-400">已中 3 樣 · 副偈正從「濕·凝·淤」滑向塞死</span>
           </div>
-          <h2 id="wr-hud-title" class="font-serif text-xl sm:text-2xl font-black text-white leading-tight">
-            四條死路齊爆 ➔ 食粒薑黃素根本救唔到！
+          <h2 id="wr-hud-title" class="font-serif text-lg sm:text-2xl font-black text-white leading-tight">
+            咪就係咁囉！一步步由「虛變癌」嘅香港人寫照
           </h2>
-          <p id="wr-hud-desc" class="text-xs sm:text-sm text-slate-200 leading-relaxed bg-[#111419]/92 border border-white/15 rounded-xl p-3">
-            點擊場景中任何一條攻擊導管，或切換下方「只補唔清 vs 四開關減法」，實時睇清點解只吞維他命 CRP 依然高企！
+          <p id="wr-hud-desc" class="text-xs sm:text-sm text-slate-200 leading-relaxed bg-[#111419]/95 border border-white/15 rounded-xl p-3">
+            點擊場景中 <strong>01 虛 ➔ 08 癌</strong> 任何一座圖騰，或點選中央<strong>「Online Healing Store 療癒專櫃」</strong>四件斬纜法寶，實時睇清點樣喺「濕、凝、淤」階段即刻斬纜救返副偈！
           </p>
         </div>
 
         <!-- Collapsible Bottom Control Dock (Zero viewport occlusion) -->
-        <div id="prem25-dock" class="z-20 absolute bottom-4 left-1/2 -translate-x-1/2 w-[94vw] max-w-[860px]">
+        <div id="prem25-dock" class="z-20 absolute bottom-3 left-1/2 -translate-x-1/2 w-[95vw] max-w-[920px]">
           <div class="flex justify-center mb-1">
             <button type="button" id="wr-btn-toggle-dock" class="px-3.5 py-1 rounded-t-lg bg-[#1A202B] border border-b-0 border-amber-500/35 text-[11px] font-mono font-bold text-slate-200 hover:text-amber-300 cursor-pointer">
-              ▾ 收合戰情控制台 (H)
+              ▾ 收合 3D 沙盤控制台 (H)
             </button>
           </div>
-          <div class="bg-[#0D1016]/96 border border-amber-500/35 rounded-2xl p-3 sm:p-4 shadow-2xl space-y-2.5">
-            <!-- Row 1: Mode Switch + Pathway Focus -->
-            <div class="flex flex-wrap items-center justify-between gap-2 font-mono text-[11px]">
+          <div class="bg-[#0D1016]/95 border border-amber-500/35 rounded-2xl p-3 sm:p-3.5 shadow-2xl space-y-2.5">
+            <!-- Row 1: 8-Stage Progression (虛 ➔ 癌) + Panorama Store -->
+            <div class="flex flex-wrap items-center justify-between gap-1.5 font-mono text-[11px]">
+              <div class="flex flex-wrap items-center gap-1">
+                <button type="button" id="wr-focus-all" class="wr-focus-btn px-2.5 py-1 rounded-lg bg-[#D97706] text-[#111827] font-black cursor-pointer">療癒商店全景</button>
+                <button type="button" id="wr-focus-0" class="wr-focus-btn px-2 py-1 rounded-lg bg-[#1C222E] text-slate-200 hover:bg-[#283142] font-bold cursor-pointer">01 虛</button>
+                <button type="button" id="wr-focus-1" class="wr-focus-btn px-2 py-1 rounded-lg bg-[#1C222E] text-slate-200 hover:bg-[#283142] font-bold cursor-pointer">02 寒</button>
+                <button type="button" id="wr-focus-2" class="wr-focus-btn px-2 py-1 rounded-lg bg-[#1C222E] text-amber-300 hover:bg-[#283142] font-bold cursor-pointer">03 濕★</button>
+                <button type="button" id="wr-focus-3" class="wr-focus-btn px-2 py-1 rounded-lg bg-[#1C222E] text-amber-300 hover:bg-[#283142] font-bold cursor-pointer">04 凝★</button>
+                <button type="button" id="wr-focus-4" class="wr-focus-btn px-2 py-1 rounded-lg bg-[#1C222E] text-amber-300 hover:bg-[#283142] font-bold cursor-pointer">05 淤★</button>
+                <button type="button" id="wr-focus-5" class="wr-focus-btn px-2 py-1 rounded-lg bg-[#1C222E] text-rose-300 hover:bg-[#283142] font-bold cursor-pointer">06 堵</button>
+                <button type="button" id="wr-focus-6" class="wr-focus-btn px-2 py-1 rounded-lg bg-[#1C222E] text-rose-300 hover:bg-[#283142] font-bold cursor-pointer">07 瘤</button>
+                <button type="button" id="wr-focus-7" class="wr-focus-btn px-2 py-1 rounded-lg bg-[#1C222E] text-red-400 hover:bg-[#283142] font-bold cursor-pointer">08 癌</button>
+              </div>
+              <button type="button" id="wr-strategy-toggle" class="px-3 py-1 rounded-lg bg-[#8B0000] hover:bg-red-700 text-white font-black cursor-pointer whitespace-nowrap">
+                即刻斬纜：未啟動（儲緊大病利息）⇄
+              </button>
+            </div>
+
+            <!-- Row 2: 發炎元兇速覽（撳掣前起碼中兩樣）4-Culprit Quick Check -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/10 font-mono text-[11px]">
               <div class="flex flex-wrap items-center gap-1.5">
-                <button type="button" id="wr-focus-all" class="wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#D97706] text-[#111827] font-black cursor-pointer">全景戰情</button>
-                <button type="button" id="wr-focus-0" class="wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#1C222E] text-slate-200 hover:bg-[#283142] font-bold cursor-pointer">① 超加工 LPS</button>
-                <button type="button" id="wr-focus-1" class="wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#1C222E] text-slate-200 hover:bg-[#283142] font-bold cursor-pointer">② 久坐 LPL</button>
-                <button type="button" id="wr-focus-2" class="wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#1C222E] text-slate-200 hover:bg-[#283142] font-bold cursor-pointer">③ 內臟 IL-6</button>
-                <button type="button" id="wr-focus-3" class="wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#1C222E] text-slate-200 hover:bg-[#283142] font-bold cursor-pointer">④ 熬夜皮質醇</button>
+                <span class="text-amber-400 font-bold mr-1">發炎元兇速覽：</span>
+                <button type="button" class="wr-culprit-btn px-2 py-1 rounded border border-rose-500/60 bg-rose-950/70 text-rose-200 font-bold cursor-pointer" data-culprit="0">☑ 日日 OT 捱夜</button>
+                <button type="button" class="wr-culprit-btn px-2 py-1 rounded border border-rose-500/60 bg-rose-950/70 text-rose-200 font-bold cursor-pointer" data-culprit="1">☑ 冷氣＋凍奶茶當水飲</button>
+                <button type="button" class="wr-culprit-btn px-2 py-1 rounded border border-rose-500/60 bg-rose-950/70 text-rose-200 font-bold cursor-pointer" data-culprit="2">☑ 坐足成日唔郁</button>
+                <button type="button" class="wr-culprit-btn px-2 py-1 rounded border border-white/20 bg-[#1C222E] text-slate-300 font-bold cursor-pointer" data-culprit="3">☐ 假健康超加工嘢</button>
               </div>
-              <div class="flex items-center gap-1.5">
-                <button type="button" id="wr-strategy-toggle" class="px-3 py-1.5 rounded-lg bg-[#8B0000] hover:bg-red-700 text-white font-black cursor-pointer">
-                  模式：只食薑黃素/維他命 (未清源) ⇄
-                </button>
+              <button type="button" id="wr-reset-cam" class="px-2.5 py-1 rounded bg-[#1C222E] hover:bg-[#283142] text-slate-200 font-bold cursor-pointer whitespace-nowrap">
+                重置視角
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Companion Readout Strip: Full 8-Step「虛變癌」寫照 & Online Healing Store 4大斬纜專櫃 -->
+      <div class="bg-[#141820] border-t border-white/10 py-10 px-4 sm:px-8">
+        <div class="max-w-7xl mx-auto space-y-8">
+          <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 border-b border-white/10 pb-5">
+            <div class="space-y-1.5 max-w-3xl">
+              <div class="text-xs font-mono font-bold text-[#F59E0B]">
+                <span>香港人寫照：虛 ➔ 寒 ➔ 濕 ➔ 凝 ➔ 淤 ➔ 堵 ➔ 瘤 ➔ 癌</span>
+                <span aria-hidden="true" class="mx-2">·</span>
+                <span>個個以為大病突然殺到，其實全部係生活習慣儲埋返嚟嘅「利息」</span>
               </div>
+              <h3 class="font-serif text-2xl sm:text-3xl font-black text-white leading-snug">
+                仲喺「濕、凝、淤」階段快啲搞掂佢，咪等塞死變 condom 先嚟喊！
+              </h3>
             </div>
-            <!-- Row 2: Subtraction Defense Slider -->
-            <div class="flex items-center gap-3 pt-1 border-t border-white/10 font-mono text-xs">
-              <span class="text-slate-300 shrink-0">四開關減法執行度</span>
-              <input id="wr-defense-slider" type="range" min="0" max="100" value="10" class="w-full accent-[#D97706] cursor-pointer" aria-label="Subtraction protocol defense slider" />
-              <span id="wr-defense-val" class="text-amber-400 font-black tabular-nums w-12 text-right">10%</span>
+            <div class="text-xs font-mono text-emerald-300 font-bold shrink-0">
+              Online Healing Store · 4 大「即刻斬纜」專區
             </div>
+          </div>
+
+          <!-- 8 Stages Grid (虛 -> 癌) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5" id="wr-stage-cards">
+            <button type="button" onclick="window.__focusPrem25Stage && window.__focusPrem25Stage(0)" class="text-left p-4 rounded-xl bg-[#1B2029] hover:bg-[#222834] border border-amber-500/30 transition cursor-pointer space-y-1.5">
+              <div class="font-mono text-xs font-black text-amber-400">01 · 虛（陽氣淘空）</div>
+              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">日日捱夜透支，個底畀你淘空晒，陽氣唔夠，免疫力直接跌穿底線。</p>
+            </button>
+            <button type="button" onclick="window.__focusPrem25Stage && window.__focusPrem25Stage(1)" class="text-left p-4 rounded-xl bg-[#1B2029] hover:bg-[#222834] border border-cyan-500/30 transition cursor-pointer space-y-1.5">
+              <div class="font-mono text-xs font-black text-cyan-300">02 · 寒（副偈凍僵）</div>
+              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">個底虛仲要日日嘆冷氣飲凍嘢，寒氣入晒五臟六腑，成副偈凍到僵晒，氣血行唔郁。</p>
+            </button>
+            <button type="button" onclick="window.__focusPrem25Stage && window.__focusPrem25Stage(2)" class="text-left p-4 rounded-xl bg-[#1B2029] hover:bg-[#222834] border-2 border-amber-400/60 transition cursor-pointer space-y-1.5">
+              <div class="font-mono text-xs font-black text-amber-300">03 · 濕 ★ 黃金斬纜窗</div>
+              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">寒氣綁死晒啲水濕，排又排唔走，個人日日重到郁唔到、攰到隻積咁，望下條脷厚到成層雪。</p>
+            </button>
+            <button type="button" onclick="window.__focusPrem25Stage && window.__focusPrem25Stage(3)" class="text-left p-4 rounded-xl bg-[#1B2029] hover:bg-[#222834] border-2 border-amber-400/60 transition cursor-pointer space-y-1.5">
+              <div class="font-mono text-xs font-black text-amber-300">04 · 凝 ★ 黃金斬纜窗</div>
+              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">濕氣積埋遇寒就結成冰，體液同淋巴變杰變稠，微絲血管開始塞車。</p>
+            </button>
+            <button type="button" onclick="window.__focusPrem25Stage && window.__focusPrem25Stage(4)" class="text-left p-4 rounded-xl bg-[#1B2029] hover:bg-[#222834] border-2 border-amber-400/60 transition cursor-pointer space-y-1.5">
+              <div class="font-mono text-xs font-black text-amber-300">05 · 淤 ★ 最後救援線</div>
+              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">唔通就梗係淤，氣血塞住晒，周身骨痛、面色青口唇白，體內垃圾同發炎因子清唔走。</p>
+            </button>
+            <button type="button" onclick="window.__focusPrem25Stage && window.__focusPrem25Stage(5)" class="text-left p-4 rounded-xl bg-[#1B2029] hover:bg-[#222834] border border-rose-500/35 transition cursor-pointer space-y-1.5">
+              <div class="font-mono text-xs font-black text-rose-400">06 · 堵（死霸通道）</div>
+              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">淤血痰濕死霸住條通道，徹底死實，新陳代謝停頓，細胞日日浸喺毒水裏面。</p>
+            </button>
+            <button type="button" onclick="window.__focusPrem25Stage && window.__focusPrem25Stage(6)" class="text-left p-4 rounded-xl bg-[#1B2029] hover:bg-[#222834] border border-rose-500/50 transition cursor-pointer space-y-1.5">
+              <div class="font-mono text-xs font-black text-rose-400">07 · 瘤（死角越滾越大）</div>
+              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">塞到無路可走，啲垃圾同變異細胞喺死角位越滾越大，搞出硬塊、息肉、肌瘤。</p>
+            </button>
+            <button type="button" onclick="window.__focusPrem25Stage && window.__focusPrem25Stage(7)" class="text-left p-4 rounded-xl bg-[#1B2029] hover:bg-[#222834] border border-red-600/70 transition cursor-pointer space-y-1.5">
+              <div class="font-mono text-xs font-black text-red-400">08 · 癌（一鋪爆大鑊）</div>
+              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">長期缺氧、高發炎、微循環完全死亡，良性變惡性，最後一鋪爆大鑊。</p>
+            </button>
+          </div>
+
+          <!-- Online Healing Store: 4 Actionable Remedies (唯一出路：即刻斬纜) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-2">
+            <button type="button" onclick="window.__focusPrem25Remedy && window.__focusPrem25Remedy(0)" class="text-left p-4 rounded-xl bg-emerald-950/35 hover:bg-emerald-950/55 border border-emerald-500/35 transition cursor-pointer space-y-1">
+              <div class="font-mono text-xs font-black text-emerald-300">療癒貨架 ① · 溫陽陶壺</div>
+              <div class="text-sm font-bold text-white">掉轉頭戒凍飲</div>
+              <p class="text-xs text-slate-300 leading-relaxed">停凍奶茶凍飲冷氣直吹，用溫熱食療解凍脾胃陽氣。</p>
+            </button>
+            <button type="button" onclick="window.__focusPrem25Remedy && window.__focusPrem25Remedy(1)" class="text-left p-4 rounded-xl bg-emerald-950/35 hover:bg-emerald-950/55 border border-emerald-500/35 transition cursor-pointer space-y-1">
+              <div class="font-mono text-xs font-black text-emerald-300">療癒貨架 ② · 夜修琥珀瓶</div>
+              <div class="text-sm font-bold text-white">唔好再捱夜透支</div>
+              <p class="text-xs text-slate-300 leading-relaxed">固定上床起身時間，保住腸道 400 倍褪黑激素夜間修補。</p>
+            </button>
+            <button type="button" onclick="window.__focusPrem25Remedy && window.__focusPrem25Remedy(2)" class="text-left p-4 rounded-xl bg-emerald-950/35 hover:bg-emerald-950/55 border border-emerald-500/35 transition cursor-pointer space-y-1">
+              <div class="font-mono text-xs font-black text-emerald-300">療癒貨架 ③ · 通絡阻力壺鈴</div>
+              <div class="text-sm font-bold text-white">起身做運動排汗去濕</div>
+              <p class="text-xs text-slate-300 leading-relaxed">每 30 分鐘起身郁 2 分鐘喚醒 LPL，加負重逼走濕凝淤。</p>
+            </button>
+            <button type="button" onclick="window.__focusPrem25Remedy && window.__focusPrem25Remedy(3)" class="text-left p-4 rounded-xl bg-emerald-950/35 hover:bg-emerald-950/55 border border-emerald-500/35 transition cursor-pointer space-y-1">
+              <div class="font-mono text-xs font-black text-emerald-300">療癒貨架 ④ · 原型淨食碗</div>
+              <div class="text-sm font-bold text-white">食番乾淨原型食物清毒</div>
+              <p class="text-xs text-slate-300 leading-relaxed">行減法戒種子油與加工糖，靠真原型食物清走體內毒素。</p>
+            </button>
           </div>
         </div>
       </div>
@@ -761,7 +852,7 @@
     }
   </script>
 
-  <!-- Three.js CDN 3D Four-Pathway Inflammation Strategy Sandbox -->
+  <!-- Three.js CDN 3D Online Healing Store + 8-Stage「虛變癌」World -->
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -781,33 +872,146 @@
       }
     }
 
-    const PATHWAY_META = [
+    const STAGES_8 = [
       {
-        title: '① 超加工食品 (NOVA 4) ➔ 腸壁穿窿 LPS 入血',
-        desc: '紙包豆漿乳化劑、益生菌飲品 14g 糖、全麥方包改良劑 24–48 小時改寫 38 兆腸菌，單細胞腸壁漏出 LPS 脂多醣引爆全身發炎！',
+        char: '虛',
+        color: 0xf59e0b,
+        title: '01 虛 · 個底畀你淘空晒，陽氣唔夠',
+        desc: '日日捱夜透支，個底畀你淘空晒，陽氣唔夠，免疫力直接跌穿底線！唔好以為後生就熬得，個底一穿就開始連環滑落。',
       },
       {
-        title: '② 張凳久坐 8 小時 ➔ 臀肌失憶 + LPL 酵素停工',
-        desc: '朝早操肌跑 5K 救唔返！久坐令清血脂酵素 LPL 即刻停工、下肢淋巴塞死、大腦缺血。每坐 30 分鐘必起身郁 2 分鐘。',
+        char: '寒',
+        color: 0x38bdf8,
+        title: '02 寒 · 嘆冷氣飲凍嘢，氣血行唔郁',
+        desc: '個底虛仲要日日嘆冷氣飲凍嘢（凍奶茶凍飲當水飲），寒氣入晒五臟六腑，成副偈凍到僵晒，氣血行唔郁！',
       },
       {
-        title: '③ 瘦胖子內臟脂肪 ➔ 24 小時狂噴 IL-6 / TNF-α',
-        desc: '亞洲人睇落瘦削一樣中招！隱形內臟脂肪直接向血液狂噴發炎因子，免疫系統亂開槍，膠原流失眼底凹陷變殘樣。',
+        char: '濕',
+        color: 0x2dd4bf,
+        title: '03 濕 ★ 黃金斬纜窗 · 條脷厚到成層雪',
+        desc: '寒氣綁死晒啲水濕，排又排唔走，個人日日重到郁唔到、攰到隻積咁，望下條脷厚到成層雪。仲喺呢步快啲搞掂佢！',
       },
       {
-        title: '④ 睡眠不足一晚 ➔ 腸道 400× 褪黑激素維修停擺',
-        desc: '週末補眠補唔返！少於 6 小時第二朝 CRP 即飆，腸道 400 倍褪黑激素失守引發腸漏，與超加工食品雙面夾擊同一條腸。',
+        char: '凝',
+        color: 0x60a5fa,
+        title: '04 凝 ★ 黃金斬纜窗 · 體液淋巴變杰開始塞車',
+        desc: '濕氣積埋遇寒就結成冰，體液同淋巴變杰變稠，微絲血管開始塞車。即刻戒凍飲加做運動排汗，仲救得切！',
+      },
+      {
+        char: '淤',
+        color: 0xa855f7,
+        title: '05 淤 ★ 最後救援線 · 垃圾發炎因子清唔走',
+        desc: '唔通就梗係淤，氣血塞住晒，周身骨痛、面色青口唇白，體內垃圾同發炎因子清唔走——過埋呢站就彻底死實！',
+      },
+      {
+        char: '堵',
+        color: 0xf43f5e,
+        title: '06 堵 · 徹底死實，細胞日日浸喺毒水裏面',
+        desc: '淤血痰濕死霸住條通道，徹底死實，新陳代謝停頓，細胞日日浸喺毒水裏面，唔係等閒補劑頂得住。',
+      },
+      {
+        char: '瘤',
+        color: 0xe11d48,
+        title: '07 瘤 · 死角越滾越大，搞出硬塊、息肉、肌瘤',
+        desc: '塞到無路可走，啲垃圾同變異細胞喺死角位越滾越大，搞出硬塊、息肉、肌瘤。全部係平日生活習慣儲返嚟嘅「利息」。',
+      },
+      {
+        char: '癌',
+        color: 0x991b1b,
+        title: '08 癌 · 長期缺氧微循環死亡，最後一鋪爆大鑊',
+        desc: '長期缺氧、高發炎、微循環完全死亡，良性變惡性，最後一鋪爆大鑊。唔想行到最後一步，唯一出路就係即刻斬纜！',
       },
     ];
+
+    const REMEDIES_4 = [
+      {
+        title: '療癒貨架 ① · 溫陽陶壺：掉轉頭戒凍飲',
+        desc: '斬纜第一步：即刻停凍奶茶凍飲、冷氣唔好長開直吹，用溫熱食療解凍副偈，等氣血重新郁得返！',
+      },
+      {
+        title: '療癒貨架 ② · 夜修琥珀瓶：唔好再捱夜透支',
+        desc: '斬纜第二步：停止日日 OT 捱夜透支陽氣！固定上床同起身時間，守住腸道 400 倍褪黑激素夜間維修。',
+      },
+      {
+        title: '療癒貨架 ③ · 通絡壺鈴：起身做運動排汗去濕',
+        desc: '斬纜第三步：唔好坐喺度成日唔郁！每 30 分鐘起身郁 2 分鐘重啟 LPL 酵素，加負重排汗逼走濕凝淤。',
+      },
+      {
+        title: '療癒貨架 ④ · 原型淨食碗：食番乾淨原型食物清毒',
+        desc: '斬纜第四步：踢走假健康超加工食物，行減法戒種子油與加工糖，靠真原型食物清走體內毒素。',
+      },
+    ];
+
+    function makeSignTexture(maxAniso) {
+      const c = document.createElement('canvas');
+      c.width = 1024;
+      c.height = 256;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#18221D';
+      ctx.fillRect(0, 0, 1024, 256);
+      ctx.strokeStyle = '#D97706';
+      ctx.lineWidth = 10;
+      ctx.strokeRect(14, 14, 996, 228);
+
+      ctx.fillStyle = '#F59E0B';
+      ctx.font = '800 28px "JetBrains Mono", monospace';
+      ctx.fillText('ONLINE HEALING STORE · MAGA SANCTUARY', 46, 68);
+
+      ctx.fillStyle = '#FAF8F2';
+      ctx.font = '900 66px "PingFang HK", "Noto Sans TC", sans-serif';
+      ctx.fillText('療癒雜貨店 · 即刻斬纜專區', 46, 158);
+
+      ctx.fillStyle = '#6EE7B7';
+      ctx.font = '700 26px "PingFang HK", "Noto Sans TC", sans-serif';
+      ctx.fillText('戒凍飲 · 唔捱夜 · 排汗去濕 · 原型淨食', 46, 214);
+
+      const t = new THREE.CanvasTexture(c);
+      t.colorSpace = THREE.SRGBColorSpace;
+      t.anisotropy = maxAniso;
+      return t;
+    }
+
+    function makeStageTileTexture(char, hexColor, isGoldWindow, maxAniso) {
+      const c = document.createElement('canvas');
+      c.width = 256;
+      c.height = 256;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#11161E';
+      ctx.fillRect(0, 0, 256, 256);
+      ctx.strokeStyle = '#' + hexColor.toString(16).padStart(6, '0');
+      ctx.lineWidth = isGoldWindow ? 18 : 10;
+      ctx.strokeRect(14, 14, 228, 228);
+      ctx.fillStyle = '#F8FAFC';
+      ctx.font = '900 132px "PingFang HK", "Noto Sans TC", serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(char, 128, 134);
+      const t = new THREE.CanvasTexture(c);
+      t.colorSpace = THREE.SRGBColorSpace;
+      t.anisotropy = maxAniso;
+      return t;
+    }
+
+    function makeShadowTex() {
+      const c = document.createElement('canvas');
+      c.width = 512;
+      c.height = 512;
+      const ctx = c.getContext('2d');
+      const g = ctx.createRadialGradient(256, 256, 30, 256, 256, 240);
+      g.addColorStop(0, 'rgba(0,0,0,0.72)');
+      g.addColorStop(0.65, 'rgba(0,0,0,0.28)');
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 512, 512);
+      const t = new THREE.CanvasTexture(c);
+      t.colorSpace = THREE.SRGBColorSpace;
+      return t;
+    }
 
     window.__bootPrem25Scene = function () {
       const mount = document.getElementById('warroom-three-mount');
       const fallback = document.getElementById('warroom-webgl-fallback');
       if (!mount || window.__prem25WebGLActive) return;
-      if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-        fallback?.classList.remove('hidden');
-        return;
-      }
 
       let renderer;
       const isSoftwareGl = detectSoftwareGl();
@@ -818,133 +1022,326 @@
         return;
       }
       window.__prem25WebGLActive = true;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.setPixelRatio(isSoftwareGl ? 1 : Math.min(window.devicePixelRatio || 1, 2));
-      renderer.setSize(mount.clientWidth || window.innerWidth, mount.clientHeight || 640);
+      renderer.setSize(mount.clientWidth || window.innerWidth, mount.clientHeight || 680);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.08;
+      renderer.toneMappingExposure = 1.1;
+      renderer.shadowMap.enabled = !isSoftwareGl;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       mount.appendChild(renderer.domElement);
 
+      const maxAniso = renderer.capabilities.getMaxAnisotropy();
       const scene = new THREE.Scene();
       scene.background = new THREE.Color('#111419');
-      scene.fog = new THREE.FogExp2('#111419', 0.032);
+      scene.fog = new THREE.FogExp2('#111419', 0.025);
 
       const pmrem = new THREE.PMREMGenerator(renderer);
       scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
       pmrem.dispose();
 
-      const camera = new THREE.PerspectiveCamera(42, (mount.clientWidth || window.innerWidth) / (mount.clientHeight || 640), 0.1, 100);
-      camera.position.set(0, 4.4, 9.6);
+      const camera = new THREE.PerspectiveCamera(42, (mount.clientWidth || window.innerWidth) / (mount.clientHeight || 680), 0.1, 100);
+      camera.position.set(0, 4.6, 11.4);
 
       const controls = new OrbitControls(camera, renderer.domElement);
-      controls.enableDamping = true;
+      controls.enableDamping = !isSoftwareGl;
       controls.dampingFactor = 0.06;
-      controls.enableZoom = false; // Never hijack vertical scroll
-      controls.minPolarAngle = 0.45;
+      controls.enableZoom = false;
+      controls.enablePan = false;
+      controls.minPolarAngle = 0.38;
       controls.maxPolarAngle = 1.38;
-      controls.target.set(0, 0.7, 0);
+      controls.target.set(0, 1.0, 0);
 
-      // Lights
-      scene.add(new THREE.HemisphereLight(0xfef3c7, 0x1e293b, 0.85));
-      const keyLight = new THREE.DirectionalLight(0xfffbeb, 2.2);
-      keyLight.position.set(5, 8, 5);
+      // 3-Point Warm/Cool Studio Rig
+      scene.add(new THREE.HemisphereLight(0xcbd5e1, 0x1c1917, 0.85));
+      const keyLight = new THREE.DirectionalLight(0xffedd5, 2.2);
+      keyLight.position.set(6, 9, 6);
+      keyLight.castShadow = !isSoftwareGl;
+      keyLight.shadow.mapSize.set(1024, 1024);
+      keyLight.shadow.camera.near = 1;
+      keyLight.shadow.camera.far = 26;
+      keyLight.shadow.camera.left = -9;
+      keyLight.shadow.camera.right = 9;
+      keyLight.shadow.camera.top = 9;
+      keyLight.shadow.camera.bottom = -9;
+      keyLight.shadow.bias = -0.0005;
+      keyLight.shadow.normalBias = 0.02;
       scene.add(keyLight);
-      const coreLight = new THREE.PointLight(0xd97706, 3.0, 12, 1.8);
-      coreLight.position.set(0, 1.6, 0);
-      scene.add(coreLight);
 
-      // Ground Arena Disc + Hairline Rings
-      const floor = new THREE.Mesh(
-        new THREE.CylinderGeometry(7.2, 7.2, 0.14, 48),
-        new THREE.MeshStandardMaterial({ color: 0x171c26, roughness: 0.78, metalness: 0.25 })
+      const rimLight = new THREE.DirectionalLight(0x60a5fa, 1.05);
+      rimLight.position.set(-7, 5, -6);
+      scene.add(rimLight);
+
+      const shopLantern = new THREE.PointLight(0xf59e0b, 2.6, 12, 1.6);
+      shopLantern.position.set(0, 2.9, 0.5);
+      scene.add(shopLantern);
+
+      // Ground Sanctuary Platform + Contact Shadow
+      const ground = new THREE.Mesh(
+        new THREE.CylinderGeometry(9.6, 9.8, 0.18, 64),
+        new THREE.MeshStandardMaterial({ color: 0x161b22, roughness: 0.88, metalness: 0.1 })
       );
-      floor.position.y = -0.07;
-      scene.add(floor);
+      ground.position.y = -0.09;
+      ground.receiveShadow = !isSoftwareGl;
+      scene.add(ground);
 
-      [2.6, 4.4, 6.2].forEach((r) => {
-        const ring = new THREE.Mesh(
-          new THREE.RingGeometry(r - 0.025, r + 0.025, 64),
-          new THREE.MeshBasicMaterial({ color: 0x334155, side: THREE.DoubleSide })
-        );
-        ring.rotation.x = -Math.PI / 2;
-        ring.position.y = 0.02;
-        scene.add(ring);
+      const shadowPlane = new THREE.Mesh(
+        new THREE.PlaneGeometry(14, 14),
+        new THREE.MeshBasicMaterial({ map: makeShadowTex(), transparent: true, opacity: 0.55, depthWrite: false })
+      );
+      shadowPlane.rotation.x = -Math.PI / 2;
+      shadowPlane.position.y = 0.015;
+      scene.add(shadowPlane);
+
+      // ================================================================
+      // HERO COMPOSITE MODEL 1: ONLINE HEALING STORE PAVILION (10+ parts)
+      // ================================================================
+      const storeGroup = new THREE.Group();
+      const woodMat = new THREE.MeshStandardMaterial({ color: 0x5c3a21, roughness: 0.78, metalness: 0.05 });
+      const stoneMat = new THREE.MeshStandardMaterial({ color: 0xe7e0d2, roughness: 0.52, metalness: 0.04 });
+      const brassMat = new THREE.MeshPhysicalMaterial({ color: 0xf59e0b, metalness: 0.92, roughness: 0.2, clearcoat: 0.4 });
+      const apothecaryMat = new THREE.MeshStandardMaterial({ color: 0x1c2823, roughness: 0.65, metalness: 0.12 });
+
+      // Plinth + Travertine Sales Counter
+      const storePlinth = new THREE.Mesh(new THREE.BoxGeometry(5.6, 0.24, 3.2), woodMat);
+      storePlinth.position.set(0, 0.12, -0.35);
+      storePlinth.castShadow = !isSoftwareGl;
+      storePlinth.receiveShadow = !isSoftwareGl;
+      storeGroup.add(storePlinth);
+
+      const counterBase = new THREE.Mesh(new THREE.BoxGeometry(4.8, 0.78, 1.35), apothecaryMat);
+      counterBase.position.set(0, 0.63, 0.25);
+      counterBase.castShadow = !isSoftwareGl;
+      storeGroup.add(counterBase);
+
+      const counterTop = new THREE.Mesh(new THREE.BoxGeometry(5.05, 0.12, 1.5), stoneMat);
+      counterTop.position.set(0, 1.08, 0.25);
+      counterTop.receiveShadow = !isSoftwareGl;
+      storeGroup.add(counterTop);
+
+      // Back Apothecary Shelf Wall + Brass Frame + Signboard
+      const backWall = new THREE.Mesh(new THREE.BoxGeometry(5.2, 2.75, 0.22), woodMat);
+      backWall.position.set(0, 1.62, -1.35);
+      backWall.castShadow = !isSoftwareGl;
+      storeGroup.add(backWall);
+
+      const canopyRoof = new THREE.Mesh(new THREE.BoxGeometry(5.6, 0.18, 2.2), apothecaryMat);
+      canopyRoof.position.set(0, 3.06, -0.35);
+      canopyRoof.rotation.x = 0.09;
+      storeGroup.add(canopyRoof);
+
+      [-2.45, 2.45].forEach((px) => {
+        const post = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.09, 2.9, 12), brassMat);
+        post.position.set(px, 1.55, 0.55);
+        storeGroup.add(post);
       });
 
-      // Central Gut-Immune Core (Spleen-Qi Sphere + Tight Junction Protective Shield + HSCRP Flame Ring)
-      const coreGroup = new THREE.Group();
-      const innerCoreMat = new THREE.MeshPhysicalMaterial({
-        color: 0xd97706,
-        emissive: 0x8b0000,
-        emissiveIntensity: 0.9,
-        roughness: 0.24,
-        metalness: 0.15,
-        clearcoat: 0.65,
-      });
-      const innerCore = new THREE.Mesh(new THREE.IcosahedronGeometry(0.95, 2), innerCoreMat);
-      innerCore.position.y = 1.2;
-      coreGroup.add(innerCore);
+      const signTex = makeSignTexture(maxAniso);
+      const signBoard = new THREE.Mesh(
+        new THREE.BoxGeometry(4.2, 1.0, 0.14),
+        new THREE.MeshStandardMaterial({ color: 0x11161e, roughness: 0.4, metalness: 0.4 })
+      );
+      signBoard.position.set(0, 3.68, -0.45);
+      storeGroup.add(signBoard);
 
-      const shieldRingMat = new THREE.MeshStandardMaterial({
-        color: 0x10b981,
-        emissive: 0x065f46,
-        emissiveIntensity: 0.4,
-        metalness: 0.75,
-        roughness: 0.25,
-      });
-      const shieldRing = new THREE.Mesh(new THREE.TorusGeometry(1.45, 0.08, 16, 48), shieldRingMat);
-      shieldRing.position.y = 1.2;
-      shieldRing.rotation.x = Math.PI / 2;
-      coreGroup.add(shieldRing);
-      scene.add(coreGroup);
+      const signFace = new THREE.Mesh(
+        new THREE.PlaneGeometry(4.02, 0.88),
+        new THREE.MeshStandardMaterial({ map: signTex, roughness: 0.35, polygonOffset: true, polygonOffsetFactor: -1 })
+      );
+      signFace.position.set(0, 3.68, -0.37);
+      storeGroup.add(signFace);
 
-      // 4 Threat Conduits (NOVA4, Sitting LPL, Visceral IL-6, Sleep 400x)
-      const colors = [0xef4444, 0x38bdf8, 0xf43f5e, 0xa855f7];
-      const angles = [Math.PI * 0.25, Math.PI * 0.75, Math.PI * 1.25, Math.PI * 1.75];
-      const conduits = [];
+      // 4 Composite Store Remedies on Counter (Clickable Layer 1)
       const pickables = [];
+      const remedyMeshes = [];
 
-      angles.forEach((ang, idx) => {
+      function buildRemedyKettle(x) {
         const g = new THREE.Group();
-        const radius = 4.2;
-        const px = Math.cos(ang) * radius;
-        const pz = Math.sin(ang) * radius;
+        const body = new THREE.Mesh(new THREE.LatheGeometry([
+          new THREE.Vector2(0.01, 0), new THREE.Vector2(0.32, 0.05),
+          new THREE.Vector2(0.36, 0.24), new THREE.Vector2(0.22, 0.44), new THREE.Vector2(0.18, 0.5)
+        ], 18), new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.42, metalness: 0.15 }));
+        const lid = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 10), brassMat);
+        lid.scale.y = 0.55;
+        lid.position.y = 0.5;
+        const handle = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.032, 8, 20, Math.PI), brassMat);
+        handle.position.y = 0.48;
+        g.add(body, lid, handle);
+        g.position.set(x, 1.14, 0.3);
+        return g;
+      }
 
-        // Threat node pylon
-        const nodeMat = new THREE.MeshStandardMaterial({
-          color: colors[idx],
-          emissive: colors[idx],
-          emissiveIntensity: 0.45,
-          roughness: 0.3,
-          metalness: 0.4,
-        });
-        const pylon = new THREE.Mesh(new THREE.BoxGeometry(0.95, 1.35, 0.95), nodeMat);
-        pylon.position.set(px, 0.68, pz);
-        pylon.userData.pathwayIdx = idx;
-        g.add(pylon);
-        pickables.push(pylon);
+      function buildRemedyBottle(x) {
+        const g = new THREE.Group();
+        const glassMat = isSoftwareGl
+          ? new THREE.MeshPhysicalMaterial({ color: 0xd97706, roughness: 0.15, transparent: true, opacity: 0.72, clearcoat: 1 })
+          : new THREE.MeshPhysicalMaterial({ color: 0xf59e0b, roughness: 0.08, transmission: 0.82, thickness: 0.5, ior: 1.52, clearcoat: 1 });
+        const jar = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.24, 0.56, 16), glassMat);
+        jar.position.y = 0.28;
+        const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.13, 0.14, 14), glassMat);
+        neck.position.y = 0.62;
+        const cork = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.08, 0.12, 12), woodMat);
+        cork.position.y = 0.72;
+        const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.24, 6), new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.5 }));
+        leaf.position.set(0, 0.25, 0);
+        g.add(jar, neck, cork, leaf);
+        g.position.set(x, 1.14, 0.3);
+        return g;
+      }
 
-        // Beam connecting node to central core
-        const beamLen = radius - 1.25;
-        const beamMat = new THREE.MeshBasicMaterial({ color: colors[idx], transparent: true, opacity: 0.75 });
-        const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, beamLen, 10), beamMat);
-        beam.position.set(Math.cos(ang) * (radius * 0.54), 1.05, Math.sin(ang) * (radius * 0.54));
-        beam.rotation.z = Math.PI / 2;
-        beam.rotation.y = -ang;
-        g.add(beam);
+      function buildRemedyKettlebell(x) {
+        const g = new THREE.Group();
+        const ironMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.55, metalness: 0.75 });
+        const bell = new THREE.Mesh(new THREE.SphereGeometry(0.26, 16, 14), ironMat);
+        bell.position.y = 0.24;
+        const loop = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.04, 10, 20, Math.PI), brassMat);
+        loop.position.y = 0.44;
+        g.add(bell, loop);
+        g.position.set(x, 1.14, 0.3);
+        return g;
+      }
 
-        // Moving toxin packet sphere
-        const packet = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 12), new THREE.MeshBasicMaterial({ color: 0xfef08a }));
-        packet.position.set(px, 1.05, pz);
-        g.add(packet);
+      function buildRemedyBowl(x) {
+        const g = new THREE.Group();
+        const bowlMat = new THREE.MeshStandardMaterial({ color: 0xfaf8f2, roughness: 0.38, metalness: 0.05 });
+        const bowl = new THREE.Mesh(new THREE.LatheGeometry([
+          new THREE.Vector2(0.01, 0), new THREE.Vector2(0.18, 0.02),
+          new THREE.Vector2(0.34, 0.18), new THREE.Vector2(0.36, 0.3)
+        ], 18), bowlMat);
+        const greensMat = new THREE.MeshStandardMaterial({ color: 0x15803d, roughness: 0.65 });
+        const oilFlask = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.1, 0.38, 12), new THREE.MeshStandardMaterial({ color: 0xeab308, roughness: 0.2, metalness: 0.2 }));
+        oilFlask.position.set(0.12, 0.34, 0.02);
+        const veg = new THREE.Mesh(new THREE.DodecahedronGeometry(0.14, 0), greensMat);
+        veg.position.set(-0.08, 0.26, 0.04);
+        g.add(bowl, oilFlask, veg);
+        g.position.set(x, 1.14, 0.3);
+        return g;
+      }
 
-        scene.add(g);
-        conduits.push({ group: g, pylon, beam, beamMat, packet, ang, radius, tOffset: idx * 0.25 });
+      const remedyBuilders = [buildRemedyKettle, buildRemedyBottle, buildRemedyKettlebell, buildRemedyBowl];
+      [-1.75, -0.6, 0.6, 1.75].forEach((rx, rIdx) => {
+        const rg = remedyBuilders[rIdx](rx);
+        storeGroup.add(rg);
+        remedyMeshes.push(rg);
+
+        const proxy = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.95, 0.85), new THREE.MeshBasicMaterial({ visible: false }));
+        proxy.position.set(rx, 1.55, 0.3);
+        proxy.layers.set(1);
+        proxy.userData.remedyIdx = rIdx;
+        storeGroup.add(proxy);
+        pickables.push(proxy);
       });
+
+      scene.add(storeGroup);
+
+      // ================================================================
+      // 8-STAGE「虛 ➔ 寒 ➔ 濕 ➔ 凝 ➔ 淤 ➔ 堵 ➔ 瘤 ➔ 癌」PROGRESSION ARC
+      // ================================================================
+      const stageStations = [];
+      const arcPoints = [];
+      const arcRadius = 6.5;
+
+      STAGES_8.forEach((st, idx) => {
+        const ang = Math.PI * (0.88 - (idx / 7) * 0.76); // Sweep left-front to right-front arc around store
+        const sx = Math.cos(ang) * arcRadius;
+        const sz = Math.sin(ang) * arcRadius * 0.86 + 0.8;
+        arcPoints.push(new THREE.Vector3(sx, 0.65, sz));
+
+        const g = new THREE.Group();
+        const isGoldWin = idx >= 2 && idx <= 4; // 濕·凝·淤 rescue window
+
+        // 1. Pedestal base
+        const base = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.46, 0.56, 0.32, 18),
+          new THREE.MeshStandardMaterial({ color: 0x1e2530, roughness: 0.7, metalness: 0.35 })
+        );
+        base.position.y = 0.16;
+        base.castShadow = !isSoftwareGl;
+        g.add(base);
+
+        // 2. Collar ring (amber highlight for 濕凝淤)
+        const collar = new THREE.Mesh(
+          new THREE.TorusGeometry(0.48, 0.045, 10, 28),
+          new THREE.MeshStandardMaterial({
+            color: isGoldWin ? 0xf59e0b : st.color,
+            emissive: isGoldWin ? 0xb45309 : 0x000000,
+            emissiveIntensity: isGoldWin ? 0.55 : 0,
+            metalness: 0.75,
+            roughness: 0.25,
+          })
+        );
+        collar.rotation.x = Math.PI / 2;
+        collar.position.y = 0.34;
+        g.add(collar);
+
+        // 3. Stage Core Orb / Knot (changes geometry density from open -> congested knot)
+        const coreMat = new THREE.MeshStandardMaterial({
+          color: st.color,
+          emissive: st.color,
+          emissiveIntensity: 0.35,
+          roughness: idx >= 4 ? 0.75 : 0.25,
+          metalness: idx <= 1 ? 0.2 : 0.45,
+        });
+        const orbGeo = idx >= 6
+          ? new THREE.TorusKnotGeometry(0.28, 0.09, 42, 8)
+          : idx >= 4
+            ? new THREE.DodecahedronGeometry(0.32, 0)
+            : new THREE.IcosahedronGeometry(0.32, 1);
+        const orb = new THREE.Mesh(orbGeo, coreMat);
+        orb.position.y = 0.92;
+        g.add(orb);
+
+        // 4. Crisp Chinese Character Tile Face on front of pedestal
+        const tileTex = makeStageTileTexture(st.char, st.color, isGoldWin, maxAniso);
+        const plaque = new THREE.Mesh(
+          new THREE.PlaneGeometry(0.68, 0.68),
+          new THREE.MeshStandardMaterial({ map: tileTex, roughness: 0.4, polygonOffset: true, polygonOffsetFactor: -1 })
+        );
+        plaque.position.set(0, 1.66, 0);
+        g.add(plaque);
+
+        // Proxy box for raycast
+        const proxy = new THREE.Mesh(new THREE.BoxGeometry(1.1, 2.2, 1.1), new THREE.MeshBasicMaterial({ visible: false }));
+        proxy.position.y = 1.05;
+        proxy.layers.set(1);
+        proxy.userData.stageIdx = idx;
+        g.add(proxy);
+        pickables.push(proxy);
+
+        g.position.set(sx, 0, sz);
+        scene.add(g);
+        stageStations.push({ group: g, orb, coreMat, plaque, collar, sx, sz, idx });
+      });
+
+      // Meridian Flow Tube connecting 01 虛 -> 08 癌
+      const meridianCurve = new THREE.CatmullRomCurve3(arcPoints);
+      const meridianMat = new THREE.MeshStandardMaterial({
+        color: 0x8b0000,
+        emissive: 0x8b0000,
+        emissiveIntensity: 0.55,
+        roughness: 0.35,
+        transparent: true,
+        opacity: 0.8,
+      });
+      const meridianTube = new THREE.Mesh(new THREE.TubeGeometry(meridianCurve, 64, 0.085, 10, false), meridianMat);
+      scene.add(meridianTube);
+
+      // InstancedMesh Flow Corpuscles along meridian path (Zero GC!)
+      const particleCount = 44;
+      const particleGeo = new THREE.SphereGeometry(0.11, 10, 10);
+      const particleMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3, metalness: 0.1 });
+      const particleInst = new THREE.InstancedMesh(particleGeo, particleMat, particleCount);
+      particleInst.frustumCulled = false;
+      const _dummy = new THREE.Object3D();
+      const _ptPos = new THREE.Vector3();
+      const _col = new THREE.Color();
+      scene.add(particleInst);
 
       const state = {
-        subtractionPct: 0.1,
-        subtractionMode: false, // false = supplement only (leaking), true = 4-switch subtraction
+        focusType: 'all', // 'all' | 'stage' | 'remedy'
         focusIdx: -1,
+        healingActive: false,
+        culprits: [true, true, true, false], // Default 3 hit -> warns user!
         userOrbit: false,
         contextLost: false,
       };
@@ -953,67 +1350,132 @@
       const hudTitle = document.getElementById('wr-hud-title');
       const hudDesc = document.getElementById('wr-hud-desc');
       const stratBtn = document.getElementById('wr-strategy-toggle');
-      const slider = document.getElementById('wr-defense-slider');
-      const sliderVal = document.getElementById('wr-defense-val');
       const dock = document.getElementById('prem25-dock');
       const toggleDockBtn = document.getElementById('wr-btn-toggle-dock');
 
       function refreshWarroomUI() {
-        if (state.focusIdx >= 0) {
-          const m = PATHWAY_META[state.focusIdx];
-          if (hudTitle) hudTitle.textContent = m.title;
-          if (hudDesc) hudDesc.textContent = m.desc;
-        } else if (state.subtractionMode || state.subtractionPct >= 0.75) {
-          if (hudTitle) hudTitle.textContent = '四開關減法啟動 ➔ 12 星期 HSCRP 跌 20%–30%！';
-          if (hudDesc) hudDesc.textContent = '同時換走超加工食物（戒種子油＋加工糖）、每 30 分鐘起身、負重訓練與固定作息，四條發炎導管逐一關閘！';
+        const hitCount = state.culprits.filter(Boolean).length;
+        if (state.focusType === 'stage' && STAGES_8[state.focusIdx]) {
+          const s = STAGES_8[state.focusIdx];
+          if (hudTitle) hudTitle.textContent = s.title;
+          if (hudDesc) hudDesc.textContent = s.desc;
+        } else if (state.focusType === 'remedy' && REMEDIES_4[state.focusIdx]) {
+          const r = REMEDIES_4[state.focusIdx];
+          if (hudTitle) hudTitle.textContent = r.title;
+          if (hudDesc) hudDesc.textContent = r.desc;
+        } else if (state.healingActive) {
+          if (hudTitle) hudTitle.textContent = '唯一出路 · 即刻斬纜 ➔ 療癒商店四大清毒修復啟動！';
+          if (hudDesc) hudDesc.textContent = '掉轉頭戒凍飲、唔好再捱夜透支、起身做運動排汗去濕、食番乾淨原型食物清走體內毒素。仲喺「濕、凝、淤」就搞掂佢！';
         } else {
-          if (hudTitle) hudTitle.textContent = '四條死路齊爆 ➔ 食粒薑黃素根本救唔到！';
-          if (hudDesc) hudDesc.textContent = '只吞維他命、飲植物奶但唔行減法，犯咗「只補唔清」＋「吸收錯配」雙盲點，四條發炎路徑繼續向核心漏毒。';
+          if (hudTitle) hudTitle.textContent = `發炎元兇速覽（已中 ${hitCount} 樣）➔ 每日幫自己副偈儲緊大病「利息」！`;
+          if (hudDesc) hudDesc.textContent = '虛 ➔ 寒 ➔ 濕 ➔ 凝 ➔ 淤 ➔ 堵 ➔ 瘤 ➔ 癌。點擊下方「01 虛–08 癌」或療癒商店四件法寶，睇清香港人點樣親手將副偈塞爆！';
         }
+
         if (modeLabel) {
-          modeLabel.textContent = (state.subtractionMode || state.subtractionPct >= 0.75)
-            ? '四開關減法攔截中'
-            : '漏電爆發中 (只補唔清)';
+          if (state.healingActive) {
+            modeLabel.textContent = '即刻斬纜模式 · 經絡暢通修復中';
+            modeLabel.className = 'text-emerald-400';
+          } else {
+            modeLabel.textContent = hitCount >= 2
+              ? `已中 ${hitCount} 樣元兇 · 濕凝淤塞車惡化中`
+              : `已中 ${hitCount} 樣 · 切忌跌入塞車陷阱`;
+            modeLabel.className = 'text-rose-400';
+          }
         }
       }
 
-      stratBtn?.addEventListener('click', () => {
-        state.subtractionMode = !state.subtractionMode;
-        state.subtractionPct = state.subtractionMode ? 0.95 : 0.1;
-        if (slider) slider.value = String(Math.round(state.subtractionPct * 100));
-        if (sliderVal) sliderVal.textContent = `${Math.round(state.subtractionPct * 100)}%`;
-        stratBtn.textContent = state.subtractionMode
-          ? '模式：四開關減法齊斬 (清源) ⇄'
-          : '模式：只食薑黃素/維他命 (未清源) ⇄';
-        stratBtn.className = state.subtractionMode
-          ? 'px-3 py-1.5 rounded-lg bg-[#15803D] hover:bg-emerald-700 text-white font-black cursor-pointer'
-          : 'px-3 py-1.5 rounded-lg bg-[#8B0000] hover:bg-red-700 text-white font-black cursor-pointer';
-        refreshWarroomUI();
-      });
+      function updateFocusButtons() {
+        document.querySelectorAll('.wr-focus-btn').forEach((b) => {
+          const isAll = b.id === 'wr-focus-all';
+          const isGold = ['wr-focus-2', 'wr-focus-3', 'wr-focus-4'].includes(b.id);
+          const isHigh = ['wr-focus-5', 'wr-focus-6', 'wr-focus-7'].includes(b.id);
+          const isActive = (state.focusType === 'all' && isAll) || (state.focusType === 'stage' && b.id === `wr-focus-${state.focusIdx}`);
+          if (isActive) {
+            b.className = 'wr-focus-btn px-2.5 py-1 rounded-lg bg-[#D97706] text-[#111827] font-black cursor-pointer';
+          } else {
+            const tc = isGold ? 'text-amber-300' : isHigh ? (b.id === 'wr-focus-7' ? 'text-red-400' : 'text-rose-300') : 'text-slate-200';
+            b.className = `wr-focus-btn px-2 py-1 rounded-lg bg-[#1C222E] ${tc} hover:bg-[#283142] font-bold cursor-pointer`;
+          }
+        });
+      }
 
-      slider?.addEventListener('input', (e) => {
-        state.subtractionPct = Number(e.target.value) / 100;
-        if (sliderVal) sliderVal.textContent = `${e.target.value}%`;
-        state.subtractionMode = state.subtractionPct >= 0.65;
-        refreshWarroomUI();
-      });
-
-      function setFocus(idx) {
+      window.__focusPrem25Stage = function (idx) {
+        state.focusType = 'stage';
         state.focusIdx = idx;
         state.userOrbit = false;
-        document.querySelectorAll('.wr-focus-btn').forEach((b) => {
-          b.className = 'wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#1C222E] text-slate-200 hover:bg-[#283142] font-bold cursor-pointer';
-        });
-        const activeBtn = document.getElementById(idx === -1 ? 'wr-focus-all' : `wr-focus-${idx}`);
-        if (activeBtn) activeBtn.className = 'wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#D97706] text-[#111827] font-black cursor-pointer';
+        updateFocusButtons();
         refreshWarroomUI();
-      }
-      document.getElementById('wr-focus-all')?.addEventListener('click', () => setFocus(-1));
-      [0, 1, 2, 3].forEach((i) => document.getElementById(`wr-focus-${i}`)?.addEventListener('click', () => setFocus(i)));
+      };
+
+      window.__focusPrem25Remedy = function (idx) {
+        state.focusType = 'remedy';
+        state.focusIdx = idx;
+        state.healingActive = true;
+        if (stratBtn) {
+          stratBtn.textContent = '即刻斬纜：已啟動療癒清毒（順通）⇄';
+          stratBtn.className = 'px-3 py-1 rounded-lg bg-[#15803D] hover:bg-emerald-700 text-white font-black cursor-pointer whitespace-nowrap';
+        }
+        state.userOrbit = false;
+        updateFocusButtons();
+        refreshWarroomUI();
+      };
+
+      document.getElementById('wr-focus-all')?.addEventListener('click', () => {
+        state.focusType = 'all';
+        state.focusIdx = -1;
+        state.userOrbit = false;
+        updateFocusButtons();
+        refreshWarroomUI();
+      });
+      STAGES_8.forEach((_, i) => {
+        document.getElementById(`wr-focus-${i}`)?.addEventListener('click', () => window.__focusPrem25Stage(i));
+      });
+
+      stratBtn?.addEventListener('click', () => {
+        state.healingActive = !state.healingActive;
+        stratBtn.textContent = state.healingActive
+          ? '即刻斬纜：已啟動療癒清毒（順通）⇄'
+          : '即刻斬纜：未啟動（儲緊大病利息）⇄';
+        stratBtn.className = state.healingActive
+          ? 'px-3 py-1 rounded-lg bg-[#15803D] hover:bg-emerald-700 text-white font-black cursor-pointer whitespace-nowrap'
+          : 'px-3 py-1 rounded-lg bg-[#8B0000] hover:bg-red-700 text-white font-black cursor-pointer whitespace-nowrap';
+        state.focusType = 'all';
+        state.focusIdx = -1;
+        updateFocusButtons();
+        refreshWarroomUI();
+      });
+
+      document.querySelectorAll('.wr-culprit-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const cIdx = Number(btn.getAttribute('data-culprit'));
+          state.culprits[cIdx] = !state.culprits[cIdx];
+          const on = state.culprits[cIdx];
+          const label = btn.textContent.replace(/^[☑☐]\s*/, '');
+          btn.textContent = `${on ? '☑' : '☐'} ${label}`;
+          btn.className = on
+            ? 'wr-culprit-btn px-2 py-1 rounded border border-rose-500/60 bg-rose-950/70 text-rose-200 font-bold cursor-pointer'
+            : 'wr-culprit-btn px-2 py-1 rounded border border-white/20 bg-[#1C222E] text-slate-300 font-bold cursor-pointer';
+          if (state.culprits.filter(Boolean).length >= 2) state.healingActive = false;
+          if (stratBtn && !state.healingActive) {
+            stratBtn.textContent = '即刻斬纜：未啟動（儲緊大病利息）⇄';
+            stratBtn.className = 'px-3 py-1 rounded-lg bg-[#8B0000] hover:bg-red-700 text-white font-black cursor-pointer whitespace-nowrap';
+          }
+          refreshWarroomUI();
+        });
+      });
+
+      document.getElementById('wr-reset-cam')?.addEventListener('click', () => {
+        state.userOrbit = false;
+        state.focusType = 'all';
+        state.focusIdx = -1;
+        controls.reset();
+        updateFocusButtons();
+        refreshWarroomUI();
+      });
 
       toggleDockBtn?.addEventListener('click', () => {
         const collapsed = dock?.classList.toggle('dock-collapsed');
-        toggleDockBtn.textContent = collapsed ? '▴ 展開戰情控制台 (H)' : '▾ 收合戰情控制台 (H)';
+        toggleDockBtn.textContent = collapsed ? '▴ 展開 3D 沙盤控制台 (H)' : '▾ 收合 3D 沙盤控制台 (H)';
       });
       window.addEventListener('keydown', (e) => {
         if ((e.key === 'h' || e.key === 'H') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName || '')) {
@@ -1022,6 +1484,7 @@
       });
 
       const raycaster = new THREE.Raycaster();
+      raycaster.layers.set(1);
       const mouse = new THREE.Vector2();
       let downPos = { x: 0, y: 0 };
       renderer.domElement.addEventListener('pointerdown', (e) => { downPos = { x: e.clientX, y: e.clientY }; });
@@ -1032,9 +1495,24 @@
         mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
         raycaster.setFromCamera(mouse, camera);
         const hits = raycaster.intersectObjects(pickables, false);
-        if (hits.length > 0 && typeof hits[0].object.userData.pathwayIdx === 'number') {
-          setFocus(hits[0].object.userData.pathwayIdx);
+        if (hits.length > 0) {
+          const ud = hits[0].object.userData;
+          if (typeof ud.stageIdx === 'number') window.__focusPrem25Stage(ud.stageIdx);
+          else if (typeof ud.remedyIdx === 'number') window.__focusPrem25Remedy(ud.remedyIdx);
         }
+      });
+
+      let lastHover = 0;
+      renderer.domElement.addEventListener('pointermove', (e) => {
+        const now = performance.now();
+        if (now - lastHover < 50) return;
+        lastHover = now;
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const hits = raycaster.intersectObjects(pickables, false);
+        renderer.domElement.style.cursor = hits.length > 0 ? 'pointer' : 'grab';
       });
 
       controls.addEventListener('start', () => { state.userOrbit = true; });
@@ -1043,15 +1521,36 @@
 
       window.addEventListener('resize', () => {
         const w = mount.clientWidth || window.innerWidth;
-        const h = mount.clientHeight || 640;
+        const h = mount.clientHeight || 680;
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
         renderer.setSize(w, h);
+        renderer.setPixelRatio(isSoftwareGl ? 1 : Math.min(window.devicePixelRatio || 1, 2));
       });
 
       const _camTarget = new THREE.Vector3();
       const _lookTarget = new THREE.Vector3();
       let lastTime = performance.now();
+      let frameId = 0;
+
+      function afterDraw(cb) {
+        const gl = renderer.getContext();
+        if (!gl || typeof gl.fenceSync !== 'function') {
+          frameId = window.setTimeout(cb, 80);
+          return;
+        }
+        const sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
+        gl.flush();
+        const poll = () => {
+          const st = sync && gl.getSyncParameter(sync, gl.SYNC_STATUS);
+          if (st === gl.UNSIGNALED) frameId = window.setTimeout(poll, 5);
+          else {
+            if (sync) gl.deleteSync(sync);
+            frameId = window.setTimeout(cb, 80);
+          }
+        };
+        frameId = window.setTimeout(poll, 5);
+      }
 
       function tick() {
         const now = performance.now();
@@ -1059,35 +1558,67 @@
         lastTime = now;
 
         if (!state.contextLost) {
-          const def = state.subtractionPct;
-          const timeSec = now * 0.001;
+          const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          const timeSec = prefersReducedMotion ? 0 : now * 0.001;
+          const hitRatio = state.culprits.filter(Boolean).length / 4;
+          const isHealed = state.healingActive;
 
-          // Core color shifts from inflamed crimson (leak) to calm emerald-gold (subtraction active)
-          innerCoreMat.emissive.setHex(def > 0.65 ? 0x065f46 : 0x8b0000);
-          innerCoreMat.color.setHex(def > 0.65 ? 0x10b981 : 0xd97706);
-          innerCoreMat.emissiveIntensity = 0.55 + (1 - def) * 0.85 + Math.sin(timeSec * 3.2) * 0.12;
-          innerCore.rotation.y += dt * (0.4 + (1 - def) * 1.1);
-          shieldRing.scale.setScalar(0.75 + def * 0.45);
-          shieldRing.rotation.z = timeSec * 0.7;
+          // Update meridian color & lighting mood
+          shopLantern.color.setHex(isHealed ? 0x10b981 : 0xf59e0b);
+          meridianMat.color.setHex(isHealed ? 0x10b981 : 0x991b1b);
+          meridianMat.emissive.setHex(isHealed ? 0x059669 : 0x7f1d1d);
 
-          conduits.forEach((c, idx) => {
-            const leakStrength = Math.max(0.08, 1 - def);
-            c.beamMat.opacity = 0.12 + leakStrength * 0.72;
-            const prog = ((timeSec * (0.55 + leakStrength * 0.5) + c.tOffset) % 1);
-            const dist = c.radius * (1 - prog * (0.72 * leakStrength + 0.1));
-            c.packet.position.set(Math.cos(c.ang) * dist, 1.05, Math.sin(c.ang) * dist);
-            c.packet.visible = def < 0.92;
-            c.pylon.scale.y = state.focusIdx === idx ? 1.28 : 1.0;
+          // Animate stage totems + billboard facing camera
+          stageStations.forEach((st, idx) => {
+            const active = state.focusType === 'stage' && state.focusIdx === idx;
+            if (!prefersReducedMotion) {
+              st.orb.rotation.y += dt * (isHealed ? 1.1 : Math.max(0.15, 0.9 - idx * 0.1));
+            }
+            st.orb.position.y = 0.92 + (prefersReducedMotion ? 0 : Math.sin(timeSec * 2 + idx) * (isHealed ? 0.08 : 0.03));
+            st.plaque.lookAt(camera.position.x, st.plaque.position.y, camera.position.z);
+            const targetScale = active ? 1.28 : 1.0;
+            st.group.scale.setScalar(THREE.MathUtils.damp(st.group.scale.x, targetScale, 6, dt));
+            st.coreMat.emissiveIntensity = isHealed ? 0.45 : (active ? 0.85 : 0.35 + hitRatio * 0.25);
           });
 
+          // Animate healing remedies gently on counter
+          remedyMeshes.forEach((rm, idx) => {
+            const active = state.focusType === 'remedy' && state.focusIdx === idx;
+            if (!prefersReducedMotion) {
+              rm.rotation.y += dt * (isHealed || active ? 0.9 : 0.2);
+            }
+            rm.position.y = THREE.MathUtils.damp(rm.position.y, active ? 1.38 : 1.14, 6, dt);
+          });
+
+          // Animate meridian InstancedMesh flow corpuscles (sludgy slow when blocked, brisk emerald when healed)
+          const flowSpeed = prefersReducedMotion ? 0 : (isHealed ? 0.18 : Math.max(0.02, 0.08 - hitRatio * 0.055));
+          for (let i = 0; i < particleCount; i++) {
+            const u = ((i / particleCount) + timeSec * flowSpeed) % 1;
+            meridianCurve.getPointAt(u, _ptPos);
+            _dummy.position.copy(_ptPos);
+            _dummy.position.y += prefersReducedMotion ? 0 : Math.sin(timeSec * 3 + i) * 0.06;
+            const s = isHealed ? 0.95 : (u > 0.6 ? 1.35 : 0.85);
+            _dummy.scale.setScalar(s);
+            _dummy.updateMatrix();
+            particleInst.setMatrixAt(i, _dummy.matrix);
+            _col.setHex(isHealed ? 0x34d399 : (u < 0.35 ? 0xf59e0b : u < 0.68 ? 0x38bdf8 : 0xef4444));
+            particleInst.setColorAt(i, _col);
+          }
+          particleInst.instanceMatrix.needsUpdate = true;
+          if (particleInst.instanceColor) particleInst.instanceColor.needsUpdate = true;
+
           if (!state.userOrbit) {
-            if (state.focusIdx >= 0) {
-              const ang = angles[state.focusIdx];
-              _camTarget.set(Math.cos(ang) * 7.6, 3.3, Math.sin(ang) * 7.6);
-              _lookTarget.set(Math.cos(ang) * 2.1, 0.9, Math.sin(ang) * 2.1);
+            if (state.focusType === 'stage' && stageStations[state.focusIdx]) {
+              const st = stageStations[state.focusIdx];
+              _camTarget.set(st.sx * 1.48, 2.75, st.sz * 1.48 + 3.1);
+              _lookTarget.set(st.sx * 0.72, 1.0, st.sz * 0.72);
+            } else if (state.focusType === 'remedy') {
+              const rx = [-1.75, -0.6, 0.6, 1.75][state.focusIdx] || 0;
+              _camTarget.set(rx * 1.1, 2.5, 4.3);
+              _lookTarget.set(rx, 1.4, 0.3);
             } else {
-              _camTarget.set(Math.sin(timeSec * 0.18) * 1.6, 4.4, 9.6);
-              _lookTarget.set(0, 0.8, 0);
+              _camTarget.set(prefersReducedMotion ? 0 : Math.sin(timeSec * 0.14) * 1.5, 4.6, 11.4);
+              _lookTarget.set(0, 1.0, 0.6);
             }
             camera.position.x = THREE.MathUtils.damp(camera.position.x, _camTarget.x, 4, dt);
             camera.position.y = THREE.MathUtils.damp(camera.position.y, _camTarget.y, 4, dt);
@@ -1101,8 +1632,8 @@
           renderer.render(scene, camera);
         }
 
-        if (isSoftwareGl) window.setTimeout(tick, 80);
-        else requestAnimationFrame(tick);
+        if (isSoftwareGl) afterDraw(tick);
+        else frameId = requestAnimationFrame(tick);
       }
 
       refreshWarroomUI();
