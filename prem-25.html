@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PREM 25 · 慢性低度發炎 × 四大元兇實彈拆局</title>
+  <meta name="description" content="PREM 25 專屬 80% 核心實彈：2026 香港人原聲節奏拆解脾虛寒濕塞到慢性低度發炎/超加工／久坐 LPL／瘦胖子 IL-6／400 倍腸道褪黑激素完全攻略、HSCRP 自保與 12 星期減法模擬器。" />
+
+  <!-- Safe WebSocket & HMR Sandbox Guard -->
+  <script>
+    (function () {
+      var OriginalWebSocket = window.WebSocket;
+      if (OriginalWebSocket) {
+        function SafeWebSocket(url, protocols) {
+          var isViteHmr =
+            (typeof protocols === 'string' && protocols.indexOf('vite-hmr') !== -1) ||
+            (Array.isArray(protocols) && protocols.indexOf('vite-hmr') !== -1) ||
+            (typeof url === 'string' && (url.indexOf('vite-hmr') !== -1 || url.indexOf(':3000') !== -1));
+
+          if (isViteHmr) {
+            var listeners = {};
+            var mockSocket = {
+              binaryType: 'blob',
+              bufferedAmount: 0,
+              extensions: '',
+              protocol: 'vite-hmr',
+              readyState: 1,
+              url: String(url),
+              CONNECTING: 0, OPEN: 1, CLOSING: 2, CLOSED: 3,
+              send: function () {},
+              close: function () { mockSocket.readyState = 3; },
+              addEventListener: function (type, fn) {
+                listeners[type] = listeners[type] || [];
+                listeners[type].push(fn);
+                if (type === 'open') {
+                  setTimeout(function () {
+                    try { fn({ type: 'open', target: mockSocket }); } catch (e) {}
+                  }, 0);
+                }
+              },
+              removeEventListener: function (type, fn) {
+                if (!listeners[type]) return;
+                listeners[type] = listeners[type].filter(function (f) { return f !== fn; });
+              },
+              dispatchEvent: function () { return true; },
+              onopen: null, onclose: null, onerror: null, onmessage: null
+            };
+            setTimeout(function () {
+              if (typeof mockSocket.onopen === 'function') {
+                try { mockSocket.onopen({ type: 'open', target: mockSocket }); } catch (e) {}
+              }
+            }, 0);
+            return mockSocket;
+          }
+          return new OriginalWebSocket(url, protocols);
+        }
+        SafeWebSocket.prototype = OriginalWebSocket.prototype;
+        SafeWebSocket.CONNECTING = 0; SafeWebSocket.OPEN = 1;
+        SafeWebSocket.CLOSING = 2; SafeWebSocket.CLOSED = 3;
+        window.WebSocket = SafeWebSocket;
+      }
+      window.addEventListener('unhandledrejection', function (event) {
+        if (!event || !event.reason) return;
+        var msg = String(event.reason.message || event.reason);
+        if (msg.indexOf('WebSocket') !== -1 || msg.indexOf('websocket') !== -1) {
+          event.preventDefault();
+        }
+      }, true);
+    })();
+  </script>
+
+  <!-- Three.js r165 CDN Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', '"PingFang HK"', 'sans-serif'],
+            serif: ['"Playfair Display"', '"Noto Sans TC"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            cream: '#F4F0E6',
+            creamSoft: '#FAF8F2',
+            crimson: '#8B0000',
+            chamber: '#111419',
+            ink: '#17191C',
+            inkMuted: '#4B5563',
+            amberAccent: '#D97706',
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Icons & Confetti -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg-cream: #F4F0E6;
+      --bg-chamber: #111419;
+      --text-ink: #17191C;
+      --accent-crimson: #8B0000;
+      --accent-amber: #D97706;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-ink);
+      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', 'PingFang HK', sans-serif;
+    }
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+    .headline-balance { text-wrap: balance; }
+    .hairline-cream { border-color: rgba(23, 25, 28, 0.14); }
+    .hairline-dark { border-color: rgba(244, 240, 230, 0.14); }
+    #prem25-dock {
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #prem25-dock.dock-collapsed {
+      transform: translate(-50%, calc(100% - 30px));
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-[#8B0000] selection:text-white">
+
+  <!-- STRICT 3-ZONE TOP BAR -->
+  <header class="sticky top-0 z-50 bg-[#F4F0E6]/95 border-b hairline-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between gap-6">
+      <a href="./prem-25.html" class="font-serif italic font-black text-xl sm:text-2xl tracking-tight text-[#8B0000] whitespace-nowrap shrink-0">
+        PREM 25
+      </a>
+
+      <nav aria-label="章節導覽" class="hidden md:flex items-center gap-6 text-sm font-semibold text-[#4B5563]">
+        <a href="#band-voice" class="hover:text-[#17191C] hover:underline underline-offset-4 whitespace-nowrap">原聲惡化鏈條</a>
+        <a href="#band-3d-warroom" class="hover:text-[#17191C] hover:underline underline-offset-4 whitespace-nowrap">3D 攔截沙盤</a>
+        <a href="#band-enemies" class="hover:text-[#17191C] hover:underline underline-offset-4 whitespace-nowrap">四大元兇拆局</a>
+        <a href="#band-hscrp" class="hover:text-[#17191C] hover:underline underline-offset-4 whitespace-nowrap">HSCRP × 減法模擬</a>
+      </nav>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <a href="./dailyflow15.html" class="px-3.5 py-2 rounded-lg bg-[#17191C] hover:bg-[#8B0000] text-[#F4F0E6] text-xs font-bold transition-colors whitespace-nowrap">
+          返回第15日日報
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- PASSKEY BARRIER -->
+  <section id="passkey-barrier" class="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+    <div class="bg-[#FAF8F2] border-2 border-[#17191C] rounded-2xl p-8 sm:p-12 text-center shadow-[4px_4px_0px_#17191C] space-y-6">
+      <div class="text-xs font-mono tracking-wider text-[#8B0000] font-bold">
+        <span>PREM 25 專屬戰情室</span>
+        <span aria-hidden="true" class="mx-2">·</span>
+        <span>第15日 80% 完整實彈庫</span>
+        <span aria-hidden="true" class="mx-2">·</span>
+        <span>2026 香港人原聲節奏</span>
+      </div>
+
+      <h1 class="font-serif text-3xl sm:text-4xl font-black text-[#17191C] leading-tight headline-balance">
+        解鎖慢性低度發炎 3D 攔截沙盤與四大元兇全拆局
+      </h1>
+
+      <p class="text-sm sm:text-base text-[#4B5563] max-w-xl mx-auto leading-relaxed">
+        完整收錄其餘 80% 實彈檔案：脾虛寒濕塞演變鏈、Three.js 3D 四路徑實時戰情沙盤、NOVA 4 超加工食品黑名單、張凳 LPL 停工機制、瘦胖子 IL-6 工廠、400 倍腸道褪黑激素，及 HSCRP 1/3/10 自保模擬器。
+      </p>
+
+      <div class="max-w-md mx-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+        <input
+          id="passkey-input"
+          type="text"
+          aria-label="專屬通行碼"
+          placeholder="輸入解鎖碼（試用碼：xxxxx）"
+          class="flex-1 min-h-[44px] px-4 py-2.5 rounded-xl bg-white border-2 border-[#17191C]/25 text-[#17191C] font-mono text-sm text-center sm:text-left focus:outline-none focus:border-[#8B0000]"
+          onkeydown="if(event.key==='Enter') unlockVault()"
+        />
+        <button
+          type="button"
+          onclick="unlockVault()"
+          class="min-h-[44px] px-6 py-2.5 rounded-xl bg-[#8B0000] hover:bg-[#17191C] text-white font-bold text-sm transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+        >
+          驗證解鎖
+        </button>
+      </div>
+
+      <p id="passkey-err" role="alert" class="text-xs font-bold text-[#B91C1C] hidden">
+        通行碼無效，請確認後重試（體驗試用碼：xxxxx）。
+      </p>
+
+      <div class="pt-4 border-t hairline-cream flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-[#4B5563]">
+        <button type="button" onclick="fillDemoKey()" class="font-bold text-[#8B0000] underline underline-offset-4 hover:text-[#17191C] transition-colors cursor-pointer">
+          一鍵填入並解鎖體驗 (xxxxx)
+        </button>
+        <span aria-hidden="true">·</span>
+        <a href="./dailyflow15.html" class="underline underline-offset-4 hover:text-[#17191C] transition-colors">
+          返回第15日報紙 A1（20% 摘要）
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- UNLOCKED VAULT CONTENT -->
+  <main id="vault-content" class="hidden">
+
+    <!-- ================================================================ -->
+    <!-- BAND A (WARM CREAM): VOICE CARD 惡化鏈條 & 幕後黑手總綱           -->
+    <!-- ================================================================ -->
+    <section id="band-voice" class="bg-[#F4F0E6] text-[#17191C] py-12 sm:py-16 border-b hairline-cream">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 space-y-10">
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div class="lg:col-span-7 space-y-5">
+            <div class="flex flex-wrap items-center gap-2 text-xs font-mono font-bold text-[#8B0000]">
+              <span class="bg-[#8B0000] text-white px-2.5 py-0.5 rounded">PREM 25 · 80% 完整實彈</span>
+              <span>2026 香港人原聲節奏 (Voice Card Locked)</span>
+            </div>
+
+            <h1 class="font-serif text-3xl sm:text-5xl font-black text-[#17191C] leading-[1.15] headline-balance">
+              講人話：<span class="text-[#8B0000] underline decoration-[#D97706] underline-offset-8">全部病都係自己親手養成</span>，背後黑手就係慢性低度發炎！
+            </h1>
+
+            <p class="text-base sm:text-lg text-[#374151] leading-relaxed">
+              喺人嘅身體上邊嚟講，全部都係一步步由好變到最壞呢個過程。短期發炎係你副偈喺度打仗救你命——整傷流血埋口、殺菌清場全部靠佢；<strong>最攞命嘅係「慢性低度發炎」</strong>：唔痛唔癢完全 feel 唔到，但佢 <strong>24 小時喺你體內暗中燒緊</strong>。一般驗血報告根本照唔出，除非你特登叫醫生加驗 <strong>CRP 或者高敏感度 HSCRP</strong>，如果唔係等到爆大鑊嗰日先知出事，副偈其實已經暗中燒咗好幾年！
+            </p>
+
+            <div class="flex flex-wrap gap-3 pt-1">
+              <a href="#band-3d-warroom" class="px-5 py-3 rounded-xl bg-[#8B0000] hover:bg-[#17191C] text-white text-sm font-bold transition-colors">
+                進入 3D 發炎攔截沙盤 ↓
+              </a>
+              <a href="#band-hscrp" class="px-5 py-3 rounded-xl border-2 border-[#17191C] hover:bg-[#17191C] hover:text-white text-[#17191C] text-sm font-bold transition-colors">
+                HSCRP 驗血自保 &amp; 四開關模擬
+              </a>
+            </div>
+          </div>
+
+          <!-- Interactive 8-Step Deterioration Chain Inspector -->
+          <div class="lg:col-span-5 bg-[#FAF8F2] border-2 border-[#17191C] rounded-2xl p-5 shadow-[4px_4px_0px_#17191C] space-y-4">
+            <div class="flex items-center justify-between border-b hairline-cream pb-2.5">
+              <span class="font-mono text-xs font-black text-[#8B0000]">點擊逐階拆解：由好變壞 8 步</span>
+              <span class="font-mono text-[11px] text-[#4B5563]">中醫經絡 ➔ 細胞微生態</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-xs" id="chain-btn-grid">
+              <button type="button" onclick="selectChainStep(0)" class="chain-step-btn p-2 rounded-lg bg-[#8B0000] text-white font-black border border-[#17191C] cursor-pointer text-left">01 脾虛</button>
+              <button type="button" onclick="selectChainStep(1)" class="chain-step-btn p-2 rounded-lg bg-white text-[#17191C] font-bold border border-[#17191C]/25 hover:border-[#8B0000] cursor-pointer text-left">02 寒弱</button>
+              <button type="button" onclick="selectChainStep(2)" class="chain-step-btn p-2 rounded-lg bg-white text-[#17191C] font-bold border border-[#17191C]/25 hover:border-[#8B0000] cursor-pointer text-left">03 濕</button>
+              <button type="button" onclick="selectChainStep(3)" class="chain-step-btn p-2 rounded-lg bg-white text-[#17191C] font-bold border border-[#17191C]/25 hover:border-[#8B0000] cursor-pointer text-left">04 凝結</button>
+              <button type="button" onclick="selectChainStep(4)" class="chain-step-btn p-2 rounded-lg bg-white text-[#17191C] font-bold border border-[#17191C]/25 hover:border-[#8B0000] cursor-pointer text-left">05 塞</button>
+              <button type="button" onclick="selectChainStep(5)" class="chain-step-btn p-2 rounded-lg bg-white text-[#17191C] font-bold border border-[#17191C]/25 hover:border-[#8B0000] cursor-pointer text-left">06 毒素困死</button>
+              <button type="button" onclick="selectChainStep(6)" class="chain-step-btn p-2 rounded-lg bg-white text-[#17191C] font-bold border border-[#17191C]/25 hover:border-[#8B0000] cursor-pointer text-left">07 免疫跌</button>
+              <button type="button" onclick="selectChainStep(7)" class="chain-step-btn p-2 rounded-lg bg-white text-[#17191C] font-bold border border-[#17191C]/25 hover:border-[#8B0000] cursor-pointer text-left">08 腫瘤改變</button>
+            </div>
+
+            <div id="chain-step-readout" class="p-4 rounded-xl bg-white border border-[#17191C]/15 space-y-1.5">
+              <div class="font-mono text-xs font-black text-[#8B0000]">階段 01 / 08 · 脾虛（中氣起點失守）</div>
+              <p class="text-sm text-[#17191C] font-medium leading-relaxed">
+                正所謂中醫所講：一切惡化由脾虛開始。運化動力不足、消化屏障變薄，令體內水穀同廢物開始轉化唔切。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Core Hard Numbers Row -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 border-t hairline-cream pt-6 gap-6">
+          <div class="space-y-1">
+            <div class="text-xs font-mono text-[#4B5563]">腸道管理免疫同代謝軍團</div>
+            <div class="text-2xl sm:text-3xl font-mono font-black text-[#17191C] tabular-nums">38 兆隻菌</div>
+            <div class="text-xs text-[#4B5563]">一亂即得一個細胞薄嘅腸壁穿窿</div>
+          </div>
+          <div class="space-y-1 lg:border-l hairline-cream lg:pl-6">
+            <div class="text-xs font-mono text-[#4B5563]">哈佛實證：超加工改寫菌相</div>
+            <div class="text-2xl sm:text-3xl font-mono font-black text-[#8B0000] tabular-nums">24–48 hr</div>
+            <div class="text-xs text-[#4B5563]">唔使幾個月，兩日就漏 LPS 脂多醣入血</div>
+          </div>
+          <div class="space-y-1 lg:border-l hairline-cream lg:pl-6">
+            <div class="text-xs font-mono text-[#4B5563]">腸道製造褪黑激素 vs 大腦</div>
+            <div class="text-2xl sm:text-3xl font-mono font-black text-[#D97706] tabular-nums">400 倍</div>
+            <div class="text-xs text-[#4B5563]">專職喺腸壁做抗炎維修，一熬夜即失守</div>
+          </div>
+          <div class="space-y-1 lg:border-l hairline-cream lg:pl-6">
+            <div class="text-xs font-mono text-[#4B5563]">12 星期同時改四個開關</div>
+            <div class="text-2xl sm:text-3xl font-mono font-black text-[#15803D] tabular-nums">-20% ~ -30%</div>
+            <div class="text-xs text-[#4B5563]">高敏感度 HSCRP 發炎指標實測回落幅度</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- BAND B (CHARCOAL WARROOM): THREE.JS CDN 3D STRATEGY SANDBOX      -->
+    <!-- ================================================================ -->
+    <section id="band-3d-warroom" class="bg-[#111419] text-[#F8FAFC] relative">
+      <div class="relative w-full h-[88vh] min-h-[640px] max-h-[860px] overflow-hidden select-none">
+
+        <!-- Empty Three.js Canvas Mount (Zero backdrop-filter over WebGL!) -->
+        <div id="warroom-three-mount" class="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing"></div>
+
+        <!-- Static WebGL Fallback -->
+        <div id="warroom-webgl-fallback" class="hidden absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#111419]">
+          <div class="max-w-md p-6 rounded-2xl border border-amber-500/40 bg-[#1B2029]">
+            <div class="font-mono text-xs font-bold text-amber-400 mb-1">3D INFLAMMATION SANDBOX FALLBACK</div>
+            <h2 class="font-serif text-xl font-bold text-white mb-2">系統已切換為靜態模式</h2>
+            <p class="text-sm text-slate-300">可繼續瀏覽下方四大元兇逐件解剖同 HSCRP 12 星期減法模擬器。</p>
+          </div>
+        </div>
+
+        <!-- Top-Left Solid Telemetry HUD (No backdrop-blur over WebGL) -->
+        <div class="pointer-events-none absolute top-5 left-4 sm:left-8 right-4 sm:right-auto max-w-md z-10 space-y-2.5">
+          <div class="flex items-center gap-2 text-xs font-mono font-bold text-[#F59E0B]">
+            <span>3D 體內發炎四路徑攔截沙盤</span>
+            <span>·</span>
+            <span id="wr-mode-label">漏電爆發中 (未行減法)</span>
+          </div>
+          <h2 id="wr-hud-title" class="font-serif text-xl sm:text-2xl font-black text-white leading-tight">
+            四條死路齊爆 ➔ 食粒薑黃素根本救唔到！
+          </h2>
+          <p id="wr-hud-desc" class="text-xs sm:text-sm text-slate-200 leading-relaxed bg-[#111419]/92 border border-white/15 rounded-xl p-3">
+            點擊場景中任何一條攻擊導管，或切換下方「只補唔清 vs 四開關減法」，實時睇清點解只吞維他命 CRP 依然高企！
+          </p>
+        </div>
+
+        <!-- Collapsible Bottom Control Dock (Zero viewport occlusion) -->
+        <div id="prem25-dock" class="z-20 absolute bottom-4 left-1/2 -translate-x-1/2 w-[94vw] max-w-[860px]">
+          <div class="flex justify-center mb-1">
+            <button type="button" id="wr-btn-toggle-dock" class="px-3.5 py-1 rounded-t-lg bg-[#1A202B] border border-b-0 border-amber-500/35 text-[11px] font-mono font-bold text-slate-200 hover:text-amber-300 cursor-pointer">
+              ▾ 收合戰情控制台 (H)
+            </button>
+          </div>
+          <div class="bg-[#0D1016]/96 border border-amber-500/35 rounded-2xl p-3 sm:p-4 shadow-2xl space-y-2.5">
+            <!-- Row 1: Mode Switch + Pathway Focus -->
+            <div class="flex flex-wrap items-center justify-between gap-2 font-mono text-[11px]">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button type="button" id="wr-focus-all" class="wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#D97706] text-[#111827] font-black cursor-pointer">全景戰情</button>
+                <button type="button" id="wr-focus-0" class="wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#1C222E] text-slate-200 hover:bg-[#283142] font-bold cursor-pointer">① 超加工 LPS</button>
+                <button type="button" id="wr-focus-1" class="wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#1C222E] text-slate-200 hover:bg-[#283142] font-bold cursor-pointer">② 久坐 LPL</button>
+                <button type="button" id="wr-focus-2" class="wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#1C222E] text-slate-200 hover:bg-[#283142] font-bold cursor-pointer">③ 內臟 IL-6</button>
+                <button type="button" id="wr-focus-3" class="wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#1C222E] text-slate-200 hover:bg-[#283142] font-bold cursor-pointer">④ 熬夜皮質醇</button>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button type="button" id="wr-strategy-toggle" class="px-3 py-1.5 rounded-lg bg-[#8B0000] hover:bg-red-700 text-white font-black cursor-pointer">
+                  模式：只食薑黃素/維他命 (未清源) ⇄
+                </button>
+              </div>
+            </div>
+            <!-- Row 2: Subtraction Defense Slider -->
+            <div class="flex items-center gap-3 pt-1 border-t border-white/10 font-mono text-xs">
+              <span class="text-slate-300 shrink-0">四開關減法執行度</span>
+              <input id="wr-defense-slider" type="range" min="0" max="100" value="10" class="w-full accent-[#D97706] cursor-pointer" aria-label="Subtraction protocol defense slider" />
+              <span id="wr-defense-val" class="text-amber-400 font-black tabular-nums w-12 text-right">10%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- BAND C (DEEP CHARCOAL-OLIVE): FOUR HIDDEN ENEMIES 80% FULL       -->
+    <!-- ================================================================ -->
+    <section id="band-enemies" class="bg-[#1B2219] text-[#F4F0E6] py-16 sm:py-20 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 space-y-14">
+
+        <div class="max-w-3xl space-y-2">
+          <div class="text-xs font-mono font-bold text-[#F59E0B]">
+            <span>其餘 80% 完整深度拆解</span>
+            <span aria-hidden="true" class="mx-2">·</span>
+            <span>撳掣睇字前起碼已中兩樣</span>
+          </div>
+          <h2 class="font-serif text-3xl sm:text-4xl font-black text-white headline-balance">
+            四大發炎元兇逐件解剖：點解你日日俾佢毒害都唔覺？
+          </h2>
+        </div>
+
+        <!-- 4 ENEMIES FULL GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <!-- Enemy 1: NOVA 4 Ultra-Processed -->
+          <article class="bg-[#121711] border-2 border-amber-500/40 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between border-b hairline-dark pb-3">
+              <span class="px-2.5 py-1 rounded bg-[#8B0000] text-white font-mono text-xs font-black">敵人一 · NOVA 第四級</span>
+              <span class="font-mono text-xs text-amber-300 font-bold">24–48 hr 改寫腸菌</span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-black text-white">你以為好健康嘅「超加工食物」陷阱</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              唔好講薯片、即食麵呢啲明知係垃圾嘅嘢，講啲你日日以為好健康嘅陷阱。根據食品分類系統 <strong>NOVA</strong>，但凡成分表出現你屋企廚房根本唔會擺嘅嘢——<strong>乳化劑、修飾澱粉、人工香料、膠類</strong>——全部都係第四級超加工食品，同幾多卡路里、幾多脂肪完全無關：
+            </p>
+            <ul class="space-y-2 text-xs sm:text-sm text-slate-200 bg-[#1B2219] p-4 rounded-xl border hairline-dark">
+              <li><strong>🥛 紙包豆漿：</strong>街市現磨豆漿係黃豆加水加少少糖，唔雪即刻壞；便利店盒裝豆漿擺幾個禮拜都唔變，入面全部係乳化劑同穩定劑。</li>
+              <li><strong>🧫 益生菌飲品：</strong>細細支已經 <strong>10 至 14 克糖</strong>，話就話補菌，其實倒緊糖落腸道餵肥壞菌。</li>
+              <li><strong>⚡ 運動飲品：</strong>水加糖、甜味劑、色素，根本唔係日常健康飲品。</li>
+              <li><strong>🍞 全麥方包：</strong>印住「全麥」兩個字唔代表健康，麵包廠為咗令塊包放幾日都軟熟，落足改良劑同乳化劑。</li>
+              <li><strong>🥗 沙律醬、真空包裝重口味豆乾：</strong>全部靠膠體、化學調味料同防腐堆出嚟。</li>
+            </ul>
+            <p class="text-xs sm:text-sm text-amber-200/90 leading-relaxed">
+              <strong>菌壁漏電機制：</strong>你條腸住咗 <strong>38 兆隻細菌</strong>，管晒免疫同代謝。哈佛研究證實只要 <strong>24 至 48 小時</strong>，超加工食品就夠膽改寫你成個腸道菌相。菌群一亂，得一個細胞咁薄嘅腸壁即刻穿窿，死菌碎片 <strong>LPS（脂多醣）</strong> 漏晒入血！免疫系統即刻開著熄唔到嘅發炎總掣，順手搞散埋<strong>血清素同皮質醇</strong>，連情緒、集中力同睡眠質素一齊拖垮。
+            </p>
+            <div class="p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-xs sm:text-sm text-emerald-200 font-bold">
+              ✅ 拆局方法：買任何包裝嘢，反轉睇成分表。見到成堆屋企廚房唔會出現嘅化學名，即刻放低。
+            </div>
+          </article>
+
+          <!-- Enemy 2: Sitting Kills -->
+          <article class="bg-[#121711] border-2 border-sky-500/40 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between border-b hairline-dark pb-3">
+              <span class="px-2.5 py-1 rounded bg-sky-800 text-white font-mono text-xs font-black">敵人二 · 張凳毒害</span>
+              <span class="font-mono text-xs text-sky-300 font-bold">LPL 酵素即刻停工</span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-black text-white">張凳日日毒害你，朝早做 Gym 都救唔返</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              你今日坐咗幾多個鐘？自己計下數。朝早去操肌、跑五公里，完全抵銷唔到你之後坐喺張凳度八個鐘嘅傷害。你副偈係將<strong>「做運動」同「久坐」分開兩條數計</strong>嘅！研究講到明，坐得越耐嘅寫字樓打工仔，發炎指標同胰島素阻抗就越差，同佢平時有冇做運動完全無關。
+            </p>
+            <div class="bg-[#1B2219] p-4 rounded-xl border hairline-dark space-y-2 text-xs sm:text-sm text-slate-200">
+              <div><strong>🍑 臀肌失憶症：</strong>坐得耐你對蘿柚真係會唔記得點用力，跟住<strong>骨盆前傾</strong>，下肢血液同淋巴塞死，上腦血流量暴跌，下午成個人散晒、專注力歸零，仲會生橙皮紋。</div>
+              <div><strong>🩸 LPL 停工飆血脂：</strong>最致命係一停低唔郁，身體負責清走血液脂肪嘅酵素 <strong>LPL（脂蛋白脂肪酶）</strong> 即刻停工！脂肪留喺血管入面清唔走，發炎反應即刻飆升。</div>
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-xs sm:text-sm text-emerald-200 font-bold">
+              ✅ 拆局方法：張枱貼張紙寫住「起身」。每坐 <strong>30 分鐘</strong>，起身郁動 <strong>2 分鐘</strong>——呢個係科學驗證過嘅最低門檻。
+            </div>
+          </article>
+
+          <!-- Enemy 3: TOFI Visceral Fat -->
+          <article class="bg-[#121711] border-2 border-rose-500/40 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between border-b hairline-dark pb-3">
+              <span class="px-2.5 py-1 rounded bg-rose-800 text-white font-mono text-xs font-black">敵人三 · 瘦胖子 TOFI</span>
+              <span class="font-mono text-xs text-rose-300 font-bold">24 小時狂噴 IL-6 / TNF-α</span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-black text-white">睇落好瘦但「內臟脂肪」爆錶</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              唔好見到上磅個數字輕就以為過關。皮下脂肪你搣得到、磅得到；但包住你五臟六腑嘅<strong>內臟脂肪</strong>，睇唔到亦磅唔出。<strong>BMI 標準係跟西方人數據定出嚟，對亞洲人根本唔準。</strong>好多香港人睇落手腳瘦削，其實係典型「瘦胖子」，內臟脂肪早就超標。
+            </p>
+            <div class="bg-[#1B2219] p-4 rounded-xl border hairline-dark space-y-2 text-xs sm:text-sm text-slate-200">
+              <div><strong>🏭 自動化發炎工廠：</strong>內臟脂肪唔係一嚿死物，佢係一間 24 小時自動運作嘅發炎工廠，唔需要任何訊號，自己按時間表直接向血液狂噴發炎因子（<strong>IL-6、TNF-α</strong>）。</div>
+              <div><strong>🥀 殘樣真兇：</strong>除咗令免疫系統以為成棟大廈著火而亂咁開槍，內臟脂肪仲會加速<strong>膠原蛋白流失</strong>，搞到你<strong>眼底凹陷、下顎線條消失</strong>——呢種殘樣，你瞓幾多覺都補唔返！</div>
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-xs sm:text-sm text-emerald-200 font-bold">
+              ✅ 拆局方法：減內臟脂肪，<strong>負重阻力訓練</strong>遠比單純跑帶氧運動有效。
+            </div>
+          </article>
+
+          <!-- Enemy 4: Sleep Deprivation -->
+          <article class="bg-[#121711] border-2 border-violet-500/40 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between border-b hairline-dark pb-3">
+              <span class="px-2.5 py-1 rounded bg-violet-800 text-white font-mono text-xs font-black">敵人四 · 睡眠斷層</span>
+              <span class="font-mono text-xs text-violet-300 font-bold">腸道褪黑激素 400×</span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-black text-white">睡眠不足一晚，CRP 發炎指標即刻飆</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              你對上一次一覺瞓足 8 個鐘、半夜冇醒過係幾時？千祈唔好諗住「週末瞓返夠本」，身體嘅損傷係逐日累積，補眠根本補唔返。深度睡眠係副偈製造抗炎分子、清理當日細胞垃圾嘅唯一時段。
+            </p>
+            <div class="bg-[#1B2219] p-4 rounded-xl border hairline-dark space-y-2 text-xs sm:text-sm text-slate-200">
+              <div><strong>🧬 腸道 400 倍褪黑激素：</strong>腸道製造嘅褪黑激素係大腦嘅 <strong>400 倍</strong>，佢唔係用嚟叫你瞓覺，而係直接喺腸壁做<strong>抗炎維修</strong>！睡眠時間一亂，腸壁滲透度增加（腸漏），同敵人一從兩個方向夾擊同一條腸。</div>
+              <div><strong>📊 臨床鐵證：</strong>研究證實只要一晚瞓唔夠 <strong>6 個鐘</strong>，第二朝 CRP 發炎指標已經明顯飆升；涵蓋超過<strong>五萬人</strong>嘅大型分析亦確認，睡眠失調同所有發炎指標直接掛鉤。</div>
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-xs sm:text-sm text-emerald-200 font-bold">
+              ✅ 拆局方法：<strong>固定上床同起身時間</strong>，重要性同瞓幾多個鐘完全對等。
+            </div>
+          </article>
+
+        </div>
+
+        <!-- WHY CURCUMIN FAILS + TWO-ANGLE LOGIC -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2">
+          <div class="lg:col-span-6 bg-[#121711] border hairline-dark rounded-2xl p-6 space-y-4">
+            <div class="font-mono text-xs font-bold text-amber-400">點解食極薑黃素、補劑都冇用？</div>
+            <h3 class="text-xl font-black text-white">四個系統同時壞晒，每條死路都唔同：</h3>
+            <div class="space-y-2 font-mono text-xs sm:text-sm">
+              <div class="p-2.5 rounded bg-[#1B2219] border-l-4 border-amber-500">超加工食品 ➔ 走腸道 LPS 漏電路徑</div>
+              <div class="p-2.5 rounded bg-[#1B2219] border-l-4 border-sky-500">久坐 ➔ 脂蛋白脂肪酶停工，血脂塞死</div>
+              <div class="p-2.5 rounded bg-[#1B2219] border-l-4 border-rose-500">內臟脂肪 ➔ 直接向血液噴發炎因子</div>
+              <div class="p-2.5 rounded bg-[#1B2219] border-l-4 border-violet-500">瞓唔夠 ➔ 皮質醇失控，修復工程停擺</div>
+            </div>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              食粒薑黃素最多幫你頂住其中一條路，根本修復唔到你成個腸道菌相。<strong>你唔係缺補劑，你係成套生活模式要改。</strong>
+            </p>
+          </div>
+
+          <div class="lg:col-span-6 bg-[#8B0000]/25 border-2 border-[#8B0000] rounded-2xl p-6 space-y-4">
+            <div class="font-mono text-xs font-bold text-amber-300">兩個角度底層邏輯拆局</div>
+            <h3 class="text-xl font-black text-white">點解我日日吞綜合維他命、飲健康植物奶，驗血 CRP 仲係咁高？</h3>
+            <div class="space-y-3 text-sm text-slate-100 leading-relaxed">
+              <div class="p-3.5 rounded-xl bg-black/35 border border-white/15">
+                <strong class="text-amber-300 block mb-1">角度一 · 犯咗「只補唔清」盲點：</strong>
+                唔好再信超市包裝寫咩「低脂」、「健康」，嗰啲全部係商業陷阱。你一定要行<strong>「減法」</strong>，戒走<strong>精製種子油</strong>同<strong>加工糖</strong>！
+              </div>
+              <div class="p-3.5 rounded-xl bg-black/35 border border-white/15">
+                <strong class="text-amber-300 block mb-1">角度二 · 犯咗「吸收錯配」盲點：</strong>
+                當脾虛寒濕塞令單細胞腸壁穿窿、LPS 同 LPL 雙雙停工，吞再多維他命亦只能錯配空轉，救唔返日夜暗燒嘅發炎火場。
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- BAND D (WARM CREAM): HSCRP CHECKER & 12-WEEK 4-SWITCH SIMULATOR  -->
+    <!-- ================================================================ -->
+    <section id="band-hscrp" class="bg-[#F4F0E6] text-[#17191C] py-16 sm:py-20">
+      <div class="max-w-6xl mx-auto px-4 sm:px-8 space-y-12">
+
+        <div class="bg-[#FAF8F2] border-2 border-[#17191C] rounded-2xl p-6 sm:p-10 shadow-[4px_4px_0px_#17191C] space-y-8">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b hairline-cream pb-5">
+            <div>
+              <div class="text-xs font-mono font-bold text-[#8B0000]">驗血自保指標（主動叫醫生驗 HSCRP）× 12 星期實測模擬器</div>
+              <h2 class="font-serif text-2xl sm:text-3xl font-black text-[#17191C] mt-1">
+                計一計你今日坐咗幾多個鐘 · 睇清未來 12 星期 HSCRP 跌幅
+              </h2>
+            </div>
+            <span class="text-xs font-mono font-bold text-[#4B5563]">四開關齊調 ➔ 12 週跌 20%–30%</span>
+          </div>
+
+          <!-- 3 Standard HSCRP Reference Zones -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono">
+            <button type="button" onclick="setHscrpZone('low')" id="hscrp-btn-low" class="text-left p-4 rounded-xl border-2 border-[#17191C]/20 bg-white hover:border-[#8B0000] transition cursor-pointer">
+              <div class="text-xs font-bold text-amber-700">超過 1 mg/L</div>
+              <div class="text-lg font-black text-[#17191C] mt-0.5">慢性低度發炎區</div>
+              <div class="text-xs font-sans text-[#4B5563] mt-1">唔痛唔癢但副偈暗燒緊</div>
+            </button>
+            <button type="button" onclick="setHscrpZone('mid')" id="hscrp-btn-mid" class="text-left p-4 rounded-xl border-2 border-[#8B0000] bg-red-50/70 transition cursor-pointer">
+              <div class="text-xs font-bold text-[#8B0000]">去到 3 mg/L</div>
+              <div class="text-lg font-black text-[#8B0000] mt-0.5">心血管出事風險直接倍增</div>
+              <div class="text-xs font-sans text-[#4B5563] mt-1">發炎相當顯著，必行減法</div>
+            </button>
+            <button type="button" onclick="setHscrpZone('high')" id="hscrp-btn-high" class="text-left p-4 rounded-xl border-2 border-[#17191C]/20 bg-white hover:border-[#8B0000] transition cursor-pointer">
+              <div class="text-xs font-bold text-slate-700">超過 10 mg/L</div>
+              <div class="text-lg font-black text-[#17191C] mt-0.5">急性發炎警號</div>
+              <div class="text-xs font-sans text-[#4B5563] mt-1">多屬急性感染或受傷，即刻睇醫生</div>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Left Controls -->
+            <div class="lg:col-span-5 space-y-5 text-sm">
+              <div>
+                <div class="flex justify-between font-mono text-xs font-bold mb-1.5">
+                  <span>講到尾，你今日坐咗幾多個鐘？</span>
+                  <span id="sim-sit-hours-label" class="text-[#8B0000] font-black">8 小時</span>
+                </div>
+                <input id="sim-sit-hours" type="range" min="1" max="14" value="8" oninput="updatePrem25Sim()" class="w-full accent-[#8B0000] cursor-pointer" />
+              </div>
+
+              <div class="space-y-2.5">
+                <div class="font-mono text-xs font-bold text-[#17191C]">勾選同時調整的四個「減法開關」：</div>
+                <label class="flex items-start gap-2.5 cursor-pointer">
+                  <input type="checkbox" id="sw-nova" checked onchange="updatePrem25Sim()" class="mt-1 w-4 h-4 accent-[#8B0000]" />
+                  <span><strong>開關 ①：</strong>換走一樣超加工食物 + 戒精製種子油與加工糖</span>
+                </label>
+                <label class="flex items-start gap-2.5 cursor-pointer">
+                  <input type="checkbox" id="sw-stand" checked onchange="updatePrem25Sim()" class="mt-1 w-4 h-4 accent-[#8B0000]" />
+                  <span><strong>開關 ②：</strong>每半個鐘起身郁 2 分鐘（喚醒 LPL 清血脂）</span>
+                </label>
+                <label class="flex items-start gap-2.5 cursor-pointer">
+                  <input type="checkbox" id="sw-lift" onchange="updatePrem25Sim()" class="mt-1 w-4 h-4 accent-[#8B0000]" />
+                  <span><strong>開關 ③：</strong>做返負重阻力訓練（拆解瘦胖子內臟脂肪）</span>
+                </label>
+                <label class="flex items-start gap-2.5 cursor-pointer">
+                  <input type="checkbox" id="sw-sleep" onchange="updatePrem25Sim()" class="mt-1 w-4 h-4 accent-[#8B0000]" />
+                  <span><strong>開關 ④：</strong>固定上床同起身時間（保腸道 400× 褪黑激素）</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Right Simulation Output -->
+            <div class="lg:col-span-7 bg-white border hairline-cream rounded-2xl p-6 space-y-5">
+              <div class="flex items-center justify-between border-b hairline-cream pb-3">
+                <span class="font-mono text-xs font-bold text-[#4B5563]">12 星期體內暗火評估</span>
+                <span id="sim-verdict-badge" class="font-mono text-xs font-black text-[#8B0000]">需四路齊開先見效</span>
+              </div>
+
+              <div class="grid grid-cols-3 gap-4 font-mono">
+                <div>
+                  <div class="text-[11px] text-[#4B5563]">LPL 清血脂狀態</div>
+                  <div id="sim-lpl-out" class="text-lg sm:text-xl font-black text-[#8B0000] mt-0.5">半停工</div>
+                </div>
+                <div class="border-l hairline-cream pl-4">
+                  <div class="text-[11px] text-[#4B5563]">12 週預期 HSCRP</div>
+                  <div id="sim-hscrp-out" class="text-lg sm:text-xl font-black text-[#15803D] tabular-nums mt-0.5">-12%</div>
+                </div>
+                <div class="border-l hairline-cream pl-4">
+                  <div class="text-[11px] text-[#4B5563]">漏補風險判定</div>
+                  <div id="sim-blind-out" class="text-lg sm:text-xl font-black text-[#D97706] mt-0.5">仍有 2 條死路</div>
+                </div>
+              </div>
+
+              <div id="sim-cantonese-advice" class="p-4 rounded-xl bg-[#FAF8F2] border hairline-cream text-sm text-[#17191C] leading-relaxed">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#F4F0E6] border-t hairline-cream py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#4B5563]">
+        <div class="flex flex-wrap items-center gap-4">
+          <a href="./dailyflow15.html" class="font-bold text-[#8B0000] hover:underline">抗炎日報 第15日</a>
+          <span aria-hidden="true">·</span>
+          <a href="./dailyflow.html" class="hover:text-[#17191C]">第14日存檔</a>
+          <span aria-hidden="true">·</span>
+          <a href="./prem-24.html" class="hover:text-[#17191C]">PREM 24 羅漢果解剖</a>
+          <span aria-hidden="true">·</span>
+          <a href="./index.html" class="hover:text-[#17191C]">MAGASite 首頁</a>
+        </div>
+        <div>MAGASite 抗炎實證庫 · PREM 25 (2026)</div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- VAULT AUTH, CHAIN INSPECTOR & HSCRP SIMULATOR -->
+  <script>
+    const MASTER_KEYS = ['xxxxx', 'cc00', '4lome'];
+    let isVaultUnlocked = localStorage.getItem('maga_unlocked') === 'true';
+    let vaultBooted = false;
+    window.__prem25WebGLActive = false;
+
+    const CHAIN_STEPS = [
+      { label: '階段 01 / 08 · 脾虛', desc: '中醫所講惡化起點：脾胃運化動力轉弱，氣血津液轉化效率跌落去。' },
+      { label: '階段 02 / 08 · 寒弱', desc: '脾虛耐咗變成寒弱，副偈唔夠熱力推動全身微循環同消化酵素。' },
+      { label: '階段 03 / 08 · 濕', desc: '寒則水液停聚變成濕——睇舌診會見到明顯舌邊齒痕、水腫感。' },
+      { label: '階段 04 / 08 · 凝結', desc: '濕濁日積月累，加上久坐血液淋巴慢落嚟，開始由散轉實、凝結成塊。' },
+      { label: '階段 05 / 08 · 塞', desc: '成條通道唔暢順，結埋一嚿就塞死——代謝廢物同脂蛋白清唔走。' },
+      { label: '階段 06 / 08 · 毒素垃圾困死', desc: '一淤塞唔通，加上超加工 LPS 漏入血，毒素同垃圾全部困死喺入面！' },
+      { label: '階段 07 / 08 · 免疫菌群唔夠應付', desc: '去到呢個位，身體免疫力同 38 兆有益菌群根本唔夠應付，同時一路跌落去。' },
+      { label: '階段 08 / 08 · 腫瘤適應環境改變', desc: '講人話：自己親手養成，最後連免疫力都畀佢吞噬埋（分唔到好定壞），要靠醫治救命、博個生存期。' }
+    ];
+
+    window.selectChainStep = function (idx) {
+      const btns = document.querySelectorAll('.chain-step-btn');
+      btns.forEach((b, i) => {
+        b.className = i === idx
+          ? 'chain-step-btn p-2 rounded-lg bg-[#8B0000] text-white font-black border border-[#17191C] cursor-pointer text-left'
+          : 'chain-step-btn p-2 rounded-lg bg-white text-[#17191C] font-bold border border-[#17191C]/25 hover:border-[#8B0000] cursor-pointer text-left';
+      });
+      const step = CHAIN_STEPS[idx];
+      const box = document.getElementById('chain-step-readout');
+      if (box && step) {
+        box.innerHTML = `<div class="font-mono text-xs font-black text-[#8B0000]">${step.label}</div><p class="text-sm text-[#17191C] font-medium leading-relaxed">${step.desc}</p>`;
+      }
+    };
+
+    let selectedHscrpZone = 'mid';
+    window.setHscrpZone = function (zone) {
+      selectedHscrpZone = zone;
+      ['low', 'mid', 'high'].forEach((z) => {
+        const b = document.getElementById(`hscrp-btn-${z}`);
+        if (!b) return;
+        b.className = z === zone
+          ? 'text-left p-4 rounded-xl border-2 border-[#8B0000] bg-red-50/70 transition cursor-pointer'
+          : 'text-left p-4 rounded-xl border-2 border-[#17191C]/20 bg-white hover:border-[#8B0000] transition cursor-pointer';
+      });
+      updatePrem25Sim();
+    };
+
+    window.updatePrem25Sim = function () {
+      const hours = Number(document.getElementById('sim-sit-hours')?.value || 8);
+      const sitLbl = document.getElementById('sim-sit-hours-label');
+      if (sitLbl) sitLbl.textContent = `${hours} 小時`;
+
+      const swNova = Boolean(document.getElementById('sw-nova')?.checked);
+      const swStand = Boolean(document.getElementById('sw-stand')?.checked);
+      const swLift = Boolean(document.getElementById('sw-lift')?.checked);
+      const swSleep = Boolean(document.getElementById('sw-sleep')?.checked);
+      const activeSwitches = [swNova, swStand, swLift, swSleep].filter(Boolean).length;
+
+      const badgeEl = document.getElementById('sim-verdict-badge');
+      const lplEl = document.getElementById('sim-lpl-out');
+      const hscrpEl = document.getElementById('sim-hscrp-out');
+      const blindEl = document.getElementById('sim-blind-out');
+      const adviceEl = document.getElementById('sim-cantonese-advice');
+      if (!badgeEl || !lplEl || !hscrpEl || !blindEl || !adviceEl) return;
+
+      const dropLow = Math.round((activeSwitches / 4) * 20);
+      const dropHigh = Math.round((activeSwitches / 4) * 30);
+
+      lplEl.textContent = swStand ? (hours >= 9 ? '每半個鐘重啟' : '活躍清脂中') : (hours >= 6 ? '停工塞血脂' : '低負荷');
+      lplEl.className = `text-lg sm:text-xl font-black mt-0.5 ${swStand ? 'text-[#15803D]' : 'text-[#8B0000]'}`;
+
+      hscrpEl.textContent = activeSwitches === 0 ? '0% (繼續暗燒)' : `-${dropLow}% 至 -${dropHigh}%`;
+      hscrpEl.className = `text-lg sm:text-xl font-black tabular-nums mt-0.5 ${activeSwitches === 4 ? 'text-[#15803D]' : 'text-[#D97706]'}`;
+
+      const remaining = 4 - activeSwitches;
+      blindEl.textContent = remaining === 0 ? '4 條路全封鎖' : `仍有 ${remaining} 條漏電`;
+      blindEl.className = `text-lg sm:text-xl font-black mt-0.5 ${remaining === 0 ? 'text-[#15803D]' : 'text-[#8B0000]'}`;
+
+      if (selectedHscrpZone === 'high') {
+        badgeEl.textContent = '⚠ 超過 10 mg/L 屬急性發炎';
+        adviceEl.innerHTML = '<strong>急性警號提醒：</strong>超過 10 mg/L 多數反映身體有急性感染或受傷，請先搵講人話嘅醫生檢查，切勿只當慢性發炎拖延。';
+      } else if (activeSwitches === 4) {
+        badgeEl.textContent = '✓ 四個開關齊開 · 減法啟動';
+        adviceEl.innerHTML = `<strong>12 星期實戰預計：</strong>你今日坐 ${hours} 個鐘，但只要同時保持換走超加工（戒精製種子油＋加工糖）、每半個鐘起身 2 分鐘、做負重阻力訓練同固定作息時間，<strong>12 星期內 HSCRP 有望跌 20% 至 30%</strong>，副偈暗火明顯降溫！`;
+      } else {
+        badgeEl.textContent = `▲ 只改 ${activeSwitches}/4 條路 · 仲有盲點`;
+        adviceEl.innerHTML = `<strong>點解仲係咁高？</strong>你今日坐咗 <strong>${hours} 小時</strong>，仲有 ${remaining} 條死路暗中放火！唔好再靠吞綜合維他命或薑黃素「只補唔清」，即刻勾齊四個開關行減法。`;
+      }
+    };
+
+    function revealVault() {
+      document.getElementById('passkey-barrier')?.classList.add('hidden');
+      document.getElementById('vault-content')?.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        if (window.lucide) lucide.createIcons();
+        updatePrem25Sim();
+        if (!vaultBooted) {
+          vaultBooted = true;
+          if (typeof window.__bootPrem25Scene === 'function') window.__bootPrem25Scene();
+        }
+      });
+    }
+
+    window.fillDemoKey = function () {
+      const inp = document.getElementById('passkey-input');
+      if (inp) inp.value = 'xxxxx';
+      unlockVault();
+    };
+
+    window.unlockVault = function () {
+      const val = (document.getElementById('passkey-input')?.value || '').trim().toLowerCase();
+      const err = document.getElementById('passkey-err');
+      if (MASTER_KEYS.includes(val)) {
+        err?.classList.add('hidden');
+        localStorage.setItem('maga_unlocked', 'true');
+        isVaultUnlocked = true;
+        revealVault();
+        try { if (window.confetti) confetti({ particleCount: 65, spread: 58, origin: { y: 0.6 } }); } catch {}
+      } else {
+        err?.classList.remove('hidden');
+      }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        if (window.lucide) lucide.createIcons();
+        if (isVaultUnlocked) revealVault();
+      });
+    } else {
+      if (window.lucide) lucide.createIcons();
+      if (isVaultUnlocked) revealVault();
+    }
+  </script>
+
+  <!-- Three.js CDN 3D Four-Pathway Inflammation Strategy Sandbox -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+    function detectSoftwareGl() {
+      try {
+        const probe = document.createElement('canvas');
+        const gl = probe.getContext('webgl2') || probe.getContext('webgl');
+        if (!gl) return true;
+        const ext = gl.getExtension('WEBGL_debug_renderer_info');
+        const gpu = String(gl.getParameter(ext ? ext.UNMASKED_RENDERER_WEBGL : gl.RENDERER) || '');
+        gl.getExtension('WEBGL_lose_context')?.loseContext();
+        return /SwiftShader|llvmpipe|softpipe|Software|Basic Render/i.test(gpu);
+      } catch {
+        return true;
+      }
+    }
+
+    const PATHWAY_META = [
+      {
+        title: '① 超加工食品 (NOVA 4) ➔ 腸壁穿窿 LPS 入血',
+        desc: '紙包豆漿乳化劑、益生菌飲品 14g 糖、全麥方包改良劑 24–48 小時改寫 38 兆腸菌，單細胞腸壁漏出 LPS 脂多醣引爆全身發炎！',
+      },
+      {
+        title: '② 張凳久坐 8 小時 ➔ 臀肌失憶 + LPL 酵素停工',
+        desc: '朝早操肌跑 5K 救唔返！久坐令清血脂酵素 LPL 即刻停工、下肢淋巴塞死、大腦缺血。每坐 30 分鐘必起身郁 2 分鐘。',
+      },
+      {
+        title: '③ 瘦胖子內臟脂肪 ➔ 24 小時狂噴 IL-6 / TNF-α',
+        desc: '亞洲人睇落瘦削一樣中招！隱形內臟脂肪直接向血液狂噴發炎因子，免疫系統亂開槍，膠原流失眼底凹陷變殘樣。',
+      },
+      {
+        title: '④ 睡眠不足一晚 ➔ 腸道 400× 褪黑激素維修停擺',
+        desc: '週末補眠補唔返！少於 6 小時第二朝 CRP 即飆，腸道 400 倍褪黑激素失守引發腸漏，與超加工食品雙面夾擊同一條腸。',
+      },
+    ];
+
+    window.__bootPrem25Scene = function () {
+      const mount = document.getElementById('warroom-three-mount');
+      const fallback = document.getElementById('warroom-webgl-fallback');
+      if (!mount || window.__prem25WebGLActive) return;
+      if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+        fallback?.classList.remove('hidden');
+        return;
+      }
+
+      let renderer;
+      const isSoftwareGl = detectSoftwareGl();
+      try {
+        renderer = new THREE.WebGLRenderer({ antialias: !isSoftwareGl, powerPreference: 'high-performance' });
+      } catch {
+        fallback?.classList.remove('hidden');
+        return;
+      }
+      window.__prem25WebGLActive = true;
+      renderer.setPixelRatio(isSoftwareGl ? 1 : Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(mount.clientWidth || window.innerWidth, mount.clientHeight || 640);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.08;
+      mount.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color('#111419');
+      scene.fog = new THREE.FogExp2('#111419', 0.032);
+
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+      pmrem.dispose();
+
+      const camera = new THREE.PerspectiveCamera(42, (mount.clientWidth || window.innerWidth) / (mount.clientHeight || 640), 0.1, 100);
+      camera.position.set(0, 4.4, 9.6);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.06;
+      controls.enableZoom = false; // Never hijack vertical scroll
+      controls.minPolarAngle = 0.45;
+      controls.maxPolarAngle = 1.38;
+      controls.target.set(0, 0.7, 0);
+
+      // Lights
+      scene.add(new THREE.HemisphereLight(0xfef3c7, 0x1e293b, 0.85));
+      const keyLight = new THREE.DirectionalLight(0xfffbeb, 2.2);
+      keyLight.position.set(5, 8, 5);
+      scene.add(keyLight);
+      const coreLight = new THREE.PointLight(0xd97706, 3.0, 12, 1.8);
+      coreLight.position.set(0, 1.6, 0);
+      scene.add(coreLight);
+
+      // Ground Arena Disc + Hairline Rings
+      const floor = new THREE.Mesh(
+        new THREE.CylinderGeometry(7.2, 7.2, 0.14, 48),
+        new THREE.MeshStandardMaterial({ color: 0x171c26, roughness: 0.78, metalness: 0.25 })
+      );
+      floor.position.y = -0.07;
+      scene.add(floor);
+
+      [2.6, 4.4, 6.2].forEach((r) => {
+        const ring = new THREE.Mesh(
+          new THREE.RingGeometry(r - 0.025, r + 0.025, 64),
+          new THREE.MeshBasicMaterial({ color: 0x334155, side: THREE.DoubleSide })
+        );
+        ring.rotation.x = -Math.PI / 2;
+        ring.position.y = 0.02;
+        scene.add(ring);
+      });
+
+      // Central Gut-Immune Core (Spleen-Qi Sphere + Tight Junction Protective Shield + HSCRP Flame Ring)
+      const coreGroup = new THREE.Group();
+      const innerCoreMat = new THREE.MeshPhysicalMaterial({
+        color: 0xd97706,
+        emissive: 0x8b0000,
+        emissiveIntensity: 0.9,
+        roughness: 0.24,
+        metalness: 0.15,
+        clearcoat: 0.65,
+      });
+      const innerCore = new THREE.Mesh(new THREE.IcosahedronGeometry(0.95, 2), innerCoreMat);
+      innerCore.position.y = 1.2;
+      coreGroup.add(innerCore);
+
+      const shieldRingMat = new THREE.MeshStandardMaterial({
+        color: 0x10b981,
+        emissive: 0x065f46,
+        emissiveIntensity: 0.4,
+        metalness: 0.75,
+        roughness: 0.25,
+      });
+      const shieldRing = new THREE.Mesh(new THREE.TorusGeometry(1.45, 0.08, 16, 48), shieldRingMat);
+      shieldRing.position.y = 1.2;
+      shieldRing.rotation.x = Math.PI / 2;
+      coreGroup.add(shieldRing);
+      scene.add(coreGroup);
+
+      // 4 Threat Conduits (NOVA4, Sitting LPL, Visceral IL-6, Sleep 400x)
+      const colors = [0xef4444, 0x38bdf8, 0xf43f5e, 0xa855f7];
+      const angles = [Math.PI * 0.25, Math.PI * 0.75, Math.PI * 1.25, Math.PI * 1.75];
+      const conduits = [];
+      const pickables = [];
+
+      angles.forEach((ang, idx) => {
+        const g = new THREE.Group();
+        const radius = 4.2;
+        const px = Math.cos(ang) * radius;
+        const pz = Math.sin(ang) * radius;
+
+        // Threat node pylon
+        const nodeMat = new THREE.MeshStandardMaterial({
+          color: colors[idx],
+          emissive: colors[idx],
+          emissiveIntensity: 0.45,
+          roughness: 0.3,
+          metalness: 0.4,
+        });
+        const pylon = new THREE.Mesh(new THREE.BoxGeometry(0.95, 1.35, 0.95), nodeMat);
+        pylon.position.set(px, 0.68, pz);
+        pylon.userData.pathwayIdx = idx;
+        g.add(pylon);
+        pickables.push(pylon);
+
+        // Beam connecting node to central core
+        const beamLen = radius - 1.25;
+        const beamMat = new THREE.MeshBasicMaterial({ color: colors[idx], transparent: true, opacity: 0.75 });
+        const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, beamLen, 10), beamMat);
+        beam.position.set(Math.cos(ang) * (radius * 0.54), 1.05, Math.sin(ang) * (radius * 0.54));
+        beam.rotation.z = Math.PI / 2;
+        beam.rotation.y = -ang;
+        g.add(beam);
+
+        // Moving toxin packet sphere
+        const packet = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 12), new THREE.MeshBasicMaterial({ color: 0xfef08a }));
+        packet.position.set(px, 1.05, pz);
+        g.add(packet);
+
+        scene.add(g);
+        conduits.push({ group: g, pylon, beam, beamMat, packet, ang, radius, tOffset: idx * 0.25 });
+      });
+
+      const state = {
+        subtractionPct: 0.1,
+        subtractionMode: false, // false = supplement only (leaking), true = 4-switch subtraction
+        focusIdx: -1,
+        userOrbit: false,
+        contextLost: false,
+      };
+
+      const modeLabel = document.getElementById('wr-mode-label');
+      const hudTitle = document.getElementById('wr-hud-title');
+      const hudDesc = document.getElementById('wr-hud-desc');
+      const stratBtn = document.getElementById('wr-strategy-toggle');
+      const slider = document.getElementById('wr-defense-slider');
+      const sliderVal = document.getElementById('wr-defense-val');
+      const dock = document.getElementById('prem25-dock');
+      const toggleDockBtn = document.getElementById('wr-btn-toggle-dock');
+
+      function refreshWarroomUI() {
+        if (state.focusIdx >= 0) {
+          const m = PATHWAY_META[state.focusIdx];
+          if (hudTitle) hudTitle.textContent = m.title;
+          if (hudDesc) hudDesc.textContent = m.desc;
+        } else if (state.subtractionMode || state.subtractionPct >= 0.75) {
+          if (hudTitle) hudTitle.textContent = '四開關減法啟動 ➔ 12 星期 HSCRP 跌 20%–30%！';
+          if (hudDesc) hudDesc.textContent = '同時換走超加工食物（戒種子油＋加工糖）、每 30 分鐘起身、負重訓練與固定作息，四條發炎導管逐一關閘！';
+        } else {
+          if (hudTitle) hudTitle.textContent = '四條死路齊爆 ➔ 食粒薑黃素根本救唔到！';
+          if (hudDesc) hudDesc.textContent = '只吞維他命、飲植物奶但唔行減法，犯咗「只補唔清」＋「吸收錯配」雙盲點，四條發炎路徑繼續向核心漏毒。';
+        }
+        if (modeLabel) {
+          modeLabel.textContent = (state.subtractionMode || state.subtractionPct >= 0.75)
+            ? '四開關減法攔截中'
+            : '漏電爆發中 (只補唔清)';
+        }
+      }
+
+      stratBtn?.addEventListener('click', () => {
+        state.subtractionMode = !state.subtractionMode;
+        state.subtractionPct = state.subtractionMode ? 0.95 : 0.1;
+        if (slider) slider.value = String(Math.round(state.subtractionPct * 100));
+        if (sliderVal) sliderVal.textContent = `${Math.round(state.subtractionPct * 100)}%`;
+        stratBtn.textContent = state.subtractionMode
+          ? '模式：四開關減法齊斬 (清源) ⇄'
+          : '模式：只食薑黃素/維他命 (未清源) ⇄';
+        stratBtn.className = state.subtractionMode
+          ? 'px-3 py-1.5 rounded-lg bg-[#15803D] hover:bg-emerald-700 text-white font-black cursor-pointer'
+          : 'px-3 py-1.5 rounded-lg bg-[#8B0000] hover:bg-red-700 text-white font-black cursor-pointer';
+        refreshWarroomUI();
+      });
+
+      slider?.addEventListener('input', (e) => {
+        state.subtractionPct = Number(e.target.value) / 100;
+        if (sliderVal) sliderVal.textContent = `${e.target.value}%`;
+        state.subtractionMode = state.subtractionPct >= 0.65;
+        refreshWarroomUI();
+      });
+
+      function setFocus(idx) {
+        state.focusIdx = idx;
+        state.userOrbit = false;
+        document.querySelectorAll('.wr-focus-btn').forEach((b) => {
+          b.className = 'wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#1C222E] text-slate-200 hover:bg-[#283142] font-bold cursor-pointer';
+        });
+        const activeBtn = document.getElementById(idx === -1 ? 'wr-focus-all' : `wr-focus-${idx}`);
+        if (activeBtn) activeBtn.className = 'wr-focus-btn px-2.5 py-1.5 rounded-lg bg-[#D97706] text-[#111827] font-black cursor-pointer';
+        refreshWarroomUI();
+      }
+      document.getElementById('wr-focus-all')?.addEventListener('click', () => setFocus(-1));
+      [0, 1, 2, 3].forEach((i) => document.getElementById(`wr-focus-${i}`)?.addEventListener('click', () => setFocus(i)));
+
+      toggleDockBtn?.addEventListener('click', () => {
+        const collapsed = dock?.classList.toggle('dock-collapsed');
+        toggleDockBtn.textContent = collapsed ? '▴ 展開戰情控制台 (H)' : '▾ 收合戰情控制台 (H)';
+      });
+      window.addEventListener('keydown', (e) => {
+        if ((e.key === 'h' || e.key === 'H') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName || '')) {
+          toggleDockBtn?.click();
+        }
+      });
+
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();
+      let downPos = { x: 0, y: 0 };
+      renderer.domElement.addEventListener('pointerdown', (e) => { downPos = { x: e.clientX, y: e.clientY }; });
+      renderer.domElement.addEventListener('pointerup', (e) => {
+        if (Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y) > 7) return;
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const hits = raycaster.intersectObjects(pickables, false);
+        if (hits.length > 0 && typeof hits[0].object.userData.pathwayIdx === 'number') {
+          setFocus(hits[0].object.userData.pathwayIdx);
+        }
+      });
+
+      controls.addEventListener('start', () => { state.userOrbit = true; });
+      renderer.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); state.contextLost = true; });
+      renderer.domElement.addEventListener('webglcontextrestored', () => { state.contextLost = false; });
+
+      window.addEventListener('resize', () => {
+        const w = mount.clientWidth || window.innerWidth;
+        const h = mount.clientHeight || 640;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+      });
+
+      const _camTarget = new THREE.Vector3();
+      const _lookTarget = new THREE.Vector3();
+      let lastTime = performance.now();
+
+      function tick() {
+        const now = performance.now();
+        const dt = Math.min((now - lastTime) / 1000, 0.1);
+        lastTime = now;
+
+        if (!state.contextLost) {
+          const def = state.subtractionPct;
+          const timeSec = now * 0.001;
+
+          // Core color shifts from inflamed crimson (leak) to calm emerald-gold (subtraction active)
+          innerCoreMat.emissive.setHex(def > 0.65 ? 0x065f46 : 0x8b0000);
+          innerCoreMat.color.setHex(def > 0.65 ? 0x10b981 : 0xd97706);
+          innerCoreMat.emissiveIntensity = 0.55 + (1 - def) * 0.85 + Math.sin(timeSec * 3.2) * 0.12;
+          innerCore.rotation.y += dt * (0.4 + (1 - def) * 1.1);
+          shieldRing.scale.setScalar(0.75 + def * 0.45);
+          shieldRing.rotation.z = timeSec * 0.7;
+
+          conduits.forEach((c, idx) => {
+            const leakStrength = Math.max(0.08, 1 - def);
+            c.beamMat.opacity = 0.12 + leakStrength * 0.72;
+            const prog = ((timeSec * (0.55 + leakStrength * 0.5) + c.tOffset) % 1);
+            const dist = c.radius * (1 - prog * (0.72 * leakStrength + 0.1));
+            c.packet.position.set(Math.cos(c.ang) * dist, 1.05, Math.sin(c.ang) * dist);
+            c.packet.visible = def < 0.92;
+            c.pylon.scale.y = state.focusIdx === idx ? 1.28 : 1.0;
+          });
+
+          if (!state.userOrbit) {
+            if (state.focusIdx >= 0) {
+              const ang = angles[state.focusIdx];
+              _camTarget.set(Math.cos(ang) * 7.6, 3.3, Math.sin(ang) * 7.6);
+              _lookTarget.set(Math.cos(ang) * 2.1, 0.9, Math.sin(ang) * 2.1);
+            } else {
+              _camTarget.set(Math.sin(timeSec * 0.18) * 1.6, 4.4, 9.6);
+              _lookTarget.set(0, 0.8, 0);
+            }
+            camera.position.x = THREE.MathUtils.damp(camera.position.x, _camTarget.x, 4, dt);
+            camera.position.y = THREE.MathUtils.damp(camera.position.y, _camTarget.y, 4, dt);
+            camera.position.z = THREE.MathUtils.damp(camera.position.z, _camTarget.z, 4, dt);
+            controls.target.x = THREE.MathUtils.damp(controls.target.x, _lookTarget.x, 4, dt);
+            controls.target.y = THREE.MathUtils.damp(controls.target.y, _lookTarget.y, 4, dt);
+            controls.target.z = THREE.MathUtils.damp(controls.target.z, _lookTarget.z, 4, dt);
+          }
+
+          controls.update();
+          renderer.render(scene, camera);
+        }
+
+        if (isSoftwareGl) window.setTimeout(tick, 80);
+        else requestAnimationFrame(tick);
+      }
+
+      refreshWarroomUI();
+      tick();
+    };
+
+    if (localStorage.getItem('maga_unlocked') === 'true') {
+      window.__bootPrem25Scene();
+    }
+  </script>
+</body>
+</html>
