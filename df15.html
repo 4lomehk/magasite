@@ -6,7 +6,7 @@
     <title>抗炎日報 DAILY FLOW 第15日 - 脾虛寒濕塞 × 慢性低度發炎四大元兇</title>    
     <meta name="description" content="抗炎日報 DAILY FLOW 第15日：2026 香港人原聲節奏拆解慢性低度發炎、脾虛寒弱濕塞演變鏈、四大發炎元兇與 HSCRP 減法攻略（完整 80% 收錄於 PREM_25）。" />
 
-<!-- thumbnail -->
+<!-- thumbnail --> 
   <head>
   <meta property="og:title" content="抗炎日報 DAILY FLOW 第15日 - 慢性低度發炎四大元兇">
   <meta property="og:description" content="由脾虛寒濕塞到慢性低度發炎：講人話拆解 NOVA 超加工、久坐、內臟脂肪與熬夜四大元兇。">
@@ -306,68 +306,17 @@
             100% { transform: scale(1) translateY(0); }
         }
 
-        /* 3D HK Street Newsstand Scrollytelling Stage */
+        /* 3D HK Street Newsstand Horizontal Scroll Stage (Section 06 Only) */
         #df-explainer-shell {
             position: relative;
             width: 100%;
             height: 100vh;
-            min-height: 620px;
+            min-height: 640px;
             background-color: #101318;
             color: #F8FAFC;
             overflow: hidden;
             border-bottom: 4px double #121212;
             font-family: 'Inter', 'PingFang HK', 'Helvetica Neue', Arial, sans-serif;
-        }
-        #df-explainer-scroller {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
-        }
-        .df-act-section {
-            position: relative;
-            min-height: 100vh;
-            width: 100%;
-            scroll-snap-align: start;
-            scroll-snap-stop: always;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 66px 20px 108px;
-            pointer-events: none;
-        }
-        .df-parallax-bg {
-            position: absolute;
-            inset: -120px 0 0 0;
-            height: 180%;
-            background-image:
-                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 64px 64px;
-            pointer-events: none;
-            will-change: transform;
-        }
-        .df-parallax-mid {
-            position: absolute;
-            inset: -80px 0 0 0;
-            height: 160%;
-            background-image: repeating-linear-gradient(
-                90deg,
-                transparent 0,
-                transparent 136px,
-                rgba(217, 119, 6, 0.06) 136px,
-                rgba(217, 119, 6, 0.06) 139px
-            );
-            pointer-events: none;
-            will-change: transform;
-        }
-        .df-sticky-pin {
-            position: sticky;
-            top: 66px;
-            z-index: 15;
         }
         .df-horiz-container {
             overflow-x: auto;
@@ -375,25 +324,6 @@
             scroll-snap-type: x mandatory;
             scrollbar-width: thin;
             scrollbar-color: #D97706 rgba(255,255,255,0.08);
-        }
-        .df-act-dot {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            border: 1px solid rgba(255,255,255,0.22);
-            background: rgba(16, 19, 24, 0.92);
-            color: #94A3B8;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease;
-        }
-        .df-act-dot-active {
-            background: #D97706;
-            color: #111827;
-            border-color: #FDE047;
-            transform: scale(1.08);
         }
         #df-explainer-dock {
             position: absolute;
@@ -407,17 +337,12 @@
         #df-explainer-dock.dock-collapsed {
             transform: translate(-50%, calc(100% - 28px));
         }
-        @media (prefers-reduced-motion: reduce) {
-            #df-explainer-scroller {
-                scroll-behavior: auto;
-            }
-        }
     </style>    
 </head>    
 <body class="min-h-screen antialiased m-0 p-0">
 
-    <!-- 0. 3D 香港街邊報紙檔 (HK Street Newsstand) 12-Second Three.js Explainer -->
-    <section id="df-explainer-shell" class="no-print" aria-label="Three.js 3D Hong Kong Street Newsstand 12-Second Explainer">
+    <!-- 0. 3D 香港街邊報紙檔 (HK Street Newsstand) 12-Second Three.js Explainer · 06 Horizontal Scroll Only -->
+    <section id="df-explainer-shell" class="no-print" aria-label="Three.js 3D Hong Kong Street Newsstand Horizontal Scroll Showcase">
         <!-- Clean 3-Zone Top Bar (Zero backdrop-filter over WebGL, zero pulsing dots) -->
         <div class="absolute top-0 left-0 right-0 z-30 flex items-center justify-between gap-3 px-4 sm:px-6 py-2.5 bg-[#101318]/94 border-b border-white/10">
             <div class="flex items-center gap-2.5 min-w-0">
@@ -425,151 +350,49 @@
                 <span class="text-xs sm:text-sm font-black tracking-tight text-white truncate">抗炎日報 DAILY FLOW 第15日 · 3D 香港街邊報紙檔 12S</span>
             </div>
             <div id="df-top-act-label" class="hidden md:block text-[11px] font-mono font-bold text-[#FBBF24] tracking-wider truncate">
-                01 · SCROLL-TRIGGERED 碌到嗰個位先播
+                06 · HORIZONTAL SCROLL 內容向横行（每次不同＋只能用一款）
             </div>
             <div class="flex items-center gap-2 shrink-0">
-                <button id="df-btn-toggle-snap" type="button" class="px-2.5 py-1 rounded border border-white/20 bg-[#1A1F29] hover:bg-[#232A38] text-[11px] font-mono font-bold text-slate-200 cursor-pointer">
-                    SNAP: ON 一碌成版過
-                </button>
                 <button type="button" onclick="document.getElementById('df-broadsheet-archive').scrollIntoView({behavior:'smooth'})" class="px-2.5 py-1 rounded bg-[#D97706] hover:bg-[#F59E0B] text-[#111827] text-[11px] font-black cursor-pointer">
                     閱讀報紙全文 ↓
                 </button>
             </div>
         </div>
 
-        <!-- Right-Edge Compact Chapter Dots -->
-        <nav class="hidden sm:flex flex-col gap-1.5 absolute right-3 top-1/2 -translate-y-1/2 z-30" aria-label="Scroll Mechanic Acts">
-            <button type="button" class="df-act-dot df-act-dot-active" data-df-act="0" title="01 Scroll-Triggered 碌到嗰個位先播">01</button>
-            <button type="button" class="df-act-dot" data-df-act="1" title="02 Scroll-Linked 郁幾多就碌幾多">02</button>
-            <button type="button" class="df-act-dot" data-df-act="2" title="03 Parallax 背景行得慢過前景">03</button>
-            <button type="button" class="df-act-dot" data-df-act="3" title="04 Sticky 碌到頂就會黐住">04</button>
-            <button type="button" class="df-act-dot" data-df-act="4" title="05 Scroll Snap 一碌就會成版過">05</button>
-            <button type="button" class="df-act-dot" data-df-act="5" title="06 Horizontal Scroll 內容向横行">06</button>
-        </nav>
-
-        <!-- Vertical Snap-Scroll Container -->
-        <div id="df-explainer-scroller">
-            <!-- Sticky 3D WebGL Stage -->
-            <div id="df-sticky-stage" class="sticky top-0 left-0 w-full h-full z-0 overflow-hidden bg-[#101318]">
-                <div id="df-parallax-bg" class="df-parallax-bg"></div>
-                <div id="df-parallax-mid" class="df-parallax-mid"></div>
-                <div id="df-three-mount" class="relative w-full h-full z-10"></div>
-                <div id="df-webgl-fallback" class="hidden absolute inset-0 z-20 flex items-center justify-center p-6 text-center bg-[#101318]">
-                    <div class="max-w-md p-5 rounded-xl border border-amber-500/40 bg-[#1A1F29] text-slate-100">
-                        <div class="font-mono text-xs text-amber-400 font-bold mb-1">3D NEWSSTAND FALLBACK</div>
-                        <p class="text-sm font-bold">裝置暫時未能啟用 WebGL，請向下滾動閱讀《抗炎日報 DAILY FLOW》完整報紙內容。</p>
-                    </div>
+        <!-- 3D WebGL Stage + Section 06 Horizontal Scroll Overlay -->
+        <div id="df-stage-viewport" class="relative w-full h-full overflow-hidden bg-[#101318]">
+            <div id="df-three-mount" class="relative w-full h-full z-10"></div>
+            <div id="df-webgl-fallback" class="hidden absolute inset-0 z-20 flex items-center justify-center p-6 text-center bg-[#101318]">
+                <div class="max-w-md p-5 rounded-xl border border-amber-500/40 bg-[#1A1F29] text-slate-100">
+                    <div class="font-mono text-xs text-amber-400 font-bold mb-1">3D NEWSSTAND FALLBACK</div>
+                    <p class="text-sm font-bold">裝置暫時未能啟用 WebGL，請向下滾動閱讀《抗炎日報 DAILY FLOW》完整報紙內容。</p>
                 </div>
             </div>
 
-            <!-- 6 Full-Viewport Scroll-Snap Chapters -->
-            <div class="relative z-20 pointer-events-none" style="margin-top: -100vh;">
-
-                <!-- ACT 01: Scroll-Triggered (碌到嗰個位先播) -->
-                <article data-df-act-idx="0" class="df-act-section">
-                    <div class="max-w-lg bg-[#101318]/88 border border-white/15 rounded-xl p-4 pointer-events-auto">
-                        <div class="text-[11px] font-mono font-bold text-[#F59E0B] tracking-wider">01 · SCROLL-TRIGGERED · 碌到嗰個位先播</div>
-                        <h2 class="text-xl sm:text-2xl font-black text-white mt-1 leading-tight">香港街邊報紙檔 · 12 秒立體網站導覽</h2>
-                        <p class="text-xs sm:text-sm text-slate-300 font-medium mt-1.5 leading-relaxed">
-                            碌入視區即時觸發 12 秒街邊鐵皮報紙檔開檔動畫：綠鐵頂篷、霓虹招牌同 6 份《抗炎日報》逐份彈出。可拖曳轉視角，或直接點擊報紙檔上面任何一份報紙轉動及播報！
-                        </p>
-                        <div class="mt-3 flex flex-wrap items-center gap-2">
-                            <button id="df-btn-retrigger" type="button" class="px-3 py-1.5 rounded bg-[#D97706] hover:bg-[#F59E0B] text-[#111827] text-xs font-black cursor-pointer">
-                                由 0.0s 重播開檔 12 秒 ↻
-                            </button>
-                            <span class="text-[11px] font-mono text-slate-400">點選任何 3D 報紙即可 Spin + Play</span>
-                        </div>
+            <!-- 06 · HORIZONTAL SCROLL (內容向横行 · 每次不同 + 只能用一款) -->
+            <div class="absolute inset-0 z-20 flex flex-col justify-between pt-14 pb-28 px-4 sm:px-6 pointer-events-none">
+                <div class="max-w-md bg-[#101318]/92 border border-amber-400/45 rounded-xl p-3 sm:p-3.5 pointer-events-auto">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <span class="text-[11px] font-mono font-bold text-amber-400 tracking-wider">06 · HORIZONTAL SCROLL · 內容向横行</span>
+                        <span id="df-active-edition-badge" class="text-[11px] font-mono font-bold text-white bg-[#1F2533] px-2 py-0.5 rounded border border-white/20">
+                            單一款式 · 只能用一款
+                        </span>
                     </div>
-                    <div class="text-center text-[11px] font-mono text-slate-400 tracking-widest">SCROLL DOWN · 往下滾動示範 6 種動態滾動特效 ↓</div>
-                </article>
-
-                <!-- ACT 02: Scroll-Linked (郁幾多就碌幾多) -->
-                <article data-df-act-idx="1" class="df-act-section">
-                    <div class="max-w-lg bg-[#101318]/90 border border-amber-500/35 rounded-xl p-4 pointer-events-auto">
-                        <div class="flex items-center justify-between gap-2">
-                            <span class="text-[11px] font-mono font-bold text-[#F59E0B] tracking-wider">02 · SCROLL-LINKED · 郁幾多就碌幾多</span>
-                            <span id="df-link-pct" class="text-xs font-mono font-black text-white">0%</span>
-                        </div>
-                        <h2 class="text-xl sm:text-2xl font-black text-white mt-1">1:1 報紙檔結構拆解：郁幾多就轉幾多</h2>
-                        <p class="text-xs sm:text-sm text-slate-300 font-medium mt-1.5">
-                            滾動距離直接 1:1 驅動報紙檔鐵篷掀開幅度、印刷齒輪角度同 6 份報紙扇形展開，可拖拉刻度條實測同步耦合。
-                        </p>
-                        <div class="mt-3 flex items-center gap-3">
-                            <span class="text-[11px] font-mono text-slate-400 shrink-0">0%</span>
-                            <input id="df-link-scrub" type="range" min="0" max="1" step="0.005" value="0" class="w-full accent-[#D97706] cursor-pointer" aria-label="Scroll-linked 1:1 progress" />
-                            <span class="text-[11px] font-mono text-slate-400 shrink-0">100%</span>
-                        </div>
+                    <h2 class="text-base sm:text-lg font-black text-white mt-1">橫向報架瀏覽：每次不同 + 只能用一款</h2>
+                    <p class="text-xs text-slate-300 font-medium mt-1 leading-relaxed">
+                        每次載入或撳換款只會嚴格鎖定「單一報紙檔版式」，絕不重疊混款；橫向滾動下方《抗炎日報》專題卡，上方 3D 報架會同步橫移對焦，點擊報紙即可 Spin + Play！
+                    </p>
+                    <div class="mt-2.5 flex items-center gap-2">
+                        <button id="df-btn-switch-edition" type="button" class="px-3 py-1.5 rounded bg-[#D97706] hover:bg-[#F59E0B] text-[#111827] text-xs font-black cursor-pointer">
+                            換另一款版式 (每次不同 · 只能用一款) ⇄
+                        </button>
                     </div>
-                    <div></div>
-                </article>
+                </div>
 
-                <!-- ACT 03: Parallax (背景行得慢過前景) -->
-                <article data-df-act-idx="2" class="df-act-section">
-                    <div class="max-w-lg bg-[#101318]/90 border border-sky-400/35 rounded-xl p-4 pointer-events-auto">
-                        <div class="text-[11px] font-mono font-bold text-sky-400 tracking-wider">03 · PARALLAX · 背景行得慢過前景</div>
-                        <h2 class="text-xl sm:text-2xl font-black text-white mt-1">街景三層視差：後巷唐樓行得慢過前景報架</h2>
-                        <p class="text-xs sm:text-sm text-slate-300 font-medium mt-1.5">
-                            背景霓虹燈箱與唐樓輪廓以 0.22× 慢速移動、鐵閘直紋以 0.52× 跟進，前景街邊報紙檔以 1.00× 主軸推進。
-                        </p>
-                        <div id="df-parallax-readout" class="mt-2.5 pt-2 border-t border-white/10 text-[11px] font-mono font-bold text-sky-300">
-                            BG 0px (0.22×) · MID 0px (0.52×) · FG 0px (1.00×)
-                        </div>
-                    </div>
-                    <div></div>
-                </article>
-
-                <!-- ACT 04: Sticky (碌到頂就會黐住) -->
-                <article data-df-act-idx="3" class="df-act-section">
-                    <div class="df-sticky-pin max-w-lg bg-[#101318]/94 border border-emerald-400/40 rounded-xl p-4 pointer-events-auto">
-                        <div class="text-[11px] font-mono font-bold text-emerald-400 tracking-wider">04 · STICKY · 碌到頂就會黐住</div>
-                        <h2 class="text-xl sm:text-2xl font-black text-white mt-1">頂部黏滯鎖定：報紙頭條欄頂置黐實唔走位</h2>
-                        <p class="text-xs sm:text-sm text-slate-300 font-medium mt-1.5">
-                            3D 報紙檔舞台及此報頭專欄均設定 Sticky 頂置，當你繼續向下捲動瀏覽內文時依然穩穩黐住頂部。
-                        </p>
-                    </div>
-                    <div class="self-end max-w-sm bg-[#1A1F29]/92 border border-white/15 rounded-xl p-3.5 text-xs text-slate-200 font-semibold pointer-events-auto">
-                        STICKY CHECK · 上方《抗炎日報》報紙檔主視窗與規格卡會一直黐住頂部，直至跨入下一幕。
-                    </div>
-                </article>
-
-                <!-- ACT 05: Scroll Snap (一碌就會成版過) -->
-                <article data-df-act-idx="4" class="df-act-section">
-                    <div class="max-w-lg bg-[#101318]/90 border border-violet-400/40 rounded-xl p-4 pointer-events-auto">
-                        <div class="text-[11px] font-mono font-bold text-violet-300 tracking-wider">05 · SCROLL SNAP · 一碌就會成版過</div>
-                        <h2 class="text-xl sm:text-2xl font-black text-white mt-1">一碌成版翻頁：整份大報齊齊對位鎖實</h2>
-                        <p class="text-xs sm:text-sm text-slate-300 font-medium mt-1.5">
-                            採用 <span class="font-mono text-violet-300">scroll-snap-type: y mandatory</span> 與 <span class="font-mono text-violet-300">scroll-snap-stop: always</span>，每滾動一次精準翻完一整版，絕不卡半截。
-                        </p>
-                    </div>
-                    <div></div>
-                </article>
-
-                <!-- ACT 06: Horizontal Scroll (內容向横行 · 每次不同 + 只能用一款) -->
-                <article data-df-act-idx="5" class="df-act-section">
-                    <div class="max-w-xl bg-[#101318]/94 border border-amber-400/45 rounded-xl p-4 pointer-events-auto">
-                        <div class="flex flex-wrap items-center justify-between gap-2">
-                            <span class="text-[11px] font-mono font-bold text-amber-400 tracking-wider">06 · HORIZONTAL SCROLL · 內容向横行</span>
-                            <span id="df-active-edition-badge" class="text-[11px] font-mono font-bold text-white bg-[#1F2533] px-2 py-0.5 rounded border border-white/20">
-                                單一款式 · 只能用一款
-                            </span>
-                        </div>
-                        <h2 class="text-lg sm:text-xl font-black text-white mt-1">橫向報架瀏覽：每次不同 + 只能用一款</h2>
-                        <p class="text-xs text-slate-300 font-medium mt-1">
-                            每次載入或撳換款只會嚴格鎖定「單一報紙檔版式」，絕不重疊混款；橫向滾動下方《抗炎日報》專題卡，上方 3D 報架會同步橫移對焦！
-                        </p>
-                        <div class="mt-2.5 flex items-center gap-2">
-                            <button id="df-btn-switch-edition" type="button" class="px-3 py-1.5 rounded bg-[#D97706] hover:bg-[#F59E0B] text-[#111827] text-xs font-black cursor-pointer">
-                                換另一款版式 (每次不同 · 只能用一款) ⇄
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Horizontal Scroll Shelf Track (1:1 synced with 3D HK Newsstand X pan) -->
-                    <div id="df-horiz-container" class="df-horiz-container w-full max-w-5xl mx-auto pb-3 pt-2 pointer-events-auto">
-                        <div id="df-horiz-track" class="flex items-stretch gap-4 w-max px-2"></div>
-                    </div>
-                </article>
-
+                <!-- Horizontal Scroll Shelf Track (1:1 synced with 3D HK Newsstand X pan) -->
+                <div id="df-horiz-container" class="df-horiz-container w-full max-w-5xl mx-auto pb-2 pt-2 pointer-events-auto">
+                    <div id="df-horiz-track" class="flex items-stretch gap-4 w-max px-2"></div>
+                </div>
             </div>
         </div>
 
@@ -594,7 +417,7 @@
                         </button>
                     </div>
                     <div class="flex items-center gap-2 text-[11px] font-mono">
-                        <span id="df-beat-label" class="hidden sm:inline text-slate-300 font-bold">01 / 04 · 報紙檔開檔搭建</span>
+                        <span id="df-beat-label" class="hidden sm:inline text-slate-300 font-bold">06 · 橫向報架焦點掃描</span>
                         <span id="df-time-label" class="text-amber-400 font-black">0.0s / 12.0s</span>
                     </div>
                     <div class="flex items-center gap-1.5">
@@ -2390,12 +2213,12 @@
                 cardText: '#121212',
                 cardBorder: '#121212',
                 papers: [
-                    { code: 'A1', en: 'TRIGGERED', title: '脾虛寒濕塞➔慢性發炎', zh: '碌到嗰個位先播', actDesc: '進入視區啟動12秒報紙檔：自己親手養成慢性低度發炎', sectionId: 'sec-a1-d15' },
-                    { code: 'A2', en: 'LINKED', title: '舌診漏電×四大元兇', zh: '郁幾多就碌幾多', actDesc: '滾動距離1:1連動報紙檔結構，對照脾虛齒痕厚苔', sectionId: 'sec-tongue-game' },
-                    { code: 'B1', en: 'PARALLAX', title: '舊A1羅漢果×12大戰術', zh: '背景行得慢過前景', actDesc: '街景視差襯托B1舊A1存檔（第14日羅漢果＋1-11）', sectionId: 'sec-b1' },
-                    { code: 'B2', en: 'STICKY', title: '逆轉食物金字塔行減法', zh: '碌到頂就會黐住', actDesc: '戒精製種子油同加工糖，修復單細胞腸壁防LPS', sectionId: 'sec-b2' },
-                    { code: 'P25', en: 'SNAP', title: 'PREM_25 完整80%實彈', zh: '一碌就會成版過', actDesc: '深入解剖NOVA4、久坐LPL、瘦胖子IL-6與400×褪黑激素', sectionId: 'sec-a1-d15' },
-                    { code: 'CHK', en: 'HORIZONTAL', title: 'HSCRP自保指標1/3/10', zh: '內容向横行', actDesc: '每次不同＋只能用一款，12星期四開關減法跌20–30%', sectionId: 'sec-a1-d15' },
+                    { code: 'A1', en: 'DAY 15 HEADLINE', title: '脾虛寒濕塞➔慢性發炎', zh: 'A1 第15日實彈', actDesc: '由好變壞：自己親手養成慢性低度發炎，連免疫力都吞噬', sectionId: 'sec-a1-d15' },
+                    { code: 'A2', en: 'TONGUE CHECK', title: '舌診漏電×四大元兇', zh: '舌診濕重測試', actDesc: '齒痕厚苔對照脾虛塞車警報，即時檢視副偈漏電指數', sectionId: 'sec-tongue-game' },
+                    { code: 'B1', en: 'OLD A1 ARCHIVE', title: '舊A1羅漢果×12大戰術', zh: 'B1 舊A1已歸檔', actDesc: '第14日純羅漢果減糖檔案完整移入B1第12條目永久存檔', sectionId: 'sec-b1' },
+                    { code: 'B2', en: 'FOOD PYRAMID', title: '逆轉食物金字塔行減法', zh: 'B2 減法金字塔', actDesc: '戒精製種子油同加工糖，修復單細胞腸壁防LPS滲漏', sectionId: 'sec-b2' },
+                    { code: 'P25', en: 'PREM_25 FULL', title: 'PREM_25 完整80%實彈', zh: '80% 全文解鎖', actDesc: '深入解剖NOVA4、久坐LPL、瘦胖子IL-6與400×褪黑激素', sectionId: 'sec-a1-d15' },
+                    { code: 'CHK', en: 'HSCRP TARGET', title: 'HSCRP自保指標1/3/10', zh: '12週減法見效', actDesc: '每次不同＋只能用一款，同時扭轉四開關CRP跌20–30%', sectionId: 'sec-a1-d15' },
                 ],
             },
             {
@@ -2410,12 +2233,12 @@
                 cardText: '#F8FAFC',
                 cardBorder: '#F59E0B',
                 papers: [
-                    { code: 'EX-01', en: 'IGNITE', title: '號外：24小時體內暗燒', zh: '碌到嗰個位先播', actDesc: '普通驗血照唔出，必主動加驗CRP／HSCRP先知燒咗幾年', sectionId: 'sec-a1-d15' },
-                    { code: 'EX-02', en: 'SCRUB', title: '號外：張凳LPL停工', zh: '郁幾多就碌幾多', actDesc: '朝早跑5K都救唔返坐8粒鐘，每30分鐘起身郁2分鐘', sectionId: 'sec-a1-d15' },
-                    { code: 'EX-03', en: 'DEPTH', title: '號外：NOVA4改寫38兆菌', zh: '背景行得慢過前景', actDesc: '紙包豆漿全麥包24–48小時穿腸漏LPS搞散血清素', sectionId: 'sec-b1' },
-                    { code: 'EX-04', en: 'PINNED', title: '號外：瘦胖子IL-6工廠', zh: '碌到頂就會黐住', actDesc: '內臟脂肪狂噴TNF-α令膠原流失、眼底凹陷變殘樣', sectionId: 'sec-b2' },
-                    { code: 'EX-05', en: 'FLIP', title: '號外：只補唔清雙盲點', zh: '一碌就會成版過', actDesc: '食極薑黃素綜合維他命CRP仲高？因吸收錯配要行減法', sectionId: 'sec-a1-d15' },
-                    { code: 'EX-06', en: 'SLIDE', title: '號外：腸道400×褪黑激素', zh: '內容向横行', actDesc: '一晚瞓唔夠6粒鐘CRP即飆，固定作息先救到腸壁維修', sectionId: 'sec-b1' },
+                    { code: 'EX-01', en: 'HSCRP ALERT', title: '號外：24小時體內暗燒', zh: '普通驗血照唔出', actDesc: '無痛無癢暗中燒幾年，主動加驗CRP／HSCRP先知真實火情', sectionId: 'sec-a1-d15' },
+                    { code: 'EX-02', en: '30M / 2M RULE', title: '號外：張凳LPL停工', zh: '久坐癱瘓清脂酶', actDesc: '朝早跑5K都救唔返坐8粒鐘，每30分鐘起身郁2分鐘', sectionId: 'sec-a1-d15' },
+                    { code: 'EX-03', en: 'NOVA 4 TRAP', title: '號外：NOVA4改寫38兆菌', zh: '24–48小時腸漏', actDesc: '紙包豆漿全麥包24–48小時穿腸漏LPS搞散血清素', sectionId: 'sec-b1' },
+                    { code: 'EX-04', en: 'TOFI CYTOKINE', title: '號外：瘦胖子IL-6工廠', zh: '內臟脂肪狂噴毒', actDesc: '內臟脂肪狂噴TNF-α令膠原流失、眼底凹陷變殘樣', sectionId: 'sec-b2' },
+                    { code: 'EX-05', en: 'TWO-ANGLE', title: '號外：只補唔清雙盲點', zh: '吸收錯配要行減法', actDesc: '食極薑黃素綜合維他命CRP仲高？未清垃圾先補變零效', sectionId: 'sec-a1-d15' },
+                    { code: 'EX-06', en: 'GUT 400X', title: '號外：腸道400×褪黑激素', zh: '瞓唔夠6h發炎飆', actDesc: '一晚瞓唔夠6粒鐘CRP即飆，固定作息先救到腸壁維修', sectionId: 'sec-b1' },
                 ],
             },
             {
@@ -2430,12 +2253,12 @@
                 cardText: '#ECFDF5',
                 cardBorder: '#22C55E',
                 papers: [
-                    { code: 'HK-01', en: 'CUE', title: '排檔頭條：脾虛寒濕塞', zh: '碌到嗰個位先播', actDesc: '踏入視區播足12秒：毒素困死免疫力畀腫瘤吞噬', sectionId: 'sec-a1-d15' },
-                    { code: 'HK-02', en: 'SYNC', title: '排檔二條：脷苔濕重測', zh: '郁幾多就碌幾多', actDesc: '齒痕厚苔對照副偈漏電指數，即時鎖定身體警報', sectionId: 'sec-tongue-game' },
-                    { code: 'HK-03', en: 'DRIFT', title: '排檔三條：舊A1羅漢果', zh: '背景行得慢過前景', actDesc: '第14日純羅漢果減糖檔案完整移入B1第12條目存檔', sectionId: 'sec-b1' },
-                    { code: 'HK-04', en: 'HOLD', title: '排檔四條：抗炎金字塔', zh: '碌到頂就會黐住', actDesc: 'Sticky鎖定LAYER 02發酵菜修補Tight Junction', sectionId: 'sec-b2' },
-                    { code: 'HK-05', en: 'LOCK', title: '排檔五條：反轉成分表', zh: '一碌就會成版過', actDesc: '見到屋企廚房無嘅乳化劑膠類化學名即刻放低唔好買', sectionId: 'sec-b1' },
-                    { code: 'HK-06', en: 'PAN', title: '排檔六條：負重阻力練', zh: '內容向横行', actDesc: '減內臟脂肪靠負重阻力訓練，遠勝單純帶氧跑步', sectionId: 'sec-a1-d15' },
+                    { code: 'HK-01', en: '8-STEP CHAIN', title: '排檔頭條：脾虛寒濕塞', zh: '自己親手養成', actDesc: '脾虛變寒弱再成濕凝結塞死，最後連免疫力都畀佢吞噬', sectionId: 'sec-a1-d15' },
+                    { code: 'HK-02', en: 'TONGUE LAB', title: '排檔二條：脷苔濕重測', zh: '齒痕厚苔對照', actDesc: '齒痕厚苔對照副偈漏電指數，即時鎖定身體警報', sectionId: 'sec-tongue-game' },
+                    { code: 'HK-03', en: 'MONK FRUIT', title: '排檔三條：舊A1羅漢果', zh: '移入B1第12號', actDesc: '第14日純羅漢果減糖檔案完整移入B1第12條目存檔', sectionId: 'sec-b1' },
+                    { code: 'HK-04', en: 'FERMENTATION', title: '排檔四條：抗炎金字塔', zh: '修補腸壁連接', actDesc: '底層天然食物＋發酵菜修補Tight Junction防滲漏', sectionId: 'sec-b2' },
+                    { code: 'HK-05', en: 'READ LABELS', title: '排檔五條：反轉成分表', zh: '睇清乳化劑膠類', actDesc: '見到屋企廚房無嘅乳化劑膠類化學名即刻放低唔好買', sectionId: 'sec-b1' },
+                    { code: 'HK-06', en: 'RESISTANCE', title: '排檔六條：負重阻力練', zh: '切走內臟脂肪', actDesc: '減內臟脂肪靠負重阻力訓練，遠勝單純帶氧跑步', sectionId: 'sec-a1-d15' },
                 ],
             },
             {
@@ -2450,12 +2273,12 @@
                 cardText: '#F8FAFC',
                 cardBorder: '#FACC15',
                 papers: [
-                    { code: 'PR-01', en: 'START', title: '晨報：行減法戒種子油', zh: '碌到嗰個位先播', actDesc: '停信低脂健康商業包裝，由源頭切斷精製油加工糖', sectionId: 'sec-a1-d15' },
-                    { code: 'PR-02', en: 'DRIVE', title: '晨報：四條死路齊爆發', zh: '郁幾多就碌幾多', actDesc: 'LPS漏電＋LPL停工＋內臟噴射＋皮質醇失控全面攔截', sectionId: 'sec-a1-d15' },
-                    { code: 'PR-03', en: 'DEPTH', title: '晨報：5萬人睡眠實證', zh: '背景行得慢過前景', actDesc: '週末補眠補唔返，睡眠失調同所有發炎指標直接掛鉤', sectionId: 'sec-b1' },
-                    { code: 'PR-04', en: 'STICK', title: '晨報：B1歷代A1檔案庫', zh: '碌到頂就會黐住', actDesc: '一站查閱第14日羅漢果至第1日古法發酵12篇實彈', sectionId: 'sec-b1' },
-                    { code: 'PR-05', en: 'SNAP', title: '晨報：12週HSCRP跌30%', zh: '一碌就會成版過', actDesc: '同時扭轉飲食起身訓練作息四開關，三個月見分曉', sectionId: 'sec-a1-d15' },
-                    { code: 'PR-06', en: 'CROSS', title: '晨報：PREM_25解鎖全庫', zh: '內容向横行', actDesc: '嚴守單一款式橫向對焦，即入PREM_25看80%全文', sectionId: 'sec-a1-d15' },
+                    { code: 'PR-01', en: 'SUBTRACTION', title: '晨報：行減法戒種子油', zh: '停信低脂健康包裝', actDesc: '停信低脂健康商業包裝，由源頭切斷精製油加工糖', sectionId: 'sec-a1-d15' },
+                    { code: 'PR-02', en: '4 BROKEN ROADS', title: '晨報：四條死路齊爆發', zh: '補劑唔見效真相', actDesc: 'LPS漏電＋LPL停工＋內臟噴射＋皮質醇失控全面攔截', sectionId: 'sec-a1-d15' },
+                    { code: 'PR-03', en: '50K COHORT', title: '晨報：5萬人睡眠實證', zh: '週末補眠補唔返', actDesc: '週末補眠補唔返，睡眠失調同所有發炎指標直接掛鉤', sectionId: 'sec-b1' },
+                    { code: 'PR-04', en: '12 TACTICS', title: '晨報：B1歷代A1檔案庫', zh: '第14日至第1日全齊', actDesc: '一站查閱第14日羅漢果至第1日古法發酵12篇實彈', sectionId: 'sec-b1' },
+                    { code: 'PR-05', en: '12W DROP 30%', title: '晨報：12週HSCRP跌30%', zh: '四開關齊斬有效', actDesc: '同時扭轉飲食起身訓練作息四開關，三個月見分曉', sectionId: 'sec-a1-d15' },
+                    { code: 'PR-06', en: 'PREM_25 ARCH', title: '晨報：PREM_25解鎖全庫', zh: '內容向横行對焦', actDesc: '嚴守單一款式橫向對焦，即入PREM_25看80%全文', sectionId: 'sec-a1-d15' },
                 ],
             },
         ];
@@ -2755,7 +2578,6 @@
             ribs.instanceMatrix.needsUpdate = true;
             ribs.computeBoundingSphere();
             canopyGroup.add(ribs);
-            canopyGroup.userData.explodeVec = new THREE.Vector3(0, 0.85, 0);
             booth.add(canopyGroup);
 
             // 4. Vertical Wrought-Iron Stall Posts
@@ -2830,7 +2652,6 @@
             signGroup.add(beacon);
 
             signGroup.position.set(0, 2.38, -0.32);
-            signGroup.userData.explodeVec = new THREE.Vector3(0, 0.45, 0.72);
             booth.add(signGroup);
 
             // 6. Warm Hanging Tungsten Stall Bulb
@@ -2852,7 +2673,7 @@
             bulbGlow.position.set(0, 2.86, 0.85);
             booth.add(bulbGlow);
 
-            // 7. Parallax Street Background Layers (Far HK Neon / Mid Stall Shutters)
+            // 7. Static HK Night Street Backdrop (Far HK Neon / Mid Stall Shutters)
             const farBgGroup = new THREE.Group();
             const neonMat = new THREE.MeshStandardMaterial({
                 color: 0x8b0000,
@@ -3016,8 +2837,7 @@
 
         function initDailyFlow3DNewsstand() {
             const mountEl = document.getElementById('df-three-mount');
-            const scrollerEl = document.getElementById('df-explainer-scroller');
-            if (!mountEl || !scrollerEl) return;
+            if (!mountEl) return;
 
             const isSoftwareGl = detectSoftwareGl();
             let renderer;
@@ -3147,13 +2967,9 @@
             const state = {
                 isPlaying: false,
                 playhead: 0,
-                triggeredOnce: false,
-                activeAct: 0,
                 activePaperIdx: 0,
-                scrollProgress: 0,
-                linkedScrub: 0,
                 horizRatio: 0,
-                snapMandatory: true,
+                horizEngaged: false,
                 userOrbit: false,
                 dockCollapsed: false,
                 rackPanX: 0,
@@ -3161,8 +2977,8 @@
             };
 
             const _v3 = new THREE.Vector3();
-            const _camTarget = new THREE.Vector3(0, 1.95, 9.1);
-            const _lookTarget = new THREE.Vector3(0, 1.05, 0);
+            const _camTarget = new THREE.Vector3(0, 1.35, 7.3);
+            const _lookTarget = new THREE.Vector3(0, 0.9, 0.25);
             const _mouse = new THREE.Vector2();
             const _raycaster = new THREE.Raycaster();
             _raycaster.layers.set(1);
@@ -3181,17 +2997,8 @@
             const edBadgeEl = document.getElementById('df-active-edition-badge');
             const horizTrackEl = document.getElementById('df-horiz-track');
             const horizContEl = document.getElementById('df-horiz-container');
-            const linkRangeEl = document.getElementById('df-link-scrub');
-            const linkPctEl = document.getElementById('df-link-pct');
-            const paraBgEl = document.getElementById('df-parallax-bg');
-            const paraMidEl = document.getElementById('df-parallax-mid');
-            const paraReadEl = document.getElementById('df-parallax-readout');
-            const snapBtn = document.getElementById('df-btn-toggle-snap');
             const dockEl = document.getElementById('df-explainer-dock');
             const dockToggleBtn = document.getElementById('df-btn-toggle-dock');
-            const topActEl = document.getElementById('df-top-act-label');
-            const actDots = Array.from(document.querySelectorAll('[data-df-act]'));
-            const actSections = Array.from(document.querySelectorAll('[data-df-act-idx]'));
 
             function renderSingleEditionDeck() {
                 const ed = NEWSSTAND_EDITIONS[currentEditionIdx];
@@ -3249,10 +3056,10 @@
                 if (scrubberEl) scrubberEl.value = t.toFixed(2);
                 if (timeEl) timeEl.textContent = `${t.toFixed(1)}s / 12.0s`;
                 if (beatEl) {
-                    if (t < 3.0) beatEl.textContent = '01 / 04 · 報紙檔開檔搭建';
-                    else if (t < 6.0) beatEl.textContent = '02 / 04 · 六份《抗炎日報》上架';
-                    else if (t < 9.0) beatEl.textContent = '03 / 04 · 頭條報紙 SPIN & PLAY';
-                    else beatEl.textContent = '04 / 04 · 街邊報紙檔全景巡禮';
+                    if (t < 3.0) beatEl.textContent = '06 · 橫向報架焦點掃描';
+                    else if (t < 6.0) beatEl.textContent = '06 · 六份《抗炎日報》逐份亮起';
+                    else if (t < 9.0) beatEl.textContent = '06 · 頭條報紙 SPIN & PLAY';
+                    else beatEl.textContent = '06 · 橫向滑動同步對焦';
                 }
                 if (playLabel) playLabel.textContent = state.isPlaying ? '暫停 PAUSE' : '播放 12s PLAY';
                 if (playBtn) playBtn.setAttribute('aria-pressed', String(state.isPlaying));
@@ -3269,6 +3076,8 @@
             function triggerSpinAndPlay(idx) {
                 const target = THREE.MathUtils.clamp(idx, 0, papers.length - 1);
                 state.activePaperIdx = target;
+                state.horizRatio = papers.length > 1 ? target / (papers.length - 1) : 0;
+                state.horizEngaged = true;
                 const p = papers[target];
                 if (p) {
                     p.spinVelocity = 11.2;
@@ -3294,7 +3103,6 @@
                 updateTimelineUI();
             });
             replayBtn?.addEventListener('click', () => start12s(true));
-            document.getElementById('df-btn-retrigger')?.addEventListener('click', () => start12s(true));
             spinBtn?.addEventListener('click', () => triggerSpinAndPlay((state.activePaperIdx + 1) % papers.length));
             scrubberEl?.addEventListener('input', (e) => {
                 state.playhead = parseFloat(e.target.value) || 0;
@@ -3326,20 +3134,6 @@
                     }
                 });
             }
-            snapBtn?.addEventListener('click', () => {
-                state.snapMandatory = !state.snapMandatory;
-                scrollerEl.style.scrollSnapType = state.snapMandatory ? 'y mandatory' : 'none';
-                snapBtn.textContent = state.snapMandatory ? 'SNAP: ON 一碌成版過' : 'SNAP: OFF 自由連貫';
-                audio.playFlip(560);
-            });
-            linkRangeEl?.addEventListener('input', (e) => {
-                const v = parseFloat(e.target.value) || 0;
-                state.linkedScrub = THREE.MathUtils.clamp(v, 0, 1);
-                if (linkPctEl) linkPctEl.textContent = `${Math.round(state.linkedScrub * 100)}%`;
-                state.playhead = state.linkedScrub * DURATION_SEC;
-                state.isPlaying = false;
-                updateTimelineUI();
-            });
 
             if (horizContEl) {
                 horizContEl.addEventListener('wheel', (e) => {
@@ -3357,59 +3151,9 @@
                     const maxH = Math.max(1, horizContEl.scrollWidth - horizContEl.clientWidth);
                     state.horizRatio = THREE.MathUtils.clamp(horizContEl.scrollLeft / maxH, 0, 1);
                     state.activePaperIdx = Math.round(state.horizRatio * (papers.length - 1));
+                    state.horizEngaged = true;
                 });
             }
-
-            const ACT_LABELS = [
-                '01 · SCROLL-TRIGGERED 碌到嗰個位先播',
-                '02 · SCROLL-LINKED 郁幾多就碌幾多',
-                '03 · PARALLAX 背景行得慢過前景',
-                '04 · STICKY 碌到頂就會黐住',
-                '05 · SCROLL SNAP 一碌就會成版過',
-                '06 · HORIZONTAL SCROLL 內容向横行',
-            ];
-
-            scrollerEl.addEventListener('scroll', () => {
-                const maxScroll = Math.max(1, scrollerEl.scrollHeight - scrollerEl.clientHeight);
-                const top = scrollerEl.scrollTop;
-                state.scrollProgress = THREE.MathUtils.clamp(top / maxScroll, 0, 1);
-
-                if (paraBgEl) paraBgEl.style.transform = `translate3d(0, ${(-top * 0.16).toFixed(1)}px, 0)`;
-                if (paraMidEl) paraMidEl.style.transform = `translate3d(0, ${(-top * 0.36).toFixed(1)}px, 0)`;
-                if (paraReadEl) {
-                    paraReadEl.textContent = `BG ${(-top * 0.16).toFixed(0)}px (0.22×) · MID ${(-top * 0.36).toFixed(0)}px (0.52×) · FG ${(-top).toFixed(0)}px (1.00×)`;
-                }
-
-                if (state.activeAct === 1 && actSections[1]) {
-                    const lp = THREE.MathUtils.clamp((top - actSections[1].offsetTop + scrollerEl.clientHeight * 0.4) / Math.max(1, actSections[1].offsetHeight), 0, 1);
-                    state.linkedScrub = lp;
-                    if (linkRangeEl) linkRangeEl.value = lp.toFixed(3);
-                    if (linkPctEl) linkPctEl.textContent = `${Math.round(lp * 100)}%`;
-                }
-            }, { passive: true });
-
-            const actObs = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (!entry.isIntersecting) return;
-                    const idx = Number(entry.target.getAttribute('data-df-act-idx'));
-                    state.activeAct = idx;
-                    if (topActEl) topActEl.textContent = ACT_LABELS[idx] || ACT_LABELS[0];
-                    actDots.forEach((btn) => btn.classList.toggle('df-act-dot-active', Number(btn.getAttribute('data-df-act')) === idx));
-                    if (idx === 0 && !state.triggeredOnce) {
-                        state.triggeredOnce = true;
-                        start12s(true);
-                    }
-                });
-            }, { root: scrollerEl, threshold: 0.55 });
-            actSections.forEach((s) => actObs.observe(s));
-
-            actDots.forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    const idx = Number(btn.getAttribute('data-df-act'));
-                    actSections[idx]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    audio.playFlip(520 + idx * 35);
-                });
-            });
 
             controls.addEventListener('start', () => { state.userOrbit = true; });
 
@@ -3456,7 +3200,6 @@
             updateTimelineUI();
 
             if (!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-                state.triggeredOnce = true;
                 state.isPlaying = true;
             }
 
@@ -3500,28 +3243,16 @@
                     const t = state.playhead;
                     const normT = t / DURATION_SEC;
 
-                    // Exploded assembly during 0..2.2s intro OR Act 2 Scroll-Linked scrubbing
-                    let explode = t < 2.3 ? Math.max(0, 1 - t / 2.3) * 1.15 : 0;
-                    if (state.activeAct === 1) explode = Math.sin(state.linkedScrub * Math.PI) * 1.25;
-
-                    [boothObj.canopyGroup, boothObj.signGroup].forEach((part) => {
-                        if (!part.userData.basePos) part.userData.basePos = part.position.clone();
-                        _v3.copy(part.userData.basePos).addScaledVector(part.userData.explodeVec, explode);
-                        part.position.x = THREE.MathUtils.damp(part.position.x, _v3.x, 7, dt);
-                        part.position.y = THREE.MathUtils.damp(part.position.y, _v3.y, 7, dt);
-                        part.position.z = THREE.MathUtils.damp(part.position.z, _v3.z, 7, dt);
-                    });
-
-                    // Press gears synced to 12s timeline & scroll-linked scrub
-                    const gearSpin = t * 2.4 + state.scrollProgress * Math.PI * 3.0 + state.linkedScrub * Math.PI * 3.0;
+                    // Press gears synced to 12s timeline
+                    const gearSpin = t * 2.4;
                     boothObj.pressGears.forEach((g, i) => {
                         g.rotation.z = (i === 0 ? 1 : -1) * gearSpin;
                     });
                     boothObj.beacon.position.x = -2.8 + normT * 5.6;
 
-                    // Horizontal Rack Pan in Act 6
+                    // Section 06 Horizontal Rack Pan (1:1 synced with horizontal shelf track)
                     const spacing = 2.28;
-                    const targetPanX = state.activeAct === 5
+                    const targetPanX = state.horizEngaged || !state.isPlaying
                         ? -((state.horizRatio - 0.5) * (papers.length - 1) * spacing)
                         : (t >= 6.0 && t <= 10.5 && state.isPlaying)
                             ? -(state.activePaperIdx - (papers.length - 1) / 2) * spacing * 0.5
@@ -3529,11 +3260,11 @@
                     state.rackPanX = THREE.MathUtils.damp(state.rackPanX, targetPanX, 5.5, dt);
                     rackGroup.position.x = state.rackPanX;
 
-                    // Animate 6 Newspapers (cascade 3..6s, spin & play 6..9s, user clicks)
+                    // Animate 6 Newspapers (cascade 3..6s, spin & play 6..9s, horizontal focus)
                     papers.forEach((p, idx) => {
                         const waveStart = 3.0 + idx * 0.35;
                         const inWave = t >= waveStart && t <= waveStart + 1.1;
-                        const featured = idx === state.activePaperIdx && (state.activeAct === 5 || (t >= 6.0 && t < 9.5));
+                        const featured = idx === state.activePaperIdx;
 
                         const targetZ = inWave ? 0.55 : featured ? 0.85 : 0;
                         const targetY = inWave ? 0.14 : featured ? 0.25 : 0;
@@ -3556,30 +3287,13 @@
                         p.root.rotation.y = p.spinAngle;
                     });
 
-                    // 3D Parallax layers (background slower than foreground)
-                    const pDriver = state.scrollProgress * 2.4 + Math.sin(now * 0.0004) * 0.1;
-                    boothObj.midBgGroup.position.x = THREE.MathUtils.damp(boothObj.midBgGroup.position.x, -pDriver * 0.65, 5, dt);
-                    boothObj.farBgGroup.position.x = THREE.MathUtils.damp(boothObj.farBgGroup.position.x, -pDriver * 0.24, 5, dt);
-
                     if (!state.userOrbit) {
-                        if (state.activeAct === 2) {
-                            _camTarget.set(2.4, 2.0, 9.2);
-                            _lookTarget.set(0, 1.15, -0.8);
-                        } else if (state.activeAct === 3) {
-                            _camTarget.set(-1.35, 1.8, 7.9);
-                            _lookTarget.set(0, 1.18, 0);
-                        } else if (state.activeAct === 5) {
-                            _camTarget.set(0, 1.35, 7.3);
-                            _lookTarget.set(0, 0.9, 0.25);
-                        } else if (t < 3.0 && state.isPlaying) {
+                        if (t < 3.0 && state.isPlaying && !state.horizEngaged) {
                             _camTarget.set(Math.sin(t * 0.7) * 1.1, 2.5, 7.4);
                             _lookTarget.set(0, 2.1, -0.2);
-                        } else if (t >= 6.0 && t < 9.0 && state.isPlaying) {
-                            _camTarget.set(0.6, 1.45, 7.6);
-                            _lookTarget.set(0, 1.05, 0.28);
                         } else {
-                            _camTarget.set(Math.sin(normT * Math.PI * 2) * 0.75, 1.95, 9.1);
-                            _lookTarget.set(0, 1.08, 0);
+                            _camTarget.set(0, 1.35, 7.3);
+                            _lookTarget.set(0, 0.9, 0.25);
                         }
 
                         camera.position.x = THREE.MathUtils.damp(camera.position.x, _camTarget.x, 4.2, dt);
