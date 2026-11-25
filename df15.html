@@ -345,10 +345,10 @@
         <div class="absolute top-0 left-0 right-0 z-30 flex items-center justify-between gap-3 px-4 sm:px-6 py-2.5 bg-[#101318]/94 border-b border-white/10">
             <div class="flex items-center gap-2.5 min-w-0">
                 <span class="inline-flex items-center justify-center px-2 py-0.5 rounded bg-[#8B0000] text-white font-mono font-black text-xs shrink-0">第15日報紙檔</span>
-                <span class="text-xs sm:text-sm font-black tracking-tight text-white truncate">抗炎日報 DAILY FLOW 第15日 · 3D 香港街邊報紙檔 12S</span>
+                <span class="text-xs sm:text-sm font-black tracking-tight text-white truncate">抗炎日報 DAILY FLOW 第15日 · 香港街邊報紙檔</span>
             </div>
             <div id="df-top-act-label" class="hidden md:block text-[11px] font-mono font-bold text-[#FBBF24] tracking-wider truncate">
-                06 · HORIZONTAL SCROLL 內容向横行（每次不同＋只能用一款）
+                06 · HORIZONTAL SCROLL 內容向横行
             </div>
             <div class="flex items-center gap-2 shrink-0">
                 <button type="button" onclick="document.getElementById('df-broadsheet-archive').scrollIntoView({behavior:'smooth'})" class="px-2.5 py-1 rounded bg-[#D97706] hover:bg-[#F59E0B] text-[#111827] text-[11px] font-black cursor-pointer">
@@ -362,8 +362,8 @@
             <div id="df-three-mount" class="relative w-full h-full z-10"></div>
             <div id="df-webgl-fallback" class="hidden absolute inset-0 z-20 flex items-center justify-center p-6 text-center bg-[#101318]">
                 <div class="max-w-md p-5 rounded-xl border border-amber-500/40 bg-[#1A1F29] text-slate-100">
-                    <div class="font-mono text-xs text-amber-400 font-bold mb-1">3D NEWSSTAND FALLBACK</div>
-                    <p class="text-sm font-bold">裝置暫時未能啟用 WebGL，請向下滾動閱讀《抗炎日報 DAILY FLOW》完整報紙內容。</p>
+                    <div class="font-mono text-xs text-amber-400 font-bold mb-1">NEWSSTAND FALLBACK</div>
+                    <p class="text-sm font-bold">請向下滾動閱讀《抗炎日報 DAILY FLOW》完整報紙內容。</p>
                 </div>
             </div>
 
@@ -371,18 +371,18 @@
             <div class="absolute inset-0 z-20 flex flex-col justify-between pt-14 pb-28 px-4 sm:px-6 pointer-events-none">
                 <div class="max-w-md bg-[#101318]/92 border border-amber-400/45 rounded-xl p-3 sm:p-3.5 pointer-events-auto">
                     <div class="flex flex-wrap items-center justify-between gap-2">
-                        <span class="text-[11px] font-mono font-bold text-amber-400 tracking-wider">06 · HORIZONTAL SCROLL · 內容向横行</span>
+                        <span class="text-[11px] font-mono font-bold text-amber-400 tracking-wider"> SCROLL · 內容向横行</span>
                         <span id="df-active-edition-badge" class="text-[11px] font-mono font-bold text-white bg-[#1F2533] px-2 py-0.5 rounded border border-white/20">
-                            單一款式 · 只能用一款
+                            單一款
                         </span>
                     </div>
-                    <h2 class="text-base sm:text-lg font-black text-white mt-1">橫向報架瀏覽：每次不同 + 只能用一款</h2>
+                    <h2 class="text-base sm:text-lg font-black text-white mt-1">瀏覽</h2>
                     <p class="text-xs text-slate-300 font-medium mt-1 leading-relaxed">
-                        每次載入或撳換款只會嚴格鎖定「單一報紙檔版式」，絕不重疊混款；橫向滾動下方《抗炎日報》專題卡，上方 3D 報架會同步橫移對焦，點擊報紙即可 Spin + Play！
+                        橫向滾動下方《抗炎日報》專題卡，點擊報紙即可 Spin + Play！
                     </p>
                     <div class="mt-2.5 flex items-center gap-2">
                         <button id="df-btn-switch-edition" type="button" class="px-3 py-1.5 rounded bg-[#D97706] hover:bg-[#F59E0B] text-[#111827] text-xs font-black cursor-pointer">
-                            換另一款版式 (每次不同 · 只能用一款) ⇄
+                            Spin + Play ⇄
                         </button>
                     </div>
                 </div>
@@ -398,7 +398,7 @@
         <div id="df-explainer-dock">
             <div class="flex justify-center">
                 <button id="df-btn-toggle-dock" type="button" class="px-3.5 py-1 rounded-t-lg bg-[#161A24] border border-b-0 border-white/15 text-[11px] font-mono font-bold text-slate-200 hover:text-amber-300 cursor-pointer">
-                    ▾ 隱藏控制列 (H)
+                    ▾ (H)
                 </button>
             </div>
             <div class="rounded-xl bg-[#12151E]/95 border border-white/15 px-3.5 py-2.5 shadow-2xl flex flex-col gap-2">
@@ -415,7 +415,7 @@
                         </button>
                     </div>
                     <div class="flex items-center gap-2 text-[11px] font-mono">
-                        <span id="df-beat-label" class="hidden sm:inline text-slate-300 font-bold">06 · 橫向報架焦點掃描</span>
+                        <span id="df-beat-label" class="hidden sm:inline text-slate-300 font-bold">報架焦點掃描</span>
                         <span id="df-time-label" class="text-amber-400 font-black">0.0s / 12.0s</span>
                     </div>
                     <div class="flex items-center gap-1.5">
@@ -436,7 +436,7 @@
     <main id="df-broadsheet-archive" class="py-4 sm:py-8 px-2 sm:px-4">
         <div class="no-print max-w-6xl mx-auto mb-2 flex justify-end">
             <button type="button" onclick="document.getElementById('df-explainer-shell').scrollIntoView({behavior:'smooth'})" class="bg-[#121212] hover:bg-[#8B0000] text-white font-mono text-xs font-bold px-3 py-1.5 rounded cursor-pointer transition">
-                ↑ 回到 3D 香港街邊報紙檔舞台
+                ↑ 回到香港街邊報紙檔
             </button>
         </div>    
     
