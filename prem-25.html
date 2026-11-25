@@ -167,7 +167,7 @@
 
       <nav aria-label="章節導覽" class="hidden md:flex items-center gap-6 text-sm font-semibold text-[#4B5563]">
         <a href="#band-voice" class="hover:text-[#17191C] hover:underline underline-offset-4 whitespace-nowrap">惡化鏈</a>
-        <a href="#band-3d-warroom" class="hover:text-[#17191C] hover:underline underline-offset-4 whitespace-nowrap">日報</a>
+        <a href="#band-warroom" class="hover:text-[#17191C] hover:underline underline-offset-4 whitespace-nowrap">日報</a>
         <a href="#band-enemies" class="hover:text-[#17191C] hover:underline underline-offset-4 whitespace-nowrap">四大元兇拆局</a>
         <a href="#band-hscrp" class="hover:text-[#17191C] hover:underline underline-offset-4 whitespace-nowrap">HSCRP × 減法模擬</a>
       </nav>
@@ -258,8 +258,8 @@
             </p>
 
             <div class="flex flex-wrap gap-3 pt-1">
-              <a href="#band-3d-warroom" class="px-5 py-3 rounded-xl bg-[#8B0000] hover:bg-[#17191C] text-white text-sm font-bold transition-colors">
-                進入 3D 發炎攔截沙盤 ↓
+              <a href="#band-warroom" class="px-5 py-3 rounded-xl bg-[#8B0000] hover:bg-[#17191C] text-white text-sm font-bold transition-colors">
+                進入發炎陣地 ↓
               </a>
               <a href="#band-hscrp" class="px-5 py-3 rounded-xl border-2 border-[#17191C] hover:bg-[#17191C] hover:text-white text-[#17191C] text-sm font-bold transition-colors">
                 HSCRP 驗血自保 &amp; 四開關模擬
@@ -322,9 +322,9 @@
     </section>
 
     <!-- ================================================================ -->
-    <!-- BAND B (CHARCOAL WARROOM): 3D ONLINE HEALING STORE & 虛變癌 WORLD -->
+    <!-- BAND B (CHARCOAL WARROOM): ONLINE HEALING STORE & 虛變癌 WORLD -->
     <!-- ================================================================ -->
-    <section id="band-3d-warroom" class="bg-[#111419] text-[#F8FAFC] relative border-b border-white/10">
+    <section id="band-warroom" class="bg-[#111419] text-[#F8FAFC] relative border-b border-white/10">
       <div class="relative w-full h-[90vh] min-h-[680px] max-h-[880px] overflow-hidden select-none">
 
         <!-- Empty Three.js Canvas Mount (Zero backdrop-filter over WebGL!) -->
@@ -333,7 +333,7 @@
         <!-- Static WebGL Fallback -->
         <div id="warroom-webgl-fallback" class="hidden absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#111419]">
           <div class="max-w-md p-6 rounded-2xl border border-amber-500/40 bg-[#1B2029]">
-            <div class="font-mono text-xs font-bold text-amber-400 mb-1">3D HEALING STORE FALLBACK</div>
+            <div class="font-mono text-xs font-bold text-amber-400 mb-1">HEALING STORE FALLBACK</div>
             <h2 class="font-serif text-xl font-bold text-white mb-2">系統已切換為靜態模式</h2>
             <p class="text-sm text-slate-300">可繼續瀏覽下方「虛變癌 8 步寫照」與四大發炎元兇拆局。</p>
           </div>
@@ -342,7 +342,7 @@
         <!-- Top-Left Solid HUD Readout (No backdrop-blur, static typography) -->
         <div class="pointer-events-none absolute top-4 left-4 sm:left-8 right-4 sm:right-auto max-w-lg z-10 space-y-2">
           <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-mono font-bold text-[#F59E0B]">
-            <span>3D 療癒雜貨店 × 發炎元兇速覽（撳掣前起碼中兩樣）</span>
+            <span>。  療癒雜貨店 × 發炎元兇速覽（撳掣前起碼中兩樣）</span>
             <span aria-hidden="true">·</span>
             <span id="wr-mode-label" class="text-rose-400">已中 3 樣 · 副偈正從「濕·凝·淤」滑向塞死</span>
           </div>
@@ -358,7 +358,7 @@
         <div id="prem25-dock" class="z-20 absolute bottom-3 left-1/2 -translate-x-1/2 w-[95vw] max-w-[920px]">
           <div class="flex justify-center mb-1">
             <button type="button" id="wr-btn-toggle-dock" class="px-3.5 py-1 rounded-t-lg bg-[#1A202B] border border-b-0 border-amber-500/35 text-[11px] font-mono font-bold text-slate-200 hover:text-amber-300 cursor-pointer">
-              ▾ 收合 3D 沙盤控制台 (H)
+              ▾ 收合 。  沙盤控制台 (H)
             </button>
           </div>
           <div class="bg-[#0D1016]/95 border border-amber-500/35 rounded-2xl p-3 sm:p-3.5 shadow-2xl space-y-2.5">
