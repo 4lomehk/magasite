@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920, initial-scale=1.0" />
+<title>Blueberry Lowfat Kefir — 3D Product Showcase</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  html, body {
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: #eef1f9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  #stage {
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 38%, #ffffff 0%, #f1f4fc 48%, #dce2f4 100%);
+  }
+  canvas#gl {
+    position: absolute;
+    inset: 0;
+    width: 1080px;
+    height: 1920px;
+    display: block;
+  }
+  /* Subtle studio vignette & soft editorial frame */
+  #vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 50% 45%, rgba(255,255,255,0) 56%, rgba(169, 179, 214, 0.28) 100%),
+      linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0) 14%, rgba(255,255,255,0) 86%, rgba(196,204,232,0.35) 100%);
+  }
+
+  /* Top subtle editorial header */
+  #top-bar {
+    position: absolute;
+    top: 72px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  .pill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 30px rgba(68, 79, 128, 0.08);
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #36416b;
+  }
+  .pill-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #5566b8;
+    box-shadow: 0 0 12px rgba(85, 102, 184, 0.7);
+  }
+
+  /* 3D-Projected Callout Labels */
+  #labels-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .callout {
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: transform, opacity;
+    opacity: 0;
+  }
+  .callout-anchor {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin-left: -8px;
+    margin-top: -8px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 4px solid #4959a8;
+    box-shadow: 0 0 0 6px rgba(73, 89, 168, 0.18), 0 6px 16px rgba(34, 44, 88, 0.22);
+  }
+  .callout-stem {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, #4959a8, rgba(73, 89, 168, 0.35));
+    top: -1px;
+    transform-origin: left center;
+  }
+  .callout.left .callout-stem {
+    right: 8px;
+    transform-origin: right center;
+    background: linear-gradient(270deg, #4959a8, rgba(73, 89, 168, 0.35));
+  }
+  .callout.right .callout-stem {
+    left: 8px;
+  }
+  .callout-card {
+    position: absolute;
+    top: -46px;
+    min-width: 245px;
+    padding: 18px 26px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.84);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1.5px solid rgba(255, 255, 255, 0.95);
+    box-shadow:
+      0 18px 40px rgba(45, 56, 104, 0.12),
+      0 2px 6px rgba(45, 56, 104, 0.05);
+  }
+  .callout.right .callout-card {
+    left: 82px;
+    text-align: left;
+  }
+  .callout.left .callout-card {
+    right: 82px;
+    text-align: right;
+  }
+  .callout-kicker {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6b79b5;
+    margin-bottom: 4px;
+  }
+  .callout-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #232b4d;
+    line-height: 1.1;
+  }
+  .callout-sub {
+    font-size: 20px;
+    font-weight: 500;
+    color: #5b668f;
+    margin-top: 4px;
+  }
+
+  /* Hero Finale Title Lockup */
+  #hero-lockup {
+    position: absolute;
+    left: 80px;
+    right: 80px;
+    bottom: 118px;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    padding: 10px 26px;
+    border-radius: 999px;
+    background: rgba(73, 89, 168, 0.11);
+    color: #42529e;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .hero-title {
+    font-size: 74px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #1f2747;
+    line-height: 1.02;
+  }
+  .hero-specs {
+    margin-top: 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 22px;
+    padding: 16px 34px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid rgba(255, 255, 255, 0.96);
+    box-shadow: 0 16px 38px rgba(42, 53, 98, 0.1);
+    font-size: 24px;
+    font-weight: 700;
+    color: #313c6b;
+  }
+  .spec-sep {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #8a97cf;
+  }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js"
+  }
+}
+</script>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl" width="1080" height="1920"></canvas>
+  <div id="vignette"></div>
+
+  <div id="top-bar">
+    <div class="pill-tag"><span class="pill-dot"></span>CULTURED LOWFAT MILK</div>
+    <div class="pill-tag">946 ML · 1% MILKFAT</div>
+  </div>
+
+  <div id="labels-layer">
+    <div id="lbl-kefir" class="callout right">
+      <div class="callout-anchor"></div>
+      <div class="callout-stem" style="width: 74px;"></div>
+      <div class="callout-card">
+        <div class="callout-kicker">Cultured Drink</div>
+        <div class="callout-title">Kefir</div>
+        <div class="callout-sub">Smooth &amp; creamy texture</div>
+      </div>
+    </div>
+
+    <div id="lbl-blueberry" class="callout left">
+      <div class="callout-anchor"></div>
+      <div class="callout-stem" style="width: 74px;"></div>
+      <div class="callout-card">
+        <div class="callout-kicker">Flavor Profile</div>
+        <div class="callout-title">Blueberry</div>
+        <div class="callout-sub">Sweet berry notes</div>
+      </div>
+    </div>
+
+    <div id="lbl-milkfat" class="callout right">
+      <div class="callout-anchor"></div>
+      <div class="callout-stem" style="width: 74px;"></div>
+      <div class="callout-card">
+        <div class="callout-kicker">Cultured Lowfat Milk</div>
+        <div class="callout-title">1% Milkfat</div>
+        <div class="callout-sub">Light, refreshing body</div>
+      </div>
+    </div>
+
+    <div id="lbl-volume" class="callout left">
+      <div class="callout-anchor"></div>
+      <div class="callout-stem" style="width: 74px;"></div>
+      <div class="callout-card">
+        <div class="callout-kicker">Bottle Size</div>
+        <div class="callout-title">946 ml</div>
+        <div class="callout-sub">32 fl oz · Resealable cap</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="hero-lockup">
+    <div class="hero-eyebrow">Cultured Lowfat Milk</div>
+    <div class="hero-title">Blueberry Kefir</div>
+    <div class="hero-specs">
+      <span>1% Milkfat</span>
+      <span class="spec-sep"></span>
+      <span>Blueberry</span>
+      <span class="spec-sep"></span>
+      <span>946 ml</span>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+
+const WIDTH = 1080;
+const HEIGHT = 1920;
+window.DURATION = 20;
+
+// Deterministic PRNG (Mulberry32) so every frame t is 100% reproducible
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return function() {
+    a |= 0;
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// Smooth math helpers
+const clamp01 = (v) => Math.max(0, Math.min(1, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const smoothstep = (e0, e1, x) => {
+  const t = clamp01((x - e0) / (e1 - e0));
+  return t * t * (3 - 2 * t);
+};
+const smootherstep = (e0, e1, x) => {
+  const t = clamp01((x - e0) / (e1 - e0));
+  return t * t * t * (t * (t * 6 - 15) + 10);
+};
+function easeOutBack(x) {
+  const c1 = 1.45;
+  const c3 = c1 + 1;
+  const t = clamp01(x);
+  return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+}
+function easeOutCubic(x) {
+  const t = clamp01(x);
+  return 1 - Math.pow(1 - t, 3);
+}
+
+// Renderer setup
+const canvas = document.getElementById('gl');
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  alpha: true,
+  powerPreference: 'high-performance',
+  preserveDrawingBuffer: true
+});
+renderer.setSize(WIDTH, HEIGHT, false);
+renderer.setPixelRatio(1);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.08;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0xe6ebf8, 0.024);
+
+const camera = new THREE.PerspectiveCamera(34, WIDTH / HEIGHT, 0.1, 100);
+camera.position.set(0, 2.2, 11.5);
+
+// Procedural Studio Environment Map (PMREM) for crisp glossy bottle & blueberry speculars
+function createStudioEnvMap() {
+  const envCanvas = document.createElement('canvas');
+  envCanvas.width = 512;
+  envCanvas.height = 256;
+  const ctx = envCanvas.getContext('2d');
+
+  const grad = ctx.createLinearGradient(0, 0, 0, 256);
+  grad.addColorStop(0.0, '#ffffff');
+  grad.addColorStop(0.35, '#eef2fc');
+  grad.addColorStop(0.68, '#d4dcf2');
+  grad.addColorStop(1.0, '#bac5e6');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 512, 256);
+
+  // Soft studio softbox strips for realistic bottle highlights
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+  ctx.beginPath();
+  ctx.roundRect(45, 24, 90, 175, 24);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.roundRect(355, 28, 105, 170, 26);
+  ctx.fill();
+
+  ctx.fillStyle = 'rgba(124, 142, 214, 0.35)';
+  ctx.beginPath();
+  ctx.roundRect(205, 45, 95, 150, 20);
+  ctx.fill();
+
+  const tex = new THREE.CanvasTexture(envCanvas);
+  tex.mapping = THREE.EquirectangularReflectionMapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const envRT = pmrem.fromEquirectangular(tex);
+  tex.dispose();
+  pmrem.dispose();
+  return envRT.texture;
+}
+scene.environment = createStudioEnvMap();
+
+// Studio Lighting
+const hemiLight = new THREE.HemisphereLight(0xffffff, 0xc7d0eb, 1.35);
+hemiLight.position.set(0, 12, 0);
+scene.add(hemiLight);
+
+const keyLight = new THREE.DirectionalLight(0xfffcf7, 1.85);
+keyLight.position.set(4.8, 8.6, 6.2);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(2048, 2048);
+keyLight.shadow.camera.near = 1;
+keyLight.shadow.camera.far = 25;
+keyLight.shadow.camera.left = -5.5;
+keyLight.shadow.camera.right = 5.5;
+keyLight.shadow.camera.top = 7.5;
+keyLight.shadow.camera.bottom = -4.5;
+keyLight.shadow.bias = -0.0004;
+keyLight.shadow.normalBias = 0.02;
+scene.add(keyLight);
+
+const rimLight = new THREE.DirectionalLight(0xc2ceff, 1.15);
+rimLight.position.set(-5.5, 5.5, -5.0);
+scene.add(rimLight);
+
+const fillLight = new THREE.DirectionalLight(0xf6f8ff, 0.7);
+fillLight.position.set(-4.5, 2.2, 5.5);
+scene.add(fillLight);
+
+// Studio Plinth & Seamless Ground
+const studioGroup = new THREE.Group();
+scene.add(studioGroup);
+
+const shadowFloor = new THREE.Mesh(
+  new THREE.PlaneGeometry(40, 40),
+  new THREE.ShadowMaterial({ opacity: 0.14, color: 0x3b4778 })
+);
+shadowFloor.rotation.x = -Math.PI / 2;
+shadowFloor.position.y = -2.35;
+shadowFloor.receiveShadow = true;
+studioGroup.add(shadowFloor);
+
+// Layered architectural studio pedestals (creamy marble & soft periwinkle rim)
+const plinthBase = new THREE.Mesh(
+  new THREE.CylinderGeometry(2.75, 2.9, 0.28, 96),
+  new THREE.MeshPhysicalMaterial({
+    color: 0xe3e8f7,
+    roughness: 0.45,
+    metalness: 0.02,
+    clearcoat: 0.25
+  })
+);
+plinthBase.position.y = -2.21;
+plinthBase.receiveShadow = true;
+plinthBase.castShadow = true;
+studioGroup.add(plinthBase);
+
+const plinthTop = new THREE.Mesh(
+  new THREE.CylinderGeometry(2.22, 2.28, 0.22, 96),
+  new THREE.MeshPhysicalMaterial({
+    color: 0xfbfcff,
+    roughness: 0.28,
+    metalness: 0.0,
+    clearcoat: 0.5,
+    clearcoatRoughness: 0.2
+  })
+);
+plinthTop.position.y = -1.96;
+plinthTop.receiveShadow = true;
+plinthTop.castShadow = true;
+studioGroup.add(plinthTop);
+
+const plinthAccentRing = new THREE.Mesh(
+  new THREE.TorusGeometry(2.225, 0.018, 24, 120),
+  new THREE.MeshStandardMaterial({
+    color: 0x7c8cc9,
+    roughness: 0.35,
+    metalness: 0.15
+  })
+);
+plinthAccentRing.rotation.x = Math.PI / 2;
+plinthAccentRing.position.y = -1.85;
+studioGroup.add(plinthAccentRing);
+
+// ============================================================================
+// HIGH-RESOLUTION BOTTLE LABEL TEXTURE (With completely blurred brand & logo)
+// ============================================================================
+function createBottleLabelTexture() {
+  const W = 2048;
+  const H = 1536;
+  const c = document.createElement('canvas');
+  c.width = W;
+  c.height = H;
+  const ctx = c.getContext('2d');
+
+  // 1. Creamy cultured milk background with soft blueberry gradient bands
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0.0, '#fbfbff');
+  bg.addColorStop(0.24, '#f5f6fd');
+  bg.addColorStop(0.56, '#eef1fc');
+  bg.addColorStop(0.78, '#6a78bc');
+  bg.addColorStop(1.0, '#445299');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Decorative organic creamy milk wave & blueberry wave across lower body
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(0, H * 0.62);
+  for (let x = 0; x <= W; x += 32) {
+    const wave = Math.sin((x / W) * Math.PI * 4) * 34 + Math.cos((x / W) * Math.PI * 2) * 22;
+    ctx.lineTo(x, H * 0.63 + wave);
+  }
+  ctx.lineTo(W, H);
+  ctx.lineTo(0, H);
+  ctx.closePath();
+  const waveGrad = ctx.createLinearGradient(0, H * 0.58, 0, H);
+  waveGrad.addColorStop(0, '#5a69b5');
+  waveGrad.addColorStop(0.55, '#3d4b94');
+  waveGrad.addColorStop(1, '#2a3573');
+  ctx.fillStyle = waveGrad;
+  ctx.fill();
+
+  // Secondary lighter periwinkle ribbon wave
+  ctx.beginPath();
+  ctx.moveTo(0, H * 0.67);
+  for (let x = 0; x <= W; x += 32) {
+    const wave = Math.cos((x / W) * Math.PI * 4 + 0.8) * 28;
+    ctx.lineTo(x, H * 0.68 + wave);
+  }
+  ctx.lineTo(W, H);
+  ctx.lineTo(0, H);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(138, 153, 224, 0.34)';
+  ctx.fill();
+  ctx.restore();
+
+  // Subtle botanical & milk-swirl line art on sides
+  ctx.save();
+  ctx.strokeStyle = 'rgba(92, 108, 184, 0.14)';
+  ctx.lineWidth = 6;
+  for (let s = 0; s < 2; s++) {
+    const baseX = s === 0 ? 280 : W - 280;
+    ctx.beginPath();
+    ctx.arc(baseX, H * 0.42, 170, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(baseX, H * 0.42, 225, 0.4, Math.PI * 1.6);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // Front Panel Center X = W * 0.5 (UV u = 0.5 faces +Z camera)
+  const cx = W * 0.5;
+
+  // 2. Top Brand Emblem & Wordmark Area — Drawn on an offscreen layer and heavily blurred
+  // so no brand name or logo can be read or identified
+  const brandLayer = document.createElement('canvas');
+  brandLayer.width = 760;
+  brandLayer.height = 340;
+  const bctx = brandLayer.getContext('2d');
+
+  // Abstract crest shape + indistinct letterforms prior to multi-pass heavy blur
+  bctx.fillStyle = '#38468c';
+  bctx.beginPath();
+  bctx.roundRect(140, 28, 480, 120, 60);
+  bctx.fill();
+
+  bctx.fillStyle = '#ffffff';
+  bctx.font = '900 74px Georgia, serif';
+  bctx.textAlign = 'center';
+  bctx.fillText('BRANDMARK', 380, 112);
+
+  bctx.fillStyle = '#4857a3';
+  bctx.font = '800 54px sans-serif';
+  bctx.fillText('EST. DAIRY CO.', 380, 215);
+
+  // Apply heavy multi-pass Gaussian blur + pixelation mosaic so it is 100% unreadable
+  const tiny = document.createElement('canvas');
+  tiny.width = 24;
+  tiny.height = 11;
+  const tctx = tiny.getContext('2d');
+  tctx.drawImage(brandLayer, 0, 0, tiny.width, tiny.height);
+
+  ctx.save();
+  ctx.filter = 'blur(26px)';
+  ctx.globalAlpha = 0.72;
+  ctx.drawImage(tiny, cx - 350, 95, 700, 310);
+  ctx.filter = 'blur(18px)';
+  ctx.drawImage(tiny, cx - 340, 105, 680, 290);
+  ctx.restore();
+
+  // Frosted privacy badge pill over the blurred brand zone
+  ctx.save();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.48)';
+  ctx.beginPath();
+  ctx.roundRect(cx - 255, 130, 510, 155, 78);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(116, 131, 201, 0.32)';
+  ctx.lineWidth = 4;
+  ctx.stroke();
+  ctx.restore();
+
+  // 3. Clear, Crisp Product Identity Typography (Matching Reference Details)
+  // "Kefir" main display title
+  ctx.save();
+  ctx.fillStyle = '#252f63';
+  ctx.font = '800 164px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Kefir', cx, 425);
+
+  // "cultured lowfat milk" subtitle badge
+  ctx.fillStyle = '#5362ab';
+  ctx.font = '700 44px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.letterSpacing = '6px';
+  ctx.fillText('CULTURED LOWFAT MILK', cx, 535);
+  ctx.letterSpacing = '0px';
+
+  // "Blueberry" flavor callout banner
+  ctx.fillStyle = '#36448c';
+  ctx.beginPath();
+  ctx.roundRect(cx - 235, 595, 470, 96, 48);
+  ctx.fill();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '800 56px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.fillText('Blueberry', cx, 645);
+  ctx.restore();
+
+  // 4. Illustrated Ripe Blueberries & Creamy Milk Splash Cluster on Label Front
+  function drawLabelBlueberry(bx, by, r, rot) {
+    ctx.save();
+    ctx.translate(bx, by);
+    ctx.rotate(rot);
+
+    // Soft drop shadow
+    ctx.fillStyle = 'rgba(22, 30, 74, 0.28)';
+    ctx.beginPath();
+    ctx.arc(6, 12, r * 1.02, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Berry body gradient
+    const bgBerry = ctx.createRadialGradient(-r * 0.32, -r * 0.35, r * 0.1, 0, 0, r);
+    bgBerry.addColorStop(0.0, '#8d9ee8');
+    bgBerry.addColorStop(0.35, '#4b5cb0');
+    bgBerry.addColorStop(0.8, '#2b3675');
+    bgBerry.addColorStop(1.0, '#1c2454');
+    ctx.fillStyle = bgBerry;
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Specular bloom
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.42)';
+    ctx.beginPath();
+    ctx.ellipse(-r * 0.34, -r * 0.34, r * 0.26, r * 0.15, -0.6, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Star-shaped blossom crown
+    ctx.fillStyle = '#1b224f';
+    ctx.beginPath();
+    const spikes = 5;
+    for (let i = 0; i < spikes * 2; i++) {
+      const rad = i % 2 === 0 ? r * 0.32 : r * 0.14;
+      const ang = (i * Math.PI) / spikes;
+      const px = Math.cos(ang) * rad;
+      const py = Math.sin(ang) * rad - r * 0.58;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Creamy milk splash arc behind berries
+  ctx.save();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+  ctx.beginPath();
+  ctx.moveTo(cx - 260, 955);
+  ctx.bezierCurveTo(cx - 190, 815, cx - 50, 855, cx, 920);
+  ctx.bezierCurveTo(cx + 65, 835, cx + 205, 815, cx + 265, 965);
+  ctx.bezierCurveTo(cx + 150, 1045, cx - 150, 1045, cx - 260, 955);
+  ctx.fill();
+  ctx.restore();
+
+  drawLabelBlueberry(cx - 115, 925, 76, -0.35);
+  drawLabelBlueberry(cx + 110, 932, 72, 0.42);
+  drawLabelBlueberry(cx, 888, 92, 0.12);
+  drawLabelBlueberry(cx - 48, 995, 64, -0.2);
+  drawLabelBlueberry(cx + 58, 992, 62, 0.28);
+
+  // 5. Bottom Specs Pill: "1% milkfat" & "946 ml"
+  ctx.save();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
+  ctx.beginPath();
+  ctx.roundRect(cx - 310, 1135, 620, 114, 57);
+  ctx.fill();
+
+  ctx.fillStyle = '#242e61';
+  ctx.font = '800 46px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('1% milkfat   •   946 ml', cx, 1194);
+
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+  ctx.font = '600 30px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.fillText('KEEP REFRIGERATED   •   32 FL OZ (1 QT)', cx, 1315);
+  ctx.restore();
+
+  // 6. Back/Side Nutrition Facts Style Graphic (Left & Right edges of wrap so 360 rotation looks authentic)
+  function drawSidePanel(px) {
+    ctx.save();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.86)';
+    ctx.beginPath();
+    ctx.roundRect(px - 175, 310, 350, 740, 28);
+    ctx.fill();
+
+    ctx.fillStyle = '#283366';
+    ctx.font = '800 36px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('Nutrition Facts', px - 145, 370);
+
+    ctx.fillRect(px - 145, 392, 290, 8);
+    ctx.font = '600 24px sans-serif';
+    ctx.fillStyle = '#4e5b94';
+    ctx.fillText('Serving size 1 cup (240ml)', px - 145, 430);
+    ctx.fillRect(px - 145, 452, 290, 4);
+
+    const rows = [
+      ['1% Milkfat', 'Lowfat'],
+      ['Texture', 'Smooth'],
+      ['Flavor', 'Blueberry'],
+      ['Net Volume', '946 ml']
+    ];
+    rows.forEach((r, idx) => {
+      const ry = 510 + idx * 72;
+      ctx.fillStyle = '#283366';
+      ctx.font = '700 26px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(r[0], px - 145, ry);
+      ctx.textAlign = 'right';
+      ctx.fillText(r[1], px + 145, ry);
+      ctx.fillStyle = 'rgba(78, 91, 148, 0.2)';
+      ctx.fillRect(px - 145, ry + 24, 290, 2);
+    });
+    ctx.restore();
+  }
+  drawSidePanel(230);
+  drawSidePanel(W - 230);
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 8;
+  tex.needsUpdate = true;
+  return tex;
+}
+
+// ============================================================================
+// STEP-BY-STEP MODULAR 3D KEFIR BOTTLE ASSEMBLY
+// ============================================================================
+const bottleRoot = new THREE.Group();
+bottleRoot.position.set(0, 0.18, 0);
+scene.add(bottleRoot);
+
+// Part 1: Translucent HDPE / PET Creamy-White Bottle Shell (Lathe Profile)
+const bottlePoints = [
+  new THREE.Vector2(0.00, -1.98),
+  new THREE.Vector2(0.84, -1.98),
+  new THREE.Vector2(0.96, -1.92),
+  new THREE.Vector2(1.01, -1.78),
+  new THREE.Vector2(1.01,  0.58), // Straight cylindrical label zone (-1.75 to +0.55)
+  new THREE.Vector2(0.99,  0.76),
+  new THREE.Vector2(0.86,  1.06), // Smooth sculpted shoulder
+  new THREE.Vector2(0.62,  1.34),
+  new THREE.Vector2(0.47,  1.52), // Neck base
+  new THREE.Vector2(0.47,  1.86), // Neck cylinder
+  new THREE.Vector2(0.42,  1.88)
+];
+const bottleGeo = new THREE.LatheGeometry(bottlePoints, 96);
+bottleGeo.computeVertexNormals();
+
+const bottleShellMat = new THREE.MeshPhysicalMaterial({
+  color: 0xfbfcff,
+  roughness: 0.16,
+  metalness: 0.0,
+  transmission: 0.24,
+  thickness: 0.45,
+  ior: 1.48,
+  clearcoat: 0.85,
+  clearcoatRoughness: 0.12
+});
+const bottleShellGroup = new THREE.Group();
+const bottleShellMesh = new THREE.Mesh(bottleGeo, bottleShellMat);
+bottleShellMesh.castShadow = true;
+bottleShellMesh.receiveShadow = true;
+bottleShellGroup.add(bottleShellMesh);
+
+// Subtle structural shoulder grip ribs (characteristic of 946ml kefir bottles)
+for (let i = 0; i < 3; i++) {
+  const rib = new THREE.Mesh(
+    new THREE.TorusGeometry(0.93 - i * 0.055, 0.011, 16, 96),
+    bottleShellMat
+  );
+  rib.rotation.x = Math.PI / 2;
+  rib.position.y = 0.84 + i * 0.11;
+  bottleShellGroup.add(rib);
+}
+bottleRoot.add(bottleShellGroup);
+
+// Part 2: Inner Creamy-Lavender Blueberry Kefir Liquid Core (visible inside translucent bottle & neck)
+const liquidPoints = [
+  new THREE.Vector2(0.00, -1.90),
+  new THREE.Vector2(0.92, -1.90),
+  new THREE.Vector2(0.94,  0.56),
+  new THREE.Vector2(0.80,  1.00),
+  new THREE.Vector2(0.56,  1.26),
+  new THREE.Vector2(0.42,  1.42),
+  new THREE.Vector2(0.00,  1.42)
+];
+const liquidGeo = new THREE.LatheGeometry(liquidPoints, 72);
+const liquidMat = new THREE.MeshPhysicalMaterial({
+  color: 0xd9def7,
+  emissive: 0x3b4887,
+  emissiveIntensity: 0.08,
+  roughness: 0.18,
+  metalness: 0.0,
+  clearcoat: 0.7
+});
+const liquidCoreGroup = new THREE.Group();
+const liquidCoreMesh = new THREE.Mesh(liquidGeo, liquidMat);
+liquidCoreGroup.add(liquidCoreMesh);
+bottleRoot.add(liquidCoreGroup);
+
+// Part 3: Full-Wrap Sleeve Label (Radius slightly outside bottle wall: 1.015)
+const labelTexture = createBottleLabelTexture();
+const labelGeo = new THREE.CylinderGeometry(1.016, 1.016, 2.30, 96, 1, true);
+// Rotate cylinder UVs so texture center (u=0.5) faces +Z front camera
+labelGeo.rotateY(-Math.PI / 2);
+
+const labelMat = new THREE.MeshPhysicalMaterial({
+  map: labelTexture,
+  roughness: 0.26,
+  metalness: 0.0,
+  clearcoat: 0.55,
+  clearcoatRoughness: 0.18,
+  side: THREE.DoubleSide
+});
+const labelSleeveGroup = new THREE.Group();
+const labelSleeveMesh = new THREE.Mesh(labelGeo, labelMat);
+labelSleeveMesh.position.y = -0.60;
+labelSleeveMesh.castShadow = true;
+labelSleeveMesh.receiveShadow = true;
+labelSleeveGroup.add(labelSleeveMesh);
+bottleRoot.add(labelSleeveGroup);
+
+// Part 4: Neck Collar Ring & Ribbed Screw Cap (Blueberry Indigo)
+const capGroup = new THREE.Group();
+const capMat = new THREE.MeshPhysicalMaterial({
+  color: 0x384794,
+  roughness: 0.28,
+  metalness: 0.04,
+  clearcoat: 0.45,
+  clearcoatRoughness: 0.22
+});
+
+// Tamper-evident security ring
+const securityRing = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.505, 0.515, 0.09, 64),
+  capMat
+);
+securityRing.position.y = 1.66;
+securityRing.castShadow = true;
+capGroup.add(securityRing);
+
+// Main cap body
+const capMain = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.495, 0.505, 0.27, 64),
+  capMat
+);
+capMain.position.y = 1.85;
+capMain.castShadow = true;
+capGroup.add(capMain);
+
+// Cap top bevel dome
+const capTop = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.46, 0.495, 0.04, 64),
+  capMat
+);
+capTop.position.y = 2.00;
+capTop.castShadow = true;
+capGroup.add(capTop);
+
+// Fine vertical grip ridges around cap
+const ridgeCount = 44;
+const ridgeGeo = new THREE.BoxGeometry(0.014, 0.23, 0.022);
+for (let i = 0; i < ridgeCount; i++) {
+  const ang = (i / ridgeCount) * Math.PI * 2;
+  const ridge = new THREE.Mesh(ridgeGeo, capMat);
+  ridge.position.set(Math.cos(ang) * 0.502, 1.85, Math.sin(ang) * 0.502);
+  ridge.rotation.y = -ang;
+  capGroup.add(ridge);
+}
+bottleRoot.add(capGroup);
+
+// ============================================================================
+// ORGANIC 3D BLUEBERRIES & CREAMY MILK RIBBONS / DROPLETS
+// ============================================================================
+function createBlueberryMesh(seed = 1) {
+  const rng = mulberry32(seed);
+  const group = new THREE.Group();
+
+  // Slightly oblate berry sphere with subtle organic vertex perturbation
+  const geo = new THREE.SphereGeometry(0.24, 36, 28);
+  const pos = geo.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    let x = pos.getX(i);
+    let y = pos.getY(i) * 0.88;
+    let z = pos.getZ(i);
+    const n = 1 + 0.035 * Math.sin(x * 14 + seed) * Math.cos(z * 14 - seed);
+    pos.setXYZ(i, x * n, y * n, z * n);
+  }
+  geo.computeVertexNormals();
+
+  const berryMat = new THREE.MeshPhysicalMaterial({
+    color: 0x35438a,
+    roughness: 0.34,
+    metalness: 0.02,
+    clearcoat: 0.42,
+    clearcoatRoughness: 0.26,
+    sheen: 0.75,
+    sheenRoughness: 0.55,
+    sheenColor: new THREE.Color(0x9aa8eb)
+  });
+
+  const berry = new THREE.Mesh(geo, berryMat);
+  berry.castShadow = true;
+  berry.receiveShadow = true;
+  group.add(berry);
+
+  // Calyx crown (5-pointed star sepals at top)
+  const crownMat = new THREE.MeshStandardMaterial({
+    color: 0x20295c,
+    roughness: 0.65
+  });
+  for (let k = 0; k < 5; k++) {
+    const ang = (k / 5) * Math.PI * 2 + rng() * 0.2;
+    const sepal = new THREE.Mesh(new THREE.ConeGeometry(0.036, 0.075, 6), crownMat);
+    sepal.position.set(Math.cos(ang) * 0.055, 0.205, Math.sin(ang) * 0.055);
+    sepal.rotation.z = -Math.cos(ang) * 0.55;
+    sepal.rotation.x = Math.sin(ang) * 0.55;
+    group.add(sepal);
+  }
+
+  return group;
+}
+
+// Orbiting & plinth blueberries
+const blueberryConfigs = [
+  // Plinth resting hero berries
+  { base: new THREE.Vector3(-1.32, -1.68,  0.88), scale: 1.08, rot: [0.3, 0.5, 0.2], orbit: false, phase: 0.1 },
+  { base: new THREE.Vector3(-1.02, -1.72,  1.15), scale: 0.86, rot: [-0.4, 1.1, 0.3], orbit: false, phase: 1.2 },
+  { base: new THREE.Vector3( 1.28, -1.70,  0.92), scale: 0.98, rot: [0.2, -0.7, -0.3], orbit: false, phase: 2.4 },
+  // Levitating orbital berries
+  { base: new THREE.Vector3(-1.62,  0.85,  0.65), scale: 0.92, rot: [0.6, 0.3, 0.4], orbit: true,  phase: 0.5 },
+  { base: new THREE.Vector3( 1.68,  0.32,  0.72), scale: 1.02, rot: [-0.5, 0.8, -0.2], orbit: true, phase: 1.8 },
+  { base: new THREE.Vector3(-1.54, -0.45, -0.58), scale: 0.82, rot: [0.4, -0.6, 0.5], orbit: true, phase: 3.1 },
+  { base: new THREE.Vector3( 1.52,  1.45, -0.45), scale: 0.78, rot: [-0.3, 1.2, 0.2], orbit: true, phase: 4.2 },
+  { base: new THREE.Vector3(-1.25,  1.88,  0.38), scale: 0.74, rot: [0.5, 0.4, -0.4], orbit: true, phase: 5.0 }
+];
+
+const blueberries = blueberryConfigs.map((cfg, idx) => {
+  const m = createBlueberryMesh(100 + idx * 17);
+  m.position.copy(cfg.base);
+  m.scale.setScalar(cfg.scale);
+  scene.add(m);
+  return { mesh: m, cfg };
+});
+
+// Creamy Cultured Milk Swirl Ribbons & Floating Pearls
+const milkMaterial = new THREE.MeshPhysicalMaterial({
+  color: 0xffffff,
+  roughness: 0.14,
+  metalness: 0.0,
+  clearcoat: 0.9,
+  clearcoatRoughness: 0.08,
+  sheen: 0.3,
+  sheenColor: new THREE.Color(0xe6ebff)
+});
+
+function createMilkRibbon(radiusX, radiusZ, yStart, yEnd, turns, tubeRadius) {
+  const pts = [];
+  const steps = 90;
+  for (let i = 0; i <= steps; i++) {
+    const u = i / steps;
+    const ang = u * Math.PI * 2 * turns;
+    const taper = Math.sin(u * Math.PI);
+    const rx = radiusX * (0.85 + 0.25 * taper);
+    const rz = radiusZ * (0.85 + 0.25 * taper);
+    const y = lerp(yStart, yEnd, u) + Math.sin(u * Math.PI * 3) * 0.14;
+    pts.push(new THREE.Vector3(Math.cos(ang) * rx, y, Math.sin(ang) * rz));
+  }
+  const curve = new THREE.CatmullRomCurve3(pts);
+  const geo = new THREE.TubeGeometry(curve, 120, tubeRadius, 16, false);
+  // Taper ribbon ends smoothly
+  const pos = geo.attributes.position;
+  const center = new THREE.Vector3();
+  const v = new THREE.Vector3();
+  const radialSegments = 16;
+  const tubularSegments = 120;
+  for (let i = 0; i <= tubularSegments; i++) {
+    const u = i / tubularSegments;
+    curve.getPointAt(u, center);
+    const env = Math.pow(Math.sin(u * Math.PI), 0.55);
+    for (let j = 0; j <= radialSegments; j++) {
+      const idx = i * (radialSegments + 1) + j;
+      v.fromBufferAttribute(pos, idx);
+      v.sub(center).multiplyScalar(env).add(center);
+      pos.setXYZ(idx, v.x, v.y, v.z);
+    }
+  }
+  geo.computeVertexNormals();
+  const mesh = new THREE.Mesh(geo, milkMaterial);
+  mesh.castShadow = true;
+  return mesh;
+}
+
+const milkSwirlGroup = new THREE.Group();
+const ribbon1 = createMilkRibbon(1.48, 1.48, -1.35, 1.25, 1.35, 0.055);
+const ribbon2 = createMilkRibbon(1.62, 1.62, -0.85, 1.65, 1.15, 0.038);
+ribbon2.rotation.y = Math.PI * 0.85;
+milkSwirlGroup.add(ribbon1, ribbon2);
+scene.add(milkSwirlGroup);
+
+// Floating creamy milk droplets
+const dropletRng = mulberry32(777);
+const droplets = [];
+const dropletGeo = new THREE.SphereGeometry(0.065, 24, 24);
+for (let i = 0; i < 22; i++) {
+  const ang = (i / 22) * Math.PI * 2 + dropletRng() * 0.3;
+  const dist = 1.35 + dropletRng() * 0.85;
+  const y = -1.3 + dropletRng() * 3.4;
+  const sc = 0.45 + dropletRng() * 0.95;
+  const m = new THREE.Mesh(dropletGeo, milkMaterial);
+  m.castShadow = true;
+  scene.add(m);
+  droplets.push({
+    mesh: m,
+    ang,
+    dist,
+    y,
+    sc,
+    speed: 0.35 + dropletRng() * 0.4,
+    phase: dropletRng() * Math.PI * 2
+  });
+}
+
+// ============================================================================
+// 3D -> 2D SCREEN PROJECTION FOR CALLOUT LABELS
+// ============================================================================
+const anchorKefir = new THREE.Object3D();
+anchorKefir.position.set(0.62, 0.82, 0.85);
+bottleRoot.add(anchorKefir);
+
+const anchorBlueberry = new THREE.Object3D();
+anchorBlueberry.position.set(-0.68, 0.18, 0.82);
+bottleRoot.add(anchorBlueberry);
+
+const anchorMilkfat = new THREE.Object3D();
+anchorMilkfat.position.set(0.68, -0.78, 0.82);
+bottleRoot.add(anchorMilkfat);
+
+const anchorVolume = new THREE.Object3D();
+anchorVolume.position.set(-0.62, -1.25, 0.85);
+bottleRoot.add(anchorVolume);
+
+const domTopBar = document.getElementById('top-bar');
+const domHeroLockup = document.getElementById('hero-lockup');
+const domLblKefir = document.getElementById('lbl-kefir');
+const domLblBlueberry = document.getElementById('lbl-blueberry');
+const domLblMilkfat = document.getElementById('lbl-milkfat');
+const domLblVolume = document.getElementById('lbl-volume');
+
+const projVec = new THREE.Vector3();
+function updateProjectedLabel(el, obj3D, visibility, slideOffset) {
+  if (visibility <= 0.001) {
+    el.style.opacity = '0';
+    return;
+  }
+  obj3D.getWorldPosition(projVec);
+  projVec.project(camera);
+
+  const sx = (projVec.x * 0.5 + 0.5) * WIDTH;
+  const sy = (-projVec.y * 0.5 + 0.5) * HEIGHT;
+
+  const isLeft = el.classList.contains('left');
+  const dx = (isLeft ? -1 : 1) * (1 - visibility) * slideOffset;
+
+  el.style.opacity = visibility.toFixed(3);
+  el.style.transform = `translate3d(${(sx + dx).toFixed(1)}px, ${sy.toFixed(1)}px, 0)`;
+}
+
+// ============================================================================
+// DETERMINISTIC TIMELINE CHOREOGRAPHY (0s -> 20s)
+// ============================================================================
+// 0.0s - 2.2s : Studio Plinth & Creamy Atmosphere Reveal
+// 1.4s - 4.2s : Step 1 — Translucent Bottle Shell rises & settles onto plinth
+// 3.2s - 5.8s : Step 2 — Cultured Blueberry Kefir Liquid Core fills inside
+// 4.8s - 7.6s : Step 3 — Full-Wrap Blueberry Kefir Sleeve Label glides & wraps into place
+// 6.6s - 8.8s : Step 4 — Indigo Ribbed Cap descends and twists locked onto neck
+// 7.5s - 11.5s: Step 5 — Milk Swirl Ribbons & Ripe Blueberries bloom into orbit
+// 8.5s - 16.5s: Guided Product Callout Labels ("Kefir", "Blueberry", "1% Milkfat", "946 ml")
+// 15.5s - 20.0s: Cinematic Finale Hero Framing & Lockup
+window.renderAt = function(t) {
+  const time = Math.max(0, Math.min(window.DURATION, t));
+
+  // 1. Plinth entrance
+  const pPlinth = smootherstep(0.0, 2.0, time);
+  studioGroup.position.y = lerp(-1.4, 0, easeOutCubic(pPlinth));
+
+  // 2. Step-by-step Bottle Assembly
+  // Step A: Bottle Shell
+  const pShell = smootherstep(1.2, 3.6, time);
+  const shellEase = easeOutBack(pShell);
+  bottleShellGroup.visible = pShell > 0.001;
+  bottleShellGroup.position.y = lerp(3.8, 0, shellEase);
+  bottleShellGroup.scale.setScalar(lerp(0.84, 1.0, easeOutCubic(pShell)));
+
+  // Step B: Cultured Liquid Core
+  const pLiquid = smootherstep(2.9, 5.2, time);
+  liquidCoreGroup.visible = pLiquid > 0.001;
+  const liqScaleY = easeOutCubic(pLiquid);
+  liquidCoreGroup.scale.set(
+    lerp(0.75, 1.0, liqScaleY),
+    Math.max(0.001, liqScaleY),
+    lerp(0.75, 1.0, liqScaleY)
+  );
+  liquidCoreGroup.position.y = lerp(-1.9 * (1 - liqScaleY), 0, liqScaleY);
+
+  // Step C: Wrap Label Sleeve (descends with subtle rotational alignment)
+  const pLabel = smootherstep(4.6, 7.0, time);
+  const labelEase = easeOutCubic(pLabel);
+  labelSleeveGroup.visible = pLabel > 0.001;
+  labelSleeveGroup.position.y = lerp(3.4, 0, labelEase);
+  labelSleeveGroup.rotation.y = lerp(-Math.PI * 0.85, 0, labelEase);
+  const labelRadScale = lerp(1.06, 1.0, smootherstep(6.0, 7.2, time));
+  labelSleeveGroup.scale.set(labelRadScale, 1, labelRadScale);
+
+  // Step D: Ribbed Cap drops & screws down onto threads
+  const pCapDrop = smootherstep(6.4, 8.0, time);
+  const pCapTwist = smootherstep(7.6, 8.7, time);
+  capGroup.visible = pCapDrop > 0.001;
+  capGroup.position.y = lerp(2.8, 0.14, easeOutCubic(pCapDrop)) - 0.14 * pCapTwist;
+  capGroup.rotation.y = lerp(Math.PI * 1.5, 0, pCapTwist);
+
+  // Subtle hero bottle floating & showcase rotation
+  const showcaseSpin =
+    smootherstep(7.2, 13.5, time) * (Math.PI * 0.32) -
+    smootherstep(13.5, 18.0, time) * (Math.PI * 0.32);
+  const gentleFloat = Math.sin(time * 1.15) * 0.045 * smootherstep(7.5, 9.5, time);
+  bottleRoot.position.y = 0.18 + gentleFloat;
+  bottleRoot.rotation.y = showcaseSpin;
+  bottleRoot.rotation.z = Math.sin(time * 0.8) * 0.018 * smootherstep(8.0, 10.0, time);
+
+  // 3. Milk Swirl Ribbons & Floating Droplets
+  const pSwirl = smootherstep(7.2, 9.8, time);
+  milkSwirlGroup.visible = pSwirl > 0.001;
+  milkSwirlGroup.scale.setScalar(easeOutCubic(pSwirl));
+  milkSwirlGroup.rotation.y = time * 0.28;
+  milkSwirlGroup.position.y = Math.sin(time * 1.1) * 0.06;
+
+  const pDroplets = smootherstep(7.6, 10.2, time);
+  droplets.forEach((d, idx) => {
+    const localP = clamp01(pDroplets * 1.25 - (idx % 5) * 0.05);
+    const sc = d.sc * easeOutBack(localP);
+    d.mesh.visible = sc > 0.005;
+    d.mesh.scale.setScalar(Math.max(0.001, sc));
+    const curAng = d.ang + time * d.speed;
+    const bob = Math.sin(time * 1.6 + d.phase) * 0.14;
+    d.mesh.position.set(
+      Math.cos(curAng) * d.dist,
+      d.y + bob,
+      Math.sin(curAng) * d.dist
+    );
+  });
+
+  // 4. Ripe Blueberries Choreography
+  const pBerries = smootherstep(7.0, 9.6, time);
+  blueberries.forEach((b, idx) => {
+    const stagger = idx * 0.14;
+    const bp = smootherstep(7.0 + stagger, 9.2 + stagger, time);
+    const sc = b.cfg.scale * easeOutBack(bp);
+    b.mesh.visible = sc > 0.005;
+    b.mesh.scale.setScalar(Math.max(0.001, sc));
+
+    if (b.cfg.orbit) {
+      const orbitAng = time * 0.34 + b.cfg.phase;
+      const rad = Math.hypot(b.cfg.base.x, b.cfg.base.z);
+      const baseAng = Math.atan2(b.cfg.base.z, b.cfg.base.x);
+      const a = baseAng + orbitAng * 0.45;
+      b.mesh.position.set(
+        Math.cos(a) * rad,
+        b.cfg.base.y + Math.sin(time * 1.4 + b.cfg.phase) * 0.15,
+        Math.sin(a) * rad
+      );
+      b.mesh.rotation.set(
+        b.cfg.rot[0] + time * 0.45,
+        b.cfg.rot[1] + time * 0.6,
+        b.cfg.rot[2] + time * 0.3
+      );
+    } else {
+      b.mesh.position.copy(b.cfg.base);
+      b.mesh.position.y = lerp(-2.6, b.cfg.base.y, easeOutBack(bp));
+      b.mesh.rotation.set(b.cfg.rot[0], b.cfg.rot[1] + time * 0.12, b.cfg.rot[2]);
+    }
+  });
+
+  // 5. Cinematic Slow Camera Movement
+  // Starts elevated & wider, glides smoothly closer during assembly & callouts, then settles in a clean hero portrait framing
+  const camIntro = smootherstep(0.0, 8.5, time);
+  const camMid = smootherstep(8.5, 15.5, time);
+  const camOut = smootherstep(15.5, 20.0, time);
+
+  const camX =
+    Math.sin(time * 0.28) * 0.55 * (1 - camOut * 0.65);
+  const camY =
+    lerp(2.35, 0.62, camIntro) +
+    lerp(0.0, -0.22, camMid) +
+    lerp(0.0, 0.24, camOut);
+  const camZ =
+    lerp(12.2, 9.6, camIntro) +
+    lerp(0.0, -0.45, camMid) +
+    lerp(0.0, 0.95, camOut);
+
+  camera.position.set(camX, camY, camZ);
+  const lookY = lerp(0.25, 0.08, camIntro) + lerp(0, -0.14, camOut);
+  camera.lookAt(0, lookY, 0);
+
+  // Update world matrices before projecting 3D callout anchors
+  scene.updateMatrixWorld(true);
+
+  // 6. Editorial Overlays & Projected Product Detail Callouts
+  const topBarVis = smootherstep(1.2, 2.5, time);
+  domTopBar.style.opacity = topBarVis.toFixed(3);
+  domTopBar.style.transform = `translateY(${((1 - topBarVis) * -14).toFixed(1)}px)`;
+
+  const visKefir =
+    smootherstep(8.4, 9.3, time) * (1 - smootherstep(15.2, 16.0, time));
+  const visBlueberry =
+    smootherstep(9.2, 10.1, time) * (1 - smootherstep(15.4, 16.2, time));
+  const visMilkfat =
+    smootherstep(10.0, 10.9, time) * (1 - smootherstep(15.6, 16.4, time));
+  const visVolume =
+    smootherstep(10.8, 11.7, time) * (1 - smootherstep(15.8, 16.6, time));
+
+  updateProjectedLabel(domLblKefir, anchorKefir, visKefir, 28);
+  updateProjectedLabel(domLblBlueberry, anchorBlueberry, visBlueberry, 28);
+  updateProjectedLabel(domLblMilkfat, anchorMilkfat, visMilkfat, 28);
+  updateProjectedLabel(domLblVolume, anchorVolume, visVolume, 28);
+
+  const heroVis = smootherstep(16.0, 17.4, time);
+  domHeroLockup.style.opacity = heroVis.toFixed(3);
+  domHeroLockup.style.transform = `translateY(${((1 - heroVis) * 26).toFixed(1)}px)`;
+
+  // Render exact frame
+  renderer.render(scene, camera);
+};
+
+// Render initial frame at t = 0
+window.renderAt(0);
+</script>
+</body>
+</html>

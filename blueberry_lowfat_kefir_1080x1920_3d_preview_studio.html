@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blueberry Kefir (1080×1920) — 3D Preview Studio</title>
+<style>
+  :root {
+    --studio-bg: #121626;
+    --studio-panel: #191f36;
+    --studio-panel-2: #222947;
+    --studio-border: rgba(148, 165, 232, 0.18);
+    --studio-accent: #7889e8;
+    --studio-accent-bright: #9aa8ff;
+    --studio-text: #eef1fc;
+    --studio-muted: #9aa4cc;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: var(--studio-bg);
+    color: var(--studio-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden;
+  }
+
+  /* Studio Workbench Layout */
+  #studio-app {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    width: 100vw;
+    height: 100vh;
+    background:
+      radial-gradient(circle at 50% 15%, rgba(120, 137, 232, 0.14), transparent 55%),
+      var(--studio-bg);
+  }
+
+  #studio-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 20px;
+    background: rgba(25, 31, 54, 0.92);
+    border-bottom: 1px solid var(--studio-border);
+    backdrop-filter: blur(12px);
+    z-index: 20;
+  }
+
+  .brand-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .brand-badge {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: rgba(120, 137, 232, 0.2);
+    color: var(--studio-accent-bright);
+    border: 1px solid rgba(154, 168, 255, 0.3);
+  }
+
+  .meta-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--studio-muted);
+  }
+
+  .meta-chip {
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: var(--studio-panel-2);
+    border: 1px solid var(--studio-border);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Responsive Viewport Area */
+  #viewport-host {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    overflow: hidden;
+  }
+
+  /* Exact 1080x1920 Portrait Stage, scaled proportionally via JS */
+  #stage-scaler {
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+    transform-origin: center center;
+    box-shadow:
+      0 28px 80px rgba(0, 0, 0, 0.65),
+      0 0 0 1px rgba(255, 255, 255, 0.12);
+    border-radius: 28px;
+    overflow: hidden;
+    background: #eef1f9;
+    flex-shrink: 0;
+  }
+
+  #stage {
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 38%, #ffffff 0%, #f1f4fc 48%, #dce2f4 100%);
+  }
+
+  canvas#gl {
+    position: absolute;
+    inset: 0;
+    width: 1080px;
+    height: 1920px;
+    display: block;
+  }
+
+  /* Subtle studio vignette & soft editorial frame */
+  #vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 50% 45%, rgba(255,255,255,0) 56%, rgba(169, 179, 214, 0.28) 100%),
+      linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0) 14%, rgba(255,255,255,0) 86%, rgba(196,204,232,0.35) 100%);
+  }
+
+  /* Top subtle editorial header inside 1080x1920 stage */
+  #top-bar {
+    position: absolute;
+    top: 72px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  .pill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 30px rgba(68, 79, 128, 0.08);
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #36416b;
+  }
+  .pill-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #5566b8;
+    box-shadow: 0 0 12px rgba(85, 102, 184, 0.7);
+  }
+
+  /* 3D-Projected Callout Labels */
+  #labels-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .callout {
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: transform, opacity;
+    opacity: 0;
+  }
+  .callout-anchor {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin-left: -8px;
+    margin-top: -8px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 4px solid #4959a8;
+    box-shadow: 0 0 0 6px rgba(73, 89, 168, 0.18), 0 6px 16px rgba(34, 44, 88, 0.22);
+  }
+  .callout-stem {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, #4959a8, rgba(73, 89, 168, 0.35));
+    top: -1px;
+    transform-origin: left center;
+  }
+  .callout.left .callout-stem {
+    right: 8px;
+    transform-origin: right center;
+    background: linear-gradient(270deg, #4959a8, rgba(73, 89, 168, 0.35));
+  }
+  .callout.right .callout-stem {
+    left: 8px;
+  }
+  .callout-card {
+    position: absolute;
+    top: -46px;
+    min-width: 245px;
+    padding: 18px 26px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.84);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1.5px solid rgba(255, 255, 255, 0.95);
+    box-shadow:
+      0 18px 40px rgba(45, 56, 104, 0.12),
+      0 2px 6px rgba(45, 56, 104, 0.05);
+  }
+  .callout.right .callout-card {
+    left: 82px;
+    text-align: left;
+  }
+  .callout.left .callout-card {
+    right: 82px;
+    text-align: right;
+  }
+  .callout-kicker {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6b79b5;
+    margin-bottom: 4px;
+  }
+  .callout-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #232b4d;
+    line-height: 1.1;
+  }
+  .callout-sub {
+    font-size: 20px;
+    font-weight: 500;
+    color: #5b668f;
+    margin-top: 4px;
+  }
+
+  /* Hero Finale Title Lockup */
+  #hero-lockup {
+    position: absolute;
+    left: 80px;
+    right: 80px;
+    bottom: 118px;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    padding: 10px 26px;
+    border-radius: 999px;
+    background: rgba(73, 89, 168, 0.11);
+    color: #42529e;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .hero-title {
+    font-size: 74px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #1f2747;
+    line-height: 1.02;
+  }
+  .hero-specs {
+    margin-top: 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 22px;
+    padding: 16px 34px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid rgba(255, 255, 255, 0.96);
+    box-shadow: 0 16px 38px rgba(42, 53, 98, 0.1);
+    font-size: 24px;
+    font-weight: 700;
+    color: #313c6b;
+  }
+  .spec-sep {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #8a97cf;
+  }
+
+  /* Bottom Playback & Scrubber Dock */
+  #playback-dock {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 20px 14px;
+    background: rgba(25, 31, 54, 0.95);
+    border-top: 1px solid var(--studio-border);
+    backdrop-filter: blur(14px);
+    z-index: 20;
+  }
+
+  .transport-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .transport-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-studio {
+    appearance: none;
+    border: 1px solid var(--studio-border);
+    background: var(--studio-panel-2);
+    color: var(--studio-text);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+
+  .btn-studio:hover {
+    background: #2c355c;
+    border-color: rgba(154, 168, 255, 0.45);
+  }
+
+  .btn-studio:active {
+    transform: scale(0.98);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #6879dc, #5263c7);
+    border-color: rgba(173, 185, 255, 0.45);
+    color: #ffffff;
+    min-width: 96px;
+    justify-content: center;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #7788eb, #5f70d6);
+  }
+
+  .time-readout {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--studio-text);
+    background: rgba(12, 16, 30, 0.55);
+    padding: 7px 12px;
+    border-radius: 9px;
+    border: 1px solid var(--studio-border);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .scrubber-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 28px;
+  }
+
+  input[type="range"]#scrubber {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(154, 168, 255, 0.22);
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type="range"]#scrubber::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid var(--studio-accent);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+    transition: transform 0.12s ease;
+  }
+
+  input[type="range"]#scrubber::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+  }
+
+  input[type="range"]#scrubber::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid var(--studio-accent);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+  }
+
+  /* Chapter Markers Row */
+  .chapters-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .chapter-btn {
+    appearance: none;
+    border: 1px solid var(--studio-border);
+    background: rgba(34, 41, 71, 0.72);
+    color: var(--studio-muted);
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.14s ease;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .chapter-btn:hover {
+    color: var(--studio-text);
+    background: var(--studio-panel-2);
+    border-color: rgba(154, 168, 255, 0.4);
+  }
+
+  .chapter-btn.active {
+    background: rgba(120, 137, 232, 0.26);
+    color: #ffffff;
+    border-color: var(--studio-accent-bright);
+  }
+
+  #status-note {
+    font-size: 12px;
+    color: var(--studio-muted);
+  }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js"
+  }
+}
+</script>
+</head>
+<body>
+<div id="studio-app">
+  <!-- Top Workbench Header -->
+  <header id="studio-header">
+    <div class="brand-title">
+      <span>Blueberry Lowfat Kefir · 3D Preview Studio</span>
+      <span class="brand-badge">1080 × 1920 Portrait</span>
+    </div>
+    <div class="meta-strip">
+      <span class="meta-chip">Three.js 0.160.0</span>
+      <span class="meta-chip">Deterministic renderAt(t)</span>
+      <span class="meta-chip" id="scale-readout">Scale: 100%</span>
+    </div>
+  </header>
+
+  <!-- Responsive Viewport Host -->
+  <main id="viewport-host">
+    <div id="stage-scaler">
+      <div id="stage">
+        <canvas id="gl" width="1080" height="1920"></canvas>
+        <div id="vignette"></div>
+
+        <div id="top-bar">
+          <div class="pill-tag"><span class="pill-dot"></span>CULTURED LOWFAT MILK</div>
+          <div class="pill-tag">946 ML · 1% MILKFAT</div>
+        </div>
+
+        <div id="labels-layer">
+          <div id="lbl-kefir" class="callout right">
+            <div class="callout-anchor"></div>
+            <div class="callout-stem" style="width: 74px;"></div>
+            <div class="callout-card">
+              <div class="callout-kicker">Cultured Drink</div>
+              <div class="callout-title">Kefir</div>
+              <div class="callout-sub">Smooth &amp; creamy texture</div>
+            </div>
+          </div>
+
+          <div id="lbl-blueberry" class="callout left">
+            <div class="callout-anchor"></div>
+            <div class="callout-stem" style="width: 74px;"></div>
+            <div class="callout-card">
+              <div class="callout-kicker">Flavor Profile</div>
+              <div class="callout-title">Blueberry</div>
+              <div class="callout-sub">Sweet berry notes</div>
+            </div>
+          </div>
+
+          <div id="lbl-milkfat" class="callout right">
+            <div class="callout-anchor"></div>
+            <div class="callout-stem" style="width: 74px;"></div>
+            <div class="callout-card">
+              <div class="callout-kicker">Cultured Lowfat Milk</div>
+              <div class="callout-title">1% Milkfat</div>
+              <div class="callout-sub">Light, refreshing body</div>
+            </div>
+          </div>
+
+          <div id="lbl-volume" class="callout left">
+            <div class="callout-anchor"></div>
+            <div class="callout-stem" style="width: 74px;"></div>
+            <div class="callout-card">
+              <div class="callout-kicker">Bottle Size</div>
+              <div class="callout-title">946 ml</div>
+              <div class="callout-sub">32 fl oz · Resealable cap</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="hero-lockup">
+          <div class="hero-eyebrow">Cultured Lowfat Milk</div>
+          <div class="hero-title">Blueberry Kefir</div>
+          <div class="hero-specs">
+            <span>1% Milkfat</span>
+            <span class="spec-sep"></span>
+            <span>Blueberry</span>
+            <span class="spec-sep"></span>
+            <span>946 ml</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Playback, Scrubber, Chapter Markers & Snapshot Controls -->
+  <footer id="playback-dock">
+    <div class="transport-row">
+      <div class="transport-left">
+        <button id="play-toggle-btn" class="btn-studio btn-primary" type="button">
+          <span id="play-icon">▶</span>
+          <span id="play-label">Play</span>
+        </button>
+        <button id="restart-btn" class="btn-studio" type="button" title="Reset to 0.00s">
+          ↺ Reset
+        </button>
+        <div class="time-readout">
+          <span id="time-current">0.00s</span> / <span id="time-total">20.00s</span>
+        </div>
+      </div>
+
+      <div class="transport-left">
+        <span id="status-note">Paused · Scrub or press Play</span>
+        <button id="snapshot-btn" class="btn-studio" type="button">
+          ⬇ Export PNG Frame
+        </button>
+      </div>
+    </div>
+
+    <div class="scrubber-wrap">
+      <input
+        id="scrubber"
+        type="range"
+        min="0"
+        max="20"
+        step="0.01"
+        value="0"
+        aria-label="Timeline scrubber from 0.00s to 20.00s"
+      />
+    </div>
+
+    <div class="chapters-row" id="chapters-row">
+      <button class="chapter-btn active" data-t="0.80" type="button">0.8s · Plinth</button>
+      <button class="chapter-btn" data-t="2.60" type="button">2.6s · Shell</button>
+      <button class="chapter-btn" data-t="4.40" type="button">4.4s · Liquid</button>
+      <button class="chapter-btn" data-t="6.20" type="button">6.2s · Label</button>
+      <button class="chapter-btn" data-t="8.10" type="button">8.1s · Cap</button>
+      <button class="chapter-btn" data-t="9.60" type="button">9.6s · Berries &amp; Swirls</button>
+      <button class="chapter-btn" data-t="11.80" type="button">11.8s · Callouts</button>
+      <button class="chapter-btn" data-t="17.80" type="button">17.8s · Finale</button>
+    </div>
+  </footer>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+
+const WIDTH = 1080;
+const HEIGHT = 1920;
+window.DURATION = 20;
+
+// Deterministic PRNG (Mulberry32) so every frame t is 100% reproducible
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return function() {
+    a |= 0;
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// Smooth math helpers
+const clamp01 = (v) => Math.max(0, Math.min(1, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const smoothstep = (e0, e1, x) => {
+  const t = clamp01((x - e0) / (e1 - e0));
+  return t * t * (3 - 2 * t);
+};
+const smootherstep = (e0, e1, x) => {
+  const t = clamp01((x - e0) / (e1 - e0));
+  return t * t * t * (t * (t * 6 - 15) + 10);
+};
+function easeOutBack(x) {
+  const c1 = 1.45;
+  const c3 = c1 + 1;
+  const t = clamp01(x);
+  return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+}
+function easeOutCubic(x) {
+  const t = clamp01(x);
+  return 1 - Math.pow(1 - t, 3);
+}
+
+// Renderer setup (exact 1080x1920 portrait canvas)
+const canvas = document.getElementById('gl');
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  alpha: true,
+  powerPreference: 'high-performance',
+  preserveDrawingBuffer: true
+});
+renderer.setSize(WIDTH, HEIGHT, false);
+renderer.setPixelRatio(1);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.08;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0xe6ebf8, 0.024);
+
+const camera = new THREE.PerspectiveCamera(34, WIDTH / HEIGHT, 0.1, 100);
+camera.position.set(0, 2.2, 11.5);
+
+// Procedural Studio Environment Map (PMREM) for crisp glossy bottle & blueberry speculars
+function createStudioEnvMap() {
+  const envCanvas = document.createElement('canvas');
+  envCanvas.width = 512;
+  envCanvas.height = 256;
+  const ctx = envCanvas.getContext('2d');
+
+  const grad = ctx.createLinearGradient(0, 0, 0, 256);
+  grad.addColorStop(0.0, '#ffffff');
+  grad.addColorStop(0.35, '#eef2fc');
+  grad.addColorStop(0.68, '#d4dcf2');
+  grad.addColorStop(1.0, '#bac5e6');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 512, 256);
+
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+  ctx.beginPath();
+  ctx.roundRect(45, 24, 90, 175, 24);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.roundRect(355, 28, 105, 170, 26);
+  ctx.fill();
+
+  ctx.fillStyle = 'rgba(124, 142, 214, 0.35)';
+  ctx.beginPath();
+  ctx.roundRect(205, 45, 95, 150, 20);
+  ctx.fill();
+
+  const tex = new THREE.CanvasTexture(envCanvas);
+  tex.mapping = THREE.EquirectangularReflectionMapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const envRT = pmrem.fromEquirectangular(tex);
+  tex.dispose();
+  pmrem.dispose();
+  return envRT.texture;
+}
+scene.environment = createStudioEnvMap();
+
+// Studio Lighting
+const hemiLight = new THREE.HemisphereLight(0xffffff, 0xc7d0eb, 1.35);
+hemiLight.position.set(0, 12, 0);
+scene.add(hemiLight);
+
+const keyLight = new THREE.DirectionalLight(0xfffcf7, 1.85);
+keyLight.position.set(4.8, 8.6, 6.2);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(2048, 2048);
+keyLight.shadow.camera.near = 1;
+keyLight.shadow.camera.far = 25;
+keyLight.shadow.camera.left = -5.5;
+keyLight.shadow.camera.right = 5.5;
+keyLight.shadow.camera.top = 7.5;
+keyLight.shadow.camera.bottom = -4.5;
+keyLight.shadow.bias = -0.0004;
+keyLight.shadow.normalBias = 0.02;
+scene.add(keyLight);
+
+const rimLight = new THREE.DirectionalLight(0xc2ceff, 1.15);
+rimLight.position.set(-5.5, 5.5, -5.0);
+scene.add(rimLight);
+
+const fillLight = new THREE.DirectionalLight(0xf6f8ff, 0.7);
+fillLight.position.set(-4.5, 2.2, 5.5);
+scene.add(fillLight);
+
+// Studio Plinth & Seamless Ground
+const studioGroup = new THREE.Group();
+scene.add(studioGroup);
+
+const shadowFloor = new THREE.Mesh(
+  new THREE.PlaneGeometry(40, 40),
+  new THREE.ShadowMaterial({ opacity: 0.14, color: 0x3b4778 })
+);
+shadowFloor.rotation.x = -Math.PI / 2;
+shadowFloor.position.y = -2.35;
+shadowFloor.receiveShadow = true;
+studioGroup.add(shadowFloor);
+
+const plinthBase = new THREE.Mesh(
+  new THREE.CylinderGeometry(2.75, 2.9, 0.28, 96),
+  new THREE.MeshPhysicalMaterial({
+    color: 0xe3e8f7,
+    roughness: 0.45,
+    metalness: 0.02,
+    clearcoat: 0.25
+  })
+);
+plinthBase.position.y = -2.21;
+plinthBase.receiveShadow = true;
+plinthBase.castShadow = true;
+studioGroup.add(plinthBase);
+
+const plinthTop = new THREE.Mesh(
+  new THREE.CylinderGeometry(2.22, 2.28, 0.22, 96),
+  new THREE.MeshPhysicalMaterial({
+    color: 0xfbfcff,
+    roughness: 0.28,
+    metalness: 0.0,
+    clearcoat: 0.5,
+    clearcoatRoughness: 0.2
+  })
+);
+plinthTop.position.y = -1.96;
+plinthTop.receiveShadow = true;
+plinthTop.castShadow = true;
+studioGroup.add(plinthTop);
+
+const plinthAccentRing = new THREE.Mesh(
+  new THREE.TorusGeometry(2.225, 0.018, 24, 120),
+  new THREE.MeshStandardMaterial({
+    color: 0x7c8cc9,
+    roughness: 0.35,
+    metalness: 0.15
+  })
+);
+plinthAccentRing.rotation.x = Math.PI / 2;
+plinthAccentRing.position.y = -1.85;
+studioGroup.add(plinthAccentRing);
+
+// ============================================================================
+// HIGH-RESOLUTION BOTTLE LABEL TEXTURE (With completely blurred brand & logo)
+// ============================================================================
+function createBottleLabelTexture() {
+  const W = 2048;
+  const H = 1536;
+  const c = document.createElement('canvas');
+  c.width = W;
+  c.height = H;
+  const ctx = c.getContext('2d');
+
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0.0, '#fbfbff');
+  bg.addColorStop(0.24, '#f5f6fd');
+  bg.addColorStop(0.56, '#eef1fc');
+  bg.addColorStop(0.78, '#6a78bc');
+  bg.addColorStop(1.0, '#445299');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(0, H * 0.62);
+  for (let x = 0; x <= W; x += 32) {
+    const wave = Math.sin((x / W) * Math.PI * 4) * 34 + Math.cos((x / W) * Math.PI * 2) * 22;
+    ctx.lineTo(x, H * 0.63 + wave);
+  }
+  ctx.lineTo(W, H);
+  ctx.lineTo(0, H);
+  ctx.closePath();
+  const waveGrad = ctx.createLinearGradient(0, H * 0.58, 0, H);
+  waveGrad.addColorStop(0, '#5a69b5');
+  waveGrad.addColorStop(0.55, '#3d4b94');
+  waveGrad.addColorStop(1, '#2a3573');
+  ctx.fillStyle = waveGrad;
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(0, H * 0.67);
+  for (let x = 0; x <= W; x += 32) {
+    const wave = Math.cos((x / W) * Math.PI * 4 + 0.8) * 28;
+    ctx.lineTo(x, H * 0.68 + wave);
+  }
+  ctx.lineTo(W, H);
+  ctx.lineTo(0, H);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(138, 153, 224, 0.34)';
+  ctx.fill();
+  ctx.restore();
+
+  ctx.save();
+  ctx.strokeStyle = 'rgba(92, 108, 184, 0.14)';
+  ctx.lineWidth = 6;
+  for (let s = 0; s < 2; s++) {
+    const baseX = s === 0 ? 280 : W - 280;
+    ctx.beginPath();
+    ctx.arc(baseX, H * 0.42, 170, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(baseX, H * 0.42, 225, 0.4, Math.PI * 1.6);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  const cx = W * 0.5;
+
+  // Brand Emblem & Wordmark heavily blurred so it is completely unreadable
+  const brandLayer = document.createElement('canvas');
+  brandLayer.width = 760;
+  brandLayer.height = 340;
+  const bctx = brandLayer.getContext('2d');
+
+  bctx.fillStyle = '#38468c';
+  bctx.beginPath();
+  bctx.roundRect(140, 28, 480, 120, 60);
+  bctx.fill();
+
+  bctx.fillStyle = '#ffffff';
+  bctx.font = '900 74px Georgia, serif';
+  bctx.textAlign = 'center';
+  bctx.fillText('BRANDMARK', 380, 112);
+
+  bctx.fillStyle = '#4857a3';
+  bctx.font = '800 54px sans-serif';
+  bctx.fillText('EST. DAIRY CO.', 380, 215);
+
+  const tiny = document.createElement('canvas');
+  tiny.width = 20;
+  tiny.height = 9;
+  const tctx = tiny.getContext('2d');
+  tctx.drawImage(brandLayer, 0, 0, tiny.width, tiny.height);
+
+  ctx.save();
+  ctx.filter = 'blur(30px)';
+  ctx.globalAlpha = 0.68;
+  ctx.drawImage(tiny, cx - 350, 95, 700, 310);
+  ctx.filter = 'blur(22px)';
+  ctx.drawImage(tiny, cx - 340, 105, 680, 290);
+  ctx.restore();
+
+  ctx.save();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.52)';
+  ctx.beginPath();
+  ctx.roundRect(cx - 255, 130, 510, 155, 78);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(116, 131, 201, 0.32)';
+  ctx.lineWidth = 4;
+  ctx.stroke();
+  ctx.restore();
+
+  // Product details: "Kefir", "cultured lowfat milk", "Blueberry"
+  ctx.save();
+  ctx.fillStyle = '#252f63';
+  ctx.font = '800 164px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Kefir', cx, 425);
+
+  ctx.fillStyle = '#5362ab';
+  ctx.font = '700 44px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.letterSpacing = '6px';
+  ctx.fillText('CULTURED LOWFAT MILK', cx, 535);
+  ctx.letterSpacing = '0px';
+
+  ctx.fillStyle = '#36448c';
+  ctx.beginPath();
+  ctx.roundRect(cx - 235, 595, 470, 96, 48);
+  ctx.fill();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '800 56px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.fillText('Blueberry', cx, 645);
+  ctx.restore();
+
+  function drawLabelBlueberry(bx, by, r, rot) {
+    ctx.save();
+    ctx.translate(bx, by);
+    ctx.rotate(rot);
+
+    ctx.fillStyle = 'rgba(22, 30, 74, 0.28)';
+    ctx.beginPath();
+    ctx.arc(6, 12, r * 1.02, 0, Math.PI * 2);
+    ctx.fill();
+
+    const bgBerry = ctx.createRadialGradient(-r * 0.32, -r * 0.35, r * 0.1, 0, 0, r);
+    bgBerry.addColorStop(0.0, '#8d9ee8');
+    bgBerry.addColorStop(0.35, '#4b5cb0');
+    bgBerry.addColorStop(0.8, '#2b3675');
+    bgBerry.addColorStop(1.0, '#1c2454');
+    ctx.fillStyle = bgBerry;
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.42)';
+    ctx.beginPath();
+    ctx.ellipse(-r * 0.34, -r * 0.34, r * 0.26, r * 0.15, -0.6, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#1b224f';
+    ctx.beginPath();
+    const spikes = 5;
+    for (let i = 0; i < spikes * 2; i++) {
+      const rad = i % 2 === 0 ? r * 0.32 : r * 0.14;
+      const ang = (i * Math.PI) / spikes;
+      const px = Math.cos(ang) * rad;
+      const py = Math.sin(ang) * rad - r * 0.58;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  ctx.save();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+  ctx.beginPath();
+  ctx.moveTo(cx - 260, 955);
+  ctx.bezierCurveTo(cx - 190, 815, cx - 50, 855, cx, 920);
+  ctx.bezierCurveTo(cx + 65, 835, cx + 205, 815, cx + 265, 965);
+  ctx.bezierCurveTo(cx + 150, 1045, cx - 150, 1045, cx - 260, 955);
+  ctx.fill();
+  ctx.restore();
+
+  drawLabelBlueberry(cx - 115, 925, 76, -0.35);
+  drawLabelBlueberry(cx + 110, 932, 72, 0.42);
+  drawLabelBlueberry(cx, 888, 92, 0.12);
+  drawLabelBlueberry(cx - 48, 995, 64, -0.2);
+  drawLabelBlueberry(cx + 58, 992, 62, 0.28);
+
+  // Bottom specs: "1% milkfat" & "946 ml"
+  ctx.save();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
+  ctx.beginPath();
+  ctx.roundRect(cx - 310, 1135, 620, 114, 57);
+  ctx.fill();
+
+  ctx.fillStyle = '#242e61';
+  ctx.font = '800 46px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('1% milkfat   •   946 ml', cx, 1194);
+
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+  ctx.font = '600 30px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.fillText('KEEP REFRIGERATED   •   32 FL OZ (1 QT)', cx, 1315);
+  ctx.restore();
+
+  function drawSidePanel(px) {
+    ctx.save();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.86)';
+    ctx.beginPath();
+    ctx.roundRect(px - 175, 310, 350, 740, 28);
+    ctx.fill();
+
+    ctx.fillStyle = '#283366';
+    ctx.font = '800 36px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('Nutrition Facts', px - 145, 370);
+
+    ctx.fillRect(px - 145, 392, 290, 8);
+    ctx.font = '600 24px sans-serif';
+    ctx.fillStyle = '#4e5b94';
+    ctx.fillText('Serving size 1 cup (240ml)', px - 145, 430);
+    ctx.fillRect(px - 145, 452, 290, 4);
+
+    const rows = [
+      ['1% Milkfat', 'Lowfat'],
+      ['Texture', 'Smooth'],
+      ['Flavor', 'Blueberry'],
+      ['Net Volume', '946 ml']
+    ];
+    rows.forEach((r, idx) => {
+      const ry = 510 + idx * 72;
+      ctx.fillStyle = '#283366';
+      ctx.font = '700 26px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(r[0], px - 145, ry);
+      ctx.textAlign = 'right';
+      ctx.fillText(r[1], px + 145, ry);
+      ctx.fillStyle = 'rgba(78, 91, 148, 0.2)';
+      ctx.fillRect(px - 145, ry + 24, 290, 2);
+    });
+    ctx.restore();
+  }
+  drawSidePanel(230);
+  drawSidePanel(W - 230);
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 8;
+  tex.needsUpdate = true;
+  return tex;
+}
+
+// ============================================================================
+// STEP-BY-STEP MODULAR 3D KEFIR BOTTLE ASSEMBLY
+// ============================================================================
+const bottleRoot = new THREE.Group();
+bottleRoot.position.set(0, 0.18, 0);
+scene.add(bottleRoot);
+
+const bottlePoints = [
+  new THREE.Vector2(0.00, -1.98),
+  new THREE.Vector2(0.84, -1.98),
+  new THREE.Vector2(0.96, -1.92),
+  new THREE.Vector2(1.01, -1.78),
+  new THREE.Vector2(1.01,  0.58),
+  new THREE.Vector2(0.99,  0.76),
+  new THREE.Vector2(0.86,  1.06),
+  new THREE.Vector2(0.62,  1.34),
+  new THREE.Vector2(0.47,  1.52),
+  new THREE.Vector2(0.47,  1.86),
+  new THREE.Vector2(0.42,  1.88)
+];
+const bottleGeo = new THREE.LatheGeometry(bottlePoints, 96);
+bottleGeo.computeVertexNormals();
+
+const bottleShellMat = new THREE.MeshPhysicalMaterial({
+  color: 0xfbfcff,
+  roughness: 0.16,
+  metalness: 0.0,
+  transmission: 0.24,
+  thickness: 0.45,
+  ior: 1.48,
+  clearcoat: 0.85,
+  clearcoatRoughness: 0.12
+});
+const bottleShellGroup = new THREE.Group();
+const bottleShellMesh = new THREE.Mesh(bottleGeo, bottleShellMat);
+bottleShellMesh.castShadow = true;
+bottleShellMesh.receiveShadow = true;
+bottleShellGroup.add(bottleShellMesh);
+
+for (let i = 0; i < 3; i++) {
+  const rib = new THREE.Mesh(
+    new THREE.TorusGeometry(0.93 - i * 0.055, 0.011, 16, 96),
+    bottleShellMat
+  );
+  rib.rotation.x = Math.PI / 2;
+  rib.position.y = 0.84 + i * 0.11;
+  bottleShellGroup.add(rib);
+}
+bottleRoot.add(bottleShellGroup);
+
+const liquidPoints = [
+  new THREE.Vector2(0.00, -1.90),
+  new THREE.Vector2(0.92, -1.90),
+  new THREE.Vector2(0.94,  0.56),
+  new THREE.Vector2(0.80,  1.00),
+  new THREE.Vector2(0.56,  1.26),
+  new THREE.Vector2(0.42,  1.42),
+  new THREE.Vector2(0.00,  1.42)
+];
+const liquidGeo = new THREE.LatheGeometry(liquidPoints, 72);
+const liquidMat = new THREE.MeshPhysicalMaterial({
+  color: 0xd9def7,
+  emissive: 0x3b4887,
+  emissiveIntensity: 0.08,
+  roughness: 0.18,
+  metalness: 0.0,
+  clearcoat: 0.7
+});
+const liquidCoreGroup = new THREE.Group();
+const liquidCoreMesh = new THREE.Mesh(liquidGeo, liquidMat);
+liquidCoreGroup.add(liquidCoreMesh);
+bottleRoot.add(liquidCoreGroup);
+
+const labelTexture = createBottleLabelTexture();
+const labelGeo = new THREE.CylinderGeometry(1.016, 1.016, 2.30, 96, 1, true);
+labelGeo.rotateY(-Math.PI / 2);
+
+const labelMat = new THREE.MeshPhysicalMaterial({
+  map: labelTexture,
+  roughness: 0.26,
+  metalness: 0.0,
+  clearcoat: 0.55,
+  clearcoatRoughness: 0.18,
+  side: THREE.DoubleSide
+});
+const labelSleeveGroup = new THREE.Group();
+const labelSleeveMesh = new THREE.Mesh(labelGeo, labelMat);
+labelSleeveMesh.position.y = -0.60;
+labelSleeveMesh.castShadow = true;
+labelSleeveMesh.receiveShadow = true;
+labelSleeveGroup.add(labelSleeveMesh);
+bottleRoot.add(labelSleeveGroup);
+
+const capGroup = new THREE.Group();
+const capMat = new THREE.MeshPhysicalMaterial({
+  color: 0x384794,
+  roughness: 0.28,
+  metalness: 0.04,
+  clearcoat: 0.45,
+  clearcoatRoughness: 0.22
+});
+
+const securityRing = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.505, 0.515, 0.09, 64),
+  capMat
+);
+securityRing.position.y = 1.66;
+securityRing.castShadow = true;
+capGroup.add(securityRing);
+
+const capMain = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.495, 0.505, 0.27, 64),
+  capMat
+);
+capMain.position.y = 1.85;
+capMain.castShadow = true;
+capGroup.add(capMain);
+
+const capTop = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.46, 0.495, 0.04, 64),
+  capMat
+);
+capTop.position.y = 2.00;
+capTop.castShadow = true;
+capGroup.add(capTop);
+
+const ridgeCount = 44;
+const ridgeGeo = new THREE.BoxGeometry(0.014, 0.23, 0.022);
+for (let i = 0; i < ridgeCount; i++) {
+  const ang = (i / ridgeCount) * Math.PI * 2;
+  const ridge = new THREE.Mesh(ridgeGeo, capMat);
+  ridge.position.set(Math.cos(ang) * 0.502, 1.85, Math.sin(ang) * 0.502);
+  ridge.rotation.y = -ang;
+  capGroup.add(ridge);
+}
+bottleRoot.add(capGroup);
+
+// ============================================================================
+// ORGANIC 3D BLUEBERRIES & CREAMY MILK RIBBONS / DROPLETS
+// ============================================================================
+function createBlueberryMesh(seed = 1) {
+  const rng = mulberry32(seed);
+  const group = new THREE.Group();
+
+  const geo = new THREE.SphereGeometry(0.24, 36, 28);
+  const pos = geo.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    let x = pos.getX(i);
+    let y = pos.getY(i) * 0.88;
+    let z = pos.getZ(i);
+    const n = 1 + 0.035 * Math.sin(x * 14 + seed) * Math.cos(z * 14 - seed);
+    pos.setXYZ(i, x * n, y * n, z * n);
+  }
+  geo.computeVertexNormals();
+
+  const berryMat = new THREE.MeshPhysicalMaterial({
+    color: 0x35438a,
+    roughness: 0.34,
+    metalness: 0.02,
+    clearcoat: 0.42,
+    clearcoatRoughness: 0.26,
+    sheen: 0.75,
+    sheenRoughness: 0.55,
+    sheenColor: new THREE.Color(0x9aa8eb)
+  });
+
+  const berry = new THREE.Mesh(geo, berryMat);
+  berry.castShadow = true;
+  berry.receiveShadow = true;
+  group.add(berry);
+
+  const crownMat = new THREE.MeshStandardMaterial({
+    color: 0x20295c,
+    roughness: 0.65
+  });
+  for (let k = 0; k < 5; k++) {
+    const ang = (k / 5) * Math.PI * 2 + rng() * 0.2;
+    const sepal = new THREE.Mesh(new THREE.ConeGeometry(0.036, 0.075, 6), crownMat);
+    sepal.position.set(Math.cos(ang) * 0.055, 0.205, Math.sin(ang) * 0.055);
+    sepal.rotation.z = -Math.cos(ang) * 0.55;
+    sepal.rotation.x = Math.sin(ang) * 0.55;
+    group.add(sepal);
+  }
+
+  return group;
+}
+
+const blueberryConfigs = [
+  { base: new THREE.Vector3(-1.32, -1.68,  0.88), scale: 1.08, rot: [0.3, 0.5, 0.2], orbit: false, phase: 0.1 },
+  { base: new THREE.Vector3(-1.02, -1.72,  1.15), scale: 0.86, rot: [-0.4, 1.1, 0.3], orbit: false, phase: 1.2 },
+  { base: new THREE.Vector3( 1.28, -1.70,  0.92), scale: 0.98, rot: [0.2, -0.7, -0.3], orbit: false, phase: 2.4 },
+  { base: new THREE.Vector3(-1.62,  0.85,  0.65), scale: 0.92, rot: [0.6, 0.3, 0.4], orbit: true,  phase: 0.5 },
+  { base: new THREE.Vector3( 1.68,  0.32,  0.72), scale: 1.02, rot: [-0.5, 0.8, -0.2], orbit: true, phase: 1.8 },
+  { base: new THREE.Vector3(-1.54, -0.45, -0.58), scale: 0.82, rot: [0.4, -0.6, 0.5], orbit: true, phase: 3.1 },
+  { base: new THREE.Vector3( 1.52,  1.45, -0.45), scale: 0.78, rot: [-0.3, 1.2, 0.2], orbit: true, phase: 4.2 },
+  { base: new THREE.Vector3(-1.25,  1.88,  0.38), scale: 0.74, rot: [0.5, 0.4, -0.4], orbit: true, phase: 5.0 }
+];
+
+const blueberries = blueberryConfigs.map((cfg, idx) => {
+  const m = createBlueberryMesh(100 + idx * 17);
+  m.position.copy(cfg.base);
+  m.scale.setScalar(cfg.scale);
+  scene.add(m);
+  return { mesh: m, cfg };
+});
+
+const milkMaterial = new THREE.MeshPhysicalMaterial({
+  color: 0xffffff,
+  roughness: 0.14,
+  metalness: 0.0,
+  clearcoat: 0.9,
+  clearcoatRoughness: 0.08,
+  sheen: 0.3,
+  sheenColor: new THREE.Color(0xe6ebff)
+});
+
+function createMilkRibbon(radiusX, radiusZ, yStart, yEnd, turns, tubeRadius) {
+  const pts = [];
+  const steps = 90;
+  for (let i = 0; i <= steps; i++) {
+    const u = i / steps;
+    const ang = u * Math.PI * 2 * turns;
+    const taper = Math.sin(u * Math.PI);
+    const rx = radiusX * (0.85 + 0.25 * taper);
+    const rz = radiusZ * (0.85 + 0.25 * taper);
+    const y = lerp(yStart, yEnd, u) + Math.sin(u * Math.PI * 3) * 0.14;
+    pts.push(new THREE.Vector3(Math.cos(ang) * rx, y, Math.sin(ang) * rz));
+  }
+  const curve = new THREE.CatmullRomCurve3(pts);
+  const geo = new THREE.TubeGeometry(curve, 120, tubeRadius, 16, false);
+  const pos = geo.attributes.position;
+  const center = new THREE.Vector3();
+  const v = new THREE.Vector3();
+  const radialSegments = 16;
+  const tubularSegments = 120;
+  for (let i = 0; i <= tubularSegments; i++) {
+    const u = i / tubularSegments;
+    curve.getPointAt(u, center);
+    const env = Math.pow(Math.sin(u * Math.PI), 0.55);
+    for (let j = 0; j <= radialSegments; j++) {
+      const idx = i * (radialSegments + 1) + j;
+      v.fromBufferAttribute(pos, idx);
+      v.sub(center).multiplyScalar(env).add(center);
+      pos.setXYZ(idx, v.x, v.y, v.z);
+    }
+  }
+  geo.computeVertexNormals();
+  const mesh = new THREE.Mesh(geo, milkMaterial);
+  mesh.castShadow = true;
+  return mesh;
+}
+
+const milkSwirlGroup = new THREE.Group();
+const ribbon1 = createMilkRibbon(1.48, 1.48, -1.35, 1.25, 1.35, 0.055);
+const ribbon2 = createMilkRibbon(1.62, 1.62, -0.85, 1.65, 1.15, 0.038);
+ribbon2.rotation.y = Math.PI * 0.85;
+milkSwirlGroup.add(ribbon1, ribbon2);
+scene.add(milkSwirlGroup);
+
+const dropletRng = mulberry32(777);
+const droplets = [];
+const dropletGeo = new THREE.SphereGeometry(0.065, 24, 24);
+for (let i = 0; i < 22; i++) {
+  const ang = (i / 22) * Math.PI * 2 + dropletRng() * 0.3;
+  const dist = 1.35 + dropletRng() * 0.85;
+  const y = -1.3 + dropletRng() * 3.4;
+  const sc = 0.45 + dropletRng() * 0.95;
+  const m = new THREE.Mesh(dropletGeo, milkMaterial);
+  m.castShadow = true;
+  scene.add(m);
+  droplets.push({
+    mesh: m,
+    ang,
+    dist,
+    y,
+    sc,
+    speed: 0.35 + dropletRng() * 0.4,
+    phase: dropletRng() * Math.PI * 2
+  });
+}
+
+// ============================================================================
+// 3D -> 2D SCREEN PROJECTION FOR CALLOUT LABELS
+// ============================================================================
+const anchorKefir = new THREE.Object3D();
+anchorKefir.position.set(0.62, 0.82, 0.85);
+bottleRoot.add(anchorKefir);
+
+const anchorBlueberry = new THREE.Object3D();
+anchorBlueberry.position.set(-0.68, 0.18, 0.82);
+bottleRoot.add(anchorBlueberry);
+
+const anchorMilkfat = new THREE.Object3D();
+anchorMilkfat.position.set(0.68, -0.78, 0.82);
+bottleRoot.add(anchorMilkfat);
+
+const anchorVolume = new THREE.Object3D();
+anchorVolume.position.set(-0.62, -1.25, 0.85);
+bottleRoot.add(anchorVolume);
+
+const domTopBar = document.getElementById('top-bar');
+const domHeroLockup = document.getElementById('hero-lockup');
+const domLblKefir = document.getElementById('lbl-kefir');
+const domLblBlueberry = document.getElementById('lbl-blueberry');
+const domLblMilkfat = document.getElementById('lbl-milkfat');
+const domLblVolume = document.getElementById('lbl-volume');
+
+const projVec = new THREE.Vector3();
+function updateProjectedLabel(el, obj3D, visibility, slideOffset) {
+  if (visibility <= 0.001) {
+    el.style.opacity = '0';
+    return;
+  }
+  obj3D.getWorldPosition(projVec);
+  projVec.project(camera);
+
+  const sx = (projVec.x * 0.5 + 0.5) * WIDTH;
+  const sy = (-projVec.y * 0.5 + 0.5) * HEIGHT;
+
+  const isLeft = el.classList.contains('left');
+  const dx = (isLeft ? -1 : 1) * (1 - visibility) * slideOffset;
+
+  el.style.opacity = visibility.toFixed(3);
+  el.style.transform = `translate3d(${(sx + dx).toFixed(1)}px, ${sy.toFixed(1)}px, 0)`;
+}
+
+// ============================================================================
+// DETERMINISTIC TIMELINE CHOREOGRAPHY (0s -> 20s)
+// ============================================================================
+window.renderAt = function(t) {
+  const time = Math.max(0, Math.min(window.DURATION, t));
+
+  const pPlinth = smootherstep(0.0, 2.0, time);
+  studioGroup.position.y = lerp(-1.4, 0, easeOutCubic(pPlinth));
+
+  const pShell = smootherstep(1.2, 3.6, time);
+  const shellEase = easeOutBack(pShell);
+  bottleShellGroup.visible = pShell > 0.001;
+  bottleShellGroup.position.y = lerp(3.8, 0, shellEase);
+  bottleShellGroup.scale.setScalar(lerp(0.84, 1.0, easeOutCubic(pShell)));
+
+  const pLiquid = smootherstep(2.9, 5.2, time);
+  liquidCoreGroup.visible = pLiquid > 0.001;
+  const liqScaleY = easeOutCubic(pLiquid);
+  liquidCoreGroup.scale.set(
+    lerp(0.75, 1.0, liqScaleY),
+    Math.max(0.001, liqScaleY),
+    lerp(0.75, 1.0, liqScaleY)
+  );
+  liquidCoreGroup.position.y = lerp(-1.9 * (1 - liqScaleY), 0, liqScaleY);
+
+  const pLabel = smootherstep(4.6, 7.0, time);
+  const labelEase = easeOutCubic(pLabel);
+  labelSleeveGroup.visible = pLabel > 0.001;
+  labelSleeveGroup.position.y = lerp(3.4, 0, labelEase);
+  labelSleeveGroup.rotation.y = lerp(-Math.PI * 0.85, 0, labelEase);
+  const labelRadScale = lerp(1.06, 1.0, smootherstep(6.0, 7.2, time));
+  labelSleeveGroup.scale.set(labelRadScale, 1, labelRadScale);
+
+  const pCapDrop = smootherstep(6.4, 8.0, time);
+  const pCapTwist = smootherstep(7.6, 8.7, time);
+  capGroup.visible = pCapDrop > 0.001;
+  capGroup.position.y = lerp(2.8, 0.14, easeOutCubic(pCapDrop)) - 0.14 * pCapTwist;
+  capGroup.rotation.y = lerp(Math.PI * 1.5, 0, pCapTwist);
+
+  const showcaseSpin =
+    smootherstep(7.2, 13.5, time) * (Math.PI * 0.32) -
+    smootherstep(13.5, 18.0, time) * (Math.PI * 0.32);
+  const gentleFloat = Math.sin(time * 1.15) * 0.045 * smootherstep(7.5, 9.5, time);
+  bottleRoot.position.y = 0.18 + gentleFloat;
+  bottleRoot.rotation.y = showcaseSpin;
+  bottleRoot.rotation.z = Math.sin(time * 0.8) * 0.018 * smootherstep(8.0, 10.0, time);
+
+  const pSwirl = smootherstep(7.2, 9.8, time);
+  milkSwirlGroup.visible = pSwirl > 0.001;
+  milkSwirlGroup.scale.setScalar(easeOutCubic(pSwirl));
+  milkSwirlGroup.rotation.y = time * 0.28;
+  milkSwirlGroup.position.y = Math.sin(time * 1.1) * 0.06;
+
+  const pDroplets = smootherstep(7.6, 10.2, time);
+  droplets.forEach((d, idx) => {
+    const localP = clamp01(pDroplets * 1.25 - (idx % 5) * 0.05);
+    const sc = d.sc * easeOutBack(localP);
+    d.mesh.visible = sc > 0.005;
+    d.mesh.scale.setScalar(Math.max(0.001, sc));
+    const curAng = d.ang + time * d.speed;
+    const bob = Math.sin(time * 1.6 + d.phase) * 0.14;
+    d.mesh.position.set(
+      Math.cos(curAng) * d.dist,
+      d.y + bob,
+      Math.sin(curAng) * d.dist
+    );
+  });
+
+  const pBerries = smootherstep(7.0, 9.6, time);
+  blueberries.forEach((b, idx) => {
+    const stagger = idx * 0.14;
+    const bp = smootherstep(7.0 + stagger, 9.2 + stagger, time);
+    const sc = b.cfg.scale * easeOutBack(bp);
+    b.mesh.visible = sc > 0.005;
+    b.mesh.scale.setScalar(Math.max(0.001, sc));
+
+    if (b.cfg.orbit) {
+      const orbitAng = time * 0.34 + b.cfg.phase;
+      const rad = Math.hypot(b.cfg.base.x, b.cfg.base.z);
+      const baseAng = Math.atan2(b.cfg.base.z, b.cfg.base.x);
+      const a = baseAng + orbitAng * 0.45;
+      b.mesh.position.set(
+        Math.cos(a) * rad,
+        b.cfg.base.y + Math.sin(time * 1.4 + b.cfg.phase) * 0.15,
+        Math.sin(a) * rad
+      );
+      b.mesh.rotation.set(
+        b.cfg.rot[0] + time * 0.45,
+        b.cfg.rot[1] + time * 0.6,
+        b.cfg.rot[2] + time * 0.3
+      );
+    } else {
+      b.mesh.position.copy(b.cfg.base);
+      b.mesh.position.y = lerp(-2.6, b.cfg.base.y, easeOutBack(bp));
+      b.mesh.rotation.set(b.cfg.rot[0], b.cfg.rot[1] + time * 0.12, b.cfg.rot[2]);
+    }
+  });
+
+  const camIntro = smootherstep(0.0, 8.5, time);
+  const camMid = smootherstep(8.5, 15.5, time);
+  const camOut = smootherstep(15.5, 20.0, time);
+
+  const camX = Math.sin(time * 0.28) * 0.55 * (1 - camOut * 0.65);
+  const camY =
+    lerp(2.35, 0.62, camIntro) +
+    lerp(0.0, -0.22, camMid) +
+    lerp(0.0, 0.24, camOut);
+  const camZ =
+    lerp(12.2, 9.6, camIntro) +
+    lerp(0.0, -0.45, camMid) +
+    lerp(0.0, 0.95, camOut);
+
+  camera.position.set(camX, camY, camZ);
+  const lookY = lerp(0.25, 0.08, camIntro) + lerp(0, -0.14, camOut);
+  camera.lookAt(0, lookY, 0);
+
+  scene.updateMatrixWorld(true);
+
+  const topBarVis = smootherstep(1.2, 2.5, time);
+  domTopBar.style.opacity = topBarVis.toFixed(3);
+  domTopBar.style.transform = `translateY(${((1 - topBarVis) * -14).toFixed(1)}px)`;
+
+  const visKefir =
+    smootherstep(8.4, 9.3, time) * (1 - smootherstep(15.2, 16.0, time));
+  const visBlueberry =
+    smootherstep(9.2, 10.1, time) * (1 - smootherstep(15.4, 16.2, time));
+  const visMilkfat =
+    smootherstep(10.0, 10.9, time) * (1 - smootherstep(15.6, 16.4, time));
+  const visVolume =
+    smootherstep(10.8, 11.7, time) * (1 - smootherstep(15.8, 16.6, time));
+
+  updateProjectedLabel(domLblKefir, anchorKefir, visKefir, 28);
+  updateProjectedLabel(domLblBlueberry, anchorBlueberry, visBlueberry, 28);
+  updateProjectedLabel(domLblMilkfat, anchorMilkfat, visMilkfat, 28);
+  updateProjectedLabel(domLblVolume, anchorVolume, visVolume, 28);
+
+  const heroVis = smootherstep(16.0, 17.4, time);
+  domHeroLockup.style.opacity = heroVis.toFixed(3);
+  domHeroLockup.style.transform = `translateY(${((1 - heroVis) * 26).toFixed(1)}px)`;
+
+  renderer.render(scene, camera);
+};
+
+// ============================================================================
+// PREVIEW STUDIO CONTROLLER (Deterministic Step Timer, Scrubber, Chapters, PNG)
+// ============================================================================
+const viewportHost = document.getElementById('viewport-host');
+const stageScaler = document.getElementById('stage-scaler');
+const scaleReadout = document.getElementById('scale-readout');
+const scrubber = document.getElementById('scrubber');
+const playBtn = document.getElementById('play-toggle-btn');
+const playIcon = document.getElementById('play-icon');
+const playLabel = document.getElementById('play-label');
+const restartBtn = document.getElementById('restart-btn');
+const snapshotBtn = document.getElementById('snapshot-btn');
+const timeCurrentEl = document.getElementById('time-current');
+const statusNoteEl = document.getElementById('status-note');
+const chapterBtns = Array.from(document.querySelectorAll('.chapter-btn'));
+
+let currentT = 0;
+let isPlaying = false;
+let stepIntervalId = null;
+let lastWallMs = 0;
+
+function fitPortraitStage() {
+  const pad = 24;
+  const availW = Math.max(120, viewportHost.clientWidth - pad);
+  const availH = Math.max(120, viewportHost.clientHeight - pad);
+  const scale = Math.min(availW / WIDTH, availH / HEIGHT);
+  stageScaler.style.transform = `scale(${scale.toFixed(4)})`;
+  scaleReadout.textContent = `Scale: ${Math.round(scale * 100)}%`;
+}
+
+function highlightActiveChapter(t) {
+  let activeIdx = 0;
+  for (let i = 0; i < chapterBtns.length; i++) {
+    const startT = parseFloat(chapterBtns[i].dataset.t);
+    if (t >= startT - 0.15) {
+      activeIdx = i;
+    }
+  }
+  chapterBtns.forEach((btn, i) => {
+    btn.classList.toggle('active', i === activeIdx);
+  });
+}
+
+function seekTo(t, noteText) {
+  currentT = Math.max(0, Math.min(window.DURATION, Number(t)));
+  scrubber.value = currentT.toFixed(2);
+  timeCurrentEl.textContent = `${currentT.toFixed(2)}s`;
+  highlightActiveChapter(currentT);
+  if (noteText) {
+    statusNoteEl.textContent = noteText;
+  }
+  window.renderAt(currentT);
+}
+
+function advanceDeterministicStep() {
+  if (!isPlaying) return;
+  const now = performance.now();
+  const dt = Math.min(0.1, Math.max(0.001, (now - lastWallMs) / 1000));
+  lastWallMs = now;
+
+  let nextT = currentT + dt;
+  if (nextT >= window.DURATION) {
+    nextT = 0;
+  }
+  seekTo(nextT, 'Playing deterministic timeline');
+}
+
+function setPlaying(playing) {
+  isPlaying = playing;
+  if (isPlaying) {
+    if (currentT >= window.DURATION - 0.01) {
+      currentT = 0;
+    }
+    lastWallMs = performance.now();
+    playIcon.textContent = '❚❚';
+    playLabel.textContent = 'Pause';
+    statusNoteEl.textContent = 'Playing deterministic timeline';
+    if (stepIntervalId === null) {
+      stepIntervalId = window.setInterval(advanceDeterministicStep, 16);
+    }
+  } else {
+    playIcon.textContent = '▶';
+    playLabel.textContent = 'Play';
+    statusNoteEl.textContent = `Paused at ${currentT.toFixed(2)}s`;
+    if (stepIntervalId !== null) {
+      clearInterval(stepIntervalId);
+      stepIntervalId = null;
+    }
+  }
+}
+
+playBtn.addEventListener('click', () => {
+  setPlaying(!isPlaying);
+});
+
+restartBtn.addEventListener('click', () => {
+  setPlaying(false);
+  seekTo(0, 'Reset to 0.00s');
+});
+
+scrubber.addEventListener('input', (e) => {
+  setPlaying(false);
+  const val = parseFloat(e.target.value);
+  seekTo(val, `Scrubbed to ${val.toFixed(2)}s`);
+});
+
+chapterBtns.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    setPlaying(false);
+    const t = parseFloat(btn.dataset.t);
+    seekTo(t, `Jumped to ${btn.textContent}`);
+  });
+});
+
+// Composite exact 1080x1920 WebGL canvas + HTML overlay text onto an offscreen canvas for PNG export
+snapshotBtn.addEventListener('click', () => {
+  window.renderAt(currentT);
+
+  const exportCanvas = document.createElement('canvas');
+  exportCanvas.width = WIDTH;
+  exportCanvas.height = HEIGHT;
+  const ctx = exportCanvas.getContext('2d');
+
+  // Draw WebGL render
+  ctx.drawImage(canvas, 0, 0, WIDTH, HEIGHT);
+
+  // Draw visible top bar & hero lockup cleanly on export
+  const topBarAlpha = parseFloat(domTopBar.style.opacity || '0');
+  if (topBarAlpha > 0.02) {
+    ctx.save();
+    ctx.globalAlpha = topBarAlpha;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.82)';
+    ctx.beginPath();
+    ctx.roundRect(72, 72, 410, 54, 27);
+    ctx.roundRect(WIDTH - 72 - 290, 72, 290, 54, 27);
+    ctx.fill();
+
+    ctx.fillStyle = '#36416b';
+    ctx.font = '700 20px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
+    ctx.fillText('•  CULTURED LOWFAT MILK', 102, 99);
+    ctx.textAlign = 'center';
+    ctx.fillText('946 ML · 1% MILKFAT', WIDTH - 72 - 145, 99);
+    ctx.restore();
+  }
+
+  const heroAlpha = parseFloat(domHeroLockup.style.opacity || '0');
+  if (heroAlpha > 0.02) {
+    ctx.save();
+    ctx.globalAlpha = heroAlpha;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    ctx.fillStyle = 'rgba(73, 89, 168, 0.14)';
+    ctx.beginPath();
+    ctx.roundRect(WIDTH / 2 - 185, HEIGHT - 335, 370, 46, 23);
+    ctx.fill();
+
+    ctx.fillStyle = '#42529e';
+    ctx.font = '700 20px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText('CULTURED LOWFAT MILK', WIDTH / 2, HEIGHT - 312);
+
+    ctx.fillStyle = '#1f2747';
+    ctx.font = '800 74px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText('Blueberry Kefir', WIDTH / 2, HEIGHT - 235);
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.90)';
+    ctx.beginPath();
+    ctx.roundRect(WIDTH / 2 - 260, HEIGHT - 180, 520, 62, 31);
+    ctx.fill();
+
+    ctx.fillStyle = '#313c6b';
+    ctx.font = '700 24px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText('1% Milkfat   •   Blueberry   •   946 ml', WIDTH / 2, HEIGHT - 149);
+    ctx.restore();
+  }
+
+  const dataUrl = exportCanvas.toDataURL('image/png');
+  const link = document.createElement('a');
+  link.download = `blueberry-kefir-${currentT.toFixed(2)}s.png`;
+  link.href = dataUrl;
+  link.click();
+
+  statusNoteEl.textContent = `Exported PNG snapshot at ${currentT.toFixed(2)}s`;
+});
+
+window.addEventListener('resize', fitPortraitStage);
+
+// Initial deterministic render at t = 0
+fitPortraitStage();
+seekTo(0, 'Ready at 0.00s · Scrub or press Play');
+</script>
+</body>
+</html>
